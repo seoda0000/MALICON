@@ -24,19 +24,19 @@ public class JWTutil {
     private static String SECRET_KEY;
     private static long ACCESS_EXPIRATION_TIME;
     private static long REFRESH_EXPIRATION_TIME;
-    public static final String TOKEN_PREFIX = "Bearer ";
-    public static final String HEADER_STRING = "Authorization";
 
-    private static final String ISSUER = "jongking.com";
-    private static final String SUBJECT = "";
+    private static String ISSUER;
+
 
     @Autowired
     private JWTutil(@Value("${jwt.secret}") String secretKey,
                     @Value("${jwt.access_expiration}") long ecc_expirationTime,
-                    @Value("${jwt.refresh_expiration}") long ref_expirationTime){
+                    @Value("${jwt.refresh_expiration}") long ref_expirationTime,
+                    @Value("${jwt.issuer}") String issuer){
         SECRET_KEY = secretKey;
         ACCESS_EXPIRATION_TIME = ecc_expirationTime;
         REFRESH_EXPIRATION_TIME = ref_expirationTime;
+        ISSUER = issuer;
     };
     public static String getJwtToken(UserDTO user){
         Date now = new Date();
