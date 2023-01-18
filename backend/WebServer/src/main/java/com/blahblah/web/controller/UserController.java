@@ -48,9 +48,6 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity getMyInfo(HttpServletRequest request){
-        // 필터에서 검증로직이 수행됐으므로 바로 파싱
-        //String token = request.getHeader("Authorization").substring(7);
-        //Long id = ((Integer) JWTutil.parseClaims(token).get("id")).longValue();
         UserDTO loginUser = (UserDTO)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long id = loginUser.getId();
         log.info("ID : " + id);
@@ -66,7 +63,7 @@ public class UserController {
     @PutMapping()
     public ResponseEntity updateUser(@RequestBody UserDTO userDTO){
         UserDTO loginUser = (UserDTO)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(loginUser.getId() != userDTO.getId()) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Message("권한이 없읍니당"));
+        if(loginUser.getId() != userDTO.getId()) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Message("권한이 없습니다"));
         log.info(userDTO.toString());
         if(userService.updateUser(userDTO))
             return ResponseEntity.ok(new Message("회원정보 수정 성공"));

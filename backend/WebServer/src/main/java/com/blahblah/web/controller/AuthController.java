@@ -38,7 +38,6 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(@RequestBody Map<String, String> reqRefreshTokenMap){
         // @RequestBody를 String으로 받으면 JSON이 파싱되지 않고 그대로 들어옴
-        // Map으로 개바꿔 ㅋㅋ
         String reqRefreshToken = reqRefreshTokenMap.get("reqRefreshToken");
         log.info(reqRefreshToken);
         // Exception 핸들러로 캐치하자 나중에

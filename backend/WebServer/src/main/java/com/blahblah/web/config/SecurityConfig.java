@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/auth/login", "/auth/refresh").permitAll()//인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
-                // application.properties에 /api/v1를 prefix로 붙여줬다.
+                // application.properties에 /api를 prefix로 붙여줬다.
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated()
                 .and().cors()

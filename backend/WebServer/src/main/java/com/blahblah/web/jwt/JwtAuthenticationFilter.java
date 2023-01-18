@@ -25,10 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         log.info("PATH : " + path);
 
-        // Authorization 토큰이 존재하면 그 토큰의 유효성을 검사하고
         if(validToken != null && JWTutil.isValidToken(validToken)){
-            // 유효한 토큰인 경우 Authentication 객체를 반환하여
-            // Security Context에 저장해준다.
             Authentication authentication = JWTutil.getAuthentication(validToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
