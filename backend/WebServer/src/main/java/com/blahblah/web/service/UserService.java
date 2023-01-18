@@ -9,7 +9,7 @@ public interface UserService {
     UserDTO createUser(UserDTO userDTO);
     
     UserDTO readUser(Long id);
-    UserDTO updateUser(UserDTO userDTO);
+    boolean updateUser(UserDTO userDTO);
     void deleteUserByUserId(String userId);
 
     TokenDTO login(String userId, String password);

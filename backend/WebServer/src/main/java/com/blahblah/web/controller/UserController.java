@@ -3,12 +3,16 @@ package com.blahblah.web.controller;
 
 import com.blahblah.web.dto.response.Message;
 import com.blahblah.web.dto.response.UserDTO;
+import com.blahblah.web.dto.response.UserMeDTO;
 import com.blahblah.web.service.UserService;
 import com.blahblah.web.util.JWTutil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,13 +49,27 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity getMyInfo(HttpServletRequest request){
         // 필터에서 검증로직이 수행됐으므로 바로 파싱
-        String token = request.getHeader("Authorization").substring(7);
-        Long id = ((Integer) JWTutil.parseClaims(token).get("id")).longValue();
-
+        //String token = request.getHeader("Authorization").substring(7);
+        //Long id = ((Integer) JWTutil.parseClaims(token).get("id")).longValue();
+        UserDTO loginUser = (UserDTO)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long id = loginUser.getId();
         log.info("ID : " + id);
         UserDTO userInfo = userService.readUser(id);
 
-        return ResponseEntity.ok(userInfo);
+        return ResponseEntity.ok(UserMeDTO.builder().userId(userInfo.getUserId())
+                .name(userInfo.getName())
+                .position(userInfo.getPosition())
+                .department(userInfo.getDepartment())
+                .build());
     }
 
+    @PutMapping()
+    public ResponseEntity updateUser(@RequestBody UserDTO userDTO){
+        UserDTO loginUser = (UserDTO)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(loginUser.getId() != userDTO.getId()) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Message("권한이 없읍니당"));
+        log.info(userDTO.toString());
+        if(userService.updateUser(userDTO))
+            return ResponseEntity.ok(new Message("회원정보 수정 성공"));
+        else return ResponseEntity.internalServerError().build();
+    }
 }

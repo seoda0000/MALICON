@@ -3,6 +3,7 @@ package com.blahblah.web.util;
 
 import com.blahblah.web.controller.exception.JwtAuthenticationException;
 import com.blahblah.web.dto.response.UserDTO;
+import com.blahblah.web.entity.UserEntity;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,15 +69,15 @@ public class JWTutil {
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
-        String userId = (String)claims.get("userId");
+        Long id = Integer.toUnsignedLong((Integer)claims.get("id"));
 
-        log.info("ID : " + userId);
+        log.info("ID : " + id);
 
-        if (userId == null) {
+        if (id == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(userId, "",new ArrayList<>());
+        UserDTO principal = UserEntity.builder().id(id).build().toUserDTO();
         return new UsernamePasswordAuthenticationToken(principal, "", new ArrayList<>());
     }
 

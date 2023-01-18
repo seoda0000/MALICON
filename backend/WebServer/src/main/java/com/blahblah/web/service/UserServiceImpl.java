@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -34,7 +35,6 @@ public class UserServiceImpl implements UserService{
         return userRepository.existsByUserId(userId);
     }
     @Override
-    @Transactional
     public UserDTO createUser(UserDTO userDTO) {
         UserEntity s = UserEntity.builder()
                 .userId(userDTO.getUserId())
@@ -55,10 +55,18 @@ public class UserServiceImpl implements UserService{
         }else return op.get().toUserDTO();
     }
 
-    //지금 안만들랭 ㅋ
     @Override
-    public UserDTO updateUser(UserDTO userDTO) {
-        UserEntity user = userRepository.findById(userDTO.getId()).orElseThrow(()=>new RuntimeException("hi"));
+    public boolean updateUser(UserDTO userDTO) {
+        UserEntity user = userRepository.findById(userDTO.getId()).orElseThrow(()->new RuntimeException("존재하지 않는 유저입니다."));
+        UserEntity updatedUser = UserEntity.builder().id(userDTO.getId())
+                .userId(userDTO.getUserId()==null?user.getUserId():userDTO.getUserId())
+                .password(user.getPassword())
+                .name(userDTO.getName()==null?user.getName():userDTO.getName())
+                .department(userDTO.getDepartment()==null?user.getDepartment():userDTO.getDepartment())
+                .position(userDTO.getPosition()==null?user.getPosition():userDTO.getPosition())
+                .build();
+        userRepository.save(updatedUser);
+        return true;
     }
 
     @Override
@@ -66,6 +74,7 @@ public class UserServiceImpl implements UserService{
         userRepository.deleteByUserId(userId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public TokenDTO login(String userId, String password){
         UserDetails user = userDetailService.loadUserByUsername(userId);
