@@ -38,10 +38,8 @@ public class UserServiceImpl implements UserService{
     public UserDTO createUser(UserDTO userDTO) {
         UserEntity s = UserEntity.builder()
                 .userId(userDTO.getUserId())
-                .name(userDTO.getName())
-                .department(userDTO.getDepartment())
+                .nickName(userDTO.getName())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
-                .position(userDTO.getPosition())
                 .build();
         return userRepository.save(s).toUserDTO();
     }
@@ -58,14 +56,14 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean updateUser(UserDTO userDTO) {
         UserEntity user = userRepository.findById(userDTO.getId()).orElseThrow(()->new RuntimeException("존재하지 않는 유저입니다."));
-        UserEntity updatedUser = UserEntity.builder().id(userDTO.getId())
-                .userId(userDTO.getUserId()==null?user.getUserId():userDTO.getUserId())
-                .password(user.getPassword())
-                .name(userDTO.getName()==null?user.getName():userDTO.getName())
-                .department(userDTO.getDepartment()==null?user.getDepartment():userDTO.getDepartment())
-                .position(userDTO.getPosition()==null?user.getPosition():userDTO.getPosition())
-                .build();
-        userRepository.save(updatedUser);
+//        UserEntity updatedUser = UserEntity.builder().id(userDTO.getId())
+//                .userId(userDTO.getUserId()==null?user.getUserId():userDTO.getUserId())
+//                .password(user.getPassword())
+//                .name(userDTO.getName()==null?user.getName():userDTO.getName())
+//                .department(userDTO.getDepartment()==null?user.getDepartment():userDTO.getDepartment())
+//                .position(userDTO.getPosition()==null?user.getPosition():userDTO.getPosition())
+//                .build();
+        //userRepository.save(updatedUser);
         return true;
     }
 
