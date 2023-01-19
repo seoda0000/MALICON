@@ -48,8 +48,14 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     public UserDTO toUserDTO(){
         return UserDTO.builder().id(this.id)
+                .nickName(nickName)
                 .password(this.password)
                 .userId(this.userId)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .avatar(avatar)
+                .lightStick(lightStick)
+                .aboutMe(aboutMe)
                 .build();
     }
     @Override

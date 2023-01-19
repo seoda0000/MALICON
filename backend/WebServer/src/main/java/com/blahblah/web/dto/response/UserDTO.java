@@ -1,5 +1,6 @@
 package com.blahblah.web.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,9 +12,13 @@ import lombok.ToString;
 @ToString
 public class UserDTO {
     private Long id;
-    private String department;
-    private String name;
+
+    private String nickName;
     private String password;
-    private String position;
     private String userId;
+    private String email;
+    private String phoneNumber;
+    private String avatar;
+    private String lightStick;
+    private String aboutMe;
 }

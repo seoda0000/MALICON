@@ -38,7 +38,12 @@ public class UserServiceImpl implements UserService{
     public UserDTO createUser(UserDTO userDTO) {
         UserEntity s = UserEntity.builder()
                 .userId(userDTO.getUserId())
-                .nickName(userDTO.getName())
+                .nickName(userDTO.getNickName())
+                .email(userDTO.getEmail())
+                .avatar(userDTO.getAvatar())
+                .aboutMe(userDTO.getAboutMe())
+                .lightStick(userDTO.getLightStick())
+                .phoneNumber(userDTO.getPhoneNumber())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
                 .build();
         return userRepository.save(s).toUserDTO();
@@ -56,14 +61,17 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean updateUser(UserDTO userDTO) {
         UserEntity user = userRepository.findById(userDTO.getId()).orElseThrow(()->new RuntimeException("존재하지 않는 유저입니다."));
-//        UserEntity updatedUser = UserEntity.builder().id(userDTO.getId())
-//                .userId(userDTO.getUserId()==null?user.getUserId():userDTO.getUserId())
-//                .password(user.getPassword())
-//                .name(userDTO.getName()==null?user.getName():userDTO.getName())
-//                .department(userDTO.getDepartment()==null?user.getDepartment():userDTO.getDepartment())
-//                .position(userDTO.getPosition()==null?user.getPosition():userDTO.getPosition())
-//                .build();
-        //userRepository.save(updatedUser);
+        UserEntity updatedUser = UserEntity.builder().id(userDTO.getId())
+                .userId(userDTO.getUserId()==null?user.getUserId():userDTO.getUserId())
+                .password(userDTO.getPassword()==null?user.getPassword():userDTO.getPassword())
+                .nickName(userDTO.getNickName()==null?user.getNickName():userDTO.getNickName())
+                .phoneNumber(userDTO.getPhoneNumber()==null?user.getPhoneNumber():userDTO.getPhoneNumber())
+                .lightStick(userDTO.getLightStick()==null?user.getLightStick():userDTO.getLightStick())
+                .aboutMe(userDTO.getAboutMe()==null?user.getAboutMe():userDTO.getAboutMe())
+                .avatar(userDTO.getAvatar()==null?user.getAvatar():userDTO.getAvatar())
+                .email(userDTO.getEmail()==null?user.getEmail():userDTO.getEmail())
+                .build();
+        userRepository.save(updatedUser);
         return true;
     }
 

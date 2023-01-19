@@ -3,16 +3,12 @@ package com.blahblah.web.controller;
 
 import com.blahblah.web.dto.response.Message;
 import com.blahblah.web.dto.response.UserDTO;
-import com.blahblah.web.dto.response.UserMeDTO;
 import com.blahblah.web.service.UserService;
-import com.blahblah.web.util.JWTutil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,11 +49,7 @@ public class UserController {
         log.info("ID : " + id);
         UserDTO userInfo = userService.readUser(id);
 
-        return ResponseEntity.ok(UserMeDTO.builder().userId(userInfo.getUserId())
-                .name(userInfo.getName())
-                .position(userInfo.getPosition())
-                .department(userInfo.getDepartment())
-                .build());
+        return ResponseEntity.ok(userInfo);
     }
 
     @PutMapping()
