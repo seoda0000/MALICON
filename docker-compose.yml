@@ -24,16 +24,13 @@ services:
     stdin_open: true
     tty: true
 
-  mysql:
-    image: mysql:5.7
-    container_name: db-mysql
-    volumes:
-      - ssafy_web_db-mysql-data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ssafy_web_db
+  envoy:
+    image: envoyproxy/envoy-dev
     ports:
-      - "3336:3306"
+      - "80:80"
+      - "9901:9901"
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
 
 volumes:
   ssafy_web_db-mysql-data:
