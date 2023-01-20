@@ -16,38 +16,26 @@ import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
 
-const pages = ["피드", "방송시작"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const pages = ["인트로 메뉴1", "인트로 메뉴2"];
 
-function NavBar() {
+export default function NavBarLanding() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   return (
-    <AppBar position="static">
+    <Box position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* (md) 로고 영역 */}
-
+          {/* (md) 왼쪽 상단 로고 영역 */}
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
@@ -67,8 +55,7 @@ function NavBar() {
             LOGO
           </Typography>
 
-          {/* (xs) 메뉴 영역 */}
-
+          {/* (xs) 왼쪽 상단 메뉴 영역 */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -106,8 +93,7 @@ function NavBar() {
             </Menu>
           </Box>
 
-          {/* (xs) 로고 영역 */}
-
+          {/* (xs) 가운데 로고 영역 */}
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
@@ -128,69 +114,33 @@ function NavBar() {
             LOGO
           </Typography>
 
-          {/* (md) 메뉴 영역 */}
-
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Link to="/feed">
-              <Button
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                피드
-              </Button>
-            </Link>
+          {/* 로그인 버튼 */}
+          <Box
+            sx={{
+              justifyContent: "flex-end",
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" },
+            }}
+          >
             <Button
               onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: "white", display: "block" }}
+              sx={{ my: 2, display: "block" }}
             >
-              방송시작
+              로그인
             </Button>
           </Box>
 
-          {/* 알림과 프로필 영역 */}
-          <MenuItem>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
+          {/* 회원가입 버튼 */}
+          <Box>
+            <Button
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, display: "block" }}
             >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-          </MenuItem>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+              회원가입
+            </Button>
           </Box>
         </Toolbar>
       </Container>
-    </AppBar>
+    </Box>
   );
 }
-export default NavBar;
