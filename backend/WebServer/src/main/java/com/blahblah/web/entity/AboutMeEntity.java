@@ -1,34 +1,29 @@
 package com.blahblah.web.entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Table(name ="articles")
+@Table(name ="about_me")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticleEntity extends BaseEntity{
+public class AboutMeEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-
-    @ManyToOne(
-            targetEntity = UserEntity.class,
-            fetch = FetchType.LAZY
+    @OneToOne(
+        targetEntity = UserEntity.class,
+        fetch = FetchType.LAZY
     )
+    @MapsId
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
+    @Column
     private String content;
 }

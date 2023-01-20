@@ -30,9 +30,11 @@ public class SecurityConfig {
                 .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
                 // filter chaining 순서를 지켜 써야함
                 .authorizeRequests()
-                .antMatchers("/auth/login", "/auth/refresh").permitAll()//인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
+                .antMatchers("/auth/login", "/auth/refresh","/swagger-ui/"
+                ).permitAll()//인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 // application.properties에 /api를 prefix로 붙여줬다.
+                .antMatchers(HttpMethod.GET,"/users/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated()
                 .and().cors()

@@ -1,7 +1,6 @@
 package com.blahblah.web.entity;
 
 import com.blahblah.web.dto.response.UserDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +21,7 @@ import java.util.Collection;
 // NoArgsConstructor를 만드는데 Builder 에러뜨니까 AllArgsConstructor도 넣자
 public class UserEntity extends BaseEntity implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;
@@ -36,15 +35,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
-    @Column(nullable = false)
     private String avatar;
-
 
     @Column(nullable = false,name = "light_stick")
     private String lightStick;
-
-    @Column(nullable = true, name = "about_me")
-    private String aboutMe;
 
     public UserDTO toUserDTO(){
         return UserDTO.builder().id(this.id)
@@ -55,7 +49,6 @@ public class UserEntity extends BaseEntity implements UserDetails {
                 .phoneNumber(phoneNumber)
                 .avatar(avatar)
                 .lightStick(lightStick)
-                .aboutMe(aboutMe)
                 .build();
     }
     @Override

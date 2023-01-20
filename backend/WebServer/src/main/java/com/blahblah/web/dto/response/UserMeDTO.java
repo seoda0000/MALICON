@@ -1,18 +1,19 @@
 package com.blahblah.web.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@Builder
-@ToString
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+@RequiredArgsConstructor
+@Builder
+public class UserMeDTO {
     private Long id;
 
     private String nickName;
-    private String password;
+
     private String userId;
     private String email;
     private String phoneNumber;

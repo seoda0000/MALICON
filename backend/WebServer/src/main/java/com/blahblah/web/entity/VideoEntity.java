@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class VideoEntity extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @ManyToOne(targetEntity = UserEntity.class,
