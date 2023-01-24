@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserStateType } from "../../../model/user/userStateType";
-import { signupAction } from "./thunk";
+import { checkDuplicateAction, signupAction } from "./thunk";
 
 const initialState: UserStateType = {
   userData: {
@@ -14,6 +14,7 @@ const initialState: UserStateType = {
     isLoggedIn: false,
   },
   signup: { loading: false, data: null, error: null },
+  checkDuplicate: { loading: false, data: null, error: null },
 };
 
 const userSlice = createSlice({
@@ -36,6 +37,21 @@ const userSlice = createSlice({
         state.signup.loading = false;
         state.signup.data = null;
         state.signup.error = payload;
+      })
+      .addCase(checkDuplicateAction.pending, (state) => {
+        state.checkDuplicate.loading = true;
+        state.checkDuplicate.data = null;
+        state.checkDuplicate.error = null;
+      })
+      .addCase(checkDuplicateAction.fulfilled, (state, { payload }) => {
+        state.checkDuplicate.loading = false;
+        state.checkDuplicate.data = payload;
+        state.checkDuplicate.error = null;
+      })
+      .addCase(checkDuplicateAction.rejected, (state, { payload }) => {
+        state.checkDuplicate.loading = false;
+        state.checkDuplicate.data = null;
+        state.checkDuplicate.error = payload;
       });
   },
 });

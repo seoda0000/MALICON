@@ -7,5 +7,10 @@ export type UserStateType = {
     data: any | null;
     error: Error | null | any;
   };
+  checkDuplicate: {
+    loading: boolean | null;
+    data: any | null;
+    error: Error | null | any;
+  };
 };
 
