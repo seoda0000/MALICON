@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .antMatchers("/v3/api-docs", "/swagger*/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 // application.properties에 /api를 prefix로 붙여줬다.
+                .antMatchers(HttpMethod.GET,"/users/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated()
                 .and().cors()

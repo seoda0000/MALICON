@@ -47,7 +47,7 @@ public class JWTutil {
                 .setExpiration(new Date(now.getTime() + ACCESS_EXPIRATION_TIME))
                 .claim("userId",user.getUserId())
                 .claim("id", user.getId())
-                .claim("name",user.getName())
+                .claim("name",user.getNickName())
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
