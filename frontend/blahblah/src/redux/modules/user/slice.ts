@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserStateType } from "../../../model/user/userStateType";
-import { checkDuplicateAction, signupAction } from "./thunk";
+import { checkDuplicateAction, signinAction, signupAction } from "./thunk";
 
 const initialState: UserStateType = {
   userData: {
@@ -15,6 +15,7 @@ const initialState: UserStateType = {
   },
   signup: { loading: false, data: null, error: null },
   checkDuplicate: { loading: false, data: null, error: null },
+  signin: { loading: false, data: null, error: null },
 };
 
 const userSlice = createSlice({
@@ -52,6 +53,29 @@ const userSlice = createSlice({
         state.checkDuplicate.loading = false;
         state.checkDuplicate.data = null;
         state.checkDuplicate.error = payload;
+      })
+      .addCase(signinAction.pending, (state) => {
+        state.signin.loading = true;
+        state.signin.data = null;
+        state.signin.error = null;
+      })
+      .addCase(signinAction.fulfilled, (state, { payload }) => {
+        state.signin.loading = false;
+        state.signin.data = payload;
+        state.signin.error = null;
+        state.userData.userId = payload.userId;
+        state.userData.password = payload.password;
+        state.userData.email = payload.email;
+        state.userData.nickName = payload.nickName;
+        state.userData.phone = payload.password;
+        state.userData.accessToken = payload.accessToken;
+        state.userData.refreshToken = payload.refreshToken;
+        state.userData.isLoggedIn = true;
+      })
+      .addCase(signinAction.rejected, (state, { payload }) => {
+        state.signin.loading = false;
+        state.signin.data = null;
+        state.signin.error = payload;
       });
   },
 });

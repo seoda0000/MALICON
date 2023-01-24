@@ -19,7 +19,7 @@ import BasicModal from "../ui/BasicModal";
 const buttonBoxStyle = {
   display: "flex",
   justifyContent: "center",
-  alignIemts: "center",
+  alignItems: "center",
   gap: "30px",
   marginTop: "15px",
 };
@@ -85,7 +85,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
 
-    const regex = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    const regex = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
     if (regex.test(e.target.value)) {
       setEmailAvail(true);
     } else {
@@ -289,7 +289,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
           </FormHelperText>
         </FormControl>
         {/* <FormGroup> */}
-        <div style={checkBoxStyle}>
+        <Box style={checkBoxStyle}>
           <FormControlLabel
             control={
               <Checkbox
@@ -300,7 +300,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             }
             label="개인정보 이용 동의"
           />
-        </div>
+        </Box>
         {/* </FormGroup> */}
         <Box sx={buttonBoxStyle}>
           <Button variant="contained" type="submit">

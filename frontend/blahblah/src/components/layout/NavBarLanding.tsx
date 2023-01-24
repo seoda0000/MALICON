@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import SignupModal from "../auth/SignupModal";
+import SigninModal from "../auth/SigninModal";
 // import Badge from "@mui/material/Badge";
 // import NotificationsIcon from "@mui/icons-material/Notifications";
 // import { Link } from "react-router-dom";
@@ -22,6 +23,7 @@ const pages = ["인트로 메뉴1", "인트로 메뉴2"];
 export default function NavBarLanding() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [openSignupModal, setOpenSignupModal] = useState<boolean>(false);
+  const [openSigninModal, setOpenSigninModal] = useState<boolean>(false);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -32,8 +34,13 @@ export default function NavBarLanding() {
   };
 
   const onClickSignup = () => {
-    setAnchorElNav(null);
+    handleCloseNavMenu();
     setOpenSignupModal((prev) => !prev);
+  };
+
+  const onClickSignin = () => {
+    handleCloseNavMenu();
+    setOpenSigninModal((prev) => !prev);
   };
 
   return (
@@ -127,10 +134,7 @@ export default function NavBarLanding() {
               display: { xs: "none", md: "flex" },
             }}
           >
-            <Button
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, display: "block" }}
-            >
+            <Button onClick={onClickSignin} sx={{ my: 2, display: "block" }}>
               로그인
             </Button>
           </Box>
@@ -145,6 +149,9 @@ export default function NavBarLanding() {
       </Container>
       {openSignupModal && (
         <SignupModal open={openSignupModal} setOpen={setOpenSignupModal} />
+      )}
+      {openSigninModal && (
+        <SigninModal open={openSigninModal} setOpen={setOpenSigninModal} />
       )}
     </Box>
   );
