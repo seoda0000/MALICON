@@ -80,6 +80,8 @@ export default function FeedSection(props: Props) {
         }}
       >
         <Toolbar />
+
+        {/* 왼쪽 목록 열고 닫는 메뉴 아이콘 */}
         <IconButton
           color="inherit"
           aria-label="open drawer"
@@ -89,6 +91,8 @@ export default function FeedSection(props: Props) {
         >
           <MenuIcon />
         </IconButton>
+
+        {/* 피드 영역 */}
         <FeedList />
       </Box>
     </Box>
