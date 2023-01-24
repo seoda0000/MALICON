@@ -1,7 +1,9 @@
+import FeedSection from "../components/feed/FeedSection";
+
 function FeedPage() {
   return (
     <div>
-      <h1>피드페이지</h1>
+      <FeedSection />
     </div>
   );
 }
