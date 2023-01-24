@@ -17,6 +17,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FollowingListItem from "./FollowingListItem";
 import Divider from "@mui/material/Divider";
 import FeedProfileImage from "./FeedProfileImage";
+import CommentSection from "./CommentSection";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -84,6 +85,7 @@ const FeedListItem: React.FC<{ item: any }> = (props) => {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>덧글 목록 추후 추가</Typography>
+            <CommentSection />
           </CardContent>
         </Collapse>
       </Card>
