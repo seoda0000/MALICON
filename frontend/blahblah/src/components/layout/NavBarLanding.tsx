@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 // import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 // import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import SignupModal from "../auth/SignupModal";
 // import Badge from "@mui/material/Badge";
 // import NotificationsIcon from "@mui/icons-material/Notifications";
 // import { Link } from "react-router-dom";
@@ -19,9 +20,8 @@ import AdbIcon from "@mui/icons-material/Adb";
 const pages = ["인트로 메뉴1", "인트로 메뉴2"];
 
 export default function NavBarLanding() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [openSignupModal, setOpenSignupModal] = useState<boolean>(false);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -29,6 +29,11 @@ export default function NavBarLanding() {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const onClickSignup = () => {
+    setAnchorElNav(null);
+    setOpenSignupModal((prev) => !prev);
   };
 
   return (
@@ -132,15 +137,16 @@ export default function NavBarLanding() {
 
           {/* 회원가입 버튼 */}
           <Box>
-            <Button
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, display: "block" }}
-            >
+            <Button onClick={onClickSignup} sx={{ my: 2, display: "block" }}>
               회원가입
             </Button>
           </Box>
         </Toolbar>
       </Container>
+      {openSignupModal && (
+        <SignupModal open={openSignupModal} setOpen={setOpenSignupModal} />
+      )}
     </Box>
   );
 }
+
