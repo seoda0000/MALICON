@@ -230,6 +230,8 @@ export default function Layout(props: LayoutProps) {
 
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
+              component={Link}
+              to="/main"
               sx={{
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
@@ -249,9 +251,12 @@ export default function Layout(props: LayoutProps) {
             </ListItemButton>
           </ListItem>
 
-          {/* 구독 */}
+          {/* 피드 */}
+
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
+              component={Link}
+              to="/feed"
               sx={{
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
