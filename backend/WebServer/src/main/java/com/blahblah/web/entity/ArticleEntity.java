@@ -1,6 +1,7 @@
 package com.blahblah.web.entity;
 
 
+import com.blahblah.web.dto.request.ArticleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class ArticleEntity extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
 
     @ManyToOne(
@@ -31,4 +33,13 @@ public class ArticleEntity extends BaseEntity{
 
     @Column(nullable = false)
     private String content;
+
+    public ArticleDTO toArticleDTO(){
+        return ArticleDTO.builder()
+                .id(this.id)
+                .userId(userEntity.getId())
+                .title(title)
+                .content(content)
+                .build();
+    }
 }
