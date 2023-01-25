@@ -62,7 +62,7 @@ const EditorComponent = () => {
       />
 
       <ReactQuill
-        ref={(element) => {
+        ref={(element: any) => {
           if (element !== null) {
             QuillRef.current = element;
           }

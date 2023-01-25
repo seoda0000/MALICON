@@ -18,6 +18,7 @@ import FollowingListItem from "./FollowingListItem";
 import Divider from "@mui/material/Divider";
 import FeedProfileImage from "./FeedProfileImage";
 import CommentSection from "./CommentSection";
+import parse from "html-react-parser";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -64,7 +65,7 @@ const FeedListItem: React.FC<{ item: any }> = (props) => {
         <CardContent>
           <Typography variant="h5">{props.item.title}</Typography>
           {/* <Divider /> */}
-          <Typography variant="body1">{props.item.content}</Typography>
+          <div>{parse(props.item.content)}</div>
         </CardContent>
         <CardActions disableSpacing>
           <IconButton aria-label="add to favorites">

@@ -9,7 +9,8 @@ const SAMPLE_FEED_LIST = [
       username: "testuser1",
     },
     title: "제목입니다",
-    content: "내용입니다",
+    content:
+      '<p><span style="color: rgb(230, 0, 0);">dddddddddd</span></p><iframe class="ql-video" frameborder="0" allowfullscreen="true" src="https://www.youtube.com/embed/jUNz-uTF--E?showinfo=0"></iframe><p><span style="color: rgb(230, 0, 0);"><span class="ql-cursor">﻿</span></span></p>',
     created_at: "2023-1-24 6:14 PM",
     comments: [
       {
@@ -29,7 +30,7 @@ const SAMPLE_FEED_LIST = [
       username: "testuser3",
     },
     title: "제목입니다22222",
-    content: "내용입니다22222222",
+    content: "<h1>내용입니다22222222<h1/>",
     created_at: "2023-1-24 6:14 PM",
   },
   {
@@ -58,6 +59,7 @@ export default function FeedList() {
   return (
     <div>
       <EditorComponent />
+
       {SAMPLE_FEED_LIST.map((item) => (
         <FeedListItem item={item} key={item.pk} />
       ))}
