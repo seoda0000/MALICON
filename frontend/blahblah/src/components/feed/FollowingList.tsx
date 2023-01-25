@@ -26,7 +26,7 @@ const SAMPLE_FOLLOWING_LIST = [
 export default function FollowingList() {
   return (
     <div>
-      <Toolbar />
+      {/* <Toolbar /> */}
       <Divider />
       <List>
         {SAMPLE_FOLLOWING_LIST.map((item) => (

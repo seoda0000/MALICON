@@ -58,8 +58,6 @@ const SAMPLE_FEED_LIST = [
 export default function FeedList() {
   return (
     <div>
-      <EditorComponent />
-
       {SAMPLE_FEED_LIST.map((item) => (
         <FeedListItem item={item} key={item.pk} />
       ))}
