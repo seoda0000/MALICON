@@ -7,6 +7,7 @@ public interface ArticleService {
 
     ArticleEntity createArticle(ArticleDTO articleDTO);
 
+    boolean updateArticle(ArticleDTO articleDTO);
 
 
 }

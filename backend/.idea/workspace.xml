@@ -5,20 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="84fe32ab-76c1-4b79-b656-b30537f294c1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/controller/ArticleController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/dto/request/ArticleDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/repository/ArticleRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/service/ArticleService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/service/ArticleServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebServer/src/test/java/com/blahblah/web/ArticleTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/entity/ArticleEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/entity/ArticleEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/service/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebServer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/controller/ArticleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/controller/ArticleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/repository/ArticleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/repository/ArticleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/service/ArticleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/service/ArticleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/service/ArticleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/service/ArticleServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

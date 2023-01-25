@@ -36,12 +36,15 @@ public class ArticleController {
         }
     }
 
-//    @PutMapping
-//    public ResponseEntity updateArticle(@RequestBody ArticleDTO articleDTO){
-//        UserDTO loginUser = (UserDTO)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if(loginUser.getId() != articleDTO.getUserId()) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
-//
-//    }
+    @PutMapping()
+    public ResponseEntity updateArticle(@RequestBody ArticleDTO articleDTO){
+        UserDTO loginUser = (UserDTO)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("id"+articleDTO.getUserId());
+        if(loginUser.getId() != articleDTO.getUserId()) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
+        if(articleService.updateArticle(articleDTO))
+            return ResponseEntity.ok(new Message("피드 수정 성공"));
+        else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
 //
 //    @DeleteMapping
 //    public ResponseEntity deleteArticle(){

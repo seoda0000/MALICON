@@ -4,10 +4,11 @@ import com.blahblah.web.entity.ArticleEntity;
 import com.blahblah.web.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
 
 
-    UserEntity findById(long Id);
-
+    ArticleEntity findById(long id);
 
 }
