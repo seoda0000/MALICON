@@ -55,12 +55,12 @@ const FeedListItem: React.FC<{ item: any }> = (props) => {
           title={props.item.user.username}
           subheader={props.item.created_at}
         />
-        <CardMedia
+        {/* <CardMedia
           component="img"
           height="300"
           image="https://media.npr.org/assets/img/2021/08/11/gettyimages-1279899488_wide-f3860ceb0ef19643c335cb34df3fa1de166e2761-s1100-c50.jpg"
           alt="Paella dish"
-        />
+        /> */}
         <CardContent>
           <Typography variant="h5">{props.item.title}</Typography>
           {/* <Divider /> */}
