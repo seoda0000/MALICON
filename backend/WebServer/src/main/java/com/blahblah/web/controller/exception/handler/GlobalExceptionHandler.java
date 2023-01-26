@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<?> handleAllException(Exception e) {
-        log.error(e.getMessage());
+        e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("전역 에러"));
     }
 

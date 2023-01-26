@@ -6,9 +6,9 @@ import com.blahblah.web.dto.response.Message;
 import com.blahblah.web.dto.response.UserDTO;
 import com.blahblah.web.dto.response.UserMeDTO;
 import com.blahblah.web.service.UserService;
+import com.blahblah.web.util.JWTutil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,10 +43,10 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity getMyInfo(HttpServletRequest request){
-        UserDTO loginUser = (UserDTO)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long id = loginUser.getId();
-        log.info("ID : " + id);
-        UserDTO userInfo = userService.readUser(id);
+        String accessToken =request.getHeader("Authorization").substring(7);
+        log.info(accessToken);
+        String userId = JWTutil.getIdByAccessToken(accessToken);
+        UserDTO userInfo = userService.readUserByUserId(userId);
 
         return ResponseEntity.ok(
                 UserMeDTO.builder().avatar(userInfo.getAvatar())
@@ -61,9 +61,11 @@ public class UserController {
     }
 
     @PutMapping()
-    public ResponseEntity updateUser(@RequestBody UserDTO userDTO){
-        UserDTO loginUser = (UserDTO)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(loginUser.getId() != userDTO.getId()) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
+    public ResponseEntity updateUser(@RequestBody UserDTO userDTO, HttpServletRequest request){
+        String accessToken =request.getHeader("Authorization").substring(7);
+        String userId = JWTutil.getIdByAccessToken(accessToken);
+        log.info(userId + " " + userDTO.getUserId());
+        if(!userId.equals(userDTO.getUserId())) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
         log.info(userDTO.toString());
         if(userService.updateUser(userDTO))
             return ResponseEntity.ok(new Message("회원정보 수정 성공"));
