@@ -1,18 +1,25 @@
-import EditorComponent from "../components/feed/EditorComponent";
 import FeedList from "../components/feed/FeedList";
-// import FeedSection from "../components/feed/FeedSection";
+
 import { useSelector, useDispatch } from "react-redux";
 import { FeedStateType } from "../model/feed/feedStateType";
 import { fetchFeedData } from "../redux/modules/feed/feed-action";
-import { useEffect } from "react";
-// import feed from "../redux/modules/feed";
+import { useEffect, useState } from "react";
+
 import { AppDispatch } from "../redux/configStore";
+
+import EditorModal from "../components/feed/EditorModal";
+
+import Button from "@mui/material/Button";
+
+import CreateIcon from "@mui/icons-material/Create";
+
+import { RootState } from "../redux/configStore";
 
 let isInitial = true;
 
 function FeedPage() {
   const dispatch = useDispatch<AppDispatch>();
-  const feed = useSelector((state: FeedStateType) => state);
+  const feed = useSelector((state: RootState) => state.feed);
 
   useEffect(() => {
     dispatch(fetchFeedData());
@@ -29,12 +36,31 @@ function FeedPage() {
     }
   }, [feed, dispatch]);
 
+  // 모달 조작
+  const [openEditorModal, setOpenEditorModal] = useState<boolean>(false);
+  const onClickEditor = () => {
+    setOpenEditorModal((prev) => !prev);
+  };
+
   return (
     <div>
-      <EditorComponent />
+      <Button
+        onClick={onClickEditor}
+        variant="outlined"
+        startIcon={<CreateIcon />}
+      >
+        새 피드
+      </Button>
+
       <br />
       <br />
-      <FeedList feeds={feed.feeds} />
+      <FeedList feeds={feed.feeds} onClickEditor={onClickEditor} />
+
+      {openEditorModal && (
+        <EditorModal open={openEditorModal} setOpen={setOpenEditorModal} />
+      )}
+
+      {/* {showModal && <EditorModal open={showModal} setOpen={!showModal} />} */}
     </div>
   );
 }

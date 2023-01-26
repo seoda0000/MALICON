@@ -34,7 +34,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const FeedListItem: React.FC<{ item: any }> = (props) => {
+const FeedListItem: React.FC<{ item: any; onClickEditor: any }> = (props) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -47,19 +47,13 @@ const FeedListItem: React.FC<{ item: any }> = (props) => {
       <Card>
         <CardHeader
           avatar={<FeedProfileImage src={props.item.user.img} />}
-          action={<FeedSettingButton />}
+          action={<FeedSettingButton onClickEditor={props.onClickEditor} />}
           title={props.item.user.username}
           subheader={props.item.created_at}
         />
-        {/* <CardMedia
-          component="img"
-          height="300"
-          image="https://media.npr.org/assets/img/2021/08/11/gettyimages-1279899488_wide-f3860ceb0ef19643c335cb34df3fa1de166e2761-s1100-c50.jpg"
-          alt="Paella dish"
-        /> */}
+
         <CardContent>
           <Typography variant="h5">{props.item.title}</Typography>
-          {/* <Divider /> */}
           <div>{parse(props.item.content)}</div>
         </CardContent>
         <CardActions disableSpacing>

@@ -56,13 +56,25 @@ const SAMPLE_FEED_LIST = [
   },
 ];
 
-const FeedList: React.FC<{ feeds: FeedType[] }> = (props) => {
+const FeedList: React.FC<{ feeds: FeedType[]; onClickEditor: any }> = (
+  props
+) => {
   return (
     <div>
       {props.feeds &&
-        props.feeds.map((item) => <FeedListItem item={item} key={item.id} />)}
+        props.feeds.map((item) => (
+          <FeedListItem
+            item={item}
+            key={item.id}
+            onClickEditor={props.onClickEditor}
+          />
+        ))}
       {SAMPLE_FEED_LIST.map((item) => (
-        <FeedListItem item={item} key={item.pk} />
+        <FeedListItem
+          item={item}
+          key={item.pk}
+          onClickEditor={props.onClickEditor}
+        />
       ))}
     </div>
   );

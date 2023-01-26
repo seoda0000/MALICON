@@ -1,19 +1,15 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
+import { useEffect, useState } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import PersonAdd from "@mui/icons-material/PersonAdd";
-import Settings from "@mui/icons-material/Settings";
-import Logout from "@mui/icons-material/Logout";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-export default function FeedSettingButton() {
+import IconButton from "@mui/material/IconButton";
+
+import Tooltip from "@mui/material/Tooltip";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import EditorModal from "./EditorModal";
+const FeedSettingButton: React.FC<{ onClickEditor: any }> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -22,6 +18,13 @@ export default function FeedSettingButton() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  // 모달 조작
+  const [openEditorModal, setOpenEditorModal] = useState<boolean>(false);
+  const onClickEditor = () => {
+    setOpenEditorModal((prev) => !prev);
+  };
+
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -73,11 +76,16 @@ export default function FeedSettingButton() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose}>수정</MenuItem>
+        <MenuItem onClick={onClickEditor}>수정</MenuItem>
 
         <MenuItem onClick={handleClose}>삭제</MenuItem>
         <MenuItem onClick={handleClose}>신고</MenuItem>
       </Menu>
+      {openEditorModal && (
+        <EditorModal open={openEditorModal} setOpen={setOpenEditorModal} />
+      )}
     </React.Fragment>
   );
-}
+};
+
+export default FeedSettingButton;
