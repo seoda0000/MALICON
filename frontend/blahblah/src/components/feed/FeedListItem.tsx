@@ -34,7 +34,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const FeedListItem: React.FC<{ item: any; onClickEditor: any }> = (props) => {
+const FeedListItem: React.FC<{ item: any }> = (props) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -47,7 +47,7 @@ const FeedListItem: React.FC<{ item: any; onClickEditor: any }> = (props) => {
       <Card>
         <CardHeader
           avatar={<FeedProfileImage src={props.item.user.img} />}
-          action={<FeedSettingButton onClickEditor={props.onClickEditor} />}
+          action={<FeedSettingButton />}
           title={props.item.user.username}
           subheader={props.item.created_at}
         />

@@ -9,7 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditorModal from "./EditorModal";
-const FeedSettingButton: React.FC<{ onClickEditor: any }> = (props) => {
+import FeedRemoveDialog from "./FeedRemoveDialog";
+const FeedSettingButton: React.FC<{}> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -19,10 +20,19 @@ const FeedSettingButton: React.FC<{ onClickEditor: any }> = (props) => {
     setAnchorEl(null);
   };
 
-  // 모달 조작
+  // 수정 모달 조작
   const [openEditorModal, setOpenEditorModal] = useState<boolean>(false);
   const onClickEditor = () => {
     setOpenEditorModal((prev) => !prev);
+  };
+
+  // 삭제 다이얼로그 조작
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const handleClickOpen = () => {
+    setOpenDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
   return (
@@ -77,13 +87,14 @@ const FeedSettingButton: React.FC<{ onClickEditor: any }> = (props) => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={onClickEditor}>수정</MenuItem>
-
-        <MenuItem onClick={handleClose}>삭제</MenuItem>
+        <MenuItem onClick={handleClickOpen}>삭제</MenuItem>
         <MenuItem onClick={handleClose}>신고</MenuItem>
       </Menu>
       {openEditorModal && (
         <EditorModal open={openEditorModal} setOpen={setOpenEditorModal} />
       )}
+
+      <FeedRemoveDialog open={openDialog} handleClose={handleCloseDialog} />
     </React.Fragment>
   );
 };

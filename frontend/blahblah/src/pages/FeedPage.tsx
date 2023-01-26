@@ -54,7 +54,7 @@ function FeedPage() {
 
       <br />
       <br />
-      <FeedList feeds={feed.feeds} onClickEditor={onClickEditor} />
+      <FeedList feeds={feed.feeds} />
 
       {openEditorModal && (
         <EditorModal open={openEditorModal} setOpen={setOpenEditorModal} />

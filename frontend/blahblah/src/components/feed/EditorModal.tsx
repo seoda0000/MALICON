@@ -1,7 +1,5 @@
 import { Box, Button, FormControl, Input, InputLabel } from "@mui/material";
 
-import { useAppDispatch } from "../../redux/configStore.hooks";
-import { signinAction } from "../../redux/modules/user";
 import BasicModal from "../ui/BasicModal";
 
 import TextField from "@mui/material/TextField";
@@ -15,12 +13,12 @@ import { AppDispatch } from "../../redux/configStore";
 import { useDispatch } from "react-redux";
 import { postFeedData } from "../../redux/modules/feed";
 
-const buttonBoxStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  marginTop: "32px",
-};
+// const buttonBoxStyle = {
+//   display: "flex",
+//   justifyContent: "center",
+//   alignItems: "center",
+//   marginTop: "32px",
+// };
 
 export default function EditorModal({ open, setOpen }: any): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
