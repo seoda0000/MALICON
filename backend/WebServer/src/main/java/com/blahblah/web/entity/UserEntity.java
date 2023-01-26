@@ -37,7 +37,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     private String avatar;
 
-    @Column(nullable = false,name = "light_stick")
+    @Column(name = "light_stick")
     private String lightStick;
 
     public UserDTO toUserDTO(){
