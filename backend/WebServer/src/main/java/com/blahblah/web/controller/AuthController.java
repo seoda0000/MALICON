@@ -42,8 +42,8 @@ public class AuthController {
         log.info(reqRefreshToken);
         // Exception 핸들러로 캐치하자 나중에
         if(JWTutil.isValidToken(reqRefreshToken)){
-            long id = JWTutil.getIdByRefreshToken(reqRefreshToken);
-            UserDTO user = userService.readUser(id);
+            String userId = JWTutil.getIdByRefreshToken(reqRefreshToken);
+            UserDTO user = userService.readUserByUserId(userId);
             String resAcessToken = JWTutil.getJwtToken(user);
             String resRefreshToken = JWTutil.getRefreshToken(user);
             return ResponseEntity.ok(new MessageWithToken("토큰 재발급 성공",new TokenDTO(resAcessToken, resRefreshToken)));

@@ -45,8 +45,8 @@ public class JWTutil {
                 .setIssuer(ISSUER)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + ACCESS_EXPIRATION_TIME))
-                .claim("userId",user.getUserId())
                 .claim("id", user.getId())
+                .claim("userId",user.getUserId())
                 .claim("name",user.getNickName())
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
@@ -59,7 +59,7 @@ public class JWTutil {
                 .setIssuer(ISSUER)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + REFRESH_EXPIRATION_TIME))
-                .claim("id", user.getId())
+                .claim("userId", user.getUserId())
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
@@ -69,20 +69,24 @@ public class JWTutil {
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
-        Long id = Integer.toUnsignedLong((Integer)claims.get("id"));
+        String userId = (String)claims.get("userId");
 
-        log.info("ID : " + id);
+        log.info("USER_ID : " + userId);
 
-        if (id == null) {
+        if (userId == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDTO principal = UserEntity.builder().id(id).build().toUserDTO();
+        UserDTO principal = UserEntity.builder().userId(userId).build().toUserDTO();
         return new UsernamePasswordAuthenticationToken(principal, "", new ArrayList<>());
     }
 
-    public static long getIdByRefreshToken(String refreshToken){
-        return (Integer)parseClaims(refreshToken).get("id");
+    public static String  getIdByRefreshToken(String refreshToken){
+        return (String) parseClaims(refreshToken).get("userId");
+    }
+
+    public static String  getIdByAccessToken(String accessToken){
+        return (String) parseClaims(accessToken).get("userId");
     }
 
     public static boolean isValidToken(String token){

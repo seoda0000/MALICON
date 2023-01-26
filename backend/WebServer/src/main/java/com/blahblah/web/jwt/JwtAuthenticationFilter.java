@@ -5,7 +5,6 @@ import com.blahblah.web.util.JWTutil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -16,7 +15,6 @@ import java.io.IOException;
 
 // 필터가 서블릿의 request 당 한번만 발생하게 OncePerRequestFilter를 상속그
 @Slf4j
-@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByUserId(String userId);
     void deleteByUserId(String userId);
 
-    Optional<UserDetails> findByUserId(String userId);
+    Optional<UserEntity> findByUserId(String userId);
 
     UserEntity findById(long id);
 }
