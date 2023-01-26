@@ -4,8 +4,13 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import { AppDispatch } from "../../redux/configStore";
+import { useDispatch } from "react-redux";
+import { postFeedData } from "../../redux/modules/feed";
 
 const EditorComponent = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const titleRef = useRef<HTMLInputElement>(null);
   const QuillRef = useRef<ReactQuill>();
   const [contents, setContents] = useState("");
@@ -15,16 +20,19 @@ const EditorComponent = () => {
 
   function createFeedHandler(event: React.ChangeEvent<HTMLInputElement>) {
     event.preventDefault();
+    const feedTitle = titleRef.current?.value || "";
+    const feedContent = String(QuillRef.current?.value);
 
-    const feedTitle = titleRef.current?.value;
-    const feedContent = QuillRef.current?.value;
-
-    const feedData = {
+    const postData = {
       title: feedTitle,
       content: feedContent,
     };
 
-    console.log(feedData);
+    console.log(postData);
+
+    if (postData && postData.title && postData.content) {
+      dispatch(postFeedData(postData));
+    }
   }
 
   const modules = useMemo(

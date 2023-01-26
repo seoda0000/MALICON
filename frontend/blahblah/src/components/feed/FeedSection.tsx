@@ -163,7 +163,7 @@ export default function FeedSection(props: Props) {
 
         {/* 피드 영역 */}
         <TabPanel value={value} index={0}>
-          <FeedList />
+          {/* <FeedList /> */}
         </TabPanel>
         <TabPanel value={value} index={1}>
           <h1>피드 작성</h1>

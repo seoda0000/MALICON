@@ -9,7 +9,11 @@ const initialState: FeedStateType = {
 const feedSlice = createSlice({
   name: "feed",
   initialState,
-  reducers: {},
+  reducers: {
+    replaceFeed(state, action) {
+      state.feeds = action.payload.feeds;
+    },
+  },
 });
 
 export const feedActions = feedSlice.actions;

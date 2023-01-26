@@ -1,5 +1,6 @@
-import EditorComponent from "./EditorComponent";
 import FeedListItem from "./FeedListItem";
+import { FeedType } from "../../model/feed/feedType";
+import React from "react";
 
 const SAMPLE_FEED_LIST = [
   {
@@ -55,12 +56,16 @@ const SAMPLE_FEED_LIST = [
   },
 ];
 
-export default function FeedList() {
+const FeedList: React.FC<{ feeds: FeedType[] }> = (props) => {
   return (
     <div>
+      {props.feeds &&
+        props.feeds.map((item) => <FeedListItem item={item} key={item.id} />)}
       {SAMPLE_FEED_LIST.map((item) => (
         <FeedListItem item={item} key={item.pk} />
       ))}
     </div>
   );
-}
+};
+
+export default FeedList;
