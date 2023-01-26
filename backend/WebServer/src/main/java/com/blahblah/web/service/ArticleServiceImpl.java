@@ -24,7 +24,7 @@ public class ArticleServiceImpl implements ArticleService{
     @Override
     public ArticleEntity createArticle(ArticleDTO articleDTO) {
         ArticleEntity article = ArticleEntity.builder()
-                .userEntity(userRepository.findById(articleDTO.getUserId()))
+                .userEntity(userRepository.findById(articleDTO.getUserId()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "작성자가 유효하지 않습니다.")))
                 .title(articleDTO.getTitle())
                 .content(articleDTO.getContent())
                 .build();
@@ -46,4 +46,11 @@ public class ArticleServiceImpl implements ArticleService{
         articleRepository.save(update);
         return true;
     }
+
+    @Override
+    public void deleteArticle(long id) {
+        articleRepository.deleteById(id);
+    }
+
+
 }

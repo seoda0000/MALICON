@@ -9,5 +9,6 @@ public interface ArticleService {
 
     boolean updateArticle(ArticleDTO articleDTO);
 
+    void deleteArticle(long id);
 
 }

@@ -45,11 +45,16 @@ public class ArticleController {
             return ResponseEntity.ok(new Message("피드 수정 성공"));
         else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-//
-//    @DeleteMapping
-//    public ResponseEntity deleteArticle(){
-//
-//    }
+
+    @DeleteMapping
+    public ResponseEntity deleteArticle(@RequestBody ArticleDTO articleDTO){
+        long id = articleDTO.getId();
+        UserDTO loginUser = (UserDTO)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(loginUser.getId() != id) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
+
+        articleService.deleteArticle(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new Message("피드 삭제 완료"));
+    }
 //
 //    @GetMapping("/subscribe")
 //    public ResponseEntity readArticle(){
