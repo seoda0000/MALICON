@@ -18,18 +18,17 @@ export default function FeedRemoveDialog({
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        {"Use Google's location service?"}
+        {"피드를 삭제하시겠습니까?"}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Let Google help apps determine location. This means sending anonymous
-          location data to Google, even when no apps are running.
+          삭제된 피드는 복구되지 않습니다.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Disagree</Button>
+        <Button onClick={handleClose}>취소</Button>
         <Button onClick={handleClose} autoFocus>
-          Agree
+          삭제
         </Button>
       </DialogActions>
     </Dialog>
