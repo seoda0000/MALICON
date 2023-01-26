@@ -44,7 +44,10 @@ function NavBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="fixed"
+      sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* (md) 로고 영역 */}

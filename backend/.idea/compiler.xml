@@ -10,5 +10,10 @@
         <module name="web.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="com.blahblah.web.main" target="11" />
+      <module name="web" target="11" />
+      <module name="web.test" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
