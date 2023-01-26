@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="84fe32ab-76c1-4b79-b656-b30537f294c1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/controller/ArticleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/controller/ArticleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/repository/ArticleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/repository/ArticleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/service/ArticleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/service/ArticleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/service/ArticleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/WebServer/src/main/java/com/blahblah/web/service/ArticleServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +42,14 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -49,14 +61,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/SSAFY/ssafy08/S08P12A207/backend&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "C:/SSAFY/workspace/myhome_backend_seoul_11ban_minchohyeon_choseunghee"
   }
-}</component>
-  <component name="RunManager">
+}]]></component>
+  <component name="RunManager" selected="Gradle.WebServer [bootRun]">
+    <configuration name="ArticleTest.insertTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/WebServer" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.blahblah.web.ArticleTest.insertTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="WebServer [bootRun]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -81,6 +117,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.WebServer [bootRun]" />
+        <item itemvalue="Gradle.ArticleTest.insertTest" />
       </list>
     </recent_temporary>
   </component>
@@ -94,5 +131,15 @@
       <updated>1673841548959</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
