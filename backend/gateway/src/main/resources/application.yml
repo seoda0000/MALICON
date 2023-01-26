@@ -12,7 +12,7 @@ spring:
     gateway:
       routes:
       - id: user_me
-        uri: http://localhost:8081
+        uri: http://172.17.0.1:8081
         predicates:
           - Path=/web-service/api/users/me
         filters:
@@ -20,7 +20,7 @@ spring:
           - JwtAuthenticationFilter
 
       - id: user_modify
-        uri: http://localhost:8081
+        uri: http://172.17.0.1:8081
         predicates:
           - Path=/web-service/api/users/**
           - Method=PUT
@@ -29,7 +29,7 @@ spring:
           - JwtAuthenticationFilter
 
       - id: web-service
-        uri: http://localhost:8081
+        uri: http://172.17.0.1:8081
         predicates:
           - Path=/web-service/**
         filters:
