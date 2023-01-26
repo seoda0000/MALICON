@@ -17,6 +17,7 @@ import Divider from "@mui/material/Divider";
 import FeedProfileImage from "./FeedProfileImage";
 import CommentSection from "./CommentSection";
 import parse from "html-react-parser";
+import FeedSettingButton from "./FeedSettingButton";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -46,11 +47,7 @@ const FeedListItem: React.FC<{ item: any }> = (props) => {
       <Card>
         <CardHeader
           avatar={<FeedProfileImage src={props.item.user.img} />}
-          action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-          }
+          action={<FeedSettingButton />}
           title={props.item.user.username}
           subheader={props.item.created_at}
         />
