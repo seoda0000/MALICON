@@ -5,14 +5,24 @@ import { SigninType } from "../../../model/user/signinType";
 import { UserType } from "../../../model/user/userType";
 import { getAccessToken, setAccessToken, setRefreshToken } from "./token";
 
+function createDefaultAxiosInst() {
+  let instance = axios.create({
+    baseURL: "http://blahblah.movebxeax.me",
+  });
+  return instance;
+}
+
 // 회원가입
 export const signupAction = createAsyncThunk(
   "SIGNUP",
   async (userData: UserType, { rejectWithValue }) => {
     try {
       console.log("비동기요청[SIGNUP] 시작");
-      const { data } = await axios.post<UserType>(
-        `http://localhost:8080/api/users`,
+
+      const inst = createDefaultAxiosInst();
+
+      const { data } = await inst.post<UserType>(
+        `/api/users`,
         userData
       );
       console.log("비동기요청[SIGNUP] 끝 : " + data);
@@ -30,8 +40,10 @@ export const checkDuplicateAction = createAsyncThunk(
   async (userId: string, { rejectWithValue }) => {
     try {
       console.log("비동기요청[CHECK_DUPLICATE] 시작");
-      const { data } = await axios.get<string>(
-        `http://localhost:8080/api/users/${userId}`
+      const inst = createDefaultAxiosInst();
+
+      const { data } = await inst.get<string>(
+        `/api/users/${userId}`
       );
       console.log("비동기요청[CHECK_DUPLICATE] 끝 : " + data);
       return data;
@@ -47,15 +59,11 @@ export const signinAction = createAsyncThunk(
   async (userData: SigninType, { rejectWithValue }) => {
     try {
       console.log("비동기요청[SIGNIN] 시작");
-      const { data } = await axios.post<SigninResponseType>(
-        "http://localhost:8080/api/auth/login",
-        userData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + getAccessToken(),
-          },
-        }
+      const inst = createDefaultAxiosInst();
+
+      const { data } = await inst.post<SigninResponseType>(
+        "/api/auth/login",
+        userData
       );
       console.log("비동기요청[SIGNIN] 끝");
       console.log(`로그인 - User: ${data}`);
