@@ -20,7 +20,7 @@ static_resources:
             - name: local_service
               domains: ["*"]
               routes:
-              - match: { prefix: "/api/" }
+              - match: { prefix: "/web-service/" }
                 route: { cluster: blahblah_backend }
               - match: { prefix: "/" }
                 route: { cluster: blahblah_frontend }

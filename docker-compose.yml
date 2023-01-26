@@ -13,6 +13,9 @@ services:
       - CHOKIDAR_USEPOLLING=true
     stdin_open: true
     tty: true
+    networks:
+      - default
+      - blahblah_net
 
   blahblah_webserver:
     container_name: blahblah_webserver
@@ -20,9 +23,25 @@ services:
       context: ./backend/WebServer/
       dockerfile: dockerfile
     ports:
+      - "8081:8081"
+    stdin_open: true
+    tty: true
+    networks:
+      - default
+      - blahblah_net
+
+  blahblah_api_gateway:
+    container_name: blahblah_api_gateway
+    build:
+      context: ./backend/gateway/
+      dockerfile: dockerfile
+    ports:
       - "8888:8080"
     stdin_open: true
     tty: true
+    networks:
+      - default
+      - blahblah_net
 
   envoy:
     image: envoyproxy/envoy-dev
