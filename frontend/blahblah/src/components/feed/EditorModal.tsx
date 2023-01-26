@@ -11,8 +11,8 @@ import "react-quill/dist/quill.snow.css";
 
 import { AppDispatch } from "../../redux/configStore";
 import { useDispatch } from "react-redux";
-import { postFeedData } from "../../redux/modules/feed";
-
+import { postFeedData, editFeedData } from "../../redux/modules/feed";
+import parse from "html-react-parser";
 // const buttonBoxStyle = {
 //   display: "flex",
 //   justifyContent: "center",
@@ -20,12 +20,17 @@ import { postFeedData } from "../../redux/modules/feed";
 //   marginTop: "32px",
 // };
 
-export default function EditorModal({ open, setOpen }: any): JSX.Element {
+export default function EditorModal({
+  open,
+  setOpen,
+  feed,
+  isEdit,
+}: any): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
 
   const titleRef = useRef<HTMLInputElement>(null);
   const QuillRef = useRef<ReactQuill>();
-  const [contents, setContents] = useState("");
+  const [contents, setContents] = useState(feed.content);
 
   // quill에서 사용할 모듈을 설정하는 코드
   // useMemo를 사용하지 않으면, 키를 입력할 때마다, imageHandler 때문에 focus가 계속 풀리게 됩니다.
@@ -42,7 +47,11 @@ export default function EditorModal({ open, setOpen }: any): JSX.Element {
 
     console.log(postData);
     if (postData && postData.title && postData.content) {
-      dispatch(postFeedData(postData));
+      if (isEdit) {
+        dispatch(editFeedData(postData));
+      } else {
+        dispatch(postFeedData(postData));
+      }
     }
   };
 
@@ -85,6 +94,7 @@ export default function EditorModal({ open, setOpen }: any): JSX.Element {
           type="title"
           variant="standard"
           inputRef={titleRef}
+          defaultValue={feed.title}
         />
 
         <ReactQuill
@@ -94,10 +104,12 @@ export default function EditorModal({ open, setOpen }: any): JSX.Element {
             }
           }}
           value={contents}
+          // value="엥?"
           onChange={setContents}
           modules={modules}
           theme="snow"
           placeholder="내용을 입력해주세요."
+          // defaultValue="엥?"
         />
 
         <Button size="medium" type="submit">

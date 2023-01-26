@@ -73,4 +73,26 @@ export const removeFeedData = () => {};
 
 // 피드 수정하기
 
-export const editFeedData = () => {};
+export const editFeedData = createAsyncThunk(
+  "feed/postFeedData",
+  async (postData: FeedPostType, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post<FeedType>(
+        `http://blahblah.movebxeax.me/api/articles`,
+        postData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      );
+      console.log("피드 작성: ", data);
+
+      return data;
+    } catch (e) {
+      console.error(e);
+      return rejectWithValue(e);
+    }
+  }
+);

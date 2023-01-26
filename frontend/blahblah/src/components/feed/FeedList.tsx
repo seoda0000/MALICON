@@ -60,9 +60,9 @@ const FeedList: React.FC<{ feeds: FeedType[] }> = (props) => {
   return (
     <div>
       {props.feeds &&
-        props.feeds.map((item) => <FeedListItem item={item} key={item.id} />)}
-      {SAMPLE_FEED_LIST.map((item) => (
-        <FeedListItem item={item} key={item.pk} />
+        props.feeds.map((feed) => <FeedListItem feed={feed} key={feed.id} />)}
+      {SAMPLE_FEED_LIST.map((feed) => (
+        <FeedListItem feed={feed} key={feed.pk} />
       ))}
     </div>
   );

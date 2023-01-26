@@ -10,7 +10,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditorModal from "./EditorModal";
 import FeedRemoveDialog from "./FeedRemoveDialog";
-const FeedSettingButton: React.FC<{}> = (props) => {
+const FeedSettingButton: React.FC<{ feed: any }> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -91,7 +91,12 @@ const FeedSettingButton: React.FC<{}> = (props) => {
         <MenuItem onClick={handleClose}>신고</MenuItem>
       </Menu>
       {openEditorModal && (
-        <EditorModal open={openEditorModal} setOpen={setOpenEditorModal} />
+        <EditorModal
+          open={openEditorModal}
+          setOpen={setOpenEditorModal}
+          feed={props.feed}
+          isEdit={true}
+        />
       )}
 
       <FeedRemoveDialog open={openDialog} handleClose={handleCloseDialog} />

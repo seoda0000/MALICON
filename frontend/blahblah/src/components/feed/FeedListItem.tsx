@@ -34,7 +34,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const FeedListItem: React.FC<{ item: any }> = (props) => {
+const FeedListItem: React.FC<{ feed: any }> = (props) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -46,15 +46,15 @@ const FeedListItem: React.FC<{ item: any }> = (props) => {
       {/* <Card sx={{ maxWidth: 345 }}> */}
       <Card>
         <CardHeader
-          avatar={<FeedProfileImage src={props.item.user.img} />}
-          action={<FeedSettingButton />}
-          title={props.item.user.username}
-          subheader={props.item.created_at}
+          avatar={<FeedProfileImage src={props.feed.user.img} />}
+          action={<FeedSettingButton feed={props.feed} />}
+          title={props.feed.user.username}
+          subheader={props.feed.created_at}
         />
 
         <CardContent>
-          <Typography variant="h5">{props.item.title}</Typography>
-          <div>{parse(props.item.content)}</div>
+          <Typography variant="h5">{props.feed.title}</Typography>
+          <div>{parse(props.feed.content)}</div>
         </CardContent>
         <CardActions disableSpacing>
           <IconButton aria-label="add to favorites">

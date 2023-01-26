@@ -57,7 +57,12 @@ function FeedPage() {
       <FeedList feeds={feed.feeds} />
 
       {openEditorModal && (
-        <EditorModal open={openEditorModal} setOpen={setOpenEditorModal} />
+        <EditorModal
+          open={openEditorModal}
+          setOpen={setOpenEditorModal}
+          feed={{ title: "", content: "" }}
+          isEdit={false}
+        />
       )}
 
       {/* {showModal && <EditorModal open={showModal} setOpen={!showModal} />} */}
