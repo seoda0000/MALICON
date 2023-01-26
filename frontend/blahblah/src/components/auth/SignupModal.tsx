@@ -12,6 +12,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
 import { checkDuplicateAction, signupAction } from "../../redux/modules/user";
 import BasicModal from "../ui/BasicModal";
@@ -31,9 +32,9 @@ const checkBoxStyle = {
 };
 
 export default function SignupModal({ open, setOpen }: any): JSX.Element {
-  const user = useAppSelector((state) => state.user.userData);
   const checkDup = useAppSelector((state) => state.user.checkDuplicate);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
@@ -108,11 +109,6 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
 
   const onConfirmID = () => {
     dispatch(checkDuplicateAction(id));
-    if (checkDup.data) {
-      setIdAvail("Unavailable");
-    } else {
-      setIdAvail("Available");
-    }
   };
 
   const handleClickShowPw = () => {
@@ -140,17 +136,18 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
     ) {
       dispatch(
         signupAction({
-          ...user,
           userId: id,
           password: pw,
           nickName,
           email,
-          phone,
+          phoneNumber: phone === "" ? null : phone,
         })
       );
 
       console.log("회원가입 된건가?");
       alert("회원가입 완료");
+      onCloseModal();
+      navigate("/", { replace: true });
     }
   };
 
@@ -161,6 +158,14 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
       setRePwAvail(false);
     }
   }, [pw, rePw]);
+
+  useEffect(() => {
+    if (checkDup.error) {
+      setIdAvail("Unavailable");
+    } else if (checkDup.data) {
+      setIdAvail("Available");
+    }
+  }, [checkDup]);
   return (
     <BasicModal open={open} setOpen={setOpen}>
       <Box
@@ -189,15 +194,16 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
               }
             />
             <FormHelperText id="id-helper-text">
-              {id && idAvail === "Unavailable" && (
-                <span>다른 아이디를 입력해주세요</span>
-              )}
-              {id && idAvail === "PleaseCheckId" && (
-                <span>아이디 중복 검사를 해주세요</span>
-              )}
-              {id && idAvail === "RegexFail" && (
-                <span>영문자로 시작하는 영문자 또는 숫자 6~20자</span>
-              )}
+              {id &&
+                (idAvail === "Available" ? (
+                  <span>사용 가능한 ID입니다</span>
+                ) : idAvail === "PleaseCheckId" ? (
+                  <span>아이디 중복 검사를 해주세요</span>
+                ) : idAvail === "RegexFail" ? (
+                  <span>영문자로 시작하는 영문자 또는 숫자 6~20자</span>
+                ) : (
+                  <span>이미 사용중인 ID입니다</span>
+                ))}
             </FormHelperText>
           </FormControl>
           <Button onClick={onConfirmID}>아이디 중복 확인</Button>
