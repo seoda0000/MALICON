@@ -2,6 +2,7 @@ package com.blahblah.web.entity;
 
 
 import com.blahblah.web.dto.request.ArticleDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,10 +24,11 @@ public class ArticleEntity extends BaseEntity{
 
     @ManyToOne(
             targetEntity = UserEntity.class,
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
+
 
     @Column(nullable = false)
     private String title;
