@@ -4,7 +4,13 @@ import { SigninResponseType } from "../../../model/user/signinResponseType";
 import { SigninType } from "../../../model/user/signinType";
 import { SignupType } from "../../../model/user/signupType";
 import { UserType } from "../../../model/user/userType";
-import { getAccessToken, setAccessToken, setRefreshToken } from "./token";
+import { useAppDispatch } from "../../configStore.hooks";
+import {
+  getAccessToken,
+  removeToken,
+  setAccessToken,
+  setRefreshToken,
+} from "./token";
 
 function createDefaultAxiosInst() {
   let instance = axios.create({
@@ -54,24 +60,92 @@ export const checkDuplicateAction = createAsyncThunk(
 // 로그인
 export const signinAction = createAsyncThunk(
   "SIGNIN",
-  async (userData: SigninType, { rejectWithValue }) => {
+  async (userData: SigninType, { dispatch, rejectWithValue }) => {
     try {
       console.log("비동기요청[SIGNIN] 시작");
+
       const inst = createDefaultAxiosInst();
 
-      const { data } = await inst.post("/api/auth/login", userData);
-      console.log("비동기요청[SIGNIN] 끝");
-      //   console.log(`로그인 - User: ${data.userId}`);
-      console.log(data);
+      await inst
+        .post("/api/auth/login", userData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then(({ data }: any) => {
+          console.log("비동기요청[SIGNIN] 끝 : " + data.message);
 
-      // 로컬스토리지 저장
-      //   setAccessToken(data.accessToken);
-      //   setRefreshToken(data.refreshToken);
+          // 로컬스토리지 저장
+          setAccessToken(data.token.accessToken);
+          setRefreshToken(data.token.refreshToken);
 
-      //   return data;
-      return data;
+          console.log("1111 ", getAccessToken());
+        })
+        .then(() => {
+          // user state에 저장
+          dispatch(getMeWithTokenAction());
+        });
+
+      // return data;
     } catch (e) {
       console.error(e);
+      console.log("로그인 실패");
+      return rejectWithValue(e);
+    }
+  }
+);
+
+export const getMeWithTokenAction = createAsyncThunk(
+  "GET_ME",
+  async (token, { dispatch, rejectWithValue }) => {
+    try {
+      console.log("비동기요청[GET_ME] 시작");
+      console.log("2222 ", getAccessToken());
+
+      const { data } = await axios.get(
+        "http://blahblah.movebxeax.me/web-service/api/users/me",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        }
+      );
+      console.log("비동기요청[GET_ME] 끝 : " + data.nickName);
+      console.log(`로그인 - User: ${data.userId}`);
+
+      return data;
+    } catch (e) {
+      // 토큰 갱신
+      dispatch(refreshTokenAction());
+
+      return rejectWithValue(e);
+    }
+  }
+);
+
+export const refreshTokenAction = createAsyncThunk(
+  "REFRESH_TOKEN",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      console.log("비동기요청[REFRESH_TOKEN] 시작");
+      const req = { reqRefreshToken: "" };
+      const { data } = await axios.post(
+        "http://blahblah.movebxeax.me/web-service/api/auth/refresh",
+        req
+      );
+      console.log("비동기요청[REFRESH_TOKEN] 끝 : " + data.message);
+
+      setAccessToken(data.token.accessToken);
+      setRefreshToken(data.token.refreshToken);
+
+      // user state에 저장
+      dispatch(getMeWithTokenAction());
+
+      return data;
+    } catch (e) {
+      // 로그아웃
+
       return rejectWithValue(e);
     }
   }

@@ -206,7 +206,14 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
                 ))}
             </FormHelperText>
           </FormControl>
-          <Button onClick={onConfirmID}>아이디 중복 확인</Button>
+          <Button
+            onClick={onConfirmID}
+            disabled={
+              idAvail === "RegexFail" || idAvail === "Available" ? true : false
+            }
+          >
+            아이디 중복 확인
+          </Button>
         </div>
         <FormControl variant="standard">
           <InputLabel htmlFor="pw">Password *</InputLabel>

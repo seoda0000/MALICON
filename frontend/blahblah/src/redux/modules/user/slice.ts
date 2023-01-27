@@ -1,6 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserStateType } from "../../../model/user/userStateType";
-import { checkDuplicateAction, signinAction, signupAction } from "./thunk";
+import {
+  checkDuplicateAction,
+  getMeWithTokenAction,
+  refreshTokenAction,
+  signinAction,
+  signupAction,
+} from "./thunk";
 
 const initialState: UserStateType = {
   userData: {
@@ -8,14 +14,18 @@ const initialState: UserStateType = {
     password: "",
     nickName: "",
     email: "",
-    phone: "",
-    accessToken: "",
-    refreshToken: "",
+    phoneNumber: null,
+    avatar: null,
+    lightStick: null,
+    // accessToken: "",
+    // refreshToken: "",
     isLoggedIn: false,
   },
   signup: { loading: false, data: null, error: null },
   checkDuplicate: { loading: false, data: null, error: null },
   signin: { loading: false, data: null, error: null },
+  getMe: { loading: false, data: null, error: null },
+  refreshToken: { loading: false, data: null, error: null },
 };
 
 const userSlice = createSlice({
@@ -63,19 +73,49 @@ const userSlice = createSlice({
         state.signin.loading = false;
         state.signin.data = payload;
         state.signin.error = null;
-        state.userData.userId = payload.userId;
-        state.userData.password = payload.password;
-        state.userData.email = payload.email;
-        state.userData.nickName = payload.nickName;
-        state.userData.phone = payload.password;
-        state.userData.accessToken = payload.accessToken;
-        state.userData.refreshToken = payload.refreshToken;
-        state.userData.isLoggedIn = true;
       })
       .addCase(signinAction.rejected, (state, { payload }) => {
         state.signin.loading = false;
         state.signin.data = null;
         state.signin.error = payload;
+      })
+      .addCase(getMeWithTokenAction.pending, (state) => {
+        state.getMe.loading = true;
+        state.getMe.data = null;
+        state.getMe.error = null;
+      })
+      .addCase(getMeWithTokenAction.fulfilled, (state, { payload }) => {
+        state.getMe.loading = false;
+        state.getMe.data = payload;
+        state.getMe.error = null;
+
+        state.userData.userId = payload.userId;
+        state.userData.email = payload.email;
+        state.userData.nickName = payload.nickName;
+        state.userData.phoneNumber = payload.phoneNumber;
+        state.userData.avatar = payload.avatar;
+        state.userData.lightStick = payload.lightStick;
+        state.userData.isLoggedIn = true;
+      })
+      .addCase(getMeWithTokenAction.rejected, (state, { payload }) => {
+        state.getMe.loading = false;
+        state.getMe.data = null;
+        state.getMe.error = payload;
+      })
+      .addCase(refreshTokenAction.pending, (state) => {
+        state.refreshToken.loading = true;
+        state.refreshToken.data = null;
+        state.refreshToken.error = null;
+      })
+      .addCase(refreshTokenAction.fulfilled, (state, { payload }) => {
+        state.refreshToken.loading = false;
+        state.refreshToken.data = payload;
+        state.refreshToken.error = null;
+      })
+      .addCase(refreshTokenAction.rejected, (state, { payload }) => {
+        state.refreshToken.loading = false;
+        state.refreshToken.data = null;
+        state.refreshToken.error = payload;
       });
   },
 });

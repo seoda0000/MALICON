@@ -2,6 +2,7 @@ import { Box, Button, FormControl, Input, InputLabel } from "@mui/material";
 import React, { useState } from "react";
 import { useAppDispatch } from "../../redux/configStore.hooks";
 import { signinAction } from "../../redux/modules/user";
+import { removeToken } from "../../redux/modules/user/token";
 import BasicModal from "../ui/BasicModal";
 
 const buttonBoxStyle = {
@@ -24,17 +25,25 @@ export default function SigninModal({ open, setOpen }: any): JSX.Element {
     setPw(e.target.value);
   };
 
+  const onCloseModal = () => {
+    setOpen((prev: boolean) => !prev);
+  };
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("로그인하려고해");
-    dispatch(
+    removeToken(); ////////
+    const res = dispatch(
       signinAction({
         userId: id,
         password: pw,
       })
     );
 
-    console.log("로그인됐나?");
+    console.log("로그인됐나? : " + res);
+
+    alert("로그인!");
+    onCloseModal();
   };
 
   return (
