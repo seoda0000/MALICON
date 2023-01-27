@@ -60,7 +60,7 @@ function FeedPage() {
         <EditorModal
           open={openEditorModal}
           setOpen={setOpenEditorModal}
-          feed={{ title: "", content: "" }}
+          feed={{ title: "", content: "", feedId: null }}
           isEdit={false}
         />
       )}

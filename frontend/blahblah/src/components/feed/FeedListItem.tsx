@@ -18,6 +18,9 @@ import FeedProfileImage from "./FeedProfileImage";
 import CommentSection from "./CommentSection";
 import parse from "html-react-parser";
 import FeedSettingButton from "./FeedSettingButton";
+import EditorModal from "./EditorModal";
+import FeedRemoveDialog from "./RemoveDialog";
+import { useEffect, useState } from "react";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -41,13 +44,33 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
     setExpanded(!expanded);
   };
 
+  // 수정 모달 조작
+  const [openEditorModal, setOpenEditorModal] = useState<boolean>(false);
+  const onClickEditor = () => {
+    setOpenEditorModal((prev) => !prev);
+  };
+
+  // 삭제 다이얼로그 조작
+  const [openRemoveDialog, setopenRemoveDialog] = useState<boolean>(false);
+  const handleClickOpen = () => {
+    setopenRemoveDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setopenRemoveDialog(false);
+  };
+
   return (
     <div>
       {/* <Card sx={{ maxWidth: 345 }}> */}
       <Card>
         <CardHeader
           avatar={<FeedProfileImage src={props.feed.user.img} />}
-          action={<FeedSettingButton feed={props.feed} />}
+          action={
+            <FeedSettingButton
+              onClickEditor={onClickEditor}
+              handleClickOpen={handleClickOpen}
+            />
+          }
           title={props.feed.user.username}
           subheader={props.feed.created_at}
         />
@@ -81,6 +104,21 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
       </Card>
       <br />
       <br />
+
+      {openEditorModal && (
+        <EditorModal
+          open={openEditorModal}
+          setOpen={setOpenEditorModal}
+          feed={props.feed}
+          isEdit={true}
+        />
+      )}
+
+      <FeedRemoveDialog
+        open={openRemoveDialog}
+        handleClose={handleCloseDialog}
+        feed={props.feed}
+      />
     </div>
   );
 };

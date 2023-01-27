@@ -10,9 +10,9 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 import { AppDispatch } from "../../redux/configStore";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postFeedData, editFeedData } from "../../redux/modules/feed";
-import parse from "html-react-parser";
+import { RootState } from "../../redux/configStore";
 // const buttonBoxStyle = {
 //   display: "flex",
 //   justifyContent: "center",
@@ -27,6 +27,7 @@ export default function EditorModal({
   isEdit,
 }: any): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
+  const userId = useSelector((state: RootState) => state.user.userData.userId);
 
   const titleRef = useRef<HTMLInputElement>(null);
   const QuillRef = useRef<ReactQuill>();
@@ -37,18 +38,25 @@ export default function EditorModal({
 
   const createFeedHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const feedTitle = titleRef.current?.value || "";
-    const feedContent = String(QuillRef.current?.value);
+    const title = titleRef.current?.value || "";
+    const content = String(QuillRef.current?.value);
 
     const postData = {
-      title: feedTitle,
-      content: feedContent,
+      title,
+      content,
+    };
+
+    const editData = {
+      title,
+      content,
+      id: feed.feedId,
+      userId: userId,
     };
 
     console.log(postData);
     if (postData && postData.title && postData.content) {
       if (isEdit) {
-        dispatch(editFeedData(postData));
+        dispatch(editFeedData(editData));
       } else {
         dispatch(postFeedData(postData));
       }

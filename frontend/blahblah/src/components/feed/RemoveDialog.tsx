@@ -5,11 +5,33 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { removeFeedData } from "../../redux/modules/feed";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../redux/configStore";
+import { AppDispatch } from "../../redux/configStore";
 
 export default function FeedRemoveDialog({
   open,
   handleClose,
+  feed,
 }: any): JSX.Element {
+  const dispatch = useDispatch<AppDispatch>();
+  const userId = useSelector((state: RootState) => state.user.userData.userId);
+  const feedId = feed.id;
+
+  const removeFeedHandler = (e: any) => {
+    e.preventDefault();
+
+    const feedData = {
+      id: feedId,
+      userId: userId,
+    };
+
+    console.log(feedData);
+
+    dispatch(removeFeedData(feedData));
+  };
+
   return (
     <Dialog
       open={open}
@@ -26,7 +48,7 @@ export default function FeedRemoveDialog({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>취소</Button>
+        <Button onClick={removeFeedHandler}>취소</Button>
         <Button onClick={handleClose} autoFocus>
           삭제
         </Button>

@@ -4,7 +4,7 @@ import React from "react";
 
 const SAMPLE_FEED_LIST = [
   {
-    pk: 1,
+    feedId: 1,
     user: {
       img: "https://api.dicebear.com/5.x/pixel-art/svg?seed=Smokey",
       username: "testuser1",
@@ -25,7 +25,7 @@ const SAMPLE_FEED_LIST = [
     ],
   },
   {
-    pk: 2,
+    feedId: 2,
     user: {
       img: "https://api.dicebear.com/5.x/pixel-art/svg?seed=Miss%20kitty",
       username: "testuser3",
@@ -35,7 +35,7 @@ const SAMPLE_FEED_LIST = [
     created_at: "2023-1-24 6:14 PM",
   },
   {
-    pk: 3,
+    feedId: 3,
     user: {
       img: "https://api.dicebear.com/5.x/pixel-art/svg?seed=Zoe",
       username: "testuser2",
@@ -45,7 +45,7 @@ const SAMPLE_FEED_LIST = [
     created_at: "2023-1-24 6:14 PM",
   },
   {
-    pk: 4,
+    feedId: 4,
     user: {
       img: "https://api.dicebear.com/5.x/pixel-art/svg?seed=Garfield",
       username: "testuser4",
@@ -62,7 +62,7 @@ const FeedList: React.FC<{ feeds: FeedType[] }> = (props) => {
       {props.feeds &&
         props.feeds.map((feed) => <FeedListItem feed={feed} key={feed.id} />)}
       {SAMPLE_FEED_LIST.map((feed) => (
-        <FeedListItem feed={feed} key={feed.pk} />
+        <FeedListItem feed={feed} key={feed.feedId} />
       ))}
     </div>
   );
