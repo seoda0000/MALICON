@@ -9,6 +9,8 @@ public interface UserService {
     UserDTO createUser(UserDTO userDTO);
     
     UserDTO readUser(Long id);
+
+    UserDTO readUserByUserId(String userId);
     boolean updateUser(UserDTO userDTO);
     void deleteUserByUserId(String userId);
 

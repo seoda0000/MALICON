@@ -1,0 +1,50 @@
+# jwt
+# unit is ms. 15 * 24 * 60 * 60 * 1000 = 15days 1296000000
+# 60 * 60 * 1000 = 3600000
+
+
+
+jwt:
+  secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: '*'
+            allow-credentials: true
+            allowedHeaders: '*'
+            allowedMethods:
+              - PUT
+              - GET
+              - POST
+              - DELETE
+              - OPTIONS
+      routes:
+      - id: user_me
+        uri: http://172.17.0.1:8081
+        predicates:
+          - Path=/web-service/api/users/me
+        filters:
+          - RewritePath=/web-service/(?<segment>.*), /$\{segment}
+          - JwtAuthenticationFilter
+
+      - id: user_modify
+        uri: http://172.17.0.1:8081
+        predicates:
+          - Path=/web-service/api/users/**
+          - Method=PUT
+        filters:
+          - RewritePath=/web-service/(?<segment>.*), /$\{segment}
+          - JwtAuthenticationFilter
+
+      - id: web-service
+        uri: http://172.17.0.1:8081
+        predicates:
+          - Path=/web-service/**
+        filters:
+          - RewritePath=/web-service/(?<segment>.*), /$\{segment}

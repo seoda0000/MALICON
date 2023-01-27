@@ -1,7 +1,6 @@
 package com.blahblah.web.entity;
 
 import com.blahblah.web.dto.response.UserDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,32 +12,43 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name ="user")
+@Table(name ="users")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 // Entity는 defalut Constructor가 필요
 // NoArgsConstructor를 만드는데 Builder 에러뜨니까 AllArgsConstructor도 넣자
-public class UserEntity implements UserDetails {
+public class UserEntity extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String department;
-    private String name;
-    @JsonIgnore
+    @Column(name = "nick_name", nullable = false, unique = true)
+    private String nickName;
+    @Column(nullable = false)
     private String password;
-    private String position;
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false, unique = true)
     private String userId;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+    @Column(name = "phone_number", unique = true)
+    private String phoneNumber;
+
+    private String avatar;
+
+    @Column(name = "light_stick")
+    private String lightStick;
 
     public UserDTO toUserDTO(){
         return UserDTO.builder().id(this.id)
-                .department(this.department)
-                .name(this.name)
+                .nickName(nickName)
                 .password(this.password)
-                .position(this.position)
                 .userId(this.userId)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .avatar(avatar)
+                .lightStick(lightStick)
                 .build();
     }
     @Override

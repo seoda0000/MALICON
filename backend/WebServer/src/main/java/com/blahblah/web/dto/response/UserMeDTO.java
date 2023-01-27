@@ -1,14 +1,22 @@
 package com.blahblah.web.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-
-@Builder
 @Getter
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Builder
 public class UserMeDTO {
-    private String department;
-    private String position;
-    private String name;
+    private Long id;
+
+    private String nickName;
+
     private String userId;
+    private String email;
+    private String phoneNumber;
+    private String avatar;
+    private String lightStick;
 }
