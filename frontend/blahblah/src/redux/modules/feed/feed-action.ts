@@ -4,21 +4,31 @@ import { FeedType } from "../../../model/feed/feedType";
 import { feedActions } from "./feed-slice";
 import { AppDispatch } from "../../configStore";
 import { useSelector, useDispatch } from "react-redux";
-import { getAccessToken } from "../user/token";
 import { FeedPostType } from "../../../model/feed/feedPostType";
 
+import { getAccessToken } from "../user/token";
+
 // 피드 목록 가져오기
+
+function createDefaultAxiosInst() {
+  let instance = axios.create({
+    baseURL: "http://blahblah.movebxeax.me/web-service",
+  });
+  return instance;
+}
 
 export const fetchFeedData = createAsyncThunk(
   "feed/fetchFeedData",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(
-        `http://blahblah.movebxeax.me/api/articles/subscribe`,
+      const inst = createDefaultAxiosInst();
+
+      const response = await inst.get(
+        `http://blahblah.movebxeax.me/web-service/api/articles/subscribe`,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
+            Authorization: "Baerer " + getAccessToken(),
           },
         }
       );
@@ -32,8 +42,8 @@ export const fetchFeedData = createAsyncThunk(
       );
 
       return response.data;
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -47,7 +57,9 @@ export const postFeedData = createAsyncThunk(
     // 새 피드 작성하기
 
     try {
-      const { data } = await axios.post<FeedType>(
+      const inst = createDefaultAxiosInst();
+
+      const { data } = await inst.post<FeedType>(
         `http://blahblah.movebxeax.me/api/articles`,
         postData,
         {
@@ -73,13 +85,15 @@ export const removeFeedData = createAsyncThunk(
   "feed/removeFeedData",
   async (feedData: any, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post<FeedType>(
+      const inst = createDefaultAxiosInst();
+
+      const { data } = await inst.post<FeedType>(
         `http://blahblah.movebxeax.me/api/articles`,
         feedData,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
+            Authorization: "Bearer " + localStorage.getItem("accessToken"),
           },
         }
       );
@@ -99,13 +113,15 @@ export const editFeedData = createAsyncThunk(
   "feed/editFeedData",
   async (postData: FeedPostType, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post<FeedType>(
+      const inst = createDefaultAxiosInst();
+
+      const { data } = await inst.post<FeedType>(
         `http://blahblah.movebxeax.me/api/articles`,
         postData,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
+            Authorization: "Bearer " + localStorage.getItem("accessToken"),
           },
         }
       );
