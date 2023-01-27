@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -87,6 +88,11 @@ public class JWTutil {
 
     public static String  getIdByAccessToken(String accessToken){
         return (String) parseClaims(accessToken).get("userId");
+    }
+
+    public static Long  getLongIdByAccessToken(HttpServletRequest request){
+        String accessToken =request.getHeader("Authorization").substring(7);
+        return ((Integer)parseClaims(accessToken).get("id")).longValue();
     }
 
     public static boolean isValidToken(String token){

@@ -11,6 +11,7 @@ import com.blahblah.web.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,7 +56,7 @@ public class ArticleController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteArticle(@RequestBody ArticleDTO articleDTO){
+    public ResponseEntity deleteArticle(@RequestBody ArticleDTO articleDTO, HttpRequest){
         long id = articleDTO.getId();
         UserDTO loginUser = (UserDTO)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(loginUser.getId() != id) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
