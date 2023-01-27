@@ -1,10 +1,12 @@
-import { ReduxType } from "../reduxType";
+import { ReduxStateType } from "../reduxStateType";
 import { UserType } from "./userType";
 
 export type UserStateType = {
   userData: UserType;
-  signup: ReduxType;
-  checkDuplicate: ReduxType;
-  signin: ReduxType;
+  signup: ReduxStateType;
+  checkDuplicate: ReduxStateType;
+  signin: ReduxStateType;
+  getMe: ReduxStateType;
+  refreshToken: ReduxStateType;
 };
 

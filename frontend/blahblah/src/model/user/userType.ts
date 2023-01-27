@@ -3,9 +3,11 @@ export type UserType = {
   password: string;
   nickName: string;
   email: string;
-  phone: string;
-  accessToken: string;
-  refreshToken: string;
+  phoneNumber: string | null;
+  avatar: string | null;
+  lightStick: string | null;
+  // accessToken: string;
+  // refreshToken: string;
   isLoggedIn: boolean;
 };
 
