@@ -26,11 +26,13 @@ export default function AvatarShortcutButton() {
         icon={<GiteIcon />}
       >
         {actions.map((action) => (
+          // <Link to="/main">
           <SpeedDialAction
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
           />
+          // </Link>
         ))}
       </SpeedDial>
     </Box>
