@@ -15,15 +15,13 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: '*'
+            allowedOrigins:
+              - 'http://localhost:3000'
+              - 'http://blahblah.movebxeax.me'
+              - 'https://blahblah.movebxeax.me'
             allow-credentials: true
             allowedHeaders: '*'
-            allowedMethods:
-              - PUT
-              - GET
-              - POST
-              - DELETE
-              - OPTIONS
+            allowedMethods: '*'
       routes:
       - id: user_me
         uri: http://172.17.0.1:8081
