@@ -30,6 +30,7 @@ import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
 import ProfileImage from "../auth/ProfileImage";
+import AvatarShortcutButton from "./AvatarShortcutButton";
 
 interface LayoutProps {
   children: ReactNode;
@@ -304,6 +305,7 @@ export default function Layout(props: LayoutProps) {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <main className="main">{props.children}</main>
+        <AvatarShortcutButton />
       </Box>
     </Box>
   );
