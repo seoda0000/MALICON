@@ -48,6 +48,6 @@ public class AuthController {
             String resRefreshToken = JWTutil.getRefreshToken(user);
             return ResponseEntity.ok(new MessageWithToken("토큰 재발급 성공",new TokenDTO(resAcessToken, resRefreshToken)));
         }
-        return ResponseEntity.status(500).build();
+        return ResponseEntity.internalServerError().build();
     }
 }
