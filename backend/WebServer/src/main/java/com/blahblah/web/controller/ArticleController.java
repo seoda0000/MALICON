@@ -33,7 +33,7 @@ public class ArticleController {
 
     @PostMapping
     public ResponseEntity insertArticle(@RequestBody @Validated ArticleDTO articleDTO, HttpServletRequest request){
-         Long userId = JWTutil.getLongIdByAccessToken(request);
+        long userId = JWTutil.getLongIdByAccessToken(request);
         if(articleDTO.getTitle() =="" || articleDTO.getContent()==""){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("빈 문자열"));
         }
@@ -56,10 +56,9 @@ public class ArticleController {
 
     @DeleteMapping
     public ResponseEntity deleteArticle(@RequestBody ArticleDTO articleDTO, HttpServletRequest request){
-        long id = articleDTO.getId();
-        if(JWTutil.getLongIdByAccessToken(request) != id) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
+        if(JWTutil.getLongIdByAccessToken(request) != articleDTO.getUserId()) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
 
-        articleService.deleteArticle(id);
+        articleService.deleteArticle(articleDTO.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new Message("피드 삭제 완료"));
     }
 
