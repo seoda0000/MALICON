@@ -6,7 +6,7 @@ import { AppDispatch } from "../../configStore";
 import { useSelector, useDispatch } from "react-redux";
 import { FeedPostType } from "../../../model/feed/feedPostType";
 import { FeedEditType } from "../../../model/feed/feedEditType";
-
+import { FeedRemoveType } from "../../../model/feed/feedRemoveType";
 import { getAccessToken } from "../user/token";
 
 function createDefaultAxiosInst() {
@@ -116,22 +116,24 @@ export const postFeedData = createAsyncThunk(
 
 export const removeFeedData = createAsyncThunk(
   "feed/removeFeedData",
-  async (feedData: any, { rejectWithValue }) => {
+  async (removeData: any, thunkAPI) => {
     try {
       const inst = createDefaultAxiosInst();
 
-      const { data } = await inst.post<FeedType>(`/api/articles`, feedData, {
+      const { data } = await inst.delete<FeedRemoveType>("/api/articles", {
+        data: removeData,
         headers: {
           "Content-Type": "application/json",
           Authorization: "Baerer " + getAccessToken(),
         },
       });
       console.log("피드 삭제: ", data);
+      thunkAPI.dispatch(fetchFeedData());
 
       return data;
     } catch (e) {
       console.error(e);
-      return rejectWithValue(e);
+      return thunkAPI.rejectWithValue(e);
     }
   }
 );

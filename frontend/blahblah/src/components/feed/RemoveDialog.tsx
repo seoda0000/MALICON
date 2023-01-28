@@ -24,7 +24,7 @@ export default function FeedRemoveDialog({
 
     const feedData = {
       id: feedId,
-      userId: userId,
+      userId: 23,
     };
 
     console.log(feedData);
@@ -48,8 +48,8 @@ export default function FeedRemoveDialog({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={removeFeedHandler}>취소</Button>
-        <Button onClick={handleClose} autoFocus>
+        <Button onClick={handleClose}>취소</Button>
+        <Button onClick={removeFeedHandler} autoFocus>
           삭제
         </Button>
       </DialogActions>
