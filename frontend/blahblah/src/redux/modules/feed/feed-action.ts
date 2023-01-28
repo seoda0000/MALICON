@@ -23,15 +23,14 @@ export const fetchFeedData = createAsyncThunk(
     try {
       const inst = createDefaultAxiosInst();
 
-      const response = await inst.get(
-        `http://blahblah.movebxeax.me/web-service/api/articles/subscribe`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Baerer " + getAccessToken(),
-          },
-        }
-      );
+      console.log("액세스 토큰", getAccessToken());
+
+      const response = await inst.get("/api/articles/subscribe", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
+      });
       console.log("피드 리스트: ", response.data);
       const dispatch = useDispatch<AppDispatch>();
 
@@ -59,21 +58,22 @@ export const postFeedData = createAsyncThunk(
     try {
       const inst = createDefaultAxiosInst();
 
-      const { data } = await inst.post<FeedType>(
-        `http://blahblah.movebxeax.me/api/articles`,
-        postData,
-        {
+      await inst
+        .post<FeedType>(`/api/articles`, postData, {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + localStorage.getItem("access_token"),
           },
-        }
-      );
-      console.log("피드 작성: ", data);
+        })
+        .then(({ data }: any) => {
+          console.log("피드 작성: ", data);
+        });
 
-      return data;
-    } catch (e) {
-      console.error(e);
+      // return data;
+    } catch (e: any) {
+      console.log("작성 실패");
+      console.log(e.request);
+      console.error(e.response.data);
       return rejectWithValue(e);
     }
   }
@@ -87,16 +87,12 @@ export const removeFeedData = createAsyncThunk(
     try {
       const inst = createDefaultAxiosInst();
 
-      const { data } = await inst.post<FeedType>(
-        `http://blahblah.movebxeax.me/api/articles`,
-        feedData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("accessToken"),
-          },
-        }
-      );
+      const { data } = await inst.post<FeedType>(`/api/articles`, feedData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+        },
+      });
       console.log("피드 삭제: ", data);
 
       return data;
@@ -115,16 +111,12 @@ export const editFeedData = createAsyncThunk(
     try {
       const inst = createDefaultAxiosInst();
 
-      const { data } = await inst.post<FeedType>(
-        `http://blahblah.movebxeax.me/api/articles`,
-        postData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("accessToken"),
-          },
-        }
-      );
+      const { data } = await inst.put<FeedType>(`/api/articles`, postData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+        },
+      });
       console.log("피드 작성: ", data);
 
       return data;
