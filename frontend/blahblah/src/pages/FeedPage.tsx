@@ -31,9 +31,9 @@ function FeedPage() {
       return;
     }
 
-    if (feed.changed) {
-      dispatch(fetchFeedData());
-    }
+    // if (feed.changed) {
+    //   dispatch(fetchFeedData());
+    // }
   }, [feed, dispatch]);
 
   // 모달 조작

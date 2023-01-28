@@ -8,8 +8,6 @@ import { FeedPostType } from "../../../model/feed/feedPostType";
 
 import { getAccessToken } from "../user/token";
 
-// 피드 목록 가져오기
-
 function createDefaultAxiosInst() {
   let instance = axios.create({
     baseURL: "http://blahblah.movebxeax.me/web-service",
@@ -17,6 +15,7 @@ function createDefaultAxiosInst() {
   return instance;
 }
 
+// 피드 목록 가져오기
 export const fetchFeedData = createAsyncThunk(
   "feed/fetchFeedData",
   async (_, thunkAPI) => {
@@ -31,7 +30,7 @@ export const fetchFeedData = createAsyncThunk(
           Authorization: "Baerer " + getAccessToken(),
         },
       });
-      console.log("피드 리스트: ", response.data);
+      console.log("피드 리스트: ", response.data.content);
       const dispatch = useDispatch<AppDispatch>();
 
       dispatch(
@@ -53,16 +52,14 @@ export const fetchFeedData = createAsyncThunk(
 export const postFeedData = createAsyncThunk(
   "feed/postFeedData",
   async (postData: FeedPostType, { rejectWithValue }) => {
-    // 새 피드 작성하기
-
     try {
       const inst = createDefaultAxiosInst();
 
       await inst
-        .post<FeedType>(`/api/articles`, postData, {
+        .post<FeedPostType>(`/api/articles`, postData, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
+            Authorization: "Baerer " + getAccessToken(),
           },
         })
         .then(({ data }: any) => {
@@ -90,7 +87,7 @@ export const removeFeedData = createAsyncThunk(
       const { data } = await inst.post<FeedType>(`/api/articles`, feedData, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+          Authorization: "Baerer " + getAccessToken(),
         },
       });
       console.log("피드 삭제: ", data);
@@ -114,7 +111,7 @@ export const editFeedData = createAsyncThunk(
       const { data } = await inst.put<FeedType>(`/api/articles`, postData, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+          Authorization: "Baerer " + getAccessToken(),
         },
       });
       console.log("피드 작성: ", data);
