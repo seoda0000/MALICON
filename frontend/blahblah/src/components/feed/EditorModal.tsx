@@ -49,7 +49,7 @@ export default function EditorModal({
     const editData = {
       title,
       content,
-      id: feed.feedId,
+      id: feed.id,
       userId: userId,
     };
 

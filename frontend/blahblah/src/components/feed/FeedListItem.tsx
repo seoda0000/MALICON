@@ -64,15 +64,15 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
       {/* <Card sx={{ maxWidth: 345 }}> */}
       <Card>
         <CardHeader
-          avatar={<FeedProfileImage src={props.feed.user.img} />}
+          avatar={<FeedProfileImage src={props.feed.userAvatar} />}
           action={
             <FeedSettingButton
               onClickEditor={onClickEditor}
               handleClickOpen={handleClickOpen}
             />
           }
-          title={props.feed.user.username}
-          subheader={props.feed.created_at}
+          title={props.feed.userNickName}
+          subheader={props.feed.createDate}
         />
 
         <CardContent>

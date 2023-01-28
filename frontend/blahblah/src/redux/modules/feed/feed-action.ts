@@ -20,6 +20,7 @@ export const fetchFeedData = createAsyncThunk(
   "feed/fetchFeedData",
   async (_, thunkAPI) => {
     try {
+      // const dispatch = useDispatch<AppDispatch>();
       const inst = createDefaultAxiosInst();
 
       console.log("액세스 토큰", getAccessToken());
@@ -30,12 +31,42 @@ export const fetchFeedData = createAsyncThunk(
           Authorization: "Baerer " + getAccessToken(),
         },
       });
-      console.log("피드 리스트: ", response.data.content);
-      const dispatch = useDispatch<AppDispatch>();
 
-      dispatch(
+      const rawFeeds = response.data.content;
+
+      const dateMaker = (lst: any) => {
+        return (
+          String(lst[0]) +
+          "-" +
+          String(lst[1]) +
+          "-" +
+          String(lst[2]) +
+          " " +
+          String(lst[3]) +
+          ":" +
+          String(lst[4])
+        );
+      };
+
+      const feeds = rawFeeds.map((feed: any) => {
+        return {
+          id: feed.id,
+          title: feed.title,
+          content: feed.content,
+          createDate: dateMaker(feed.createDate),
+          lastModifiedDate: dateMaker(feed.lastModifiedDate),
+
+          userId: feed.userEntity.userId,
+          userAvatar: feed.userEntity.avatar,
+          userNickName: feed.userEntity.nickName,
+        };
+      });
+
+      console.log("피드목록: ", feeds);
+
+      thunkAPI.dispatch(
         feedActions.replaceFeed({
-          feeds: response.data || [],
+          feeds: feeds,
         })
       );
 
@@ -51,7 +82,7 @@ export const fetchFeedData = createAsyncThunk(
 
 export const postFeedData = createAsyncThunk(
   "feed/postFeedData",
-  async (postData: FeedPostType, { rejectWithValue }) => {
+  async (postData: FeedPostType, thunkAPI) => {
     try {
       const inst = createDefaultAxiosInst();
 
@@ -64,6 +95,8 @@ export const postFeedData = createAsyncThunk(
         })
         .then(({ data }: any) => {
           console.log("피드 작성: ", data);
+
+          thunkAPI.dispatch(fetchFeedData());
         });
 
       // return data;
@@ -71,7 +104,7 @@ export const postFeedData = createAsyncThunk(
       console.log("작성 실패");
       console.log(e.request);
       console.error(e.response.data);
-      return rejectWithValue(e);
+      return thunkAPI.rejectWithValue(e);
     }
   }
 );

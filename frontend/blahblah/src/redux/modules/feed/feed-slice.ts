@@ -11,6 +11,7 @@ const feedSlice = createSlice({
   initialState,
   reducers: {
     replaceFeed(state, action) {
+      // console.log("디스패치 시작");
       state.feeds = action.payload.feeds;
     },
   },
