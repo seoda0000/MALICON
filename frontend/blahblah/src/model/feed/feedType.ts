@@ -5,7 +5,8 @@ export type FeedType = {
   createDate: string;
   lastModifiedDate: string;
 
-  userId: string;
+  userId: number;
+  userName: string;
   userAvatar: string | null;
   userNickName: string;
 };

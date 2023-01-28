@@ -5,6 +5,7 @@ import { feedActions } from "./feed-slice";
 import { AppDispatch } from "../../configStore";
 import { useSelector, useDispatch } from "react-redux";
 import { FeedPostType } from "../../../model/feed/feedPostType";
+import { FeedEditType } from "../../../model/feed/feedEditType";
 
 import { getAccessToken } from "../user/token";
 
@@ -33,6 +34,7 @@ export const fetchFeedData = createAsyncThunk(
       });
 
       const rawFeeds = response.data.content;
+      console.log(rawFeeds);
 
       const dateMaker = (lst: any) => {
         return (
@@ -56,9 +58,10 @@ export const fetchFeedData = createAsyncThunk(
           createDate: dateMaker(feed.createDate),
           lastModifiedDate: dateMaker(feed.lastModifiedDate),
 
-          userId: feed.userEntity.userId,
+          userId: feed.userEntity.id,
           userAvatar: feed.userEntity.avatar,
           userNickName: feed.userEntity.nickName,
+          userName: feed.userEntity.username,
         };
       });
 
@@ -137,22 +140,29 @@ export const removeFeedData = createAsyncThunk(
 
 export const editFeedData = createAsyncThunk(
   "feed/editFeedData",
-  async (postData: FeedPostType, { rejectWithValue }) => {
+  async (editData: FeedEditType, thunkAPI) => {
     try {
       const inst = createDefaultAxiosInst();
 
-      const { data } = await inst.put<FeedType>(`/api/articles`, postData, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Baerer " + getAccessToken(),
-        },
-      });
-      console.log("피드 작성: ", data);
+      await inst
+        .put<FeedEditType>(`/api/articles`, editData, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        })
+        .then(({ data }: any) => {
+          console.log("피드 수정: ", data);
 
-      return data;
-    } catch (e) {
-      console.error(e);
-      return rejectWithValue(e);
+          thunkAPI.dispatch(fetchFeedData());
+        });
+
+      // return data;
+    } catch (e: any) {
+      console.log("수정 실패");
+      console.log(e.request);
+      console.error(e.response.data);
+      return thunkAPI.rejectWithValue(e);
     }
   }
 );
