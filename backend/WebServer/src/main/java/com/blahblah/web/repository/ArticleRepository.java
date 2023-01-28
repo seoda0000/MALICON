@@ -13,6 +13,9 @@ import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
 
+    @Override
+    void deleteById(Long id);
+
     // 아래코드는 에러 발생
     // SubscribeDTO로 받는 걸로 다시 작성
 //    @Query(value="select com.blahblah.web.dto.response.SubscribeDTO"+
