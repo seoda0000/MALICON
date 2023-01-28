@@ -29,7 +29,7 @@ public class UserController {
         if(ans == null){
             throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "가입 실패");
         }else {
-            return ResponseEntity.status(201).body(new Message("가입 성공"));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Message("가입 성공"));
         }
     }
 
@@ -37,8 +37,8 @@ public class UserController {
     public ResponseEntity checkDuplicatedId(@PathVariable String userId){
         log.info(userId);
         if(userService.isExistUserId(userId))
-            return ResponseEntity.status(409).body(new Message("이미 존재하는 사용자 ID입니다"));
-        else return ResponseEntity.status(200).body(new Message("사용가능한 사용자 ID입니다"));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new Message("이미 존재하는 사용자 ID입니다"));
+        else return ResponseEntity.ok(new Message("사용가능한 사용자 ID입니다"));
     }
 
     @GetMapping("/me")
