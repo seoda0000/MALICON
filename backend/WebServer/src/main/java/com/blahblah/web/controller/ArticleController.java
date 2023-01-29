@@ -34,7 +34,7 @@ public class ArticleController {
     @PostMapping
     public ResponseEntity insertArticle(@RequestBody @Validated ArticleDTO articleDTO, HttpServletRequest request){
         long userId = JWTutil.getLongIdByAccessToken(request);
-        if(articleDTO.getTitle() =="" || articleDTO.getContent()==""){
+        if(articleDTO.getTitle().isEmpty() || articleDTO.getContent().isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("빈 문자열"));
         }
         ArticleDTO a = ArticleDTO.builder().title(articleDTO.getTitle()).content(articleDTO.getContent()).userId(userId).build();
