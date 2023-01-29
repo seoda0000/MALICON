@@ -13,4 +13,6 @@ public interface SubscribeRepository extends JpaRepository<UserSubscribeEntity, 
     @Query(value = "select subscribe_user_id from user_subscribes where user_id=?", nativeQuery = true)
     List<Long> findAllByUserId (@Param("userId") long userId);
 
+//    void delete(UserSubscribeEntity subscribe);
+
 }

@@ -6,6 +6,7 @@ import com.blahblah.web.entity.UserEntity;
 import com.blahblah.web.entity.UserSubscribeEntity;
 import com.blahblah.web.service.SubscribeService;
 import com.blahblah.web.util.JWTutil;
+import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,15 @@ public class SubscribeController{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("구독 정보를 가져올 수 없습니다.");
         }
         return ResponseEntity.ok(subscribes);
+    }
+
+    @DeleteMapping("/{subscribeId}")
+    public ResponseEntity deleteSubscribe(@PathVariable long subscribeId, HttpServletRequest request){
+        long userId = JWTutil.getLongIdByAccessToken(request);
+
+        subscribeService.deleteSubscribe(userId, subscribeId);
+        return ResponseEntity.status(HttpStatus.OK).body(new Message("구독 취소 성공"));
+
     }
 
 }

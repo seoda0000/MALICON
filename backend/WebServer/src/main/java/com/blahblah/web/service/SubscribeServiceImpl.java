@@ -38,5 +38,14 @@ public class SubscribeServiceImpl  implements SubscribeService {
         return subscribeRepository.findAllByUserId(userId);
     }
 
+    @Override
+    public void deleteSubscribe(long userId, long subscribeId) {
+        UserSubscribeEntity subscribe = UserSubscribeEntity.builder()
+                .userEntity(userRepository.findById(userId).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "구독하려는 사용자가 유효하지 않습니다.")))
+                .subscribeUserEntity(userRepository.findById(subscribeId).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "구독하려는 사용자가 유효하지 않습니다.")))
+                .build();
+        subscribeRepository.delete(subscribe);
+    }
+
 
 }

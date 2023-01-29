@@ -9,4 +9,6 @@ public interface SubscribeService {
     UserSubscribeEntity addSubscribe(long userId, long subscribeId);
 
     List<Long> readSubscribe(long userId);
+
+    void deleteSubscribe(long userId, long subscribeId);
 }
