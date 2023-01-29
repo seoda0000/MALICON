@@ -4,36 +4,78 @@ import { FeedType } from "../../../model/feed/feedType";
 import { feedActions } from "./feed-slice";
 import { AppDispatch } from "../../configStore";
 import { useSelector, useDispatch } from "react-redux";
-import { getAccessToken } from "../user/token";
 import { FeedPostType } from "../../../model/feed/feedPostType";
+import { FeedEditType } from "../../../model/feed/feedEditType";
+import { FeedRemoveType } from "../../../model/feed/feedRemoveType";
+import { getAccessToken } from "../user/token";
+
+function createDefaultAxiosInst() {
+  let instance = axios.create({
+    baseURL: "http://blahblah.movebxeax.me/web-service",
+  });
+  return instance;
+}
 
 // 피드 목록 가져오기
-
 export const fetchFeedData = createAsyncThunk(
   "feed/fetchFeedData",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(
-        `http://blahblah.movebxeax.me/api/articles/subscribe`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        }
-      );
-      console.log("피드 리스트: ", response.data);
-      const dispatch = useDispatch<AppDispatch>();
+      // const dispatch = useDispatch<AppDispatch>();
+      const inst = createDefaultAxiosInst();
 
-      dispatch(
+      console.log("액세스 토큰", getAccessToken());
+
+      const response = await inst.get("/api/articles/subscribe", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
+      });
+
+      const rawFeeds = response.data.content;
+      console.log(rawFeeds);
+
+      const dateMaker = (lst: any) => {
+        return (
+          String(lst[0]) +
+          "-" +
+          String(lst[1]) +
+          "-" +
+          String(lst[2]) +
+          " " +
+          String(lst[3]) +
+          ":" +
+          String(lst[4])
+        );
+      };
+
+      const feeds = rawFeeds.map((feed: any) => {
+        return {
+          id: feed.id,
+          title: feed.title,
+          content: feed.content,
+          createDate: dateMaker(feed.createDate),
+          lastModifiedDate: dateMaker(feed.lastModifiedDate),
+
+          userId: feed.userEntity.id,
+          userAvatar: feed.userEntity.avatar,
+          userNickName: feed.userEntity.nickName,
+          userName: feed.userEntity.username,
+        };
+      });
+
+      console.log("피드목록: ", feeds);
+
+      thunkAPI.dispatch(
         feedActions.replaceFeed({
-          feeds: response.data || [],
+          feeds: feeds,
         })
       );
 
       return response.data;
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -43,26 +85,29 @@ export const fetchFeedData = createAsyncThunk(
 
 export const postFeedData = createAsyncThunk(
   "feed/postFeedData",
-  async (postData: FeedPostType, { rejectWithValue }) => {
-    // 새 피드 작성하기
-
+  async (postData: FeedPostType, thunkAPI) => {
     try {
-      const { data } = await axios.post<FeedType>(
-        `http://blahblah.movebxeax.me/api/articles`,
-        postData,
-        {
+      const inst = createDefaultAxiosInst();
+
+      await inst
+        .post<FeedPostType>(`/api/articles`, postData, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
+            Authorization: "Baerer " + getAccessToken(),
           },
-        }
-      );
-      console.log("피드 작성: ", data);
+        })
+        .then(({ data }: any) => {
+          console.log("피드 작성: ", data);
 
-      return data;
-    } catch (e) {
-      console.error(e);
-      return rejectWithValue(e);
+          thunkAPI.dispatch(fetchFeedData());
+        });
+
+      // return data;
+    } catch (e: any) {
+      console.log("작성 실패");
+      console.log(e.request);
+      console.error(e.response.data);
+      return thunkAPI.rejectWithValue(e);
     }
   }
 );
@@ -71,24 +116,24 @@ export const postFeedData = createAsyncThunk(
 
 export const removeFeedData = createAsyncThunk(
   "feed/removeFeedData",
-  async (feedData: any, { rejectWithValue }) => {
+  async (removeData: any, thunkAPI) => {
     try {
-      const { data } = await axios.post<FeedType>(
-        `http://blahblah.movebxeax.me/api/articles`,
-        feedData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        }
-      );
+      const inst = createDefaultAxiosInst();
+
+      const { data } = await inst.delete<FeedRemoveType>("/api/articles", {
+        data: removeData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
+      });
       console.log("피드 삭제: ", data);
+      thunkAPI.dispatch(fetchFeedData());
 
       return data;
     } catch (e) {
       console.error(e);
-      return rejectWithValue(e);
+      return thunkAPI.rejectWithValue(e);
     }
   }
 );
@@ -97,24 +142,29 @@ export const removeFeedData = createAsyncThunk(
 
 export const editFeedData = createAsyncThunk(
   "feed/editFeedData",
-  async (postData: FeedPostType, { rejectWithValue }) => {
+  async (editData: FeedEditType, thunkAPI) => {
     try {
-      const { data } = await axios.post<FeedType>(
-        `http://blahblah.movebxeax.me/api/articles`,
-        postData,
-        {
+      const inst = createDefaultAxiosInst();
+
+      await inst
+        .put<FeedEditType>(`/api/articles`, editData, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
+            Authorization: "Baerer " + getAccessToken(),
           },
-        }
-      );
-      console.log("피드 작성: ", data);
+        })
+        .then(({ data }: any) => {
+          console.log("피드 수정: ", data);
 
-      return data;
-    } catch (e) {
-      console.error(e);
-      return rejectWithValue(e);
+          thunkAPI.dispatch(fetchFeedData());
+        });
+
+      // return data;
+    } catch (e: any) {
+      console.log("수정 실패");
+      console.log(e.request);
+      console.error(e.response.data);
+      return thunkAPI.rejectWithValue(e);
     }
   }
 );

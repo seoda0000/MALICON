@@ -27,8 +27,8 @@ export default function EditorModal({
   isEdit,
 }: any): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
-  const userId = useSelector((state: RootState) => state.user.userData.userId);
-
+  // const userId = useSelector((state: RootState) => state.user.userData.id);
+  const userId = 23;
   const titleRef = useRef<HTMLInputElement>(null);
   const QuillRef = useRef<ReactQuill>();
   const [contents, setContents] = useState(feed.content);
@@ -49,7 +49,7 @@ export default function EditorModal({
     const editData = {
       title,
       content,
-      id: feed.feedId,
+      id: feed.id,
       userId: userId,
     };
 

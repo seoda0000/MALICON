@@ -16,7 +16,8 @@ export default function FeedRemoveDialog({
   feed,
 }: any): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
-  const userId = useSelector((state: RootState) => state.user.userData.userId);
+  // const userId = useSelector((state: RootState) => state.user.userData.id);
+  const userId = 23;
   const feedId = feed.id;
 
   const removeFeedHandler = (e: any) => {
@@ -48,8 +49,8 @@ export default function FeedRemoveDialog({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={removeFeedHandler}>취소</Button>
-        <Button onClick={handleClose} autoFocus>
+        <Button onClick={handleClose}>취소</Button>
+        <Button onClick={removeFeedHandler} autoFocus>
           삭제
         </Button>
       </DialogActions>
