@@ -1,5 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { SigninResponseType } from "../../../model/user/signinResponseType";
 import { SigninType } from "../../../model/user/signinType";
 import { SignupType } from "../../../model/user/signupType";
@@ -11,13 +10,7 @@ import {
   setAccessToken,
   setRefreshToken,
 } from "./token";
-
-function createDefaultAxiosInst() {
-  let instance = axios.create({
-    baseURL: "http://blahblah.movebxeax.me/web-service",
-  });
-  return instance;
-}
+import { axiosInitializer } from "../../utils/axiosInitializer";
 
 // 회원가입
 export const signupAction = createAsyncThunk(
@@ -26,9 +19,9 @@ export const signupAction = createAsyncThunk(
     try {
       console.log("비동기요청[SIGNUP] 시작");
 
-      const inst = createDefaultAxiosInst();
+      const axios = axiosInitializer();
 
-      const { data } = await inst.post(`/api/users`, userData);
+      const { data } = await axios.post(`/api/users`, userData);
       console.log("비동기요청[SIGNUP] 끝 : " + data.message);
       return data;
     } catch (e) {
@@ -44,9 +37,9 @@ export const checkDuplicateAction = createAsyncThunk(
   async (userId: string, { rejectWithValue }) => {
     try {
       console.log("비동기요청[CHECK_DUPLICATE] 시작");
-      const inst = createDefaultAxiosInst();
+      const axios = axiosInitializer();
 
-      const { data } = await inst.get(`/api/users/${userId}`);
+      const { data } = await axios.get(`/api/users/${userId}`);
       console.log("비동기요청[CHECK_DUPLICATE] 끝 : " + data.message);
 
       return data;
@@ -64,9 +57,9 @@ export const signinAction = createAsyncThunk(
     try {
       console.log("비동기요청[SIGNIN] 시작");
 
-      const inst = createDefaultAxiosInst();
+      const axios = axiosInitializer();
 
-      await inst
+      await axios
         .post("/api/auth/login", userData, {
           headers: {
             "Content-Type": "application/json",
@@ -102,8 +95,9 @@ export const getMeWithTokenAction = createAsyncThunk(
       console.log("비동기요청[GET_ME] 시작");
       console.log("2222 ", getAccessToken());
 
+      const axios = axiosInitializer();
       const { data } = await axios.get(
-        "http://blahblah.movebxeax.me/web-service/api/users/me",
+        "/api/users/me",
         {
           headers: {
             "Content-Type": "application/json",
@@ -130,8 +124,10 @@ export const refreshTokenAction = createAsyncThunk(
     try {
       console.log("비동기요청[REFRESH_TOKEN] 시작");
       const req = { reqRefreshToken: "" };
+
+      const axios = axiosInitializer();
       const { data } = await axios.post(
-        "http://blahblah.movebxeax.me/web-service/api/auth/refresh",
+        "/api/auth/refresh",
         req
       );
       console.log("비동기요청[REFRESH_TOKEN] 끝 : " + data.message);

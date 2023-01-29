@@ -1,5 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { FeedType } from "../../../model/feed/feedType";
 import { feedActions } from "./feed-slice";
 import { AppDispatch } from "../../configStore";
@@ -8,13 +7,7 @@ import { FeedPostType } from "../../../model/feed/feedPostType";
 import { FeedEditType } from "../../../model/feed/feedEditType";
 import { FeedRemoveType } from "../../../model/feed/feedRemoveType";
 import { getAccessToken } from "../user/token";
-
-function createDefaultAxiosInst() {
-  let instance = axios.create({
-    baseURL: "http://blahblah.movebxeax.me/web-service",
-  });
-  return instance;
-}
+import { axiosInitializer } from "../../utils/axiosInitializer";
 
 // 피드 목록 가져오기
 export const fetchFeedData = createAsyncThunk(
@@ -22,11 +15,11 @@ export const fetchFeedData = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       // const dispatch = useDispatch<AppDispatch>();
-      const inst = createDefaultAxiosInst();
+      const axios = axiosInitializer();
 
       console.log("액세스 토큰", getAccessToken());
 
-      const response = await inst.get("/api/articles/subscribe", {
+      const response = await axios.get("/api/articles/subscribe", {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Baerer " + getAccessToken(),
@@ -87,9 +80,9 @@ export const postFeedData = createAsyncThunk(
   "feed/postFeedData",
   async (postData: FeedPostType, thunkAPI) => {
     try {
-      const inst = createDefaultAxiosInst();
+      const axios = axiosInitializer();
 
-      await inst
+      await axios
         .post<FeedPostType>(`/api/articles`, postData, {
           headers: {
             "Content-Type": "application/json",
@@ -118,9 +111,9 @@ export const removeFeedData = createAsyncThunk(
   "feed/removeFeedData",
   async (removeData: any, thunkAPI) => {
     try {
-      const inst = createDefaultAxiosInst();
+      const axios = axiosInitializer();
 
-      const { data } = await inst.delete<FeedRemoveType>("/api/articles", {
+      const { data } = await axios.delete<FeedRemoveType>("/api/articles", {
         data: removeData,
         headers: {
           "Content-Type": "application/json",
@@ -144,9 +137,9 @@ export const editFeedData = createAsyncThunk(
   "feed/editFeedData",
   async (editData: FeedEditType, thunkAPI) => {
     try {
-      const inst = createDefaultAxiosInst();
+      const axios = axiosInitializer();
 
-      await inst
+      await axios
         .put<FeedEditType>(`/api/articles`, editData, {
           headers: {
             "Content-Type": "application/json",
