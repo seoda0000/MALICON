@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@IdClass(UserSubscribeEntityPK.class)
 public class UserSubscribeEntity implements Serializable {
 
     @Id
