@@ -4,10 +4,12 @@ import { useState } from "react";
 import { Button, Card, Box, Paper } from "@mui/material";
 import { Stack } from "@mui/system";
 import Divider from "@mui/material/Divider";
-
+import { useAppDispatch } from "../redux/configStore.hooks";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
-
+import { updateUserAction } from "../redux/modules/user";
+import { RootState } from "../redux/configStore";
+import { useSelector } from "react-redux";
 const AVATAR_OPTION = {
   body: ["checkered", "rounded", "small", "squared"],
   clothingColor: [
@@ -21,7 +23,7 @@ const AVATAR_OPTION = {
     "000000",
     "dddddd",
   ],
-  eyes: ["glasses", "happy", "open", "sleep", "sunglasses", "wink"],
+  eyes: ["open", "happy", "sleep", "wink", "glasses", "sunglasses"],
   facialHair: [
     "",
     "beardMustache",
@@ -32,14 +34,9 @@ const AVATAR_OPTION = {
     "walrus",
   ],
   hair: [
-    "bald",
-    "balding",
-    "beanie",
-    "bobBangs",
-    "bobCut",
-    "bunUndercut",
-    "buzzcut",
-    "cap",
+    "sideShave",
+    "shortCombover",
+    "shortComboverChops",
     "curly",
     "curlyBun",
     "curlyHighTop",
@@ -48,14 +45,19 @@ const AVATAR_OPTION = {
     "long",
     "mohawk",
     "pigtails",
-    "shortCombover",
-    "shortComboverChops",
-    "sideShave",
     "straightBun",
+    "bald",
+    "balding",
+    "beanie",
+    "bobBangs",
+    "bobCut",
+    "bunUndercut",
+    "buzzcut",
+    "cap",
   ],
   hairColor: [
-    "CC9966",
     "6c4545",
+    "CC9966",
     "362c47",
     "dee1f5",
     "e15c66",
@@ -81,13 +83,13 @@ const AVATAR_OPTION = {
   ],
   nose: ["mediumRound", "smallRound", "wrinkles"],
   skinColor: [
-    "623d36",
-    "92594b",
-    "b16a5b",
     "d78774",
     "e5a07e",
     "e7a391",
     "eeb4a4",
+    "623d36",
+    "92594b",
+    "b16a5b",
     "9999FF",
     "66CC66",
     "CC3333",
@@ -106,15 +108,15 @@ function AvatarPage() {
   const [skinColor, setSkinColor] = useState<number>(0);
 
   const selectedAvatar = {
-    body: AVATAR_OPTION.body[body],
-    clothingColor: AVATAR_OPTION.clothingColor[clothingColor],
-    eyes: AVATAR_OPTION.eyes[eyes],
-    facialHair: AVATAR_OPTION.facialHair[facialHair],
-    hair: AVATAR_OPTION.hair[hair],
-    hairColor: AVATAR_OPTION.hairColor[hairColor],
-    mouth: AVATAR_OPTION.mouth[mouth],
-    nose: AVATAR_OPTION.nose[nose],
-    skinColor: AVATAR_OPTION.skinColor[skinColor],
+    body: [AVATAR_OPTION.body[body]],
+    clothingColor: [AVATAR_OPTION.clothingColor[clothingColor]],
+    eyes: [AVATAR_OPTION.eyes[eyes]],
+    facialHair: [AVATAR_OPTION.facialHair[facialHair]],
+    hair: [AVATAR_OPTION.hair[hair]],
+    hairColor: [AVATAR_OPTION.hairColor[hairColor]],
+    mouth: [AVATAR_OPTION.mouth[mouth]],
+    nose: [AVATAR_OPTION.nose[nose]],
+    skinColor: [AVATAR_OPTION.skinColor[skinColor]],
   };
 
   const selectHandler = {
@@ -265,8 +267,21 @@ function AvatarPage() {
   };
 
   // 아바타 서버에 저장
+  const dispatch = useAppDispatch();
+  const userId = useSelector((state: RootState) => state.user.userData.userId);
+  const saveAvatarHandler = () => {
+    console.log("아바타 저장 시도");
+    const res = dispatch(
+      updateUserAction({
+        userId,
+        avatar: JSON.stringify(selectedAvatar),
+      })
+    );
 
-  const saveAvatarHandler = () => {};
+    console.log("아바타 저장 : " + res);
+
+    alert("아바타 저장 완료");
+  };
 
   return (
     <div>
@@ -285,6 +300,7 @@ function AvatarPage() {
         }}
       >
         <h1>Avatar Page</h1>
+        <h2>{JSON.stringify(selectedAvatar)}</h2>
       </Box>
 
       <Box

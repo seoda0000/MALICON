@@ -1,13 +1,10 @@
-export type UserType = {
+export type UpdateUserType = {
   id: number | null;
-  userId: string;
-  password: string;
   nickName: string;
+  password: string;
+  userId: string;
   email: string;
   phoneNumber: string | null;
   avatar: string | null;
   lightStick: string | null;
-  // accessToken: string;
-  // refreshToken: string;
-  isLoggedIn: boolean;
 };
