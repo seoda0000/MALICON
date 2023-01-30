@@ -1,5 +1,6 @@
 package com.blahblah.web.controller;
 
+import com.blahblah.web.controller.exception.CustomException;
 import com.blahblah.web.dto.request.CommentDTO;
 import com.blahblah.web.dto.response.Message;
 import com.blahblah.web.entity.CommentEntity;
@@ -11,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,5 +37,14 @@ public class CommentController {
         }else{
             return ResponseEntity.status(HttpStatus.OK).body(new Message("댓글 작성 완료"));
         }
+    }
+
+    @DeleteMapping
+    public ResponseEntity deleteComment(@RequestBody CommentDTO commentDTO, HttpServletRequest request){
+        long userId = JWTutil.getLongIdByAccessToken(request);
+        if(commentDTO.getUserId()!= userId) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
+
+        commentService.deleteComment(commentDTO.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(new Message("댓글 삭제 완료"));
     }
 }

@@ -7,4 +7,5 @@ public interface CommentService {
 
     CommentEntity createComment(CommentDTO commentDTO);
 
+    void deleteComment(long id);
 }

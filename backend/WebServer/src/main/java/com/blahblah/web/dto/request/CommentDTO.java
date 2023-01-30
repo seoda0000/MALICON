@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class CommentDTO {
 
+    private long id;
     private long userId;
 
     private long articleId;
