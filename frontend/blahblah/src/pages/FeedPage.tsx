@@ -21,19 +21,12 @@ function FeedPage() {
   const dispatch = useDispatch<AppDispatch>();
   const feed = useSelector((state: RootState) => state.feed);
 
-  // useEffect(() => {
-  //   dispatch(fetchFeedData());
-  // }, [dispatch]);
-
   useEffect(() => {
     if (isInitial) {
       isInitial = false;
       dispatch(fetchFeedData());
       return;
     }
-
-    // if (feed.changed) {
-    // }
   }, [feed, dispatch]);
 
   // 모달 조작
