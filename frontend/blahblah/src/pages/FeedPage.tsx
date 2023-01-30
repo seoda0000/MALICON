@@ -22,17 +22,10 @@ function FeedPage() {
   const feed = useSelector((state: RootState) => state.feed);
 
   useEffect(() => {
-    dispatch(fetchFeedData());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (isInitial) {
       isInitial = false;
-      return;
-    }
-
-    if (feed.changed) {
       dispatch(fetchFeedData());
+      return;
     }
   }, [feed, dispatch]);
 
