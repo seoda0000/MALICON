@@ -11,7 +11,9 @@ public class ArticleDTO {
 
     private long id;
 
-    private long userId;
+    private long userPK;
+
+    private String userId;
 
     private String title;
 

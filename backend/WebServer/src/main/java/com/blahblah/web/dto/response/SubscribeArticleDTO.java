@@ -1,18 +1,21 @@
 package com.blahblah.web.dto.response;
 
+import com.blahblah.web.dto.request.CommentDTO;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubscribeDTO {
+public class SubscribeArticleDTO {
     private long id;
 
-    private long userId;
+    private long userPK;
+
+    private String userId;
 
     private String userNickName;
 
@@ -25,5 +28,7 @@ public class SubscribeDTO {
     private String createDate;
 
     private String lastModifiedDate;
+
+    private List<CommentDTO> commentList;
 
 }

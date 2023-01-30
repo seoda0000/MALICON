@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.stream.events.Comment;
-
 @Transactional
 @Service
 @RequiredArgsConstructor
@@ -29,7 +27,7 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public CommentEntity createComment(CommentDTO commentDTO) {
         CommentEntity comment = CommentEntity.builder()
-                .userEntity(userRepository.findById(commentDTO.getUserId()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "작성자가 유효하지 않습니다.")))
+                .userEntity(userRepository.findById(commentDTO.getUserPK()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "작성자가 유효하지 않습니다.")))
                 .articleEntity(articleRepository.findById(commentDTO.getArticleId()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "게시글이 유효하지 않습니다.")))
                 .content(commentDTO.getContent())
                 .build();

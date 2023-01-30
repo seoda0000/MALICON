@@ -10,9 +10,15 @@ import lombok.*;
 public class CommentDTO {
 
     private long id;
-    private long userId;
+    private long userPK;
+
+    private String userId;
 
     private long articleId;
 
     private String content;
+
+    private String createDate;
+
+    private String lastModifiedDate;
 }
