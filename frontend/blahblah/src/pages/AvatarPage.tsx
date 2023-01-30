@@ -1,17 +1,29 @@
 import AvatarTest from "../components/avatar/AvatarTest";
 import SelectList from "../components/avatar/SelectList";
 import { useState } from "react";
-import { Button } from "@mui/material";
+import { Button, Card, Box, Paper } from "@mui/material";
+import { Stack } from "@mui/system";
+import Divider from "@mui/material/Divider";
+
+import * as React from "react";
+import { styled } from "@mui/material/styles";
 
 const AVATAR_OPTION = {
-  // backgroundColor,
-  // backgroundType,
-  // seed: "Shadow",
-  // flip: [false, true],
   body: ["checkered", "rounded", "small", "squared"],
-  clothingColor: ["6dbb58", "54d7c7", "456dff", "000000"],
+  clothingColor: [
+    "6dbb58",
+    "54d7c7",
+    "456dff",
+    "7555ca",
+    "e24553",
+    "f55d81",
+    "f3b63a",
+    "000000",
+    "dddddd",
+  ],
   eyes: ["glasses", "happy", "open", "sleep", "sunglasses", "wink"],
   facialHair: [
+    "",
     "beardMustache",
     "goatee",
     "pyramid",
@@ -19,11 +31,67 @@ const AVATAR_OPTION = {
     "soulPatch",
     "walrus",
   ],
-  hair: ["curlyHighTop", "sideShave"],
-  hairColor: ["6c4545", "362c47", "dee1f5"],
-  mouth: ["bigSmile", "frown", "lips", "smile"],
+  hair: [
+    "bald",
+    "balding",
+    "beanie",
+    "bobBangs",
+    "bobCut",
+    "bunUndercut",
+    "buzzcut",
+    "cap",
+    "curly",
+    "curlyBun",
+    "curlyHighTop",
+    "extraLong",
+    "fade",
+    "long",
+    "mohawk",
+    "pigtails",
+    "shortCombover",
+    "shortComboverChops",
+    "sideShave",
+    "straightBun",
+  ],
+  hairColor: [
+    "CC9966",
+    "6c4545",
+    "362c47",
+    "dee1f5",
+    "e15c66",
+    "e16381",
+    "f27d65",
+    "f29c65",
+    "FFFF99",
+    "CCFFCC",
+    "00FFCC",
+    "00FFFF",
+    "3333CC",
+    "000066",
+    "9900FF",
+  ],
+  mouth: [
+    "bigSmile",
+    "frown",
+    "lips",
+    "pacifier",
+    "smile",
+    "smirk",
+    "surprise",
+  ],
   nose: ["mediumRound", "smallRound", "wrinkles"],
-  skinColor: ["623d36", "92594b", "b16a5b"],
+  skinColor: [
+    "623d36",
+    "92594b",
+    "b16a5b",
+    "d78774",
+    "e5a07e",
+    "e7a391",
+    "eeb4a4",
+    "9999FF",
+    "66CC66",
+    "CC3333",
+  ],
 };
 
 function AvatarPage() {
@@ -196,12 +264,51 @@ function AvatarPage() {
     },
   };
 
+  // 아바타 서버에 저장
+
+  const saveAvatarHandler = () => {};
+
   return (
     <div>
-      <h1>아바타 페이지</h1>
-      <AvatarTest selectedAvatar={selectedAvatar} />
-      <SelectList options={AVATAR_OPTION} selectHandler={selectHandler} />
-      <Button>확정</Button>
+      {/* 제목 영역 */}
+
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          "& > :not(style)": {
+            m: 1,
+            // width: 1500,
+            // height: 500,
+          },
+        }}
+      >
+        <h1>Avatar Page</h1>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          "& > :not(style)": {
+            m: 1,
+            // width: 1500,
+            // height: 500,
+          },
+        }}
+      >
+        <Card sx={{ maxWidth: 500 }}>
+          <AvatarTest selectedAvatar={selectedAvatar} />
+        </Card>
+        <Card sx={{ minWidth: 400, maxWidth: 500 }}>
+          <SelectList options={AVATAR_OPTION} selectHandler={selectHandler} />
+          <Stack direction="column" spacing={1} justifyContent="center">
+            <Button onClick={saveAvatarHandler}>확정</Button>
+          </Stack>
+        </Card>
+      </Box>
     </div>
   );
 }

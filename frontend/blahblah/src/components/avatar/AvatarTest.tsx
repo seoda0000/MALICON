@@ -12,8 +12,8 @@ const AvatarTest: React.FC<{ selectedAvatar: any }> = (props) => {
     body: [props.selectedAvatar.body],
     clothingColor: [props.selectedAvatar.clothingColor],
     eyes: [props.selectedAvatar.eyes],
-    facialHair: [props.selectedAvatar.facialColor],
-    // facialHairProbability: 0,
+    facialHair: [props.selectedAvatar.facialHair],
+    facialHairProbability: 100,
     hair: [props.selectedAvatar.hair],
     hairColor: [props.selectedAvatar.hairColor],
     mouth: [props.selectedAvatar.mouth],
@@ -25,7 +25,7 @@ const AvatarTest: React.FC<{ selectedAvatar: any }> = (props) => {
 
   return (
     <Stack direction="row" spacing={1} justifyContent="center">
-      <img src={dataUri} width="200px" />
+      <img src={dataUri} width="400px" />
     </Stack>
   );
 };

@@ -7,7 +7,7 @@ import { Button, Paper } from "@mui/material";
 const SelectItem: React.FC<{ option: any; selectHandler: any }> = (props) => {
   return (
     <Stack direction="row" spacing={1} justifyContent="center">
-      <PrevButton />
+      <PrevButton PrevHandler={props.selectHandler.prevHandler} />
       <Button>{props.option}</Button>
       <NextButton NextHandler={props.selectHandler.nextHandler} />
     </Stack>
