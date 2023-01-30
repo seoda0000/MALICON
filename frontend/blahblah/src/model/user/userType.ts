@@ -1,4 +1,5 @@
 export type UserType = {
+  id: number | null;
   userId: string;
   password: string;
   nickName: string;

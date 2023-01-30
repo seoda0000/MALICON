@@ -96,15 +96,12 @@ export const getMeWithTokenAction = createAsyncThunk(
       console.log("2222 ", getAccessToken());
 
       const axios = axiosInitializer();
-      const { data } = await axios.get(
-        "/api/users/me",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Baerer " + getAccessToken(),
-          },
-        }
-      );
+      const { data } = await axios.get("/api/users/me", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
+      });
       console.log("비동기요청[GET_ME] 끝 : " + data.nickName);
       console.log(`로그인 - User: ${data.userId}`);
 
@@ -126,10 +123,7 @@ export const refreshTokenAction = createAsyncThunk(
       const req = { reqRefreshToken: "" };
 
       const axios = axiosInitializer();
-      const { data } = await axios.post(
-        "/api/auth/refresh",
-        req
-      );
+      const { data } = await axios.post("/api/auth/refresh", req);
       console.log("비동기요청[REFRESH_TOKEN] 끝 : " + data.message);
 
       setAccessToken(data.token.accessToken);
@@ -141,6 +135,8 @@ export const refreshTokenAction = createAsyncThunk(
       return data;
     } catch (e) {
       // 로그아웃
+      removeToken();
+      console.log("로그아웃");
 
       return rejectWithValue(e);
     }
