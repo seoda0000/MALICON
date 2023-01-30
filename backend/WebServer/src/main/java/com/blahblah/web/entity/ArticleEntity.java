@@ -2,7 +2,6 @@ package com.blahblah.web.entity;
 
 
 import com.blahblah.web.dto.request.ArticleDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,7 +37,7 @@ public class ArticleEntity extends BaseEntity{
     public ArticleDTO toArticleDTO(){
         return ArticleDTO.builder()
                 .id(this.id)
-                .userId(userEntity.getId())
+                .userPK(userEntity.getId())
                 .title(title)
                 .content(content)
                 .build();

@@ -2,13 +2,15 @@ package com.blahblah.web.service;
 
 import com.blahblah.web.controller.exception.CustomException;
 import com.blahblah.web.dto.request.ArticleDTO;
-import com.blahblah.web.dto.response.SubscribeDTO;
+import com.blahblah.web.dto.request.CommentDTO;
+import com.blahblah.web.dto.response.SubscribeArticleDTO;
 import com.blahblah.web.entity.ArticleEntity;
+import com.blahblah.web.entity.CommentEntity;
 import com.blahblah.web.repository.ArticleRepository;
+import com.blahblah.web.repository.CommentRepository;
 import com.blahblah.web.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -27,10 +29,12 @@ public class ArticleServiceImpl implements ArticleService{
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
 
+    private final CommentRepository commentRepository;
+
     @Override
     public ArticleEntity createArticle(ArticleDTO articleDTO) {
         ArticleEntity article = ArticleEntity.builder()
-                .userEntity(userRepository.findById(articleDTO.getUserId()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "작성자가 유효하지 않습니다.")))
+                .userEntity(userRepository.findById(articleDTO.getUserPK()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "작성자가 유효하지 않습니다.")))
                 .title(articleDTO.getTitle())
                 .content(articleDTO.getContent())
                 .build();
@@ -58,29 +62,44 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public Page<ArticleEntity> readArticle(long id) {
+    public List<SubscribeArticleDTO> readArticle(long id) {
 
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "create_date"));
-        Page<ArticleEntity> lst = articleRepository.findAllBy(id, pageRequest);
-        List<SubscribeDTO> DTOList = new ArrayList<>();
-        // DTO로 만들면 Page정보는 어떻게 보내지?
-        // 날짜 문자열로
-//        for(ArticleEntity a: lst){
-//            DTOList.add(SubscribeDTO.builder()
-//                    .id(a.getId())
-//                    .userId(a.getUserEntity().getId())
-//                    .userNickName(a.getUserEntity().getNickName())
-//                    .avatar(a.getUserEntity().getAvatar())
-//                    .title(a.getTitle())
-//                    .content(a.getContent())
-//                    .createDate(a.getCreateDate().toString())
-//                    .lastModifiedDate(a.getLastModifiedDate().toString())
-//                    .build()
-//            );
-//        }
+//        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "create_date"));
+//        List<ArticleEntity> lst = articleRepository.findAllBy(id, pageRequest);
+        List<ArticleEntity> lst = articleRepository.findAllBy(id);
+        List<SubscribeArticleDTO> DTOList = new ArrayList<>();
+        for(ArticleEntity a: lst){
+            List<CommentEntity> commentEntities = commentRepository.findAllByArticleId(a.getId());
+            List<CommentDTO> commentDTOS = new ArrayList<>();
+            for(CommentEntity c: commentEntities){
+                commentDTOS.add(CommentDTO.builder()
+                        .id(c.getId())
+                        .articleId(c.getArticleEntity().getId())
+                        .userPK(c.getUserEntity().getId())
+                        .userId(c.getUserEntity().getUserId())
+                        .content(c.getContent())
+                        .createDate(a.getCreateDate().toString())
+                        .lastModifiedDate(a.getLastModifiedDate().toString())
+                        .build()
+                );
+            }
+            DTOList.add(SubscribeArticleDTO.builder()
+                    .id(a.getId())
+                    .userPK(a.getUserEntity().getId())
+                    .userId(a.getUserEntity().getUserId())
+                    .userNickName(a.getUserEntity().getNickName())
+                    .avatar(a.getUserEntity().getAvatar())
+                    .title(a.getTitle())
+                    .content(a.getContent())
+                    .createDate(a.getCreateDate().toString())
+                    .lastModifiedDate(a.getLastModifiedDate().toString())
+                    .commentList(commentDTOS)
+                    .build()
+            );
+        }
 
 
-        return lst;
+        return DTOList;
     }
 
 

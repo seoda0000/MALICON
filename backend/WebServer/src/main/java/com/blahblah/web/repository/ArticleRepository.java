@@ -1,7 +1,6 @@
 package com.blahblah.web.repository;
 
-import com.blahblah.web.dto.request.ArticleDTO;
-import com.blahblah.web.dto.response.SubscribeDTO;
+import com.blahblah.web.dto.response.SubscribeArticleDTO;
 import com.blahblah.web.entity.ArticleEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +22,12 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
 //            "from ArticleEntity a " +
 //            "where a.userId="+
 //            "(select us.subscribeUserEntity.userId from UserSubscribeEntity us where us.userEntity.userId = :id)")
-       @Query(value="select * from articles where articles.user_id=(select us.subscribe_user_id from user_subscribes us where us.user_id = ?)", nativeQuery = true)
-       Page<ArticleEntity> findAllBy(@Param("id") long id, Pageable pageable);
+       //       @Query(value="select new com.blahblah.web.dto.response.SubscribeArticleDTO(a.id, u.userId, u.nickName, u.avatar, a.title, a.content, a.createDate, a.lastModifiedDate,c)" +
+//               "from ArticleEntity a " +
+//               "join a.userEntity u " +
+//               "join CommentEntity c on articleId " +
+//               "where a.id=:id")
+    @Query(value="select * from articles where articles.user_id=(select us.subscribe_user_id from user_subscribes us where us.user_id = ?)", nativeQuery = true)
+    List<ArticleEntity> findAllBy(@Param("id") long id);
 
 }

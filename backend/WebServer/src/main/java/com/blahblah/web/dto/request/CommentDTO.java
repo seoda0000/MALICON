@@ -7,17 +7,18 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticleDTO {
+public class CommentDTO {
 
     private long id;
-
     private long userPK;
 
     private String userId;
 
-    private String title;
+    private long articleId;
 
     private String content;
 
+    private String createDate;
 
+    private String lastModifiedDate;
 }

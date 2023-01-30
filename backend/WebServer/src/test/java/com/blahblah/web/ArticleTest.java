@@ -23,7 +23,7 @@ public class ArticleTest {
     @Test
     void insertTest() throws SQLException {
         //give
-        ArticleDTO article = ArticleDTO.builder().userId(1).title("제목").content("내용").build();
+        ArticleDTO article = ArticleDTO.builder().userPK(1).title("제목").content("내용").build();
         //when
         ArticleEntity result = service.createArticle(article);
         //then
