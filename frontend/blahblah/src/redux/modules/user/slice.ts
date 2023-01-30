@@ -10,6 +10,7 @@ import {
 
 const initialState: UserStateType = {
   userData: {
+    id: null,
     userId: "",
     password: "",
     nickName: "",
@@ -89,6 +90,7 @@ const userSlice = createSlice({
         state.getMe.data = payload;
         state.getMe.error = null;
 
+        state.userData.id = payload.id;
         state.userData.userId = payload.userId;
         state.userData.email = payload.email;
         state.userData.nickName = payload.nickName;
