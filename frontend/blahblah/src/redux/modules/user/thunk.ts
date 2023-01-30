@@ -3,6 +3,7 @@ import { SigninResponseType } from "../../../model/user/signinResponseType";
 import { SigninType } from "../../../model/user/signinType";
 import { SignupType } from "../../../model/user/signupType";
 import { UserType } from "../../../model/user/userType";
+import { UpdateUserType } from "../../../model/user/updateUserType";
 import { useAppDispatch } from "../../configStore.hooks";
 import {
   getAccessToken,
@@ -143,3 +144,26 @@ export const refreshTokenAction = createAsyncThunk(
   }
 );
 
+// 회원정보 수정
+export const updateUserAction = createAsyncThunk(
+  "UPDATE_USER",
+  async (userData: any, { rejectWithValue }) => {
+    try {
+      console.log("비동기요청[UPDATE] 시작");
+
+      const axios = axiosInitializer();
+
+      const { data } = await axios.put(`/api/users`, userData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
+      });
+      console.log("비동기요청[UPDATE] 끝 : " + data.message);
+      return data;
+    } catch (e) {
+      console.error(e);
+      return rejectWithValue(e);
+    }
+  }
+);
