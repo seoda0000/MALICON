@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,14 +14,28 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import SignupModal from "../auth/SignupModal";
 import SigninModal from "../auth/SigninModal";
+import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
+import { Badge, Tooltip } from "@mui/material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import ProfileImage from "../auth/ProfileImage";
+import { getAccessToken, removeToken } from "../../redux/modules/user/token";
+import { getMeWithTokenAction } from "../../redux/modules/user";
+
 // import Badge from "@mui/material/Badge";
 // import NotificationsIcon from "@mui/icons-material/Notifications";
 // import { Link } from "react-router-dom";
 
 const pages = ["인트로 메뉴1", "인트로 메뉴2"];
+const menuWithLogin = ["Profile", "Account", "Dashboard", "Logout"];
 
 export default function NavBarLanding() {
+  const loggedUser = useAppSelector((state) => state.user.userData);
+  const dispatch = useAppDispatch();
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
+  );
   const [openSignupModal, setOpenSignupModal] = useState<boolean>(false);
   const [openSigninModal, setOpenSigninModal] = useState<boolean>(false);
 
@@ -43,6 +57,27 @@ export default function NavBarLanding() {
     setOpenSigninModal((prev) => !prev);
   };
 
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const logout = () => {
+    removeToken();
+    console.log("로그아웃");
+    window.location.replace("/");
+  };
+
+  useEffect(() => {
+    if (getAccessToken()) {
+      if (!loggedUser.isLoggedIn) {
+        dispatch(getMeWithTokenAction());
+      }
+    }
+  }, []);
   return (
     <Box position="static">
       <Container maxWidth="xl">
@@ -126,25 +161,84 @@ export default function NavBarLanding() {
             LOGO
           </Typography>
 
-          {/* 로그인 버튼 */}
-          <Box
-            sx={{
-              justifyContent: "flex-end",
-              flexGrow: 1,
-              display: { xs: "none", md: "flex" },
-            }}
-          >
-            <Button onClick={onClickSignin} sx={{ my: 2, display: "block" }}>
-              로그인
-            </Button>
-          </Box>
+          {!loggedUser.isLoggedIn && (
+            <>
+              {/* 로그인 버튼 */}
+              <Box
+                sx={{
+                  justifyContent: "flex-end",
+                  flexGrow: 1,
+                  display: { xs: "none", md: "flex" },
+                }}
+              >
+                <Button
+                  onClick={onClickSignin}
+                  sx={{ my: 2, display: "block" }}
+                >
+                  로그인
+                </Button>
+              </Box>
+              {/* 회원가입 버튼 */}
+              <Box>
+                <Button
+                  onClick={onClickSignup}
+                  sx={{ my: 2, display: "block" }}
+                >
+                  회원가입
+                </Button>
+              </Box>
+            </>
+          )}
 
-          {/* 회원가입 버튼 */}
-          <Box>
-            <Button onClick={onClickSignup} sx={{ my: 2, display: "block" }}>
-              회원가입
-            </Button>
-          </Box>
+          {/* 알림과 프로필 영역 */}
+
+          {loggedUser.isLoggedIn && (
+            <>
+              <MenuItem>
+                <IconButton
+                  size="large"
+                  aria-label="show 17 new notifications"
+                  color="inherit"
+                >
+                  <Badge badgeContent={17} color="error">
+                    <NotificationsIcon />
+                  </Badge>
+                </IconButton>
+              </MenuItem>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <ProfileImage />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {menuWithLogin.map((item) => (
+                    <MenuItem
+                      key={item}
+                      onClick={item === "Logout" ? logout : handleCloseUserMenu}
+                    >
+                      <Typography textAlign="center">{item}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            </>
+          )}
         </Toolbar>
       </Container>
       {openSignupModal && (

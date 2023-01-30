@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -20,6 +20,7 @@ import FeedIcon from "@mui/icons-material/Feed";
 import { ReactNode } from "react";
 import Menu from "@mui/material/Menu";
 
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import Container from "@mui/material/Container";
 // import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -31,12 +32,17 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
 import ProfileImage from "../auth/ProfileImage";
 import AvatarShortcutButton from "./AvatarShortcutButton";
+import { getAccessToken, removeToken } from "../../redux/modules/user/token";
+import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
+import { getMeWithTokenAction } from "../../redux/modules/user";
+import SigninModal from "../auth/SigninModal";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const menuWithLogin = ["Profile", "Account", "Dashboard", "Logout"];
+const menuWithLogout = ["Signup", "Login"];
 
 const drawerWidth = 240;
 
@@ -110,9 +116,11 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Layout(props: LayoutProps) {
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const loggedUser = useAppSelector((state) => state.user.userData);
+  const dispatch = useAppDispatch();
+
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [openSigninModal, setOpenSigninModal] = useState<boolean>(false);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -125,11 +133,30 @@ export default function Layout(props: LayoutProps) {
   // ==========================
 
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
 
   const handleDrawer = () => {
     setOpen(!open);
   };
+
+  const onClickSignin = () => {
+    handleCloseUserMenu();
+    setOpenSigninModal((prev) => !prev);
+  };
+
+  const logout = () => {
+    removeToken();
+    console.log("로그아웃");
+    window.location.replace("/");
+  };
+
+  useEffect(() => {
+    if (getAccessToken()) {
+      if (!loggedUser.isLoggedIn) {
+        dispatch(getMeWithTokenAction());
+      }
+    }
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -178,21 +205,27 @@ export default function Layout(props: LayoutProps) {
 
             {/* 알림과 프로필 영역 */}
 
-            <MenuItem>
-              <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
-                <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-            </MenuItem>
+            {loggedUser.isLoggedIn && (
+              <MenuItem>
+                <IconButton
+                  size="large"
+                  aria-label="show 17 new notifications"
+                  color="inherit"
+                >
+                  <Badge badgeContent={17} color="error">
+                    <NotificationsIcon />
+                  </Badge>
+                </IconButton>
+              </MenuItem>
+            )}
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <ProfileImage />
+                  {loggedUser.isLoggedIn ? (
+                    <ProfileImage />
+                  ) : (
+                    <AccountCircleRoundedIcon />
+                  )}
                 </IconButton>
               </Tooltip>
 
@@ -212,11 +245,26 @@ export default function Layout(props: LayoutProps) {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+                {loggedUser.isLoggedIn &&
+                  menuWithLogin.map((item) => (
+                    <MenuItem
+                      key={item}
+                      onClick={item === "Logout" ? logout : handleCloseUserMenu}
+                    >
+                      <Typography textAlign="center">{item}</Typography>
+                    </MenuItem>
+                  ))}
+                {!loggedUser.isLoggedIn &&
+                  menuWithLogout.map((item) => (
+                    <MenuItem
+                      key={item}
+                      onClick={
+                        item === "Login" ? onClickSignin : handleCloseUserMenu
+                      }
+                    >
+                      <Typography textAlign="center">{item}</Typography>
+                    </MenuItem>
+                  ))}
               </Menu>
             </Box>
           </Toolbar>
@@ -307,6 +355,10 @@ export default function Layout(props: LayoutProps) {
         <main className="main">{props.children}</main>
         <AvatarShortcutButton />
       </Box>
+      {openSigninModal && (
+        <SigninModal open={openSigninModal} setOpen={setOpenSigninModal} />
+      )}
     </Box>
   );
 }
+
