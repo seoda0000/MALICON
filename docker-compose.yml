@@ -47,9 +47,12 @@ services:
     image: envoyproxy/envoy-dev
     ports:
       - "80:80"
+      - "443:443"
       - "9901:9901"
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
+      - /home/ubuntu/blahblah.movebxeax.me/fullchain1.pem:/home/ubuntu/blahblah.movebxeax.me/fullchain1.pem
+      - /home/ubuntu/blahblah.movebxeax.me/privkey1.pem:/home/ubuntu/blahblah.movebxeax.me/privkey1.pem
 
   redis:
     image: redis
@@ -63,7 +66,7 @@ services:
     image: openvidu/openvidu-server-kms
     ports:
       - "4443:4443"
-    enviromnent:
+    environment:
       - OPENVIDU_SECRET=MY_SECRET
     networks:
       - default
