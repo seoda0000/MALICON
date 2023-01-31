@@ -12,7 +12,7 @@ const FollowingListItem: React.FC<{
     <ListItem key={props.item.username} disablePadding>
       <ListItemButton>
         <ListItemIcon>
-          <FeedProfileImage src={props.item.img} />
+          {/* <FeedProfileImage src={props.item.img} /> */}
         </ListItemIcon>
         <ListItemText primary={props.item.username} />
       </ListItemButton>

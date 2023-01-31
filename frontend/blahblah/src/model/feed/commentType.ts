@@ -1,6 +1,5 @@
 export type CommentType = {
   id: number;
-  title: string;
   content: string;
   createDate: string;
   lastModifiedDate: string;

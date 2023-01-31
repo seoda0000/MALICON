@@ -9,17 +9,14 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 
 export default function CommentInput() {
   return (
-    <Box sx={{ "& > :not(style)": { m: 1 } }}>
-      <FormControl variant="standard">
-        <InputLabel htmlFor="input-with-icon-adornment">
-          With a start adornment
-        </InputLabel>
-      </FormControl>
-
-      <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-        <AccountCircle sx={{ color: "action.active", mr: 1, my: 0.5 }} />
-        <TextField id="input-with-sx" label="With sx" variant="standard" />
-      </Box>
+    <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+      <AccountCircle sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+      <TextField
+        id="input-with-sx"
+        label="덧글을 입력하세요"
+        variant="standard"
+        sx={{ width: 1 }}
+      />
     </Box>
   );
 }

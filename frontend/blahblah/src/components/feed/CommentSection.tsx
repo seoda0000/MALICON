@@ -1,9 +1,15 @@
 import CommentInput from "./CommentInput";
+import CommentList from "./CommentList";
+import { Box } from "@mui/system";
+import { CommentType } from "../../model/feed/commentType";
 
-export default function CommentSection() {
+const CommentSection: React.FC<{ comments: CommentType[] }> = (props) => {
   return (
-    <div>
+    <Box sx={{ mx: 2 }}>
       <CommentInput />
-    </div>
+      <CommentList comments={props.comments} />
+    </Box>
   );
-}
+};
+
+export default CommentSection;
