@@ -16,8 +16,8 @@ export default function FeedRemoveDialog({
   feed,
 }: any): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
-  // const userId = useSelector((state: RootState) => state.user.userData.id);
-  const userId = 23;
+  const userId = useSelector((state: RootState) => state.user.userData.id);
+  // const userId = 23;
   const feedId = feed.id;
 
   const removeFeedHandler = (e: any) => {
@@ -25,7 +25,7 @@ export default function FeedRemoveDialog({
 
     const feedData = {
       id: feedId,
-      userId: userId,
+      userPK: userId,
     };
 
     console.log(feedData);
