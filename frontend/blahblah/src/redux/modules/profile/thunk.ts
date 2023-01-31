@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { ProfileFeedType } from "../../../model/profile/profileFeedType";
 import { axiosInitializer } from "../../utils/axiosInitializer";
 import { getAccessToken } from "../user/token";
 
@@ -67,6 +68,29 @@ export const unSubscribeAction = createAsyncThunk(
       const axios = axiosInitializer();
       const { data } = await axios.delete(
         `/api/subscribe/${parseInt(userPK)}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + getAccessToken(),
+          },
+        }
+      );
+
+      return data;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
+// 피드 가져오기
+export const getFeedAction = createAsyncThunk(
+  "GET_FEED",
+  async (userPK: string, { rejectWithValue }) => {
+    try {
+      const axios = axiosInitializer();
+      const { data } = await axios.delete<ProfileFeedType[]>(
+        `/api/articles/${parseInt(userPK)}`,
         {
           headers: {
             "Content-Type": "application/json",

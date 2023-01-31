@@ -6,6 +6,7 @@ import {
   getAboutMeAction,
   subscribeAction,
   unSubscribeAction,
+  getFeedAction,
 } from "./thunk";
 
 const initialState: ProfileStateType = {
@@ -25,6 +26,7 @@ const initialState: ProfileStateType = {
   getIsSub: { loading: false, data: null, error: null },
   subscribe: { loading: false, data: null, error: null },
   unSubscribe: { loading: false, data: null, error: null },
+  getFeed: { loading: false, data: null, error: null },
 };
 
 const profileSlice = createSlice({
@@ -113,6 +115,23 @@ const profileSlice = createSlice({
         state.unSubscribe.loading = false;
         state.unSubscribe.data = null;
         state.unSubscribe.error = payload;
+      })
+      .addCase(getFeedAction.pending, (state) => {
+        state.getFeed.loading = true;
+        state.getFeed.data = null;
+        state.getFeed.error = null;
+      })
+      .addCase(getFeedAction.fulfilled, (state, { payload }) => {
+        state.getFeed.loading = false;
+        state.getFeed.data = payload;
+        state.getFeed.error = null;
+
+        state.feedData = payload;
+      })
+      .addCase(getFeedAction.rejected, (state, { payload }) => {
+        state.getFeed.loading = false;
+        state.getFeed.data = null;
+        state.getFeed.error = payload;
       });
   },
 });

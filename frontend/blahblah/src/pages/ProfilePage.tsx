@@ -14,6 +14,7 @@ import {
   getAboutMeAction,
   subscribeAction,
   unSubscribeAction,
+  getFeedAction,
 } from "../redux/modules/profile/thunk";
 
 const ProfilePageLayout = styled.div`
@@ -105,7 +106,7 @@ export default function ProfilePage(): JSX.Element {
 
   const onClickSubscribe = () => {
     if (!isSubscribing) {
-      dispatch(subscribeAction(userpk));
+      // dispatch(subscribeAction(userpk)); // 확인필요
       console.log("구독!!");
     } else {
       dispatch(unSubscribeAction(userpk));
@@ -125,6 +126,7 @@ export default function ProfilePage(): JSX.Element {
     // 지난 동영상 목록 가져오기
 
     // 피드 목록 가져오기
+    // dispatch(getFeedAction(userpk)); // 확인필요
   });
 
   // if (!(getProfile && getisOnAir && getVideos && getFeed))
