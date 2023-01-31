@@ -2,5 +2,5 @@ export type FeedEditType = {
   title: string;
   content: string;
   id: number;
-  userId: number;
+  userPK: number | null;
 };

@@ -19,8 +19,9 @@ import CommentSection from "./CommentSection";
 import parse from "html-react-parser";
 import FeedSettingButton from "./FeedSettingButton";
 import EditorModal from "./EditorModal";
-import FeedRemoveDialog from "./RemoveDialog";
+import FeedRemoveDialog from "./FeedRemoveDialog";
 import { useEffect, useState } from "react";
+import { FeedType } from "../../model/feed/feedType";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -64,7 +65,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
       {/* <Card sx={{ maxWidth: 345 }}> */}
       <Card>
         <CardHeader
-          avatar={<FeedProfileImage src={props.feed.userAvatar} />}
+          // avatar={<FeedProfileImage avatar={props.feed.userAvatar} />}
           action={
             <FeedSettingButton
               onClickEditor={onClickEditor}
@@ -97,8 +98,10 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>덧글 목록 추후 추가</Typography>
-            <CommentSection />
+            <CommentSection
+              comments={props.feed.commentList}
+              articleId={props.feed.id}
+            />
           </CardContent>
         </Collapse>
       </Card>

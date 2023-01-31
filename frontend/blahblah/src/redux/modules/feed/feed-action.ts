@@ -8,7 +8,7 @@ import { FeedEditType } from "../../../model/feed/feedEditType";
 import { FeedRemoveType } from "../../../model/feed/feedRemoveType";
 import { getAccessToken } from "../user/token";
 import { axiosInitializer } from "../../utils/axiosInitializer";
-
+import { CommentPostType } from "../../../model/feed/commentPostType copy";
 // 피드 목록 가져오기
 export const fetchFeedData = createAsyncThunk(
   "feed/fetchFeedData",
@@ -26,37 +26,7 @@ export const fetchFeedData = createAsyncThunk(
         },
       });
 
-      const rawFeeds = response.data.content;
-      console.log(rawFeeds);
-
-      const dateMaker = (lst: any) => {
-        return (
-          String(lst[0]) +
-          "-" +
-          String(lst[1]) +
-          "-" +
-          String(lst[2]) +
-          " " +
-          String(lst[3]) +
-          ":" +
-          String(lst[4])
-        );
-      };
-
-      const feeds = rawFeeds.map((feed: any) => {
-        return {
-          id: feed.id,
-          title: feed.title,
-          content: feed.content,
-          createDate: dateMaker(feed.createDate),
-          lastModifiedDate: dateMaker(feed.lastModifiedDate),
-
-          userId: feed.userEntity.id,
-          userAvatar: feed.userEntity.avatar,
-          userNickName: feed.userEntity.nickName,
-          userName: feed.userEntity.username,
-        };
-      });
+      const feeds = response.data;
 
       console.log("피드목록: ", feeds);
 
@@ -157,6 +127,63 @@ export const editFeedData = createAsyncThunk(
       console.log("수정 실패");
       console.log(e.request);
       console.error(e.response.data);
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
+// 덧글 작성
+
+export const postCommentData = createAsyncThunk(
+  "feed/postCommentData",
+  async (postData: CommentPostType, thunkAPI) => {
+    try {
+      const axios = axiosInitializer();
+
+      await axios
+        .post<CommentPostType>(`/api/comments`, postData, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        })
+        .then(({ data }: any) => {
+          console.log("덧글 작성: ", data);
+
+          thunkAPI.dispatch(fetchFeedData());
+
+          console.log("피드 리스트 갱신 완료");
+        });
+    } catch (e: any) {
+      console.log("덧글 작성 실패");
+      console.error(e.response.data);
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
+// 덧글 삭제하기
+
+export const removeCommentData = createAsyncThunk(
+  "feed/removeCommentData",
+  async (removeData: any, thunkAPI) => {
+    try {
+      const axios = axiosInitializer();
+
+      await axios
+        .delete<FeedRemoveType>("/api/comments", {
+          data: removeData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        })
+        .then((data) => {
+          console.log("덧글 삭제: ", data);
+          thunkAPI.dispatch(fetchFeedData());
+        });
+    } catch (e) {
+      console.error(e);
       return thunkAPI.rejectWithValue(e);
     }
   }
