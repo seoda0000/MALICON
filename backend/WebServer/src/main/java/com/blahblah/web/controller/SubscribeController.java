@@ -1,6 +1,7 @@
 package com.blahblah.web.controller;
 
 import com.blahblah.web.dto.response.Message;
+import com.blahblah.web.dto.response.SubscribeDTO;
 import com.blahblah.web.dto.response.UserDTO;
 import com.blahblah.web.entity.UserEntity;
 import com.blahblah.web.entity.UserSubscribeEntity;
@@ -41,7 +42,7 @@ public class SubscribeController{
     public ResponseEntity readSubscribe(HttpServletRequest request){
         long userId = JWTutil.getLongIdByAccessToken(request);
 
-        List<Long> subscribes = subscribeService.readSubscribe(userId);
+        List<SubscribeDTO> subscribes = subscribeService.readSubscribe(userId);
         if(subscribes==null){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("구독 정보를 가져올 수 없습니다.");
         }

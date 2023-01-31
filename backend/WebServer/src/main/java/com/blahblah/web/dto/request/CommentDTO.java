@@ -18,6 +18,8 @@ public class CommentDTO {
 
     private String content;
 
+    private String avatar;
+
     private String createDate;
 
     private String lastModifiedDate;

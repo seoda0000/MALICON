@@ -78,6 +78,7 @@ public class ArticleServiceImpl implements ArticleService{
                         .userPK(c.getUserEntity().getId())
                         .userId(c.getUserEntity().getUserId())
                         .content(c.getContent())
+                        .avatar(c.getUserEntity().getAvatar())
                         .createDate(a.getCreateDate().toString())
                         .lastModifiedDate(a.getLastModifiedDate().toString())
                         .build()

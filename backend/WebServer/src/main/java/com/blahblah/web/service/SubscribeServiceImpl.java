@@ -1,6 +1,7 @@
 package com.blahblah.web.service;
 
 import com.blahblah.web.controller.exception.CustomException;
+import com.blahblah.web.dto.response.SubscribeDTO;
 import com.blahblah.web.entity.UserEntity;
 import com.blahblah.web.entity.UserSubscribeEntity;
 import com.blahblah.web.repository.SubscribeRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
@@ -33,9 +35,19 @@ public class SubscribeServiceImpl  implements SubscribeService {
     }
 
     @Override
-    public List<Long> readSubscribe(long userId) {
+    public List<SubscribeDTO> readSubscribe(long userId) {
 
-        return subscribeRepository.findAllByUserId(userId);
+        List<UserEntity> result = userRepository.findAllByUserId(userId);
+        List<SubscribeDTO> subscribeDTOS = new ArrayList<>();
+        for(UserEntity u: result){
+            subscribeDTOS.add(SubscribeDTO.builder()
+                    .userPK(u.getId())
+                    .userId(u.getUserId())
+                    .nickName(u.getNickName())
+                    .avatar(u.getAvatar())
+                    .build());
+        }
+        return subscribeDTOS;
     }
 
     @Override
