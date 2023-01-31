@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileImage from "../components/auth/ProfileImage";
 import { useParams } from "react-router-dom";
-import { useAppSelector } from "../redux/configStore.hooks";
+import { useAppDispatch, useAppSelector } from "../redux/configStore.hooks";
 import Carousel from "../components/ui/Carousel";
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
@@ -9,6 +9,7 @@ import { CheckRounded, PersonAdd } from "@mui/icons-material";
 import onAirOn from "../assets/img/onair_turnon.png";
 import onAirOff from "../assets/img/onair_turnoff.png";
 import InfiniteScroll from "../components/ui/InfiniteScroll";
+import { getProfileAction } from "../redux/modules/profile/thunk";
 
 const ProfilePageLayout = styled.div`
   max-width: 90%;
@@ -84,9 +85,15 @@ const FeedContainer = styled.div`
 `;
 
 export default function ProfilePage(): JSX.Element {
-  const { userid } = useParams();
-  const user = useAppSelector((state) => state.user.userData);
-  console.log(userid);
+  const { userid } = useParams() as { userid: string };
+  const loggedUser = useAppSelector((state) => state.user.userData);
+  const user = useAppSelector((state) => state.profile.userData);
+  const dispatch = useAppDispatch();
+
+  // const [getProfile, setGetProfile] = useState<boolean>(false);
+  // const [getisOnAir, setGetisOnAir] = useState<boolean>(false);
+  // const [getVideos, setGetVideos] = useState<boolean>(false);
+  // const [getFeed, setGetFeed] = useState<boolean>(false);
 
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
 
@@ -94,9 +101,25 @@ export default function ProfilePage(): JSX.Element {
     setIsFollowing((prev) => !prev);
   };
 
-  //   useEffect(() => {
-  //     console.log(userid);
-  //   }, []);
+  useEffect(() => {
+    console.log(userid);
+    console.log(loggedUser);
+
+    // 프로필 가져오기
+    dispatch(getProfileAction(userid));
+
+    // 팔로잉 목록 가자오기
+
+    // 생방송 중 여부 가져오기
+
+    // 지난 동영상 목록 가져오기
+
+    // 피드 목록 가져오기
+  }, []);
+
+  // if (!(getProfile && getisOnAir && getVideos && getFeed))
+  //   return <div>loading..</div>;
+  // else
   return (
     <ProfilePageLayout>
       {/* 프로필 */}
@@ -108,9 +131,9 @@ export default function ProfilePage(): JSX.Element {
           <div className="profile-info">
             <div>
               <div className="info">
-                <h1>닉넴나싸피</h1>
-                <span className="id">@ssafy12</span>
-                <span className="follower">구독자 15명</span>
+                <h1>{user.nickName}</h1>
+                <span className="id">@{user.userId}</span>
+                <span className="follower">구독자 {user.follower}명</span>
               </div>
               {isFollowing && (
                 <Button
@@ -133,15 +156,16 @@ export default function ProfilePage(): JSX.Element {
                 </Button>
               )}
             </div>
-            <p>자기소개를 뭐 닉네임은 닉넴나싸피 나를 팔로우해라!</p>
+            <p>{user.content}</p>
           </div>
         </div>
         {/* 티켓박스 */}
         <div className="ticket-box">
-          {/* 라방중 */}
-          <img src={onAirOn} alt="onair_on" />
-          {/* 라방아님 */}
-          {/* <img src={onAirOff} alt="onair_off" /> */}
+          {user.isOnAir ? (
+            <img src={onAirOn} alt="onair_on" />
+          ) : (
+            <img src={onAirOff} alt="onair_off" />
+          )}
         </div>
       </InfoContainer>
       <VideoContainer>
