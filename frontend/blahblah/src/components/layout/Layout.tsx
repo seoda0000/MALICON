@@ -36,6 +36,8 @@ import { getAccessToken, removeToken } from "../../redux/modules/user/token";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
 import { getMeWithTokenAction } from "../../redux/modules/user";
 import SigninModal from "../auth/SigninModal";
+import SubscriberItem from "../auth/SubscriberItem";
+import { getSubscribersAction } from "../../redux/modules/subscribe";
 
 interface LayoutProps {
   children: ReactNode;
@@ -117,6 +119,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Layout(props: LayoutProps) {
   const loggedUser = useAppSelector((state) => state.user.userData);
+  const subscribers = useAppSelector((state) => state.subscribe.subscribers);
   const dispatch = useAppDispatch();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -149,6 +152,10 @@ export default function Layout(props: LayoutProps) {
     console.log("로그아웃");
     window.location.replace("/");
   };
+
+  useEffect(() => {
+    dispatch(getSubscribersAction());
+  }, []);
 
   useEffect(() => {
     if (getAccessToken()) {
@@ -348,7 +355,11 @@ export default function Layout(props: LayoutProps) {
           </ListItem>
         </List>
         <Divider />
-        <List>{/* Following List 넣기 */}</List>
+        <List sx={{ p: 2 }}>
+          {subscribers.map((item) => (
+            <SubscriberItem key={item.userPK} item={item} />
+          ))}
+        </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
