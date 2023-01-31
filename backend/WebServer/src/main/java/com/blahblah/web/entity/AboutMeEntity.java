@@ -14,8 +14,12 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+//@IdClass(AboutMeEntityPK.class)
 public class AboutMeEntity implements Serializable {
     @Id
+    @Column(name="user_id", nullable = false)
+    private Long id;
+
     @OneToOne(
         targetEntity = UserEntity.class,
         fetch = FetchType.LAZY
