@@ -26,37 +26,7 @@ export const fetchFeedData = createAsyncThunk(
         },
       });
 
-      const rawFeeds = response.data.content;
-      console.log(rawFeeds);
-
-      const dateMaker = (lst: any) => {
-        return (
-          String(lst[0]) +
-          "-" +
-          String(lst[1]) +
-          "-" +
-          String(lst[2]) +
-          " " +
-          String(lst[3]) +
-          ":" +
-          String(lst[4])
-        );
-      };
-
-      const feeds = rawFeeds.map((feed: any) => {
-        return {
-          id: feed.id,
-          title: feed.title,
-          content: feed.content,
-          createDate: dateMaker(feed.createDate),
-          lastModifiedDate: dateMaker(feed.lastModifiedDate),
-
-          userId: feed.userEntity.id,
-          userAvatar: feed.userEntity.avatar,
-          userNickName: feed.userEntity.nickName,
-          userName: feed.userEntity.username,
-        };
-      });
+      const feeds = response.data;
 
       console.log("피드목록: ", feeds);
 
