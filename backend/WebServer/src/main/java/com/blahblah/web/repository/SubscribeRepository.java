@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface SubscribeRepository extends JpaRepository<UserSubscribeEntity, Long> {
 
-    @Query(value = "select subscribe_user_id from user_subscribes where user_id=?", nativeQuery = true)
-    List<Long> findAllByUserId (@Param("userId") long userId);
+//    @Query(value = "select * from users u where u.id in (select subscribe_user_id from user_subscribes where user_id = ? )", nativeQuery = true)
+//    List<UserEntity> findAllByUserId (long userId);
 
 //    void delete(UserSubscribeEntity subscribe);
 
