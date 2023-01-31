@@ -44,7 +44,7 @@ public class SubscribeController{
 
         List<SubscribeDTO> subscribes = subscribeService.readSubscribe(userId);
         if(subscribes==null){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("구독 정보를 가져올 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("구독 정보를 가져올 수 없습니다."));
         }
         return ResponseEntity.ok(subscribes);
     }
@@ -52,6 +52,8 @@ public class SubscribeController{
     @DeleteMapping("/{subscribeId}")
     public ResponseEntity deleteSubscribe(@PathVariable long subscribeId, HttpServletRequest request){
         long userId = JWTutil.getLongIdByAccessToken(request);
+
+        if(userId==subscribeId) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("본인 구독 불가"));
 
         subscribeService.deleteSubscribe(userId, subscribeId);
         return ResponseEntity.status(HttpStatus.OK).body(new Message("구독 취소 성공"));

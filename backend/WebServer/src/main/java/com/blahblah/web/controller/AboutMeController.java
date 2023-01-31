@@ -3,6 +3,7 @@ package com.blahblah.web.controller;
 import com.blahblah.web.controller.exception.CustomException;
 import com.blahblah.web.dto.AboutMeDTO;
 import com.blahblah.web.dto.response.Message;
+import com.blahblah.web.dto.response.ProfileDTO;
 import com.blahblah.web.entity.AboutMeEntity;
 import com.blahblah.web.service.AboutMeService;
 import com.blahblah.web.util.JWTutil;
@@ -50,5 +51,14 @@ public class AboutMeController {
         else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    @GetMapping("/{userPK}")
+    public ResponseEntity readProfile(@PathVariable long userPK, HttpServletRequest request){
+//        long userPK = JWTutil.getLongIdByAccessToken(request);
+        ProfileDTO profile = aboutMeService.getAboutMe(userPK);
+        if(profile==null){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("사용자 정보를 가져올 수 없습니다."));
+        }
+        return ResponseEntity.ok(profile);
+    }
 
 }

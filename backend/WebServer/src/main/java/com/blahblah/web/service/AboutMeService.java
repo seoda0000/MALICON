@@ -1,6 +1,7 @@
 package com.blahblah.web.service;
 
 import com.blahblah.web.dto.AboutMeDTO;
+import com.blahblah.web.dto.response.ProfileDTO;
 import com.blahblah.web.entity.AboutMeEntity;
 
 public interface AboutMeService {
@@ -9,5 +10,5 @@ public interface AboutMeService {
 
     boolean updateAboutMe(AboutMeDTO aboutMeDTO);
 
-    AboutMeEntity getAboutMe(long userPK);
+    ProfileDTO getAboutMe(long userPK);
 }

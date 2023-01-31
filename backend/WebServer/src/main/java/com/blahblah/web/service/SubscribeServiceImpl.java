@@ -38,7 +38,14 @@ public class SubscribeServiceImpl  implements SubscribeService {
     public List<SubscribeDTO> readSubscribe(long userId) {
 
         List<UserEntity> result = userRepository.findAllByUserId(userId);
+        UserEntity me = userRepository.findById(userId).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "사용자가 존재하지 않습니다."));
         List<SubscribeDTO> subscribeDTOS = new ArrayList<>();
+        subscribeDTOS.add(SubscribeDTO.builder()
+                        .userPK(me.getId())
+                        .userId(me.getUserId())
+                        .avatar(me.getAvatar())
+                        .nickName(me.getNickName())
+                .build());
         for(UserEntity u: result){
             subscribeDTOS.add(SubscribeDTO.builder()
                     .userPK(u.getId())
