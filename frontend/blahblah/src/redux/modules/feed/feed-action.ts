@@ -154,12 +154,36 @@ export const postCommentData = createAsyncThunk(
 
           console.log("피드 리스트 갱신 완료");
         });
-
-      // return data;
     } catch (e: any) {
       console.log("덧글 작성 실패");
-      // console.log(e.request);
       console.error(e.response.data);
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
+// 덧글 삭제하기
+
+export const removeCommentData = createAsyncThunk(
+  "feed/removeCommentData",
+  async (removeData: any, thunkAPI) => {
+    try {
+      const axios = axiosInitializer();
+
+      await axios
+        .delete<FeedRemoveType>("/api/comments", {
+          data: removeData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        })
+        .then((data) => {
+          console.log("덧글 삭제: ", data);
+          thunkAPI.dispatch(fetchFeedData());
+        });
+    } catch (e) {
+      console.error(e);
       return thunkAPI.rejectWithValue(e);
     }
   }

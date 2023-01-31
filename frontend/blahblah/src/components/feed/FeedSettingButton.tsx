@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditorModal from "./EditorModal";
-import FeedRemoveDialog from "./RemoveDialog";
+import FeedRemoveDialog from "./FeedRemoveDialog";
 
 const FeedSettingButton: React.FC<{
   onClickEditor: any;

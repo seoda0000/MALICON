@@ -19,7 +19,7 @@ import CommentSection from "./CommentSection";
 import parse from "html-react-parser";
 import FeedSettingButton from "./FeedSettingButton";
 import EditorModal from "./EditorModal";
-import FeedRemoveDialog from "./RemoveDialog";
+import FeedRemoveDialog from "./FeedRemoveDialog";
 import { useEffect, useState } from "react";
 import { FeedType } from "../../model/feed/feedType";
 

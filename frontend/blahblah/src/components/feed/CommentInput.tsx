@@ -11,22 +11,30 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux/configStore";
 import { IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import { useRef } from "react";
+
 const CommentInput: React.FC<{
   articleId: number;
 }> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
+  const commentRef = useRef<HTMLInputElement>(null);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(props.articleId);
+    const content = commentRef.current?.value || "";
+
     const res = dispatch(
       postCommentData({
         articleId: props.articleId,
-        content: "내용",
+        content,
       })
     );
 
     console.log("덧글 작성 : " + res);
+
+    if (commentRef.current != null) {
+      commentRef.current.value = "";
+    }
   };
 
   return (
@@ -40,6 +48,7 @@ const CommentInput: React.FC<{
         id="input-with-sx"
         label="덧글을 입력하세요"
         variant="standard"
+        inputRef={commentRef}
         sx={{ width: 1 }}
       />
       <IconButton type="submit">

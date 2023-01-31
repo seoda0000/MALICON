@@ -7,8 +7,21 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { CommentType } from "../../model/feed/commentType";
+import { useEffect, useState } from "react";
+import CommentRemoveDialog from "./CommentRemoveDialog";
+import { IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const CommentListItem: React.FC<{ comment: CommentType }> = (props) => {
+  // 삭제 다이얼로그 조작
+  const [openRemoveDialog, setopenRemoveDialog] = useState<boolean>(false);
+  const handleClickOpen = () => {
+    setopenRemoveDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setopenRemoveDialog(false);
+  };
+
   return (
     <ListItem alignItems="flex-start">
       <ListItemAvatar>
@@ -29,6 +42,14 @@ const CommentListItem: React.FC<{ comment: CommentType }> = (props) => {
           </React.Fragment>
         }
         secondary={props.comment.createDate}
+      />
+      <IconButton type="submit" onClick={handleClickOpen}>
+        <DeleteIcon />
+      </IconButton>
+      <CommentRemoveDialog
+        open={openRemoveDialog}
+        handleClose={handleCloseDialog}
+        comment={props.comment}
       />
     </ListItem>
   );
