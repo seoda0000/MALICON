@@ -3,10 +3,13 @@ import CommentList from "./CommentList";
 import { Box } from "@mui/system";
 import { CommentType } from "../../model/feed/commentType";
 
-const CommentSection: React.FC<{ comments: CommentType[] }> = (props) => {
+const CommentSection: React.FC<{
+  comments: CommentType[];
+  articleId: number;
+}> = (props) => {
   return (
     <Box sx={{ mx: 2 }}>
-      <CommentInput />
+      <CommentInput articleId={props.articleId} />
       <CommentList comments={props.comments} />
     </Box>
   );

@@ -8,7 +8,7 @@ import { FeedEditType } from "../../../model/feed/feedEditType";
 import { FeedRemoveType } from "../../../model/feed/feedRemoveType";
 import { getAccessToken } from "../user/token";
 import { axiosInitializer } from "../../utils/axiosInitializer";
-
+import { CommentPostType } from "../../../model/feed/commentPostType copy";
 // 피드 목록 가져오기
 export const fetchFeedData = createAsyncThunk(
   "feed/fetchFeedData",
@@ -126,6 +126,37 @@ export const editFeedData = createAsyncThunk(
     } catch (e: any) {
       console.log("수정 실패");
       console.log(e.request);
+      console.error(e.response.data);
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
+// 덧글 작성
+
+export const postCommentData = createAsyncThunk(
+  "feed/postCommentData",
+  async (postData: CommentPostType, thunkAPI) => {
+    try {
+      const axios = axiosInitializer();
+
+      await axios
+        .post<CommentPostType>(`/api/comments`, postData, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        })
+        .then(({ data }: any) => {
+          console.log("덧글 작성: ", data);
+
+          thunkAPI.dispatch(fetchFeedData());
+        });
+
+      // return data;
+    } catch (e: any) {
+      console.log("덧글 작성 실패");
+      // console.log(e.request);
       console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }

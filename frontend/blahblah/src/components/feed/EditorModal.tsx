@@ -60,6 +60,7 @@ export default function EditorModal({
         dispatch(postFeedData(postData));
       }
     }
+    // onCloseModal();
   };
 
   const modules = useMemo(

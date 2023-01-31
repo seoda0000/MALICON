@@ -98,7 +98,10 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <CommentSection comments={props.feed.comments} />
+            <CommentSection
+              comments={props.feed.commentList}
+              articleId={props.feed.id}
+            />
           </CardContent>
         </Collapse>
       </Card>

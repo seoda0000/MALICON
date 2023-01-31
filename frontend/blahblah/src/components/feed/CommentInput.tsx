@@ -6,10 +6,35 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import { postCommentData } from "../../redux/modules/feed";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../redux/configStore";
+import { Button } from "@mui/material";
 
-export default function CommentInput() {
+const CommentInput: React.FC<{
+  articleId: number;
+}> = (props) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(props.articleId);
+    const res = dispatch(
+      postCommentData({
+        articleId: props.articleId,
+        content: "내용",
+      })
+    );
+
+    console.log("덧글 작성 : " + res);
+  };
+
   return (
-    <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+    <Box
+      sx={{ display: "flex", alignItems: "flex-end" }}
+      component="form"
+      onSubmit={onSubmit}
+    >
       <AccountCircle sx={{ color: "action.active", mr: 1, my: 0.5 }} />
       <TextField
         id="input-with-sx"
@@ -17,6 +42,11 @@ export default function CommentInput() {
         variant="standard"
         sx={{ width: 1 }}
       />
+      <Button variant="contained" type="submit">
+        덧글 작성
+      </Button>
     </Box>
   );
-}
+};
+
+export default CommentInput;
