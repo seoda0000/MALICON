@@ -151,6 +151,8 @@ export const postCommentData = createAsyncThunk(
           console.log("덧글 작성: ", data);
 
           thunkAPI.dispatch(fetchFeedData());
+
+          console.log("피드 리스트 갱신 완료");
         });
 
       // return data;

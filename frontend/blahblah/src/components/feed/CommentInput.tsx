@@ -9,8 +9,8 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import { postCommentData } from "../../redux/modules/feed";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux/configStore";
-import { Button } from "@mui/material";
-
+import { IconButton } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 const CommentInput: React.FC<{
   articleId: number;
 }> = (props) => {
@@ -42,9 +42,9 @@ const CommentInput: React.FC<{
         variant="standard"
         sx={{ width: 1 }}
       />
-      <Button variant="contained" type="submit">
-        덧글 작성
-      </Button>
+      <IconButton type="submit">
+        <SendIcon />
+      </IconButton>
     </Box>
   );
 };

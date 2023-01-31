@@ -147,23 +147,28 @@ export const refreshTokenAction = createAsyncThunk(
 // 회원정보 수정
 export const updateUserAction = createAsyncThunk(
   "UPDATE_USER",
-  async (userData: any, { rejectWithValue }) => {
+  async (userData: any, thunkAPI) => {
     try {
       console.log("비동기요청[UPDATE] 시작");
 
       const axios = axiosInitializer();
 
-      const { data } = await axios.put(`/api/users`, userData, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Baerer " + getAccessToken(),
-        },
-      });
-      console.log("비동기요청[UPDATE] 끝 : " + data.message);
-      return data;
+      await axios
+        .put(`/api/users`, userData, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        })
+        .then(({ data }: any) => {
+          // user state에 저장
+          console.log("비동기요청[UPDATE] 끝 : " + data.message);
+          thunkAPI.dispatch(getMeWithTokenAction());
+          console.log("유저 정보 업데이트 완료");
+        });
     } catch (e) {
       console.error(e);
-      return rejectWithValue(e);
+      return thunkAPI.rejectWithValue(e);
     }
   }
 );
