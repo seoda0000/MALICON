@@ -51,8 +51,23 @@ services:
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
 
-volumes:
-  ssafy_web_db-mysql-data:
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - default
+      - blahblah_net
+
+  openvidu_server:
+    image: openvidu/openvidu-server-kms
+    ports:
+      - "4443:4443"
+    enviromnent:
+      - OPENVIDU_SECRET=MY_SECRET
+    networks:
+      - default
+      - blahblah_net
 
 networks:
   blahblah_net:
