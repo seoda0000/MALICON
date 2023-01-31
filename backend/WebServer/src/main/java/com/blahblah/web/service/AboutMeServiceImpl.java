@@ -27,6 +27,10 @@ public class AboutMeServiceImpl implements AboutMeService{
     private final SubscribeRepository subscribeRepository;
 
     @Override
+    public boolean isExistId(long userPK) {
+        return aboutMeRepository.existsById(userPK);
+    }
+    @Override
     public AboutMeEntity createAboutMe(AboutMeDTO aboutMeDTO) {
         AboutMeEntity a = AboutMeEntity.builder()
                 .userEntity(userRepository.findById(aboutMeDTO.getUserPK()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "사용자가 유효하지 않습니다.")))
