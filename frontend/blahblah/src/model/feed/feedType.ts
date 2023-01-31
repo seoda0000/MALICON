@@ -1,3 +1,5 @@
+import { CommentType } from "./commentType";
+
 export type FeedType = {
   id: number;
   title: string;
@@ -5,8 +7,11 @@ export type FeedType = {
   createDate: string;
   lastModifiedDate: string;
 
-  userId: number;
+  userPK: number;
+  userId: string;
   userName: string;
   userAvatar: string | null;
   userNickName: string;
+
+  commentList: CommentType[];
 };
