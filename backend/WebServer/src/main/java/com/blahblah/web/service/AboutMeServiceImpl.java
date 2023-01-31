@@ -31,4 +31,21 @@ public class AboutMeServiceImpl implements AboutMeService{
 
         return aboutMeRepository.save(a);
     }
+
+    @Override
+    public boolean updateAboutMe(AboutMeDTO aboutMeDTO) {
+        aboutMeRepository.findById(aboutMeDTO.getUserPK()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "자기소개가 존재하지 않습니다."));
+        AboutMeEntity update = AboutMeEntity.builder()
+                .id(aboutMeDTO.getUserPK())
+                .userEntity(userRepository.findById(aboutMeDTO.getUserPK()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "자기소개가 존재하지 않습니다.")))
+                .content(aboutMeDTO.getContent())
+                .build();
+        aboutMeRepository.save(update);
+        return true;
+    }
+
+    @Override
+    public AboutMeEntity getAboutMe(long userPK) {
+        return null;
+    }
 }
