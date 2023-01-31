@@ -1,10 +1,10 @@
 export type ProfileUserType = {
-  id: number | null;
+  userPK: number | null;
   userId: string;
   nickName: string;
   avatar: string | null;
-  content: string | null;
-  follower: number;
+  subscribers: number;
+  aboutMe: string;
   isOnAir: boolean;
 };
 

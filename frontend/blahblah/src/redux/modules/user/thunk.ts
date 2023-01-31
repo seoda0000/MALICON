@@ -72,8 +72,6 @@ export const signinAction = createAsyncThunk(
           // 로컬스토리지 저장
           setAccessToken(data.token.accessToken);
           setRefreshToken(data.token.refreshToken);
-
-          console.log("1111 ", getAccessToken());
         })
         .then(() => {
           // user state에 저장
@@ -94,7 +92,6 @@ export const getMeWithTokenAction = createAsyncThunk(
   async (token, { dispatch, rejectWithValue }) => {
     try {
       console.log("비동기요청[GET_ME] 시작");
-      console.log("2222 ", getAccessToken());
 
       const axios = axiosInitializer();
       const { data } = await axios.get("/api/users/me", {
@@ -172,3 +169,4 @@ export const updateUserAction = createAsyncThunk(
     }
   }
 );
+

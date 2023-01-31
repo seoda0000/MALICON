@@ -1,20 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ProfileStateType } from "../../../model/profile/profileStateType";
-import { getProfileAction } from "./thunk";
+import { SubscriberType } from "../../../model/subscribe/subscriberType";
+import {
+  getIsSubscribeAction,
+  getAboutMeAction,
+  subscribeAction,
+  unSubscribeAction,
+} from "./thunk";
 
 const initialState: ProfileStateType = {
   userData: {
-    id: null,
+    userPK: null,
     userId: "",
     nickName: "",
     avatar: null,
-    content: null,
-    follower: 0,
+    aboutMe: "",
+    subscribers: 0,
     isOnAir: false,
   },
+  isSubscribing: false,
   feedData: null,
   videoData: null,
-  getProfile: { loading: false, data: null, error: null },
+  getAboutMe: { loading: false, data: null, error: null },
+  getIsSub: { loading: false, data: null, error: null },
+  subscribe: { loading: false, data: null, error: null },
+  unSubscribe: { loading: false, data: null, error: null },
 };
 
 const profileSlice = createSlice({
@@ -23,27 +33,86 @@ const profileSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getProfileAction.pending, (state) => {
-        state.getProfile.loading = true;
-        state.getProfile.data = null;
-        state.getProfile.error = null;
+      .addCase(getAboutMeAction.pending, (state) => {
+        state.getAboutMe.loading = true;
+        state.getAboutMe.data = null;
+        state.getAboutMe.error = null;
       })
-      .addCase(getProfileAction.fulfilled, (state, { payload }) => {
-        state.getProfile.loading = false;
-        state.getProfile.data = payload;
-        state.getProfile.error = null;
+      .addCase(getAboutMeAction.fulfilled, (state, { payload }) => {
+        state.getAboutMe.loading = false;
+        state.getAboutMe.data = payload;
+        state.getAboutMe.error = null;
 
-        state.userData.id = payload.id;
+        state.userData.userPK = payload.userPK;
         state.userData.userId = payload.userId;
         state.userData.nickName = payload.nickName;
         state.userData.avatar = payload.avatar;
-        state.userData.content = payload.content;
-        state.userData.follower = payload.follower;
+        state.userData.aboutMe = payload.aboutMe;
+        state.userData.subscribers = payload.subscribers;
       })
-      .addCase(getProfileAction.rejected, (state, { payload }) => {
-        state.getProfile.loading = false;
-        state.getProfile.data = null;
-        state.getProfile.error = payload;
+      .addCase(getAboutMeAction.rejected, (state, { payload }) => {
+        state.getAboutMe.loading = false;
+        state.getAboutMe.data = null;
+        state.getAboutMe.error = payload;
+      })
+      .addCase(getIsSubscribeAction.pending, (state, { payload }) => {
+        state.getIsSub.loading = true;
+        state.getIsSub.data = null;
+        state.getIsSub.error = null;
+      })
+      .addCase(getIsSubscribeAction.fulfilled, (state, { payload }) => {
+        state.getIsSub.loading = false;
+        state.getIsSub.data = payload;
+        state.getIsSub.error = null;
+
+        const sub = payload.filter(
+          (subscriber: SubscriberType) =>
+            subscriber.userPK === state.userData.userPK
+        );
+        if (sub.length === 0) {
+          state.isSubscribing = false;
+        } else {
+          state.isSubscribing = true;
+        }
+      })
+      .addCase(getIsSubscribeAction.rejected, (state, { payload }) => {
+        state.getIsSub.loading = false;
+        state.getIsSub.data = null;
+        state.getIsSub.error = payload;
+      })
+      .addCase(subscribeAction.pending, (state) => {
+        state.subscribe.loading = true;
+        state.subscribe.data = null;
+        state.subscribe.error = null;
+      })
+      .addCase(subscribeAction.fulfilled, (state, { payload }) => {
+        state.subscribe.loading = false;
+        state.subscribe.data = payload;
+        state.subscribe.error = null;
+
+        state.isSubscribing = true;
+      })
+      .addCase(subscribeAction.rejected, (state, { payload }) => {
+        state.subscribe.loading = false;
+        state.subscribe.data = null;
+        state.subscribe.error = payload;
+      })
+      .addCase(unSubscribeAction.pending, (state) => {
+        state.unSubscribe.loading = true;
+        state.unSubscribe.data = null;
+        state.unSubscribe.error = null;
+      })
+      .addCase(unSubscribeAction.fulfilled, (state, { payload }) => {
+        state.unSubscribe.loading = false;
+        state.unSubscribe.data = payload;
+        state.unSubscribe.error = null;
+
+        state.isSubscribing = false;
+      })
+      .addCase(unSubscribeAction.rejected, (state, { payload }) => {
+        state.unSubscribe.loading = false;
+        state.unSubscribe.data = null;
+        state.unSubscribe.error = payload;
       });
   },
 });

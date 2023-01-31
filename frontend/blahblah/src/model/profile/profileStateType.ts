@@ -5,9 +5,13 @@ import { VideoType } from "./VideoType";
 
 export type ProfileStateType = {
   userData: ProfileUserType;
+  isSubscribing: boolean;
   feedData: FeedType[] | null;
   videoData: VideoType[] | null;
-  getProfile: ReduxStateType;
+  getAboutMe: ReduxStateType;
+  getIsSub: ReduxStateType;
+  subscribe: ReduxStateType;
+  unSubscribe: ReduxStateType;
   getFeed?: ReduxStateType;
   getVideo?: ReduxStateType;
   getIsOnAir?: ReduxStateType;

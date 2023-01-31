@@ -9,10 +9,15 @@ import { CheckRounded, PersonAdd } from "@mui/icons-material";
 import onAirOn from "../assets/img/onair_turnon.png";
 import onAirOff from "../assets/img/onair_turnoff.png";
 import InfiniteScroll from "../components/ui/InfiniteScroll";
-import { getProfileAction } from "../redux/modules/profile/thunk";
+import {
+  getIsSubscribeAction,
+  getAboutMeAction,
+  subscribeAction,
+  unSubscribeAction,
+} from "../redux/modules/profile/thunk";
 
 const ProfilePageLayout = styled.div`
-  max-width: 90%;
+  max-width: 70vw;
   margin: 75px auto 0px;
   div {
     /* border: 1px solid salmon; */
@@ -49,7 +54,7 @@ const InfoContainer = styled.div`
             margin-top: 7px;
             color: #808080;
           }
-          .follower {
+          .subscriber {
             margin-top: 5px;
             color: #808080;
           }
@@ -85,9 +90,10 @@ const FeedContainer = styled.div`
 `;
 
 export default function ProfilePage(): JSX.Element {
-  const { userid } = useParams() as { userid: string };
+  const { userpk } = useParams() as { userpk: string };
   const loggedUser = useAppSelector((state) => state.user.userData);
   const user = useAppSelector((state) => state.profile.userData);
+  const isSubscribing = useAppSelector((state) => state.profile.isSubscribing);
   const dispatch = useAppDispatch();
 
   // const [getProfile, setGetProfile] = useState<boolean>(false);
@@ -95,27 +101,31 @@ export default function ProfilePage(): JSX.Element {
   // const [getVideos, setGetVideos] = useState<boolean>(false);
   // const [getFeed, setGetFeed] = useState<boolean>(false);
 
-  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  // const [isSubscribing, setIsSubscribing] = useState<boolean>(isSub);
 
-  const onClickFollow = () => {
-    setIsFollowing((prev) => !prev);
+  const onClickSubscribe = () => {
+    if (!isSubscribing) {
+      dispatch(subscribeAction(userpk));
+      console.log("구독!!");
+    } else {
+      dispatch(unSubscribeAction(userpk));
+      console.log("구독 취소!");
+    }
   };
 
   useEffect(() => {
-    console.log(userid);
-    console.log(loggedUser);
-
     // 프로필 가져오기
-    dispatch(getProfileAction(userid));
+    dispatch(getAboutMeAction(userpk));
 
-    // 팔로잉 목록 가자오기
+    // 팔로잉 목록 가져오기
+    dispatch(getIsSubscribeAction());
 
     // 생방송 중 여부 가져오기
 
     // 지난 동영상 목록 가져오기
 
     // 피드 목록 가져오기
-  }, []);
+  });
 
   // if (!(getProfile && getisOnAir && getVideos && getFeed))
   //   return <div>loading..</div>;
@@ -133,30 +143,29 @@ export default function ProfilePage(): JSX.Element {
               <div className="info">
                 <h1>{user.nickName}</h1>
                 <span className="id">@{user.userId}</span>
-                <span className="follower">구독자 {user.follower}명</span>
+                <span className="subscriber">구독자 {user.subscribers}명</span>
               </div>
-              {isFollowing && (
+              {isSubscribing ? (
                 <Button
                   variant="outlined"
                   size="small"
                   endIcon={<CheckRounded />}
-                  onClick={onClickFollow}
+                  onClick={onClickSubscribe}
                 >
                   follow
                 </Button>
-              )}
-              {!isFollowing && (
+              ) : (
                 <Button
                   variant="contained"
                   size="small"
                   endIcon={<PersonAdd />}
-                  onClick={onClickFollow}
+                  onClick={onClickSubscribe}
                 >
                   follow
                 </Button>
               )}
             </div>
-            <p>{user.content}</p>
+            <p>{user.aboutMe}</p>
           </div>
         </div>
         {/* 티켓박스 */}
