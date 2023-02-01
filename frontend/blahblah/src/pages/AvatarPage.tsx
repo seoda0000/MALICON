@@ -285,46 +285,7 @@ function AvatarPage() {
 
   return (
     <div>
-      {/* 제목 영역 */}
-
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          "& > :not(style)": {
-            m: 1,
-            // width: 1500,
-            // height: 500,
-          },
-        }}
-      >
-        <h1>Avatar Page</h1>
-        <h2>{JSON.stringify(selectedAvatar)}</h2>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          "& > :not(style)": {
-            m: 1,
-            // width: 1500,
-            // height: 500,
-          },
-        }}
-      >
-        <Card sx={{ maxWidth: 500 }}>
-          <AvatarTest selectedAvatar={selectedAvatar} />
-        </Card>
-        <Card sx={{ minWidth: 400, maxWidth: 500 }}>
-          <SelectList options={AVATAR_OPTION} selectHandler={selectHandler} />
-          <Stack direction="column" spacing={1} justifyContent="center">
-            <Button onClick={saveAvatarHandler}>확정</Button>
-          </Stack>
-        </Card>
-      </Box>
+      <h1>아바타 페이지</h1>
     </div>
   );
 }
