@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,14 +26,17 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "userEntity", orphanRemoval = true)
-    private List<ArticleEntity> articles;
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
+    private List<ArticleEntity> articles = new ArrayList<ArticleEntity>();
 
-    @OneToOne(mappedBy = "userEntity", orphanRemoval = true)
+    @OneToOne(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
     private AboutMeEntity aboutMe;
 
-    @OneToMany(mappedBy = "userEntity", orphanRemoval = true)
-    private List<UserSubscribeEntity> subscribes;
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
+    private List<UserSubscribeEntity> subscribes= new ArrayList<UserSubscribeEntity>();
+
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
+    private List<VideoEntity> videos = new ArrayList<VideoEntity>();
 
     @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;
