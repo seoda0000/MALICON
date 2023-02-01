@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name ="users")
@@ -23,6 +24,16 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "userEntity", orphanRemoval = true)
+    private List<ArticleEntity> articles;
+
+    @OneToOne(mappedBy = "userEntity", orphanRemoval = true)
+    private AboutMeEntity aboutMe;
+
+    @OneToMany(mappedBy = "userEntity", orphanRemoval = true)
+    private List<UserSubscribeEntity> subscribes;
+
     @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;
     @Column(nullable = false)
