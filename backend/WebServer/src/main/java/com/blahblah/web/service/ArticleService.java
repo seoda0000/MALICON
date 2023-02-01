@@ -17,4 +17,6 @@ public interface ArticleService {
 
     List<SubscribeArticleDTO> readArticle(long id);
 
+    List<SubscribeArticleDTO> readMyArticle(long id);
+
 }

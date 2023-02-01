@@ -66,4 +66,13 @@ public class ArticleController {
         return ResponseEntity.ok(articleList);
 
     }
+
+    @GetMapping("/{userPK}")
+    public ResponseEntity readMyArticle(@PathVariable long userPK){
+        List<SubscribeArticleDTO> articleList = articleService.readMyArticle(userPK);
+        if(articleList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("피트 목록이 없습니다"));
+        }
+        return ResponseEntity.ok(articleList);
+    }
 }

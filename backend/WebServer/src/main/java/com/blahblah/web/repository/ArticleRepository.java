@@ -4,6 +4,7 @@ import com.blahblah.web.dto.response.SubscribeArticleDTO;
 import com.blahblah.web.entity.ArticleEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,6 +15,9 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
 
     @Override
     void deleteById(Long id);
+
+
+    List<ArticleEntity> findAllByUserId(long userId);
 
     // 아래코드는 에러 발생
     // SubscribeDTO로 받는 걸로 다시 작성

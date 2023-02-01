@@ -20,6 +20,9 @@ public class ArticleEntity extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
 
+
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private long userId;
     @ManyToOne(
             targetEntity = UserEntity.class,
             fetch = FetchType.EAGER

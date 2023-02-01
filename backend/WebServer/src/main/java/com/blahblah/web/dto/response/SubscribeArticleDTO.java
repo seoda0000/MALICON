@@ -17,7 +17,7 @@ public class SubscribeArticleDTO {
 
     private String userId;
 
-    private String userNickName;
+    private String nickName;
 
     private String avatar;
 
