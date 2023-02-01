@@ -26,6 +26,9 @@ public class AboutMeController {
     @PostMapping
     public ResponseEntity insertAboutMe(@RequestBody String content, HttpServletRequest request) {
         long userPK = JWTutil.getLongIdByAccessToken(request);
+        if(aboutMeService.isExistId(userPK)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("자기소개가 이미 존재합니다"));
+        }
         if (content.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("자기소개를 적어주세요"));
         }

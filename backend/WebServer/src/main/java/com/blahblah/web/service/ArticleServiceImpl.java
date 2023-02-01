@@ -11,8 +11,6 @@ import com.blahblah.web.repository.CommentRepository;
 import com.blahblah.web.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,7 +86,7 @@ public class ArticleServiceImpl implements ArticleService{
                     .id(a.getId())
                     .userPK(a.getUserEntity().getId())
                     .userId(a.getUserEntity().getUserId())
-                    .userNickName(a.getUserEntity().getNickName())
+                    .nickName(a.getUserEntity().getNickName())
                     .avatar(a.getUserEntity().getAvatar())
                     .title(a.getTitle())
                     .content(a.getContent())
@@ -101,6 +99,41 @@ public class ArticleServiceImpl implements ArticleService{
 
 
         return DTOList;
+    }
+
+    @Override
+    public List<SubscribeArticleDTO> readMyArticle(long userPK) {
+        List<ArticleEntity> result = articleRepository.findAllByUserId(userPK);
+        List<SubscribeArticleDTO> articles = new ArrayList<>();
+        for(ArticleEntity a: result){
+            List<CommentEntity> commentEntities = commentRepository.findAllByArticleId(a.getId());
+            List<CommentDTO> commentDTOS = new ArrayList<>();
+            for(CommentEntity c: commentEntities){
+                commentDTOS.add(CommentDTO.builder()
+                        .id(c.getId())
+                        .articleId(c.getArticleEntity().getId())
+                        .userPK(c.getUserEntity().getId())
+                        .userId(c.getUserEntity().getUserId())
+                        .content(c.getContent())
+                        .avatar(c.getUserEntity().getAvatar())
+                        .createDate(a.getCreateDate().toString())
+                        .lastModifiedDate(a.getLastModifiedDate().toString())
+                        .build()
+                );
+            }
+            articles.add(SubscribeArticleDTO.builder()
+                            .userPK(a.getUserEntity().getId())
+                            .userId(a.getUserEntity().getUserId())
+                            .nickName(a.getUserEntity().getNickName())
+                            .avatar(a.getUserEntity().getAvatar())
+                            .title(a.getTitle())
+                            .content(a.getContent())
+                            .createDate(a.getCreateDate().toString())
+                            .lastModifiedDate(a.getLastModifiedDate().toString())
+                            .commentList(commentDTOS)
+                    .build());
+        }
+        return articles;
     }
 
 

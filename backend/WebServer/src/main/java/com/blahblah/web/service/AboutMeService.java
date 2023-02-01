@@ -6,6 +6,7 @@ import com.blahblah.web.entity.AboutMeEntity;
 
 public interface AboutMeService {
 
+    boolean isExistId(long userPK);
     AboutMeEntity createAboutMe(AboutMeDTO aboutMeDTO);
 
     boolean updateAboutMe(AboutMeDTO aboutMeDTO);
