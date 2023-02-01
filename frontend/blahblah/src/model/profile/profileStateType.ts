@@ -9,6 +9,8 @@ export type ProfileStateType = {
   feedData: ProfileFeedType[] | null;
   videoData: VideoType[] | null;
   getAboutMe: ReduxStateType;
+  addAboutMe: ReduxStateType;
+  updateAboutMe: ReduxStateType;
   getIsSub: ReduxStateType;
   subscribe: ReduxStateType;
   unSubscribe: ReduxStateType;

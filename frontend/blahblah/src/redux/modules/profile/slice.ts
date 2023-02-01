@@ -7,6 +7,8 @@ import {
   subscribeAction,
   unSubscribeAction,
   getFeedAction,
+  updateAboutMeAction,
+  addAboutMeAction,
 } from "./thunk";
 
 const initialState: ProfileStateType = {
@@ -23,6 +25,8 @@ const initialState: ProfileStateType = {
   feedData: null,
   videoData: null,
   getAboutMe: { loading: false, data: null, error: null },
+  addAboutMe: { loading: false, data: null, error: null },
+  updateAboutMe: { loading: false, data: null, error: null },
   getIsSub: { loading: false, data: null, error: null },
   subscribe: { loading: false, data: null, error: null },
   unSubscribe: { loading: false, data: null, error: null },
@@ -56,6 +60,36 @@ const profileSlice = createSlice({
         state.getAboutMe.loading = false;
         state.getAboutMe.data = null;
         state.getAboutMe.error = payload;
+      })
+      .addCase(addAboutMeAction.pending, (state) => {
+        state.addAboutMe.loading = true;
+        state.addAboutMe.data = null;
+        state.addAboutMe.error = null;
+      })
+      .addCase(addAboutMeAction.fulfilled, (state, { payload }) => {
+        state.addAboutMe.loading = false;
+        state.addAboutMe.data = payload;
+        state.addAboutMe.error = null;
+      })
+      .addCase(addAboutMeAction.rejected, (state, { payload }) => {
+        state.addAboutMe.loading = false;
+        state.addAboutMe.data = null;
+        state.addAboutMe.error = payload;
+      })
+      .addCase(updateAboutMeAction.pending, (state) => {
+        state.updateAboutMe.loading = true;
+        state.updateAboutMe.data = null;
+        state.updateAboutMe.error = null;
+      })
+      .addCase(updateAboutMeAction.fulfilled, (state, { payload }) => {
+        state.updateAboutMe.loading = false;
+        state.updateAboutMe.data = payload;
+        state.updateAboutMe.error = null;
+      })
+      .addCase(updateAboutMeAction.rejected, (state, { payload }) => {
+        state.updateAboutMe.loading = false;
+        state.updateAboutMe.data = null;
+        state.updateAboutMe.error = payload;
       })
       .addCase(getIsSubscribeAction.pending, (state, { payload }) => {
         state.getIsSub.loading = true;

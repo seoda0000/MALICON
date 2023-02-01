@@ -9,7 +9,6 @@ function useLogout() {
   removeToken();
 
   loggedUser.userId = "";
-  loggedUser.password = "";
   loggedUser.nickName = "";
   loggedUser.email = "";
   loggedUser.phoneNumber = null;

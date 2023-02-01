@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { ProfileFeedType } from "../../../model/profile/profileFeedType";
+import { AboutMeType } from "../../../model/user/aboutMeType";
 import { axiosInitializer } from "../../utils/axiosInitializer";
 import { getAccessToken } from "../user/token";
 
@@ -9,12 +10,49 @@ export const getAboutMeAction = createAsyncThunk(
   "GET_ABOUTME",
   async (userPK: string, { rejectWithValue }) => {
     try {
-      console.log("비동기요청[GET_ABOUTME] 시작");
       const axios = axiosInitializer();
       const { data } = await axios.get(`/api/aboutme/${parseInt(userPK)}`);
-      console.log("비동기요청[GET_ABOUTME] 끝");
       return data;
     } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
+// 자기소개 추가
+export const addAboutMeAction = createAsyncThunk(
+  "ADD_ABOUTME",
+  async (aboutMeData: string, { rejectWithValue }) => {
+    try {
+      const axios = axiosInitializer();
+      const { data } = await axios.post(`/api/aboutme`, aboutMeData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + getAccessToken(),
+        },
+      });
+      return data;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
+// 자기소개 수정
+export const updateAboutMeAction = createAsyncThunk(
+  "UPDATE_ABOUTME",
+  async (aboutMeData: AboutMeType, { rejectWithValue }) => {
+    try {
+      const axios = axiosInitializer();
+      const { data } = await axios.put(`/api/aboutme`, aboutMeData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
+      });
+      return data;
+    } catch (e) {
+      console.error(e);
       return rejectWithValue(e);
     }
   }

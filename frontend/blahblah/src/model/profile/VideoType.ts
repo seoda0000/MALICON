@@ -5,5 +5,7 @@ export type VideoType = {
   pathURL: string;
   title: string;
   userId: number;
+  // avatar
+  // nickName
 };
 

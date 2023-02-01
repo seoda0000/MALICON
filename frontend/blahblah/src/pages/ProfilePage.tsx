@@ -1,21 +1,30 @@
 import React, { useEffect, useState } from "react";
 import ProfileImage from "../components/auth/ProfileImage";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/configStore.hooks";
 import Carousel from "../components/ui/Carousel";
 import styled from "@emotion/styled";
-import { Button } from "@mui/material";
-import { CheckRounded, PersonAdd } from "@mui/icons-material";
+import { Button, IconButton, Input } from "@mui/material";
+import {
+  CheckRounded,
+  CloseRounded,
+  EditOutlined,
+  PersonAdd,
+} from "@mui/icons-material";
 import onAirOn from "../assets/img/onair_turnon.png";
 import onAirOff from "../assets/img/onair_turnoff.png";
 import InfiniteScroll from "../components/ui/InfiniteScroll";
+import FeedList from "../components/feed/FeedList";
 import {
   getIsSubscribeAction,
   getAboutMeAction,
   subscribeAction,
   unSubscribeAction,
   getFeedAction,
+  updateAboutMeAction,
+  addAboutMeAction,
 } from "../redux/modules/profile/thunk";
+import { updateUserAction } from "../redux/modules/user";
 
 const ProfilePageLayout = styled.div`
   max-width: 70vw;
@@ -38,7 +47,7 @@ const InfoContainer = styled.div`
       }
     }
     .profile-info {
-      & > div {
+      & > .info-wrapper {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
@@ -46,10 +55,20 @@ const InfoContainer = styled.div`
         .info {
           display: flex;
           flex-direction: column;
-          & > h1 {
-            margin: 0;
-            font-size: 25px;
-            font-weight: bold;
+          & > div {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-end;
+            gap: 10px;
+            & > h1 {
+              margin: 0;
+              font-size: 25px;
+              font-weight: bold;
+            }
+            & > button {
+              width: 15px;
+              height: 15px;
+            }
           }
           .id {
             margin-top: 7px;
@@ -64,9 +83,13 @@ const InfoContainer = styled.div`
           height: 30px;
         }
       }
-      & > p {
-        margin: 15px 0px 0px 0px;
-        font-size: 18px;
+      & > .aboutme-wrapper {
+        & > p {
+          margin: 15px 0px 0px 0px;
+          font-size: 18px;
+        }
+        & > button {
+        }
       }
     }
   }
@@ -94,9 +117,16 @@ export default function ProfilePage(): JSX.Element {
   const { userpk } = useParams() as { userpk: string };
   const loggedUser = useAppSelector((state) => state.user.userData);
   const user = useAppSelector((state) => state.profile.userData);
+  const feeds = useAppSelector((state) => state.profile.feedData);
   const isSubscribing = useAppSelector((state) => state.profile.isSubscribing);
   const dispatch = useAppDispatch();
 
+  const [isMine, setIsMine] = useState<boolean>(false);
+  const [isEditNickName, setIsEditNickName] = useState<boolean>(false);
+  const [newNickName, setNewNickName] = useState<string>(user.nickName);
+  const [isEditAboutMe, setIsEditAboutMe] = useState<boolean>(false);
+  const [newAboutMe, setNewAboutMe] = useState<string>(user.aboutMe);
+  const [isAboutMeExist, setIsAboutMeExist] = useState<boolean>(false);
   // const [getProfile, setGetProfile] = useState<boolean>(false);
   // const [getisOnAir, setGetisOnAir] = useState<boolean>(false);
   // const [getVideos, setGetVideos] = useState<boolean>(false);
@@ -113,6 +143,65 @@ export default function ProfilePage(): JSX.Element {
       console.log("구독 취소!");
     }
   };
+
+  const onChangeNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewNickName(e.target.value);
+  };
+  const onClickEditNickName = () => {
+    setIsEditNickName((prev) => !prev);
+  };
+  const onClickSaveNickName = () => {
+    dispatch(
+      updateUserAction({
+        id: loggedUser.id,
+        userId: loggedUser.userId,
+        nickName: newNickName,
+      })
+    ).then(() => {
+      setIsEditNickName((prev) => !prev);
+    });
+  };
+
+  const onChangeAboutMe = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewAboutMe(e.target.value);
+  };
+  const onClickEditAboutMe = () => {
+    setIsEditAboutMe((prev) => !prev);
+  };
+  const onClickSaveAboutMe = () => {
+    if (newAboutMe === "") {
+      alert("자기소개를 입력해주세요");
+    } else {
+      if (isAboutMeExist) {
+        dispatch(
+          updateAboutMeAction({ userPK: loggedUser.id, content: newAboutMe })
+        ).then(() => {
+          setIsEditAboutMe((prev) => !prev);
+        });
+      } else {
+        dispatch(addAboutMeAction(newAboutMe)).then(() => {
+          setIsEditAboutMe((prev) => !prev);
+          setIsAboutMeExist(true);
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (user.aboutMe === "") {
+      setIsAboutMeExist(false);
+    } else {
+      setIsAboutMeExist(true);
+    }
+  }, [user.aboutMe]);
+
+  useEffect(() => {
+    if (loggedUser.id === parseInt(userpk)) {
+      setIsMine(true);
+    } else {
+      setIsMine(false);
+    }
+  }, [loggedUser, userpk]);
 
   useEffect(() => {
     // 프로필 가져오기
@@ -139,11 +228,48 @@ export default function ProfilePage(): JSX.Element {
         <div className="info-box">
           <div className="profile-image">
             <ProfileImage width={120} height={120} />
+            {isMine && (
+              <Link to="/avatar">
+                <IconButton area-label="edit">
+                  <EditOutlined />
+                </IconButton>
+              </Link>
+            )}
           </div>
           <div className="profile-info">
-            <div>
+            <div className="info-wrapper">
               <div className="info">
-                <h1>{user.nickName}</h1>
+                <div>
+                  {!isEditNickName && <h1>{user.nickName}</h1>}
+                  {isEditNickName && (
+                    <Input
+                      value={newNickName}
+                      onChange={onChangeNickName}
+                      required
+                    />
+                  )}
+                  {isMine && !isEditNickName && (
+                    <IconButton area-label="edit" onClick={onClickEditNickName}>
+                      <EditOutlined />
+                    </IconButton>
+                  )}
+                  {isEditNickName && (
+                    <div>
+                      <IconButton
+                        area-label="edit"
+                        onClick={onClickSaveNickName}
+                      >
+                        <CheckRounded />
+                      </IconButton>
+                      <IconButton
+                        area-label="edit"
+                        onClick={onClickEditNickName}
+                      >
+                        <CloseRounded />
+                      </IconButton>
+                    </div>
+                  )}
+                </div>
                 <span className="id">@{user.userId}</span>
                 <span className="subscriber">구독자 {user.subscribers}명</span>
               </div>
@@ -167,7 +293,37 @@ export default function ProfilePage(): JSX.Element {
                 </Button>
               )}
             </div>
-            <p>{user.aboutMe}</p>
+            <div className="aboutme-wrapper">
+              {!isEditAboutMe && <p>{user.aboutMe}</p>}
+              {isMine && isAboutMeExist && !isEditAboutMe && (
+                <IconButton area-label="edit" onClick={onClickEditAboutMe}>
+                  <EditOutlined />
+                </IconButton>
+              )}
+              {isMine && !isAboutMeExist && !isEditAboutMe && (
+                <Button
+                  variant="contained"
+                  size="small"
+                  endIcon={<CheckRounded />}
+                  onClick={onClickEditAboutMe}
+                >
+                  자기소개 작성
+                </Button>
+              )}
+              {isMine && isEditAboutMe && (
+                <Input value={newAboutMe} onChange={onChangeAboutMe} required />
+              )}
+              {isMine && isEditAboutMe && (
+                <div>
+                  <IconButton area-label="edit" onClick={onClickSaveAboutMe}>
+                    <CheckRounded />
+                  </IconButton>
+                  <IconButton area-label="edit" onClick={onClickEditAboutMe}>
+                    <CloseRounded />
+                  </IconButton>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         {/* 티켓박스 */}
@@ -185,7 +341,8 @@ export default function ProfilePage(): JSX.Element {
       </VideoContainer>
       <FeedContainer>
         <h2>Feed</h2>
-        <InfiniteScroll />
+        {/* <InfiniteScroll /> */}
+        {/* <FeedList feeds={feeds} /> */}
       </FeedContainer>
     </ProfilePageLayout>
   );
