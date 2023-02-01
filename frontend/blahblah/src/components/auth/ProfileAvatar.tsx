@@ -3,8 +3,9 @@ import { RootState } from "../../redux/configStore";
 import { useSelector } from "react-redux";
 import { createAvatar } from "@dicebear/core";
 import { personas, pixelArt } from "@dicebear/collection";
+import { auto } from "@popperjs/core";
 
-export default function ProfileImage({ ...rest }): JSX.Element {
+export default function ProfileAvatar({ ...rest }): JSX.Element {
   const avatar = useSelector((state: RootState) => state.user.userData.avatar!);
 
   const dataUri = createAvatar(personas, {
@@ -16,7 +17,12 @@ export default function ProfileImage({ ...rest }): JSX.Element {
     <Avatar
       alt="Sample"
       src={dataUri}
-      sx={{ width: 24, height: 24 }}
+      sx={{
+        width: 120,
+        height: 120,
+        border: 3,
+        borderColor: "black",
+      }}
       // sx={{ ...rest }}
     />
   );
