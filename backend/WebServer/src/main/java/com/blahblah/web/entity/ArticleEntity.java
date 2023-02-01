@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name ="articles")
@@ -30,6 +31,9 @@ public class ArticleEntity extends BaseEntity{
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
+
+    @OneToMany(mappedBy = "articleEntity", orphanRemoval = true)
+    private List<CommentEntity> comments;
 
     @Column(nullable = false)
     private String title;

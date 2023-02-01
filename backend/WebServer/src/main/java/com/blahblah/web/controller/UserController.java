@@ -71,4 +71,12 @@ public class UserController {
             return ResponseEntity.ok(new Message("회원정보 수정 성공"));
         else return ResponseEntity.internalServerError().build();
     }
+
+    @DeleteMapping
+    public ResponseEntity deleteUser(HttpServletRequest request){
+        String accessToken =request.getHeader("Authorization").substring(7);
+        String userId = JWTutil.getIdByAccessToken(accessToken);
+        userService.deleteUserByUserId(userId);
+        return ResponseEntity.ok(new Message("회원 탈퇴 완료"));
+    }
 }
