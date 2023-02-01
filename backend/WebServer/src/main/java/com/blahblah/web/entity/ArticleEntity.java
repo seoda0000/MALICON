@@ -32,7 +32,7 @@ public class ArticleEntity extends BaseEntity{
     private UserEntity userEntity;
 
 
-    @OneToMany(mappedBy = "articleEntity", orphanRemoval = true)
+    @OneToMany(mappedBy = "articleEntity", cascade = CascadeType.REMOVE)
     private List<CommentEntity> comments;
 
     @Column(nullable = false)
