@@ -31,7 +31,7 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
 //               "join a.userEntity u " +
 //               "join CommentEntity c on articleId " +
 //               "where a.id=:id")
-    @Query(value="select * from articles where articles.user_id=(select us.subscribe_user_id from user_subscribes us where us.user_id = ?)", nativeQuery = true)
+    @Query(value="select * from articles a where a.user_id=(select us.subscribe_user_id from user_subscribes us where us.user_id = :id) or a.user_id=:id", nativeQuery = true)
     List<ArticleEntity> findAllBy(@Param("id") long id);
 
 }

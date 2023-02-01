@@ -32,6 +32,13 @@ public class CommentEntity extends BaseEntity{
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
+//    @ManyToOne(
+//            targetEntity = UserEntity.class,
+//            fetch = FetchType.LAZY
+//    )
+//    @JoinColumn(name = "video_id")
+//    private VideoEntity videoEntity;
+
     @Column(name = "content", length = 150, nullable = false)
     private String content;
 }
