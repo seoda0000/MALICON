@@ -467,6 +467,30 @@ export default function Layout(props: LayoutProps) {
                 />
               </ListItemButton>
             </ListItem>
+
+            {/* 테스트 버튼 (임시) */}
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                component={Link}
+                to="/test"
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FeedIcon />
+                </ListItemIcon>
+                <ListItemText primary="테스트" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
           </List>
 
           <Divider />
@@ -476,7 +500,7 @@ export default function Layout(props: LayoutProps) {
       </ThemeProvider>
 
       {/* 메인 화면: 페이지 랜딩되는 곳 */}
-      <Box component="main" sx={{ flexGrow: 1, mx: "8%" }}>
+      <Box component="main" sx={{ flexGrow: 1, mx: "8%", my: 5 }}>
         <main className="main">{props.children}</main>
         {/* <AvatarShortcutButton /> */}
       </Box>
