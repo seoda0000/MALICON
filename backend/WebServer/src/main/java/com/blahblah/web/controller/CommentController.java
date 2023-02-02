@@ -28,7 +28,12 @@ public class CommentController {
         if(comment.getContent().isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("댓글 내용이 없습니다."));
         }
-        CommentDTO commentDTO = CommentDTO.builder().userPK(userId).articleId(comment.getArticleId()).content(comment.getContent()).build();
+        CommentDTO commentDTO = CommentDTO.builder()
+                .userPK(userId)
+                .videoId(comment.getVideoId())
+                .articleId(comment.getArticleId())
+                .content(comment.getContent())
+                .build();
         CommentEntity result = commentService.createComment(commentDTO);
         if(result==null){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("댓글 작성 실패"));

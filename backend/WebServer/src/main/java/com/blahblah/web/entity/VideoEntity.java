@@ -28,14 +28,14 @@ public class VideoEntity extends BaseEntity{
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-//    @OneToMany(mappedBy = "videoEntity", cascade = CascadeType.REMOVE)
-//    private List<CommentEntity> comments;
+    @OneToMany(mappedBy = "videoEntity", cascade = CascadeType.REMOVE)
+    private List<CommentEntity> comments;
 
     @Column(name = "title")
     private String title;
 
-//    @Column(name = "views")
-//    private long views;
+    @Column(name = "views")
+    private long views;
 
     @Column(name = "path_url")
     private String pathUrl;

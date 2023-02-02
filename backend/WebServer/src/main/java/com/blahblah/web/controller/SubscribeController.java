@@ -29,12 +29,15 @@ public class SubscribeController{
     public ResponseEntity createSubscribe(@PathVariable long subscribeId, HttpServletRequest request){
         long userId = JWTutil.getLongIdByAccessToken(request);
 
+        if(userId==subscribeId){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("본인은 구독할 수 없음"));
+        }
         UserSubscribeEntity sub = subscribeService.addSubscribe(userId, subscribeId);
 //        log.info("sub"+sub.getSubscribeUserEntity().getUserId()+" user"+sub.getUserEntity().getUserId());
         if(sub == null){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("구독 실패"));
         }else {
-            return ResponseEntity.status(HttpStatus.OK).body(new Message("구독 성공"));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Message("구독 성공"));
         }
     }
 

@@ -15,8 +15,8 @@ public interface ArticleService {
 
     void deleteArticle(long id);
 
-    List<SubscribeArticleDTO> readArticle(long id);
+    Page<SubscribeArticleDTO> readArticle(long id);
 
-    List<SubscribeArticleDTO> readMyArticle(long id);
+    Page<SubscribeArticleDTO> readMyArticle(long id);
 
 }
