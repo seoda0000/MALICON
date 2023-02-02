@@ -19,20 +19,22 @@ const actions = [
 
 export default function AvatarShortcutButton() {
   return (
-    <Box sx={{ height: 320, transform: "translateZ(0px)", flexGrow: 1 }}>
-      <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
-        icon={<GiteIcon />}
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-          />
-        ))}
-      </SpeedDial>
-    </Box>
+    // <Box sx={{ height: 320, transform: "translateZ(0px)", flexGrow: 1 }}>
+    <SpeedDial
+      ariaLabel="SpeedDial basic example"
+      sx={{ position: "absolute", bottom: 35, right: 35 }}
+      icon={<GiteIcon />}
+    >
+      {actions.map((action) => (
+        // <Link to="/main">
+        <SpeedDialAction
+          key={action.name}
+          icon={action.icon}
+          tooltipTitle={action.name}
+        />
+        // </Link>
+      ))}
+    </SpeedDial>
+    // </Box>
   );
 }

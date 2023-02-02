@@ -6,6 +6,7 @@ function LandingPage() {
   return (
     <div>
       <NavBarLanding />
+
       <h1>랜딩페이지</h1>
       <Link to="/main">
         <Button>Skip</Button>

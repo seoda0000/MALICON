@@ -112,6 +112,7 @@ function AvatarPage() {
     clothingColor: [AVATAR_OPTION.clothingColor[clothingColor]],
     eyes: [AVATAR_OPTION.eyes[eyes]],
     facialHair: [AVATAR_OPTION.facialHair[facialHair]],
+    facialHairProbability: 100,
     hair: [AVATAR_OPTION.hair[hair]],
     hairColor: [AVATAR_OPTION.hairColor[hairColor]],
     mouth: [AVATAR_OPTION.mouth[mouth]],
@@ -287,6 +288,7 @@ function AvatarPage() {
 
   return (
     <div>
+      <h1>아바타 페이지</h1>
       {/* 제목 영역 */}
 
       <Box
@@ -302,7 +304,6 @@ function AvatarPage() {
         }}
       >
         <h1>Avatar Page</h1>
-        <h2>{JSON.stringify(selectedAvatar)}</h2>
       </Box>
 
       <Box
