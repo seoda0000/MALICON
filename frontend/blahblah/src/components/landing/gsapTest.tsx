@@ -53,14 +53,10 @@ function TestAnimation() {
     console.log("아이콘 생성");
   };
   function animateIcon(icon: any) {
-    gsap.timeline().to(icon, { y: -200 }).to(icon, {
-      opacity: 0,
-      scale: 4,
-      ease: "Power1.easeOut",
-    });
+    gsap.to(icon, { y: -200 });
     setTimeout(function () {
       icon.remove();
-    }, 1000);
+    }, 2000);
   }
   const popIcon = () => {
     console.log("pop");
@@ -68,7 +64,10 @@ function TestAnimation() {
     const icon = document.createElement("span");
     icon.innerText = "❤";
     document.querySelector(".pop-section")?.appendChild(icon);
-    animateIcon(icon);
+
+    setTimeout(function () {
+      animateIcon(icon);
+    }, 1000);
   };
 
   return (
