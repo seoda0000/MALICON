@@ -14,7 +14,11 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
-import { checkDuplicateAction, signupAction } from "../../redux/modules/user";
+import {
+  checkDupNickNameAction,
+  deleteUserAction,
+  updateUserAction,
+} from "../../redux/modules/user";
 import BasicModal from "../ui/BasicModal";
 
 const buttonBoxStyle = {
@@ -31,37 +35,35 @@ const checkBoxStyle = {
   alignItems: "center",
 };
 
-export default function SignupModal({ open, setOpen }: any): JSX.Element {
-  const checkDup = useAppSelector((state) => state.user.checkDuplicate);
+export default function AccountModal({ open, setOpen }: any): JSX.Element {
+  const loggedUser = useAppSelector((state) => state.user.userData);
+  const checkDupNick = useAppSelector((state) => state.user.checkDupNickName);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [id, setId] = useState<string>("");
-  const [pw, setPw] = useState<string>("");
-  const [rePw, setRePw] = useState<string>("");
-  const [nickName, setNickName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
+  const [pw, setPw] = useState<string>("!!!!!!!!");
+  const [rePw, setRePw] = useState<string>("!!!!!!!!");
+  const [nickName, setNickName] = useState<string>(loggedUser.nickName);
+  const [email, setEmail] = useState<string>(loggedUser.email);
+  const [phone, setPhone] = useState<string | null>(loggedUser.phoneNumber);
   const [showPw, setShowPw] = useState<boolean>(false);
-  const [idAvail, setIdAvail] = useState<string>("PleaseCheckId");
+  const [isEditPW, setIsEditPW] = useState<boolean>(false);
   const [pwAvail, setPwAvail] = useState<boolean>(false);
-  const [nickNameActivated, setNickNameActivated] = useState<boolean>(false);
   const [rePwAvail, setRePwAvail] = useState<boolean>(false);
+  const [nickNameActivated, setNickNameActivated] = useState<boolean>(false);
+  const [nickNameAvail, setNickNameAvail] = useState<string>("Plz Check");
   const [emailAvail, setEmailAvail] = useState<boolean>(false);
   const [phoneAvail, setPhoneAvail] = useState<boolean>(false);
-  const [isAgree, setIsAgree] = useState<boolean>(false);
 
-  const onChangeId = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setId(e.target.value);
-
-    const regex = /^[a-z]+[a-z0-9]{5,19}$/g;
-    if (!regex.test(e.target.value)) {
-      setIdAvail("RegexFail");
-    } else {
-      setIdAvail("PleaseCheckId");
-    }
+  const onReSetPW = () => {
+    setPw("");
+    setRePw("");
   };
   const onChangePw = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isEditPW) {
+      setIsEditPW(true);
+      setRePw("");
+    }
     setPw(e.target.value);
 
     const regex =
@@ -76,11 +78,10 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
     setRePw(e.target.value);
   };
   const onChangeNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickNameActivated(true);
-
     const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
     if (regex.test(e.target.value) || e.target.value === "") {
       setNickName(e.target.value);
+      setNickNameActivated(true);
     }
   };
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,12 +104,9 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
       setPhoneAvail(false);
     }
   };
-  const onChangeIsAgree = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsAgree((prev) => !prev);
-  };
 
-  const onConfirmID = () => {
-    dispatch(checkDuplicateAction(id));
+  const onConfirmNickName = () => {
+    dispatch(checkDupNickNameAction(nickName));
   };
 
   const handleClickShowPw = () => {
@@ -125,27 +123,43 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
     e.preventDefault();
 
     if (
-      idAvail &&
-      pwAvail &&
-      rePwAvail &&
-      nickName &&
-      emailAvail &&
-      (!phone || (phone && phoneAvail)) &&
-      isAgree
+      (!isEditPW || (isEditPW && pwAvail && rePwAvail)) &&
+      (!nickNameActivated || (nickNameActivated && nickNameAvail)) &&
+      (email === loggedUser.email ||
+        (emailAvail && email !== loggedUser.email)) &&
+      (!phone || phone === loggedUser.phoneNumber || (phone && phoneAvail))
     ) {
-      dispatch(
-        signupAction({
-          userId: id,
-          password: pw,
-          nickName,
-          email,
-          phoneNumber: phone === "" ? null : phone,
-        })
-      );
+      if (isEditPW) {
+        dispatch(
+          updateUserAction({
+            id: loggedUser.id,
+            userId: loggedUser.userId,
+            password: pw,
+            nickName,
+            email,
+            phoneNumber: phone === "" ? null : phone,
+          })
+        );
+      } else {
+        dispatch(
+          updateUserAction({
+            id: loggedUser.id,
+            userId: loggedUser.userId,
+            nickName,
+            email,
+            phoneNumber: phone === "" ? null : phone,
+          })
+        );
+      }
 
       onCloseModal();
       navigate("/", { replace: true });
     }
+  };
+
+  const onClickDelete = () => {
+    dispatch(deleteUserAction());
+    navigate("/", { replace: true });
   };
 
   useEffect(() => {
@@ -157,12 +171,18 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
   }, [pw, rePw]);
 
   useEffect(() => {
-    if (checkDup.error) {
-      setIdAvail("Unavailable");
-    } else if (checkDup.data) {
-      setIdAvail("Available");
+    if (checkDupNick.error) {
+      setNickNameAvail("UnAvailable");
+    } else if (checkDupNick.data) {
+      setNickNameAvail("Available");
     }
-  }, [checkDup]);
+  }, [checkDupNick]);
+
+  useEffect(() => {
+    if (loggedUser.email !== "") {
+      setEmailAvail(true);
+    }
+  }, []);
   return (
     <BasicModal open={open} setOpen={setOpen}>
       <Box
@@ -177,40 +197,8 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
         <div>
           <FormControl variant="standard">
             <InputLabel htmlFor="id">ID *</InputLabel>
-            <Input
-              id="id"
-              value={id}
-              onChange={onChangeId}
-              required
-              error={id && idAvail !== "Available" ? true : false}
-              aria-describedby="id-helper-text"
-              endAdornment={
-                <InputAdornment position="end">
-                  {idAvail === "Available" && <CheckRounded />}
-                </InputAdornment>
-              }
-            />
-            <FormHelperText id="id-helper-text">
-              {id &&
-                (idAvail === "Available" ? (
-                  <span>사용 가능한 ID입니다</span>
-                ) : idAvail === "PleaseCheckId" ? (
-                  <span>아이디 중복 검사를 해주세요</span>
-                ) : idAvail === "RegexFail" ? (
-                  <span>영문자로 시작하는 영문자 또는 숫자 6~20자</span>
-                ) : (
-                  <span>이미 사용중인 ID입니다</span>
-                ))}
-            </FormHelperText>
+            <Input id="id" value={loggedUser.userId} disabled />
           </FormControl>
-          <Button
-            onClick={onConfirmID}
-            disabled={
-              idAvail === "RegexFail" || idAvail === "Available" ? true : false
-            }
-          >
-            아이디 중복 확인
-          </Button>
         </div>
         <FormControl variant="standard">
           <InputLabel htmlFor="pw">Password *</InputLabel>
@@ -218,24 +206,29 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             id="pw"
             value={pw}
             onChange={onChangePw}
+            onFocus={onReSetPW}
             type={showPw ? "text" : "password"}
             required
-            error={pw && !pwAvail ? true : false}
+            error={isEditPW && pw && !pwAvail ? true : false}
             aria-describedby="pw-helper-text"
             endAdornment={
               <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPw}
-                  onMouseDown={handleMouseDownPw}
-                >
-                  {showPw ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
+                {isEditPW && (
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPw}
+                    onMouseDown={handleMouseDownPw}
+                  >
+                    {showPw ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                )}
               </InputAdornment>
             }
           />
           <FormHelperText id="pw-helper-text">
-            {!pwAvail && <span>영문, 숫자, 특수문자 포함, 8~16자</span>}
+            {isEditPW && !pwAvail && (
+              <span>영문, 숫자, 특수문자 포함, 8~16자</span>
+            )}
           </FormHelperText>
         </FormControl>
         <FormControl variant="standard">
@@ -250,9 +243,10 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             aria-describedby="repw-helper-text"
             endAdornment={
               <InputAdornment position="end">
-                {rePw && rePwAvail && <CheckRounded />}
+                {isEditPW && rePw && rePwAvail && <CheckRounded />}
               </InputAdornment>
             }
+            disabled={!isEditPW}
           />
           <FormHelperText id="repw-helper-text">
             {rePw && !rePwAvail && <span>비밀번호가 일치하지 않습니다</span>}
@@ -264,10 +258,27 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             id="nickName"
             value={nickName}
             onChange={onChangeNickName}
+            aria-describedby="nick-helper-text"
             required
             error={nickNameActivated && nickName === "" ? true : false}
           />
+          <FormHelperText id="nick-helper-text">
+            {nickNameActivated &&
+              (nickNameAvail === "Available" ? (
+                <span>사용 가능한 닉네임입니다</span>
+              ) : nickNameAvail === "UnAvailable" ? (
+                <span>이미 사용중인 닉네임입니다</span>
+              ) : (
+                <span>닉네임 중복 체크를 해주세요</span>
+              ))}
+          </FormHelperText>
         </FormControl>
+        <Button
+          onClick={onConfirmNickName}
+          disabled={!nickNameActivated || loggedUser.nickName === nickName}
+        >
+          닉네임 중복 확인
+        </Button>
         <FormControl variant="standard">
           <InputLabel htmlFor="email">email *</InputLabel>
           <Input
@@ -298,26 +309,15 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             )}
           </FormHelperText>
         </FormControl>
-        {/* <FormGroup> */}
-        <Box style={checkBoxStyle}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={isAgree}
-                onChange={onChangeIsAgree}
-                inputProps={{ "aria-label": "controlled" }}
-              />
-            }
-            label="개인정보 이용 동의"
-          />
-        </Box>
-        {/* </FormGroup> */}
         <Box sx={buttonBoxStyle}>
           <Button variant="contained" type="submit">
-            Signin
+            Confirm
           </Button>
-          <Button variant="contained" type="submit" onClick={onCloseModal}>
+          <Button variant="contained" onClick={onCloseModal}>
             Cancel
+          </Button>
+          <Button variant="contained" onClick={onClickDelete}>
+            회원탈퇴
           </Button>
         </Box>
       </Box>

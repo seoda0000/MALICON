@@ -1,8 +1,11 @@
 import FeedListItem from "./FeedListItem";
 import { FeedType } from "../../model/feed/feedType";
 import React from "react";
+import { ProfileFeedType } from "../../model/profile/profileFeedType";
 
-const FeedList: React.FC<{ feeds: FeedType[] }> = (props) => {
+const FeedList: React.FC<{ feeds: FeedType[] | ProfileFeedType[] }> = (
+  props
+) => {
   return (
     <div>
       {props.feeds.length !== 0 ? (
@@ -15,3 +18,4 @@ const FeedList: React.FC<{ feeds: FeedType[] }> = (props) => {
 };
 
 export default FeedList;
+

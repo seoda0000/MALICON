@@ -41,6 +41,8 @@ import { auto } from "@popperjs/core";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { BoldKoreanFont } from "../../theme/font";
 import { ThemeProvider } from "@mui/material/styles";
+import SubscriberItem from "../auth/SubscriberItem";
+import { getSubscribersAction } from "../../redux/modules/subscribe";
 
 interface LayoutProps {
   children: ReactNode;
@@ -122,6 +124,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Layout(props: LayoutProps) {
   const loggedUser = useAppSelector((state) => state.user.userData);
+  const subscribers = useAppSelector((state) => state.subscribe.subscribers);
   const dispatch = useAppDispatch();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -154,6 +157,10 @@ export default function Layout(props: LayoutProps) {
     console.log("로그아웃");
     window.location.replace("/");
   };
+
+  useEffect(() => {
+    dispatch(getSubscribersAction());
+  }, []);
 
   useEffect(() => {
     if (getAccessToken()) {
@@ -425,6 +432,7 @@ export default function Layout(props: LayoutProps) {
                   px: 2.5,
                 }}
               >
+<<<<<<< frontend/blahblah/src/components/layout/Layout.tsx
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
@@ -477,6 +485,23 @@ export default function Layout(props: LayoutProps) {
 
       {/* 메인 화면: 페이지 랜딩되는 곳 */}
       <Box component="main" sx={{ flexGrow: 1, mx: "8%" }}>
+=======
+                <PodcastsIcon />
+              </ListItemIcon>
+              <ListItemText primary="방송하기" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <Divider />
+        <List sx={{ p: 2 }}>
+          {subscribers.map((item) => (
+            <SubscriberItem key={item.userPK} item={item} />
+          ))}
+        </List>
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <DrawerHeader />
+>>>>>>> frontend/blahblah/src/components/layout/Layout.tsx
         <main className="main">{props.children}</main>
         {/* <AvatarShortcutButton /> */}
       </Box>

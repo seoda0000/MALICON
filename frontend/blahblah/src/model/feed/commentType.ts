@@ -11,3 +11,4 @@ export type CommentType = {
   //   userAvatar: string | null;
   //   userNickName: string;
 };
+
