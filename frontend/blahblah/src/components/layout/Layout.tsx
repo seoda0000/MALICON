@@ -19,7 +19,7 @@ import PodcastsIcon from "@mui/icons-material/Podcasts";
 import FeedIcon from "@mui/icons-material/Feed";
 import { ReactNode } from "react";
 import Menu from "@mui/material/Menu";
-
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import Container from "@mui/material/Container";
 // import Avatar from "@mui/material/Avatar";
@@ -30,12 +30,19 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
-import ProfileImage from "../auth/ProfileImage";
+import ProfileAvatar from "../auth/ProfileAvatar";
 import AvatarShortcutButton from "./AvatarShortcutButton";
 import { getAccessToken, removeToken } from "../../redux/modules/user/token";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
 import { getMeWithTokenAction } from "../../redux/modules/user";
 import SigninModal from "../auth/SigninModal";
+import ProfileImage from "../auth/ProfileImage";
+import { auto } from "@popperjs/core";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { BoldKoreanFont } from "../../theme/font";
+import { ThemeProvider } from "@mui/material/styles";
+import SubscriberItem from "../auth/SubscriberItem";
+import { getSubscribersAction } from "../../redux/modules/subscribe";
 
 interface LayoutProps {
   children: ReactNode;
@@ -117,6 +124,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Layout(props: LayoutProps) {
   const loggedUser = useAppSelector((state) => state.user.userData);
+  const subscribers = useAppSelector((state) => state.subscribe.subscribers);
   const dispatch = useAppDispatch();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -151,6 +159,10 @@ export default function Layout(props: LayoutProps) {
   };
 
   useEffect(() => {
+    dispatch(getSubscribersAction());
+  }, []);
+
+  useEffect(() => {
     if (getAccessToken()) {
       if (!loggedUser.isLoggedIn) {
         dispatch(getMeWithTokenAction());
@@ -162,50 +174,67 @@ export default function Layout(props: LayoutProps) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
 
-      <AppBar
-        position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }}
-      >
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            {/* 메뉴 버튼 */}
-
-            <Box sx={{ display: { xs: "flex", md: "flex" } }}>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawer}
-                edge="start"
-              >
-                <MenuIcon />
-              </IconButton>
-            </Box>
-
-            {/* 로고 영역 */}
-
-            <AdbIcon sx={{ display: { xs: "flex", md: "flex" }, mr: 1 }} />
+      <ThemeProvider theme={BoldKoreanFont}>
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader
+            sx={{
+              minHeight: 48,
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
+            }}
+          >
+            <AdbIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : "auto",
+                justifyContent: "center",
+              }}
+            />
             <Typography
               variant="h6"
               noWrap
               component="a"
               href="/"
               sx={{
-                mr: 2,
-                display: { xs: "flex", md: "flex" },
-                fontFamily: "monospace",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
                 color: "inherit",
                 textDecoration: "none",
-                flexGrow: 1,
+                opacity: open ? 1 : 0,
               }}
             >
-              LOGO
+              MALICON
             </Typography>
+          </DrawerHeader>
+          <Divider />
 
-            {/* 알림과 프로필 영역 */}
+          <List>
+            {/* Drawer 열림/닫힘 버튼 */}
+            <Box
+              sx={{
+                display: {
+                  xs: "flex",
+                  md: "flex",
+                  justifyContent: open ? "end" : "center",
+                },
+              }}
+            >
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawer}
+                // edge="start"
+                sx={{
+                  Height: 24,
+                  Width: 24,
+                }}
+              >
+                {open ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
+              </IconButton>
+            </Box>
 
-            {loggedUser.isLoggedIn && (
+            {/* Drawer 열렸을 때 알림 아이콘 */}
+            {open && loggedUser.isLoggedIn && (
               <MenuItem>
                 <IconButton
                   size="large"
@@ -218,143 +247,251 @@ export default function Layout(props: LayoutProps) {
                 </IconButton>
               </MenuItem>
             )}
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {loggedUser.isLoggedIn ? (
-                    <ProfileImage />
-                  ) : (
-                    <AccountCircleRoundedIcon />
-                  )}
-                </IconButton>
-              </Tooltip>
 
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {loggedUser.isLoggedIn &&
-                  menuWithLogin.map((item) => (
-                    <MenuItem
-                      key={item}
-                      onClick={item === "Logout" ? logout : handleCloseUserMenu}
-                    >
-                      <Typography textAlign="center">{item}</Typography>
-                    </MenuItem>
-                  ))}
-                {!loggedUser.isLoggedIn &&
-                  menuWithLogout.map((item) => (
-                    <MenuItem
-                      key={item}
-                      onClick={
-                        item === "Login" ? onClickSignin : handleCloseUserMenu
-                      }
-                    >
-                      <Typography textAlign="center">{item}</Typography>
-                    </MenuItem>
-                  ))}
-              </Menu>
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
-
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader></DrawerHeader>
-        <Divider />
-        <List>
-          {/* 홈버튼 */}
-
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              component={Link}
-              to="/main"
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
+            {/* Drawer 열렸을 때 큰 아바타 */}
+            {open && (
+              <Box
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
+                  display: {
+                    xs: "flex",
+                    md: "flex",
+                    justifyContent: "center",
+                    mr: auto,
+                    marginBottom: "30px",
+                  },
                 }}
               >
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="홈" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ mr: 1 }}>
+                    {loggedUser.isLoggedIn ? (
+                      <ProfileAvatar />
+                    ) : (
+                      <AccountCircleRoundedIcon
+                        sx={{
+                          height: 120,
+                          width: 120,
+                        }}
+                      />
+                    )}
+                  </IconButton>
+                </Tooltip>
 
-          {/* 피드 */}
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {loggedUser.isLoggedIn &&
+                    menuWithLogin.map((item) => (
+                      <MenuItem
+                        key={item}
+                        onClick={
+                          item === "Logout" ? logout : handleCloseUserMenu
+                        }
+                      >
+                        <Typography textAlign="center">{item}</Typography>
+                      </MenuItem>
+                    ))}
+                  {!loggedUser.isLoggedIn &&
+                    menuWithLogout.map((item) => (
+                      <MenuItem
+                        key={item}
+                        onClick={
+                          item === "Login" ? onClickSignin : handleCloseUserMenu
+                        }
+                      >
+                        <Typography textAlign="center">{item}</Typography>
+                      </MenuItem>
+                    ))}
+                </Menu>
+              </Box>
+            )}
 
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              component={Link}
-              to="/feed"
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
+            {/* Drawer 닫혔을 때 작은 아바타 아이콘 */}
+            {!open && (
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  component={Link}
+                  to="/main"
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 1 : auto,
+                      justifyContent: "center",
+                    }}
+                  >
+                    {loggedUser.isLoggedIn ? (
+                      <ProfileImage />
+                    ) : (
+                      <AccountCircleRoundedIcon />
+                    )}
+                  </ListItemIcon>
+                  <ListItemText primary="홈" sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+            )}
+
+            {/* 홈 버튼 */}
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                component={Link}
+                to="/main"
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
                 }}
               >
-                <FeedIcon />
-              </ListItemIcon>
-              <ListItemText primary="피드" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary="홈" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
 
-          {/* 방송하기 */}
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
+            {/* 피드 버튼 */}
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                component={Link}
+                to="/feed"
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
                 }}
               >
-                <PodcastsIcon />
-              </ListItemIcon>
-              <ListItemText primary="방송하기" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        </List>
-        <Divider />
-        <List>{/* Following List 넣기 */}</List>
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FeedIcon />
+                </ListItemIcon>
+                <ListItemText primary="피드" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+
+            {/* 방송하기 버튼 */}
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <PodcastsIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="방송하기"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+
+            {/* 아바타 수정 버튼 (임시) */}
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                component={Link}
+                to="/avatar"
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FeedIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="내 아바타"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+
+            {/* 튜토리얼 버튼 (임시) */}
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                component={Link}
+                to="/tutorial"
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FeedIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="튜토리얼"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </List>
+
+          <Divider />
+          <List sx={{ p: 2 }}>
+            {subscribers.map((item) => (
+              <SubscriberItem key={item.userPK} item={item} />
+            ))}
+          </List>
+        </Drawer>
+      </ThemeProvider>
+
+      {/* 메인 화면: 페이지 랜딩되는 곳 */}
+      <Box component="main" sx={{ flexGrow: 1, mx: "8%" }}>
         <main className="main">{props.children}</main>
-        <AvatarShortcutButton />
+        {/* <AvatarShortcutButton /> */}
       </Box>
+
+      {/* 모달 */}
       {openSigninModal && (
         <SigninModal open={openSigninModal} setOpen={setOpenSigninModal} />
       )}

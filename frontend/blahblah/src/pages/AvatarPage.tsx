@@ -112,6 +112,7 @@ function AvatarPage() {
     clothingColor: [AVATAR_OPTION.clothingColor[clothingColor]],
     eyes: [AVATAR_OPTION.eyes[eyes]],
     facialHair: [AVATAR_OPTION.facialHair[facialHair]],
+    facialHairProbability: 100,
     hair: [AVATAR_OPTION.hair[hair]],
     hairColor: [AVATAR_OPTION.hairColor[hairColor]],
     mouth: [AVATAR_OPTION.mouth[mouth]],
@@ -269,10 +270,12 @@ function AvatarPage() {
   // 아바타 서버에 저장
   const dispatch = useAppDispatch();
   const userId = useSelector((state: RootState) => state.user.userData.userId);
+  const userpk = useSelector((state: RootState) => state.user.userData.id);
   const saveAvatarHandler = () => {
     console.log("아바타 저장 시도");
     const res = dispatch(
       updateUserAction({
+        id: userpk,
         userId,
         avatar: JSON.stringify(selectedAvatar),
       })
@@ -285,6 +288,7 @@ function AvatarPage() {
 
   return (
     <div>
+      <h1>아바타 페이지</h1>
       {/* 제목 영역 */}
 
       <Box
@@ -300,7 +304,6 @@ function AvatarPage() {
         }}
       >
         <h1>Avatar Page</h1>
-        <h2>{JSON.stringify(selectedAvatar)}</h2>
       </Box>
 
       <Box
@@ -329,3 +332,4 @@ function AvatarPage() {
   );
 }
 export default AvatarPage;
+
