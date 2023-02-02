@@ -5,7 +5,7 @@ import { getAccessToken } from "../user/token";
 
 // 구독자 가져오기
 export const getSubscribersAction = createAsyncThunk(
-  "GET_IS_SUB",
+  "GET_SUBSCRIBERS",
   async (_, { rejectWithValue }) => {
     try {
       const axios = axiosInitializer();

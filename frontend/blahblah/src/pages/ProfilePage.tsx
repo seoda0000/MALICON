@@ -273,7 +273,9 @@ export default function ProfilePage(): JSX.Element {
                 <span className="id">@{user.userId}</span>
                 <span className="subscriber">구독자 {user.subscribers}명</span>
               </div>
-              {isSubscribing ? (
+              {isMine ? (
+                <></>
+              ) : isSubscribing ? (
                 <Button
                   variant="outlined"
                   size="small"
