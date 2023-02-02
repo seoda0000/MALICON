@@ -15,19 +15,29 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function VideoList() {
   return (
-    <Box sx={{ width: "80%" }}>
-      <Grid
-        container
-        columnSpacing={{ xs: 2, md: 1 }}
-        rowSpacing={{ xs: 2, md: 2 }}
-        columns={{ xs: 4, sm: 4, md: 12 }}
-      >
-        {Array.from(Array(6)).map((_, index) => (
-          <Grid item xs={12} sm={4} md={4} key={index}>
-            <VideoCard />
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+    <Grid
+      container
+      // justifyContent={"center"}
+      // justifyItems={"center"}
+      // alignItems={"center"}
+      columnSpacing={{ xs: 2, md: 5 }}
+      rowSpacing={{ xs: 2, md: 5 }}
+      // columns={{ xs: 4, sm: 4, md: 12 }}
+      // mx={{ xs: 0, md: 3 }}
+    >
+      {Array.from(Array(6)).map((_, index) => (
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          key={index}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <VideoCard />
+        </Grid>
+      ))}
+    </Grid>
   );
 }

@@ -11,14 +11,14 @@ import Link from "@mui/joy/Link";
 import Favorite from "@mui/icons-material/Favorite";
 import Visibility from "@mui/icons-material/Visibility";
 import CreateNewFolder from "@mui/icons-material/CreateNewFolder";
+import { autoBatchEnhancer } from "@reduxjs/toolkit";
 
 export default function VideoCard() {
   return (
     <Card
       sx={{
-        width: 300,
+        width: "100%",
         bgcolor: "initial",
-        boxShadow: "none",
         "--Card-padding": "0px",
       }}
     >
@@ -33,6 +33,8 @@ export default function VideoCard() {
             />
           </figure>
         </AspectRatio>
+
+        {/* 호버했을 때 표지에 보이는 요소 */}
         <CardCover
           className="gradient-cover"
           sx={{
@@ -69,28 +71,62 @@ export default function VideoCard() {
                     display: "block",
                   }}
                 >
-                  Yosemite
+                  Video Title
                 </Link>
               </Typography>
-              <IconButton size="sm" color="neutral" sx={{ ml: "auto" }}>
-                <CreateNewFolder />
-              </IconButton>
-              <IconButton size="sm" color="neutral">
-                <Favorite />
-              </IconButton>
             </Box>
           </Box>
         </CardCover>
       </Box>
       <Box sx={{ display: "flex", gap: 1, mt: 1.5, alignItems: "center" }}>
+        {/* 아바타 */}
         <Avatar
-          src="https://images.unsplash.com/profile-1502669002421-a8d274ad2897?dpr=2&auto=format&fit=crop&w=32&h=32&q=60&crop=faces&bg=fff"
+          src="https://image.news1.kr/system/photos/2022/8/2/5508700/article.jpg/dims/optimize"
           size="sm"
-          sx={{ "--Avatar-size": "1.5rem" }}
+          sx={{ "--Avatar-size": "2rem" }}
         />
-        <Typography sx={{ fontSize: "sm", fontWeight: "md" }}>
-          New Jeans
-        </Typography>
+        <Box>
+          {/* 유저 닉네임 */}
+          <Typography sx={{ fontSize: "sm", fontWeight: "lg" }}>
+            UserNickName
+          </Typography>
+
+          {/* 좋아요 표시 */}
+          <Link
+            href="#dribbble-shot"
+            level="body3"
+            underline="none"
+            startDecorator={<Favorite sx={{ width: 20 }} />}
+            color="neutral"
+            sx={{
+              fontSize: "sm",
+              fontWeight: "md",
+              ml: "auto",
+              "&:hover": { color: "danger.plainColor" },
+            }}
+          >
+            117
+          </Link>
+
+          {/* 조회수 표시 */}
+          <Link
+            href="#dribbble-shot"
+            level="body3"
+            underline="none"
+            startDecorator={<Visibility sx={{ width: 20 }} />}
+            color="neutral"
+            sx={{
+              fontSize: "sm",
+              fontWeight: "md",
+              ml: 2,
+              "&:hover": { color: "primary.plainColor" },
+            }}
+          >
+            10.4k
+          </Link>
+        </Box>
+
+        {/* 라이브 표시 */}
         <Chip
           variant="outlined"
           color="neutral"
@@ -99,37 +135,11 @@ export default function VideoCard() {
             borderRadius: "sm",
             py: 0.25,
             px: 0.5,
+            ml: "auto",
           }}
         >
           Live
         </Chip>
-        <Link
-          href="#dribbble-shot"
-          level="body3"
-          underline="none"
-          startDecorator={<Favorite />}
-          sx={{
-            fontWeight: "md",
-            ml: "auto",
-            color: "text.secondary",
-            "&:hover": { color: "danger.plainColor" },
-          }}
-        >
-          117
-        </Link>
-        <Link
-          href="#dribbble-shot"
-          level="body3"
-          underline="none"
-          startDecorator={<Visibility />}
-          sx={{
-            fontWeight: "md",
-            color: "text.secondary",
-            "&:hover": { color: "primary.plainColor" },
-          }}
-        >
-          10.4k
-        </Link>
       </Box>
     </Card>
   );

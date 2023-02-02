@@ -330,7 +330,11 @@ export default function Layout(props: LayoutProps) {
                       justifyContent: "center",
                     }}
                   >
-                    <ProfileImage />
+                    {loggedUser.isLoggedIn ? (
+                      <ProfileImage />
+                    ) : (
+                      <AccountCircleRoundedIcon />
+                    )}
                   </ListItemIcon>
                   <ListItemText primary="홈" sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
@@ -418,7 +422,7 @@ export default function Layout(props: LayoutProps) {
       </ThemeProvider>
 
       {/* 메인 화면: 페이지 랜딩되는 곳 */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, mx: "8%" }}>
         <DrawerHeader />
         <main className="main">{props.children}</main>
         <AvatarShortcutButton />
