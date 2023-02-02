@@ -432,7 +432,6 @@ export default function Layout(props: LayoutProps) {
                   px: 2.5,
                 }}
               >
-<<<<<<< frontend/blahblah/src/components/layout/Layout.tsx
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
@@ -478,30 +477,16 @@ export default function Layout(props: LayoutProps) {
           </List>
 
           <Divider />
-
-          <List>{/* Following List 넣기 */}</List>
+          <List sx={{ p: 2 }}>
+            {subscribers.map((item) => (
+              <SubscriberItem key={item.userPK} item={item} />
+            ))}
+          </List>
         </Drawer>
       </ThemeProvider>
 
       {/* 메인 화면: 페이지 랜딩되는 곳 */}
       <Box component="main" sx={{ flexGrow: 1, mx: "8%" }}>
-=======
-                <PodcastsIcon />
-              </ListItemIcon>
-              <ListItemText primary="방송하기" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        </List>
-        <Divider />
-        <List sx={{ p: 2 }}>
-          {subscribers.map((item) => (
-            <SubscriberItem key={item.userPK} item={item} />
-          ))}
-        </List>
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
->>>>>>> frontend/blahblah/src/components/layout/Layout.tsx
         <main className="main">{props.children}</main>
         {/* <AvatarShortcutButton /> */}
       </Box>
@@ -513,3 +498,4 @@ export default function Layout(props: LayoutProps) {
     </Box>
   );
 }
+
