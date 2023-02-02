@@ -24,16 +24,16 @@ public class AboutMeController {
     private final AboutMeService aboutMeService;
 
     @PostMapping
-    public ResponseEntity insertAboutMe(@RequestBody String content, HttpServletRequest request) {
+    public ResponseEntity insertAboutMe(@RequestBody AboutMeDTO aboutMeDTO, HttpServletRequest request) {
         long userPK = JWTutil.getLongIdByAccessToken(request);
         if(aboutMeService.isExistId(userPK)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("자기소개가 이미 존재합니다"));
         }
-        if (content.isEmpty()) {
+        if (aboutMeDTO.getContent().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("자기소개를 적어주세요"));
         }
-        AboutMeDTO aboutMeDTO = AboutMeDTO.builder().userPK(userPK).content(content).build();
-        AboutMeEntity result = aboutMeService.createAboutMe(aboutMeDTO);
+        AboutMeDTO aboutMe = AboutMeDTO.builder().userPK(userPK).content(aboutMeDTO.getContent()).build();
+        AboutMeEntity result = aboutMeService.createAboutMe(aboutMe);
         if (result == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("자기소개 추가 실패"));
         } else {
