@@ -18,7 +18,7 @@ function HomePage() {
           <Route path="/tutorial" element={<TutorialPage />} />
           <Route path="/test" element={<FeedBackupPage />} />
           <Route path="/avatar" element={<AvatarPage />} />
-          <Route path="/faceapi" element={<FaceapiSamplePage />} />
+          {/* <Route path="/faceapi" element={<FaceapiSamplePage />} /> */}
           <Route path="/profile/:userpk" element={<ProfilePage />} />
         </Routes>
       </Layout>

@@ -43,6 +43,8 @@ import { BoldKoreanFont } from "../../theme/font";
 import { ThemeProvider } from "@mui/material/styles";
 import SubscriberItem from "../auth/SubscriberItem";
 import { getSubscribersAction } from "../../redux/modules/subscribe";
+import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
+import FaceIcon from "@mui/icons-material/Face";
 
 interface LayoutProps {
   children: ReactNode;
@@ -439,7 +441,7 @@ export default function Layout(props: LayoutProps) {
                     justifyContent: "center",
                   }}
                 >
-                  <FeedIcon />
+                  <FaceIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="내 아바타"
@@ -466,36 +468,12 @@ export default function Layout(props: LayoutProps) {
                     justifyContent: "center",
                   }}
                 >
-                  <FeedIcon />
+                  <AccessibilityNewIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="튜토리얼"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
-              </ListItemButton>
-            </ListItem>
-
-            {/* 테스트 버튼 (임시) */}
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                component={Link}
-                to="/test"
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <FeedIcon />
-                </ListItemIcon>
-                <ListItemText primary="테스트" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           </List>
