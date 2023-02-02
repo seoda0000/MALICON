@@ -31,18 +31,13 @@ export default function SigninModal({ open, setOpen }: any): JSX.Element {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("로그인하려고해");
-    removeToken(); ////////
-    const res = dispatch(
+    dispatch(
       signinAction({
         userId: id,
         password: pw,
       })
     );
 
-    console.log("로그인됐나? : " + res);
-
-    alert("로그인!");
     onCloseModal();
   };
 
