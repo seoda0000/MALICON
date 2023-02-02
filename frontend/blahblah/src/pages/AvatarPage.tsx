@@ -270,10 +270,12 @@ function AvatarPage() {
   // 아바타 서버에 저장
   const dispatch = useAppDispatch();
   const userId = useSelector((state: RootState) => state.user.userData.userId);
+  const userpk = useSelector((state: RootState) => state.user.userData.id);
   const saveAvatarHandler = () => {
     console.log("아바타 저장 시도");
     const res = dispatch(
       updateUserAction({
+        id: userpk,
         userId,
         avatar: JSON.stringify(selectedAvatar),
       })
@@ -330,3 +332,4 @@ function AvatarPage() {
   );
 }
 export default AvatarPage;
+

@@ -2,31 +2,35 @@ import { createSlice } from "@reduxjs/toolkit";
 import { UserStateType } from "../../../model/user/userStateType";
 import {
   checkDuplicateAction,
+  checkDupNickNameAction,
+  deleteUserAction,
   getMeWithTokenAction,
   refreshTokenAction,
   signinAction,
   signupAction,
+  updateUserAction,
 } from "./thunk";
 
 const initialState: UserStateType = {
   userData: {
     id: null,
     userId: "",
-    password: "",
     nickName: "",
     email: "",
     phoneNumber: null,
     avatar: null,
     lightStick: null,
-    // accessToken: "",
-    // refreshToken: "",
+    aboutMe: "",
     isLoggedIn: false,
   },
   signup: { loading: false, data: null, error: null },
   checkDuplicate: { loading: false, data: null, error: null },
+  checkDupNickName: { loading: false, data: null, error: null },
   signin: { loading: false, data: null, error: null },
   getMe: { loading: false, data: null, error: null },
   refreshToken: { loading: false, data: null, error: null },
+  updateUser: { loading: false, data: null, error: null },
+  deleteUser: { loading: false, data: null, error: null },
 };
 
 const userSlice = createSlice({
@@ -64,6 +68,21 @@ const userSlice = createSlice({
         state.checkDuplicate.loading = false;
         state.checkDuplicate.data = null;
         state.checkDuplicate.error = payload;
+      })
+      .addCase(checkDupNickNameAction.pending, (state) => {
+        state.checkDupNickName.loading = true;
+        state.checkDupNickName.data = null;
+        state.checkDupNickName.error = null;
+      })
+      .addCase(checkDupNickNameAction.fulfilled, (state, { payload }) => {
+        state.checkDupNickName.loading = false;
+        state.checkDupNickName.data = payload;
+        state.checkDupNickName.error = null;
+      })
+      .addCase(checkDupNickNameAction.rejected, (state, { payload }) => {
+        state.checkDupNickName.loading = false;
+        state.checkDupNickName.data = null;
+        state.checkDupNickName.error = payload;
       })
       .addCase(signinAction.pending, (state) => {
         state.signin.loading = true;
@@ -118,6 +137,38 @@ const userSlice = createSlice({
         state.refreshToken.loading = false;
         state.refreshToken.data = null;
         state.refreshToken.error = payload;
+      })
+      .addCase(updateUserAction.pending, (state) => {
+        state.updateUser.loading = true;
+        state.updateUser.data = null;
+        state.updateUser.error = null;
+      })
+      .addCase(updateUserAction.fulfilled, (state, { payload }) => {
+        state.updateUser.loading = false;
+        state.updateUser.data = payload;
+        state.updateUser.error = null;
+      })
+      .addCase(updateUserAction.rejected, (state, { payload }) => {
+        state.updateUser.loading = false;
+        state.updateUser.data = null;
+        state.updateUser.error = payload;
+      })
+      .addCase(deleteUserAction.pending, (state) => {
+        state.deleteUser.loading = true;
+        state.deleteUser.data = null;
+        state.deleteUser.error = null;
+      })
+      .addCase(deleteUserAction.fulfilled, (state, { payload }) => {
+        state.deleteUser.loading = false;
+        state.deleteUser.data = payload;
+        state.deleteUser.error = null;
+
+        state.userData = initialState.userData;
+      })
+      .addCase(deleteUserAction.rejected, (state, { payload }) => {
+        state.deleteUser.loading = false;
+        state.deleteUser.data = null;
+        state.deleteUser.error = payload;
       });
   },
 });
