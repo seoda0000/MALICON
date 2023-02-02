@@ -112,6 +112,7 @@ function AvatarPage() {
     clothingColor: [AVATAR_OPTION.clothingColor[clothingColor]],
     eyes: [AVATAR_OPTION.eyes[eyes]],
     facialHair: [AVATAR_OPTION.facialHair[facialHair]],
+    facialHairProbability: 100,
     hair: [AVATAR_OPTION.hair[hair]],
     hairColor: [AVATAR_OPTION.hairColor[hairColor]],
     mouth: [AVATAR_OPTION.mouth[mouth]],
@@ -286,6 +287,45 @@ function AvatarPage() {
   return (
     <div>
       <h1>아바타 페이지</h1>
+      {/* 제목 영역 */}
+
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          "& > :not(style)": {
+            m: 1,
+            // width: 1500,
+            // height: 500,
+          },
+        }}
+      >
+        <h1>Avatar Page</h1>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          "& > :not(style)": {
+            m: 1,
+            // width: 1500,
+            // height: 500,
+          },
+        }}
+      >
+        <Card sx={{ maxWidth: 500 }}>
+          <AvatarTest selectedAvatar={selectedAvatar} />
+        </Card>
+        <Card sx={{ minWidth: 400, maxWidth: 500 }}>
+          <SelectList options={AVATAR_OPTION} selectHandler={selectHandler} />
+          <Stack direction="column" spacing={1} justifyContent="center">
+            <Button onClick={saveAvatarHandler}>확정</Button>
+          </Stack>
+        </Card>
+      </Box>
     </div>
   );
 }

@@ -413,6 +413,60 @@ export default function Layout(props: LayoutProps) {
                 />
               </ListItemButton>
             </ListItem>
+
+            {/* 아바타 수정 버튼 (임시) */}
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                component={Link}
+                to="/avatar"
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FeedIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="내 아바타"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+
+            {/* 튜토리얼 버튼 (임시) */}
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                component={Link}
+                to="/tutorial"
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FeedIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="튜토리얼"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
           </List>
 
           <Divider />
@@ -423,10 +477,11 @@ export default function Layout(props: LayoutProps) {
 
       {/* 메인 화면: 페이지 랜딩되는 곳 */}
       <Box component="main" sx={{ flexGrow: 1, mx: "8%" }}>
-        <DrawerHeader />
         <main className="main">{props.children}</main>
-        <AvatarShortcutButton />
+        {/* <AvatarShortcutButton /> */}
       </Box>
+
+      {/* 모달 */}
       {openSigninModal && (
         <SigninModal open={openSigninModal} setOpen={setOpenSigninModal} />
       )}
