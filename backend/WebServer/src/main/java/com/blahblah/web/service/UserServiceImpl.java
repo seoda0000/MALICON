@@ -31,6 +31,13 @@ public class UserServiceImpl implements UserService{
         log.info(userId);
         return userRepository.existsByUserId(userId);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isExistUserNickName(String nickName) {
+        log.info(nickName);
+        return userRepository.existsByNickName(nickName);
+    }
     @Override
     public UserDTO createUser(UserDTO userDTO) {
         UserEntity s = UserEntity.builder()

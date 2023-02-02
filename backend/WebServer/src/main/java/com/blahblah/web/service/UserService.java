@@ -6,6 +6,9 @@ import com.blahblah.web.dto.response.UserDTO;
 
 public interface UserService {
     boolean isExistUserId(String userId);
+
+    boolean isExistUserNickName(String nickName);
+
     UserDTO createUser(UserDTO userDTO);
     
     UserDTO readUser(Long id);

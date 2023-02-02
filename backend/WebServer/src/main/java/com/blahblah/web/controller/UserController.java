@@ -41,6 +41,14 @@ public class UserController {
         else return ResponseEntity.ok(new Message("사용가능한 사용자 ID입니다"));
     }
 
+    @GetMapping("/nickName/{nickName}")
+    public ResponseEntity checkDuplicatedNickName(@PathVariable String nickName){
+        log.info(nickName);
+        if(userService.isExistUserNickName(nickName))
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new Message("이미 존재하는 사용자 닉네임입니다"));
+        else return ResponseEntity.ok(new Message("사용가능한 사용자 닉네임입니다"));
+    }
+
     @GetMapping("/me")
     public ResponseEntity getMyInfo(HttpServletRequest request){
         String accessToken =request.getHeader("Authorization").substring(7);
