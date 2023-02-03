@@ -2,21 +2,19 @@ package com.blahblah.web.service;
 
 import com.blahblah.web.controller.exception.CustomException;
 import com.blahblah.web.dto.request.ArticleDTO;
-import com.blahblah.web.dto.request.CommentDTO;
 import com.blahblah.web.dto.response.SubscribeArticleDTO;
 import com.blahblah.web.entity.ArticleEntity;
-import com.blahblah.web.entity.CommentEntity;
 import com.blahblah.web.repository.ArticleRepository;
 import com.blahblah.web.repository.CommentRepository;
 import com.blahblah.web.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Transactional
 @Service
@@ -60,79 +58,24 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public List<SubscribeArticleDTO> readArticle(long id) {
+    public Page<SubscribeArticleDTO> readArticle(long id) {
 
-//        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "create_date"));
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
 //        List<ArticleEntity> lst = articleRepository.findAllBy(id, pageRequest);
-        List<ArticleEntity> lst = articleRepository.findAllBy(id);
-        List<SubscribeArticleDTO> DTOList = new ArrayList<>();
-        for(ArticleEntity a: lst){
-            List<CommentEntity> commentEntities = commentRepository.findAllByArticleId(a.getId());
-            List<CommentDTO> commentDTOS = new ArrayList<>();
-            for(CommentEntity c: commentEntities){
-                commentDTOS.add(CommentDTO.builder()
-                        .id(c.getId())
-                        .articleId(c.getArticleEntity().getId())
-                        .userPK(c.getUserEntity().getId())
-                        .userId(c.getUserEntity().getUserId())
-                        .content(c.getContent())
-                        .avatar(c.getUserEntity().getAvatar())
-                        .createDate(a.getCreateDate().toString())
-                        .lastModifiedDate(a.getLastModifiedDate().toString())
-                        .build()
-                );
-            }
-            DTOList.add(SubscribeArticleDTO.builder()
-                    .id(a.getId())
-                    .userPK(a.getUserEntity().getId())
-                    .userId(a.getUserEntity().getUserId())
-                    .nickName(a.getUserEntity().getNickName())
-                    .avatar(a.getUserEntity().getAvatar())
-                    .title(a.getTitle())
-                    .content(a.getContent())
-                    .createDate(a.getCreateDate().toString())
-                    .lastModifiedDate(a.getLastModifiedDate().toString())
-                    .commentList(commentDTOS)
-                    .build()
-            );
-        }
+        Page<ArticleEntity> result = articleRepository.findAllBy(id, pageRequest);
 
+        Page<SubscribeArticleDTO> DTOList = new SubscribeArticleDTO().toDtoList(result);
 
         return DTOList;
     }
 
     @Override
-    public List<SubscribeArticleDTO> readMyArticle(long userPK) {
-        List<ArticleEntity> result = articleRepository.findAllByUserId(userPK);
-        List<SubscribeArticleDTO> articles = new ArrayList<>();
-        for(ArticleEntity a: result){
-            List<CommentEntity> commentEntities = commentRepository.findAllByArticleId(a.getId());
-            List<CommentDTO> commentDTOS = new ArrayList<>();
-            for(CommentEntity c: commentEntities){
-                commentDTOS.add(CommentDTO.builder()
-                        .id(c.getId())
-                        .articleId(c.getArticleEntity().getId())
-                        .userPK(c.getUserEntity().getId())
-                        .userId(c.getUserEntity().getUserId())
-                        .content(c.getContent())
-                        .avatar(c.getUserEntity().getAvatar())
-                        .createDate(a.getCreateDate().toString())
-                        .lastModifiedDate(a.getLastModifiedDate().toString())
-                        .build()
-                );
-            }
-            articles.add(SubscribeArticleDTO.builder()
-                            .userPK(a.getUserEntity().getId())
-                            .userId(a.getUserEntity().getUserId())
-                            .nickName(a.getUserEntity().getNickName())
-                            .avatar(a.getUserEntity().getAvatar())
-                            .title(a.getTitle())
-                            .content(a.getContent())
-                            .createDate(a.getCreateDate().toString())
-                            .lastModifiedDate(a.getLastModifiedDate().toString())
-                            .commentList(commentDTOS)
-                    .build());
-        }
+    public Page<SubscribeArticleDTO> readMyArticle(long userPK) {
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
+
+        Page<ArticleEntity> result = articleRepository.findAllByUserId(userPK, pageRequest);
+        Page<SubscribeArticleDTO> articles = new SubscribeArticleDTO().toDtoList(result);
+
         return articles;
     }
 

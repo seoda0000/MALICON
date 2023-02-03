@@ -6,6 +6,7 @@ import com.blahblah.web.entity.CommentEntity;
 import com.blahblah.web.repository.ArticleRepository;
 import com.blahblah.web.repository.CommentRepository;
 import com.blahblah.web.repository.UserRepository;
+import com.blahblah.web.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,11 +25,14 @@ public class CommentServiceImpl implements CommentService{
 
     private final ArticleRepository articleRepository;
 
+    private final VideoRepository videoRepository;
+
     @Override
     public CommentEntity createComment(CommentDTO commentDTO) {
         CommentEntity comment = CommentEntity.builder()
                 .userEntity(userRepository.findById(commentDTO.getUserPK()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "작성자가 유효하지 않습니다.")))
-                .articleEntity(articleRepository.findById(commentDTO.getArticleId()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "게시글이 유효하지 않습니다.")))
+                .articleEntity(articleRepository.findById(commentDTO.getArticleId()).orElse(null))
+                .videoEntity(videoRepository.findById(commentDTO.getVideoId()).orElse(null))
                 .content(commentDTO.getContent())
                 .build();
         return commentRepository.save(comment);

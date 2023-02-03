@@ -17,7 +17,7 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
     void deleteById(Long id);
 
 
-    List<ArticleEntity> findAllByUserId(long userId);
+    Page<ArticleEntity> findAllByUserId(long userId, Pageable pageable);
 
     // 아래코드는 에러 발생
     // SubscribeDTO로 받는 걸로 다시 작성
@@ -31,7 +31,7 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
 //               "join a.userEntity u " +
 //               "join CommentEntity c on articleId " +
 //               "where a.id=:id")
-    @Query(value="select * from articles where articles.user_id=(select us.subscribe_user_id from user_subscribes us where us.user_id = ?)", nativeQuery = true)
-    List<ArticleEntity> findAllBy(@Param("id") long id);
+    @Query(value="select * from articles a where a.user_id=(select us.subscribe_user_id from user_subscribes us where us.user_id = :id) or a.user_id=:id", nativeQuery = true)
+    Page<ArticleEntity> findAllBy(@Param("id") long id, Pageable pageable);
 
 }

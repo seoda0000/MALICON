@@ -10,6 +10,7 @@ import com.blahblah.web.service.ArticleService;
 import com.blahblah.web.util.JWTutil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -62,14 +63,14 @@ public class ArticleController {
     public ResponseEntity readArticle(HttpServletRequest request){
         long id = JWTutil.getLongIdByAccessToken(request);
 
-        List<SubscribeArticleDTO> articleList = articleService.readArticle(id);
+        Page<SubscribeArticleDTO> articleList = articleService.readArticle(id);
         return ResponseEntity.ok(articleList);
 
     }
 
     @GetMapping("/{userPK}")
     public ResponseEntity readMyArticle(@PathVariable long userPK){
-        List<SubscribeArticleDTO> articleList = articleService.readMyArticle(userPK);
+        Page<SubscribeArticleDTO> articleList = articleService.readMyArticle(userPK);
         if(articleList.isEmpty()){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("피트 목록이 없습니다"));
         }

@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService{
         UserEntity user = userRepository.findByUserId(userDTO.getUserId()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."));
         UserEntity updatedUser = UserEntity.builder().id(userDTO.getId()==null?user.getId():userDTO.getId())
                 .userId(userDTO.getUserId()==null?user.getUserId():userDTO.getUserId())
-                .password(userDTO.getPassword()==null?user.getPassword():userDTO.getPassword())
+                .password(userDTO.getPassword()==null?passwordEncoder.encode(user.getPassword()):passwordEncoder.encode(userDTO.getPassword()))
                 .nickName(userDTO.getNickName()==null?user.getNickName():userDTO.getNickName())
                 .phoneNumber(userDTO.getPhoneNumber()==null?user.getPhoneNumber():userDTO.getPhoneNumber())
                 .lightStick(userDTO.getLightStick()==null?user.getLightStick():userDTO.getLightStick())

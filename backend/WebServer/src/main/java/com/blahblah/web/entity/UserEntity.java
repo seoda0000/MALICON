@@ -27,16 +27,16 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private Long id;
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
-    private List<ArticleEntity> articles = new ArrayList<ArticleEntity>();
+    private List<ArticleEntity> articles = new ArrayList<>();
 
     @OneToOne(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
     private AboutMeEntity aboutMe;
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
-    private List<UserSubscribeEntity> subscribes= new ArrayList<UserSubscribeEntity>();
+    private List<UserSubscribeEntity> subscribes= new ArrayList<>();
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
-    private List<VideoEntity> videos = new ArrayList<VideoEntity>();
+    private List<VideoEntity> videos = new ArrayList<>();
 
     @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;
@@ -44,7 +44,6 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private String password;
     @Column(name = "user_id", nullable = false, unique = true)
     private String userId;
-
     @Column(nullable = false, unique = true)
     private String email;
     @Column(name = "phone_number", unique = true)
