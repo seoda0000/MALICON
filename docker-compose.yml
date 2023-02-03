@@ -43,6 +43,19 @@ services:
       - default
       - blahblah_net
 
+  blahblah_rtc_server:
+    container_name: blahblah_rtc_server
+    build:
+      context: ./backend/RTCServer/
+      dockerfile: dockerfile
+    ports:
+      - "33332:33332"
+    stdin_open: true
+    tty: true
+    networks:
+      - default
+      - blahblah_net
+
   envoy:
     image: envoyproxy/envoy-dev
     ports:
