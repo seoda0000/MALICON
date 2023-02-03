@@ -24,7 +24,6 @@ public class AboutMeServiceImpl implements AboutMeService{
     private final AboutMeRepository aboutMeRepository;
 
     private final UserRepository userRepository;
-    private final SubscribeRepository subscribeRepository;
 
     @Override
     public boolean isExistId(long userPK) {

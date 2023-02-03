@@ -8,16 +8,12 @@ import com.blahblah.web.service.VideoService;
 import com.blahblah.web.util.JWTutil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.webresources.JarWarResource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/videos")
@@ -53,6 +49,15 @@ public class VideoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("지난 동영상이 없습니다."));
         }
         return ResponseEntity.ok(videoList);
+    }
+
+    @GetMapping("/details/{videoId}")
+    public ResponseEntity videoDetail(@PathVariable long videoId){
+        VideoDTO video = videoService.getVideo(videoId);
+        if(video==null){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("상세 조회 실패"));
+        }
+        return ResponseEntity.ok(video);
     }
 
     @DeleteMapping

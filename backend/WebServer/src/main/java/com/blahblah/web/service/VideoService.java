@@ -4,8 +4,6 @@ import com.blahblah.web.dto.response.VideoDTO;
 import com.blahblah.web.entity.VideoEntity;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 public interface VideoService {
 
     VideoEntity createVideo(VideoDTO videoDTO);
@@ -13,5 +11,8 @@ public interface VideoService {
 
     Page<VideoDTO> readMyVideos(long userPK);
 
+    VideoDTO getVideo(long videoId);
+
     void deleteVideo(long id);
+
 }
