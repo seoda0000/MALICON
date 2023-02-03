@@ -25,6 +25,7 @@ import {
   addAboutMeAction,
 } from "../redux/modules/profile/thunk";
 import { updateUserAction } from "../redux/modules/user";
+import ButtonComp from "../components/common/ButtonComp";
 
 const ProfilePageLayout = styled.div`
   max-width: 70vw;
@@ -78,9 +79,6 @@ const InfoContainer = styled.div`
             margin-top: 5px;
             color: #808080;
           }
-        }
-        & > button {
-          height: 30px;
         }
       }
       & > .aboutme-wrapper {
@@ -276,6 +274,13 @@ export default function ProfilePage(): JSX.Element {
               {isMine ? (
                 <></>
               ) : isSubscribing ? (
+                <ButtonComp onClick={onClickSubscribe}>FOLLOW</ButtonComp>
+              ) : (
+                <ButtonComp onClick={onClickSubscribe}>FOLLOW</ButtonComp>
+              )}
+              {/* {isMine ? (
+                <></>
+              ) : isSubscribing ? (
                 <Button
                   variant="outlined"
                   size="small"
@@ -293,7 +298,7 @@ export default function ProfilePage(): JSX.Element {
                 >
                   follow
                 </Button>
-              )}
+              )} */}
             </div>
             <div className="aboutme-wrapper">
               {!isEditAboutMe && <p>{user.aboutMe}</p>}
