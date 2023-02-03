@@ -49,10 +49,14 @@ services:
       - "80:80"
       - "443:443"
       - "9901:9901"
+    environment:
+      ENVOY_UID: 0
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
-      - /home/ubuntu/blahblah.movebxeax.me/fullchain1.pem:/home/ubuntu/blahblah.movebxeax.me/fullchain1.pem
-      - /home/ubuntu/blahblah.movebxeax.me/privkey1.pem:/home/ubuntu/blahblah.movebxeax.me/privkey1.pem
+      - /etc/letsencrypt/live/blahblah.movebxeax.me/privkey.pem:/etc/letsencrypt/live/blahblah.movebxeax.me/privkey.pem
+      - /etc/letsencrypt/live/blahblah.movebxeax.me/fullchain.pem:/etc/letsencrypt/live/blahblah.movebxeax.me/fullchain.pem
+      - /etc/letsencrypt/live/ov.blahblah.movebxeax.me/privkey.pem:/etc/letsencrypt/live/ov.blahblah.movebxeax.me/privkey.pem
+      - /etc/letsencrypt/live/ov.blahblah.movebxeax.me/fullchain.pem:/etc/letsencrypt/live/ov.blahblah.movebxeax.me/fullchain.pem
 
   redis:
     image: redis
@@ -62,15 +66,33 @@ services:
       - default
       - blahblah_net
 
-  openvidu_server:
-    image: openvidu/openvidu-server-kms
+  openvidu-server:
+    container_name: blahblah-openvidu-server
+    build:
+      context: ./openvidu-server
+      dockerfile: dockerfile
+    restart: on-failure
+    network_mode: host
+    entrypoint: ['/usr/local/bin/entrypoint.sh']
     ports:
       - "4443:4443"
+    volumes:
+      - ./coturn:/run/secrets/coturn
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${OPENVIDU_RECORDING_PATH}:${OPENVIDU_RECORDING_PATH}
+      - ${OPENVIDU_RECORDING_CUSTOM_LAYOUT}:${OPENVIDU_RECORDING_CUSTOM_LAYOUT}
+      - ${OPENVIDU_CDR_PATH}:${OPENVIDU_CDR_PATH}
+    env_file:
+      - .env
     environment:
-      - OPENVIDU_SECRET=MY_SECRET
-    networks:
-      - default
-      - blahblah_net
+      - SERVER_SSL_ENABLED=true
+      - SERVER_PORT=4443
+      - KMS_URIS=["ws://blahblah.movebxeax.me:8888/kurento"]
+      - COTURN_IP=${COTURN_IP:-auto-ipv4}
+      - COTURN_PORT=${COTURN_PORT:-3478}
+    logging:
+      options:
+        max-size: "${DOCKER_LOGS_MAX_SIZE:-100M}"
 
 networks:
   blahblah_net:
