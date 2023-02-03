@@ -25,8 +25,6 @@ public class ArticleServiceImpl implements ArticleService{
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
 
-    private final CommentRepository commentRepository;
-
     @Override
     public ArticleEntity createArticle(ArticleDTO articleDTO) {
         ArticleEntity article = ArticleEntity.builder()
@@ -61,7 +59,6 @@ public class ArticleServiceImpl implements ArticleService{
     public Page<SubscribeArticleDTO> readArticle(long id) {
 
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
-//        List<ArticleEntity> lst = articleRepository.findAllBy(id, pageRequest);
         Page<ArticleEntity> result = articleRepository.findAllBy(id, pageRequest);
 
         Page<SubscribeArticleDTO> DTOList = new SubscribeArticleDTO().toDtoList(result);

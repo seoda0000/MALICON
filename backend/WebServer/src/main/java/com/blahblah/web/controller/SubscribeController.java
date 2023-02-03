@@ -2,17 +2,13 @@ package com.blahblah.web.controller;
 
 import com.blahblah.web.dto.response.Message;
 import com.blahblah.web.dto.response.SubscribeDTO;
-import com.blahblah.web.dto.response.UserDTO;
-import com.blahblah.web.entity.UserEntity;
 import com.blahblah.web.entity.UserSubscribeEntity;
 import com.blahblah.web.service.SubscribeService;
 import com.blahblah.web.util.JWTutil;
-import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +29,6 @@ public class SubscribeController{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("본인은 구독할 수 없음"));
         }
         UserSubscribeEntity sub = subscribeService.addSubscribe(userId, subscribeId);
-//        log.info("sub"+sub.getSubscribeUserEntity().getUserId()+" user"+sub.getUserEntity().getUserId());
         if(sub == null){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("구독 실패"));
         }else {

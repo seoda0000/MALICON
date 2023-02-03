@@ -56,7 +56,6 @@ public class AboutMeController {
 
     @GetMapping("/{userPK}")
     public ResponseEntity readProfile(@PathVariable long userPK, HttpServletRequest request){
-//        long userPK = JWTutil.getLongIdByAccessToken(request);
         ProfileDTO profile = aboutMeService.getAboutMe(userPK);
         if(profile==null){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("사용자 정보를 가져올 수 없습니다."));
