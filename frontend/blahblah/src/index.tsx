@@ -7,6 +7,9 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/configStore";
 
+// import VideoRoomComponent from "./components/openvidu/VideoRoomComponent";
+// import registerServiceWorker from "./registerServiceWorker";
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -15,6 +18,7 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <App />
+        {/* <VideoRoomComponent /> */}
       </BrowserRouter>
     </Provider>
   </React.StrictMode>
@@ -24,4 +28,4 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-
+// registerServiceWorker();

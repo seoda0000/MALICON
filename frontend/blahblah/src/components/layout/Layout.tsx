@@ -401,6 +401,8 @@ export default function Layout(props: LayoutProps) {
             {/* 방송하기 버튼 */}
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
+                component={Link}
+                to="/video"
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
@@ -502,4 +504,3 @@ export default function Layout(props: LayoutProps) {
     </Box>
   );
 }
-

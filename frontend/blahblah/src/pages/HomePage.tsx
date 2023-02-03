@@ -7,7 +7,7 @@ import TutorialPage from "./TutorialPage";
 import AvatarPage from "./AvatarPage";
 import ProfilePage from "./ProfilePage";
 import FeedBackupPage from "./FeedBackupPage";
-
+import VideoPage from "./VideoPage";
 function HomePage() {
   return (
     <div>
@@ -20,6 +20,7 @@ function HomePage() {
           <Route path="/avatar" element={<AvatarPage />} />
           {/* <Route path="/faceapi" element={<FaceapiSamplePage />} /> */}
           <Route path="/profile/:userpk" element={<ProfilePage />} />
+          <Route path="/video" element={<VideoPage />} />
         </Routes>
       </Layout>
     </div>

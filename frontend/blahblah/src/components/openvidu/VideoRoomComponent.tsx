@@ -302,6 +302,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   leaveSession() {
+    console.log("Leave!!!!!!!!!!!!!!!!!!!!!!");
     const mySession = this.state.session;
 
     if (mySession) {
