@@ -32,6 +32,6 @@ public class JwtExceptionHandler implements ErrorWebExceptionHandler {
             return onError(res, e.getMsg(), e.getStatus());
         }
         ex.printStackTrace();
-        return onError(res, ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return onError(res, ex.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
