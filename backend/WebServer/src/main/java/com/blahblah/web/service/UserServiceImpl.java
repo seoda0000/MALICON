@@ -9,11 +9,14 @@ import com.blahblah.web.repository.UserRepository;
 import com.blahblah.web.util.JWTutil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.util.Optional;
 
 @Transactional
@@ -24,6 +27,8 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender javaMailSender;
+
 
     @Override
     @Transactional(readOnly = true)
@@ -38,6 +43,20 @@ public class UserServiceImpl implements UserService{
         log.info(nickName);
         return userRepository.existsByNickName(nickName);
     }
+
+    @Override
+    @Transactional
+    public void sendAuthStringToEmail(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        SecureRandom secureRandom = new SecureRandom();
+        int temporaryPassword = secureRandom.nextInt();
+        userRepository.updatePasswordByEmail(userEntity.getId(), passwordEncoder.encode(String.valueOf(temporaryPassword)));
+
+
+    }
+
+
     @Override
     public UserDTO createUser(UserDTO userDTO) {
         UserEntity s = UserEntity.builder()
