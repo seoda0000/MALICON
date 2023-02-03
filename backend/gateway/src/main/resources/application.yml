@@ -16,10 +16,8 @@ spring:
         cors-configurations:
           '[/**]':
             allowedOrigins:
-              - 'http://localhost:3000'
-              - 'http://blahblah.movebxeax.me'
-              - 'https://blahblah.movebxeax.me'
-            allow-credentials: true
+              - '*'
+            allow-credentials: false
             allowedHeaders: '*'
             allowedMethods: '*'
       routes:
