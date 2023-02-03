@@ -2,6 +2,7 @@ package com.blahblah.web.controller;
 
 import com.blahblah.web.dto.response.Message;
 import com.blahblah.web.entity.LikeArticleEntity;
+import com.blahblah.web.entity.LikeVideoEntity;
 import com.blahblah.web.service.LikeService;
 import com.blahblah.web.util.JWTutil;
 import io.swagger.models.Response;
@@ -22,23 +23,40 @@ public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/{articleId}")
-    public ResponseEntity createLike(@PathVariable long articleId, HttpServletRequest request){
+    @PostMapping("/article/{articleId}")
+    public ResponseEntity createLikeArticle(@PathVariable long articleId, HttpServletRequest request){
         long userPK = JWTutil.getLongIdByAccessToken(request);
-        LikeArticleEntity result = likeService.addLike(userPK, articleId);
+        LikeArticleEntity result = likeService.addLikeArticle(userPK, articleId);
         if(result == null){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("좋아요 실패"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("피드 좋아요 실패"));
         }else {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Message("좋아요 성공"));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Message("피드 좋아요 성공"));
         }
     }
 
-    @DeleteMapping("/{articleId}")
-    public ResponseEntity deleteLike(@PathVariable long articleId, HttpServletRequest request){
+    @DeleteMapping("/article/{articleId}")
+    public ResponseEntity deleteLikeArticle(@PathVariable long articleId, HttpServletRequest request){
         long userPK = JWTutil.getLongIdByAccessToken(request);
-        likeService.deleteLike(userPK, articleId);
-        return ResponseEntity.status(HttpStatus.OK).body(new Message("좋아요 취소 성공"));
+        likeService.deleteLikeArticle(userPK, articleId);
+        return ResponseEntity.status(HttpStatus.OK).body(new Message("피드 좋아요 취소 성공"));
     }
 
+    @PostMapping("/video/{videoId}")
+    public ResponseEntity createLikeVideo(@PathVariable long videoId, HttpServletRequest request){
+        long userPK = JWTutil.getLongIdByAccessToken(request);
+        LikeVideoEntity result = likeService.addLikeVideo(userPK, videoId);
+        if(result == null){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("비디오 좋아요 실패"));
+        }else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Message("비디오 좋아요 성공"));
+        }
+    }
+
+    @DeleteMapping("/video/{videoId}")
+    public ResponseEntity deleteLikeVideo(@PathVariable long videoId, HttpServletRequest request){
+        long userPK = JWTutil.getLongIdByAccessToken(request);
+        likeService.deleteLikeVideo(userPK, videoId);
+        return ResponseEntity.status(HttpStatus.OK).body(new Message("비디오 좋아요 취소 성공"));
+    }
 
 }

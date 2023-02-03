@@ -8,28 +8,26 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name ="like_articles")
+@Table(name ="like_videos")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(LikeArticleEntityPK.class)
-public class LikeArticleEntity {
-
+@IdClass(LikeVideoEntityPK.class)
+public class LikeVideoEntity {
     @Id
     @ManyToOne(
             targetEntity = UserEntity.class,
             fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name="user_id")
     private UserEntity userEntity;
 
     @Id
     @ManyToOne(
-            targetEntity = ArticleEntity.class,
+            targetEntity = VideoEntity.class,
             fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "article_id")
-    private ArticleEntity articleEntity;
-
+    @JoinColumn(name="video_id")
+    private VideoEntity videoEntity;
 }
