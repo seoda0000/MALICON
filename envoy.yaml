@@ -108,7 +108,7 @@ static_resources:
             address:
               socket_address:
                 address: blahblah.movebxeax.me
-                port_value: 8081
+                port_value: 8080
   - name: blahblah_openvidu
     connect_timeout: 0.25s
     type: LOGICAL_DNS
