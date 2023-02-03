@@ -1,0 +1,27 @@
+package io.openvidu.basic.java.config;
+
+import io.openvidu.java.client.OpenVidu;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+@Configuration
+@EnableWebMvc
+public class WebMvcConfig implements WebMvcConfigurer {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("*")
+                .allowCredentials(false)
+                .maxAge(3000);
+    }
+
+    @Bean
+    public OpenVidu vidu(@Value("${OPENVIDU_URL}") String OPENVIDU_URL,
+                         @Value("${OPENVIDU_SECRET}") String OPENVIDU_SECRET){
+        return new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+    }
+}
