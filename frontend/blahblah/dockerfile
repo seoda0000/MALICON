@@ -11,4 +11,5 @@ RUN npm install
 copy . .
 
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["npm", "run", "build"]
+CMD ["npx", "serve", "-s", "build"]
