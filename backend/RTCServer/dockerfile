@@ -1,0 +1,4 @@
+FROM openjdk:11-jdk
+COPY target/openvidu-basic-java-2.25.0.jar app.jar
+EXPOSE 33332
+ENTRYPOINT ["java", "-jar", "/app.jar"]
