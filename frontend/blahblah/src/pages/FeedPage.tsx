@@ -1,12 +1,32 @@
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import MailIcon from "@mui/icons-material/Mail";
+import MenuIcon from "@mui/icons-material/Menu";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { Paper } from "@mui/material";
+import VideoCard from "../components/video/VideoCard";
+import Grid from "@mui/material/Grid";
 import FeedList from "../components/feed/FeedList";
-import { Box } from "@mui/material";
+
 import { useSelector, useDispatch } from "react-redux";
 import { FeedStateType } from "../model/feed/feedStateType";
 import { fetchFeedData } from "../redux/modules/feed/feed-action";
 import { useEffect, useState } from "react";
-import Grid from "@mui/material/Grid";
+
 import { AppDispatch } from "../redux/configStore";
-import Paper from "@mui/material/Paper";
+
 import EditorModal from "../components/feed/EditorModal";
 
 import Button from "@mui/material/Button";
@@ -15,9 +35,10 @@ import CreateIcon from "@mui/icons-material/Create";
 
 import { RootState } from "../redux/configStore";
 
+const drawerWidth = 300;
 let isInitial = true;
 
-function FeedPage() {
+export default function FeedPage() {
   const dispatch = useDispatch<AppDispatch>();
   const feed = useSelector((state: RootState) => state.feed);
 
@@ -36,8 +57,15 @@ function FeedPage() {
   };
 
   return (
-    <Grid container columnSpacing={2}>
-      <Grid item xs={12} sm={9} md={9}>
+    <Box sx={{ display: "flex" }}>
+      {/* 메인 페이지 영역 */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+        }}
+      >
         <Button
           onClick={onClickEditor}
           variant="outlined"
@@ -49,33 +77,50 @@ function FeedPage() {
         <br />
         <br />
         <FeedList feeds={feed.feeds} />
-      </Grid>
-      <Grid item xs={0} sm={3} md={3}>
-        <Paper sx={{ position: "fixed", top: "4%", right: "8%", width: "500" }}>
-          <h1>구독 비디오</h1>
-          <div>
-            <p>야호야호</p>
-            <p>야호야호</p>
-            <p>야호야호</p>
-            <p>야호야호</p>
-            <p>야호야호</p>
-            <p>야호야호</p>
-            <p>야호야호</p>
-            <p>야호야호</p>
-            <p>야호야호</p>
-            <p>야호야호</p>
-          </div>
+
+        {openEditorModal && (
+          <EditorModal
+            open={openEditorModal}
+            setOpen={setOpenEditorModal}
+            feed={{ title: "", content: "", feedId: null }}
+            isEdit={false}
+          />
+        )}
+      </Box>
+
+      {/* 우측 컴포넌트 */}
+
+      <Box sx={{ width: { md: drawerWidth }, flexShrink: { sm: 0 } }}>
+        <Paper
+          // variant="permanent"
+          sx={{
+            display: { xs: "none", md: "flex" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
+            ml: 5,
+            p: 2,
+          }}
+        >
+          {/* 컨텐츠 내용 */}
+          <Grid container rowSpacing={3}>
+            <h3>Latest Video</h3>
+            <Grid item width={"100%"}>
+              <VideoCard />
+            </Grid>
+            <Grid item width={"100%"}>
+              <VideoCard />
+            </Grid>
+            <Grid item width={"100%"}>
+              <VideoCard />
+            </Grid>
+            <Grid item width={"100%"}>
+              <VideoCard />
+            </Grid>
+          </Grid>
         </Paper>
-      </Grid>
-      {openEditorModal && (
-        <EditorModal
-          open={openEditorModal}
-          setOpen={setOpenEditorModal}
-          feed={{ title: "", content: "", feedId: null }}
-          isEdit={false}
-        />
-      )}
-    </Grid>
+      </Box>
+    </Box>
   );
 }
-export default FeedPage;

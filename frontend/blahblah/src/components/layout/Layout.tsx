@@ -43,6 +43,8 @@ import { BoldKoreanFont } from "../../theme/font";
 import { ThemeProvider } from "@mui/material/styles";
 import SubscriberItem from "../auth/SubscriberItem";
 import { getSubscribersAction } from "../../redux/modules/subscribe";
+import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
+import FaceIcon from "@mui/icons-material/Face";
 
 interface LayoutProps {
   children: ReactNode;
@@ -439,7 +441,7 @@ export default function Layout(props: LayoutProps) {
                     justifyContent: "center",
                   }}
                 >
-                  <FeedIcon />
+                  <FaceIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="내 아바타"
@@ -466,7 +468,7 @@ export default function Layout(props: LayoutProps) {
                     justifyContent: "center",
                   }}
                 >
-                  <FeedIcon />
+                  <AccessibilityNewIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="튜토리얼"
@@ -477,6 +479,7 @@ export default function Layout(props: LayoutProps) {
           </List>
 
           <Divider />
+
           <List sx={{ p: 2 }}>
             {subscribers.map((item) => (
               <SubscriberItem key={item.userPK} item={item} />
@@ -486,7 +489,8 @@ export default function Layout(props: LayoutProps) {
       </ThemeProvider>
 
       {/* 메인 화면: 페이지 랜딩되는 곳 */}
-      <Box component="main" sx={{ flexGrow: 1, mx: "8%" }}>
+
+      <Box component="main" sx={{ flexGrow: 1, mx: "8%", my: 5 }}>
         <main className="main">{props.children}</main>
         {/* <AvatarShortcutButton /> */}
       </Box>
