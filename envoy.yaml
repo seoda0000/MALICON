@@ -13,12 +13,21 @@ static_resources:
         typed_config:
           "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
           stat_prefix: ingress_http
+          upgrade_configs:
+          - upgrade_type: websocket
           codec_type: AUTO
           route_config:
             name: local_route
             virtual_hosts:
+            - name: ws_service
+              domains: ["ov.blahblah.movebxeax.me"]
+              routes:
+              - match:
+                  prefix: "/"
+                route:
+                  cluster: blahblah_openvidu
             - name: local_service
-              domains: ["*"]
+              domains: ["blahblah.movebxeax.me"]
               routes:
               - match: { prefix: "/web-service/" }
                 route: { cluster: blahblah_backend }
@@ -29,15 +38,21 @@ static_resources:
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
       transport_socket:
-        name: envoy.transport_socket.tls
+        name: envoy.transport_sockets.tls
         typed_config:
           "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
           common_tls_context:
             tls_certificates:
               - certificate_chain:
-                  filename: /home/ubuntu/blahblah.movebxeax.me/fullchain1.pem
+                  filename: /etc/letsencrypt/live/blahblah.movebxeax.me/fullchain.pem
+                  filename: /etc/letsencrypt/live/ov.blahblah.movebxeax.me/fullchain.pem
                 private_key:
-                  filename: /home/ubuntu/blahblah.movebxeax.me/privkey1.pem
+                  filename: /etc/letsencrypt/live/blahblah.movebxeax.me/privkey.pem
+                  filename: /etc/letsencrypt/live/ov.blahblah.movebxeax.me/privkey.pem
+            validation_context:
+              trusted_ca:
+                filename: /etc/ssl/certs/ca-certificates.crt
+            alpn_protocols: ["h2,http/1.1"]
 
   - name: listener_1
     address:
@@ -52,8 +67,13 @@ static_resources:
           route_config:
             name: local_route
             virtual_hosts:
+            - name: ws_service
+              domains: ["ov.blahblah.movebxeax.me"]
+              routes:
+              - match: { prefix: "/" }
+                route: { cluster: blahblah_openvidu }
             - name: local_service
-              domains: ["*"]
+              domains: ["blahblah.movebxeax.me"]
               routes:
               - match: { prefix: "/" }
                 redirect: { https_redirect: true }
@@ -88,4 +108,32 @@ static_resources:
             address:
               socket_address:
                 address: blahblah.movebxeax.me
-                port_value: 8888
+                port_value: 8081
+  - name: blahblah_openvidu
+    connect_timeout: 0.25s
+    type: LOGICAL_DNS
+    lb_policy: ROUND_ROBIN
+    http2_protocol_options: { allow_connect: true }
+    load_assignment:
+      cluster_name: openvidu
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: ov.blahblah.movebxeax.me
+                port_value: 4443
+    transport_socket:
+      name: envoy.transport_sockets.tls
+      typed_config:
+        "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+        common_tls_context:
+          tls_certificates:
+          - certificate_chain:
+              filename: /etc/letsencrypt/live/ov.blahblah.movebxeax.me/fullchain.pem
+            private_key:
+              filename: /etc/letsencrypt/live/ov.blahblah.movebxeax.me/privkey.pem
+          validation_context:
+            trusted_ca:
+              filename: /etc/ssl/certs/ca-certificates.crt
+          alpn_protocols: ["h2,http/1.1"]
