@@ -3,9 +3,16 @@ import { RootState } from "../../redux/configStore";
 import { useSelector } from "react-redux";
 import { createAvatar } from "@dicebear/core";
 import { personas, pixelArt } from "@dicebear/collection";
-import { auto } from "@popperjs/core";
 
-export default function ProfileAvatar({ ...rest }): JSX.Element {
+type ProfileImagePropsType = {
+  big?: boolean;
+  border?: boolean;
+};
+
+export default function ProfileImage({
+  big,
+  border,
+}: ProfileImagePropsType): JSX.Element {
   const avatar = useSelector((state: RootState) => state.user.userData.avatar!);
 
   const dataUri = createAvatar(personas, {
@@ -18,12 +25,12 @@ export default function ProfileAvatar({ ...rest }): JSX.Element {
       alt="Sample"
       src={dataUri}
       sx={{
-        width: 120,
-        height: 120,
-        border: 3,
+        width: big ? 120 : 24,
+        height: big ? 120 : 24,
+        border: border ? 2 : "none",
         borderColor: "black",
       }}
-      // sx={{ ...rest }}
     />
   );
 }
+

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ProfileImage from "../components/auth/ProfileImage";
+import ProfileImage from "../components/common/ProfileImage";
 import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/configStore.hooks";
 import Carousel from "../components/ui/Carousel";
@@ -225,7 +225,7 @@ export default function ProfilePage(): JSX.Element {
       <InfoContainer>
         <div className="info-box">
           <div className="profile-image">
-            <ProfileImage width={120} height={120} />
+            <ProfileImage big={true} border={true} />
             {isMine && (
               <Link to="/avatar">
                 <IconButton area-label="edit">

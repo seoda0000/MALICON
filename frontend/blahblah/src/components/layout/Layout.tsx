@@ -30,13 +30,12 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
-import ProfileAvatar from "../auth/ProfileAvatar";
 import AvatarShortcutButton from "./AvatarShortcutButton";
 import { getAccessToken, removeToken } from "../../redux/modules/user/token";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
 import { getMeWithTokenAction } from "../../redux/modules/user";
 import SigninModal from "../auth/SigninModal";
-import ProfileImage from "../auth/ProfileImage";
+import ProfileImage from "../common/ProfileImage";
 import { auto } from "@popperjs/core";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { BoldKoreanFont } from "../../theme/font";
@@ -274,7 +273,7 @@ export default function Layout(props: LayoutProps) {
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ mr: 1 }}>
                     {loggedUser.isLoggedIn ? (
-                      <ProfileAvatar />
+                      <ProfileImage big={true} border={true} />
                     ) : (
                       <AccountCircleRoundedIcon
                         sx={{

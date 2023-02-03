@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import * as faceapi from "face-api.js";
+import AvatarComp from "../common/AvatarComp";
 
 // video size
 const constraints = {
@@ -14,12 +15,11 @@ export default function FaceExpressionRecognition() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const [currentState, setCurrentState] = useState<String>("");
-  const [currentScore, setCurrentScore] = useState<number>(0)
+  const [currentState, setCurrentState] = useState<string>("");
+  const [currentScore, setCurrentScore] = useState<number>(0);
 
   const onPlay = async () => {
-    if (videoRef.current === null)
-      return;
+    if (videoRef.current === null) return;
 
     const displaySize = {
       width: videoRef.current.width,
@@ -28,8 +28,7 @@ export default function FaceExpressionRecognition() {
 
     // FaceRecognitionStart
     const faceDetecting = async () => {
-      if (videoRef.current === null)
-        return;
+      if (videoRef.current === null) return;
 
       const detections = await faceapi
         .detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
@@ -39,9 +38,12 @@ export default function FaceExpressionRecognition() {
       const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
       resizedDetections.forEach((detection, i) => {
-        console.log(detection.expressions.asSortedArray()[0].expression, detection.expressions.asSortedArray()[0].probability);
-        setCurrentState(detection.expressions.asSortedArray()[0].expression)
-        setCurrentScore(detection.expressions.asSortedArray()[0].probability)
+        // console.log(
+        //   detection.expressions.asSortedArray()[0].expression,
+        //   detection.expressions.asSortedArray()[0].probability
+        // );
+        setCurrentState(detection.expressions.asSortedArray()[0].expression);
+        setCurrentScore(detection.expressions.asSortedArray()[0].probability);
       });
     };
 
@@ -94,8 +96,10 @@ export default function FaceExpressionRecognition() {
       </div>
       <button onClick={startDetecting}>Start</button>
       <div>
-        Your Current State is {currentState}   {currentScore * 100} %
+        Your Current State is {currentState} {currentScore * 100} %
       </div>
+
+      <AvatarComp currentState={currentState} />
     </div>
-  )
+  );
 }

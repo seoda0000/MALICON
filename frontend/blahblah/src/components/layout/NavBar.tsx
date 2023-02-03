@@ -15,7 +15,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
-import ProfileImage from "../auth/ProfileImage";
+import ProfileImage from "../common/ProfileImage";
 
 const pages = ["피드", "방송시작"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -199,3 +199,4 @@ function NavBar() {
   );
 }
 export default NavBar;
+

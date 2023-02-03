@@ -17,7 +17,7 @@ import SigninModal from "../auth/SigninModal";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
 import { Badge, Tooltip } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import ProfileImage from "../auth/ProfileImage";
+import ProfileImage from "../common/ProfileImage";
 import { getAccessToken, removeToken } from "../../redux/modules/user/token";
 import { getMeWithTokenAction } from "../../redux/modules/user";
 
@@ -250,3 +250,4 @@ export default function NavBarLanding() {
     </Box>
   );
 }
+

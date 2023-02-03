@@ -7,7 +7,7 @@ import { Avatar, CardHeader, IconButton, Menu, MenuItem } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ProfileImage from "../auth/ProfileImage";
+import ProfileImage from "../common/ProfileImage";
 
 const CarouselContainer = styled.div`
   .slick-slider {
