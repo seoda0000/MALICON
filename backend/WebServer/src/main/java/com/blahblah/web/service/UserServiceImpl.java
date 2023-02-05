@@ -2,6 +2,7 @@ package com.blahblah.web.service;
 
 
 import com.blahblah.web.controller.exception.CustomException;
+import com.blahblah.web.dto.MailDto;
 import com.blahblah.web.dto.TokenDTO;
 import com.blahblah.web.dto.response.UserDTO;
 import com.blahblah.web.entity.UserEntity;
@@ -9,8 +10,10 @@ import com.blahblah.web.repository.UserRepository;
 import com.blahblah.web.util.JWTutil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.message.SimpleMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.util.Optional;
+import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 @Transactional
 @Service
@@ -29,6 +34,7 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
 
+    private static final String FROM_ADDRESS = "tmdgml1754@naver.com";
 
     @Override
     @Transactional(readOnly = true)
@@ -45,6 +51,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public void mailSend(MailDto mailDto) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(mailDto.getAddress());
+        message.setSubject(mailDto.getTitle());
+        message.setFrom(FROM_ADDRESS);
+        message.setText(mailDto.getMessage());
+        javaMailSender.send(message);
+    }
+
+    @Override
     @Transactional
     public void sendAuthStringToEmail(String email) {
         UserEntity userEntity = userRepository.findByEmail(email);
@@ -53,7 +69,26 @@ public class UserServiceImpl implements UserService{
         int temporaryPassword = secureRandom.nextInt();
         userRepository.updatePasswordByEmail(userEntity.getId(), passwordEncoder.encode(String.valueOf(temporaryPassword)));
 
+        MailDto mailDto = MailDto.builder()
+                .title("임시비밀번호 안내")
+                .address(email)
+                .message("임시 비밀번호: "+temporaryPassword)
+                .build();
 
+        CompletableFuture.runAsync(()-> mailSend(mailDto));
+    }
+
+    @Override
+    public String checkEmail(String email) {
+        Random r = new Random();
+        int checkNum = r.nextInt(888888)+111111;
+        MailDto mailDto = MailDto.builder()
+                .title("회원 가입 인증 이메일 입니다")
+                .message("인증번호는 "+checkNum+"입니다")
+                .address(email)
+                .build();
+        CompletableFuture.runAsync(()-> mailSend(mailDto));
+        return Integer.toString(checkNum);
     }
 
 

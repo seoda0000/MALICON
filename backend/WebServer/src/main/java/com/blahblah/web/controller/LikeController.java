@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@RequestMapping("/like")
+@RequestMapping("/likes")
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -21,7 +21,7 @@ public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/article/{articleId}")
+    @PostMapping("/articles/{articleId}")
     public ResponseEntity createLikeArticle(@PathVariable long articleId, HttpServletRequest request){
         long userPK = JWTutil.getLongIdByAccessToken(request);
         LikeArticleEntity result = likeService.addLikeArticle(userPK, articleId);
@@ -32,14 +32,14 @@ public class LikeController {
         }
     }
 
-    @DeleteMapping("/article/{articleId}")
+    @DeleteMapping("/articles/{articleId}")
     public ResponseEntity deleteLikeArticle(@PathVariable long articleId, HttpServletRequest request){
         long userPK = JWTutil.getLongIdByAccessToken(request);
         likeService.deleteLikeArticle(userPK, articleId);
         return ResponseEntity.status(HttpStatus.OK).body(new Message("피드 좋아요 취소 성공"));
     }
 
-    @PostMapping("/video/{videoId}")
+    @PostMapping("/videos/{videoId}")
     public ResponseEntity createLikeVideo(@PathVariable long videoId, HttpServletRequest request){
         long userPK = JWTutil.getLongIdByAccessToken(request);
         LikeVideoEntity result = likeService.addLikeVideo(userPK, videoId);
@@ -50,7 +50,7 @@ public class LikeController {
         }
     }
 
-    @DeleteMapping("/video/{videoId}")
+    @DeleteMapping("/videos/{videoId}")
     public ResponseEntity deleteLikeVideo(@PathVariable long videoId, HttpServletRequest request){
         long userPK = JWTutil.getLongIdByAccessToken(request);
         likeService.deleteLikeVideo(userPK, videoId);
