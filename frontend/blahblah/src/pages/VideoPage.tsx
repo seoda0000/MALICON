@@ -4,9 +4,9 @@ function VideoPage() {
   return (
     <div>
       <h1>비디오 페이지</h1>
-      <VideoRoomComponent />
+      {/* <VideoRoomComponent /> */}
     </div>
   );
 }
-registerServiceWorker();
+// registerServiceWorker();
 export default VideoPage;
