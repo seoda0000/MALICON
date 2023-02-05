@@ -99,7 +99,7 @@ export default function FaceExpressionRecognition() {
         Your Current State is {currentState} {currentScore * 100} %
       </div>
 
-      <AvatarComp currentState={currentState} />
+      <AvatarComp currentState={currentState} currentScore={currentScore} />
     </div>
   );
 }

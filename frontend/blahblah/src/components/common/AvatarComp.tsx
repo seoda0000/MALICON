@@ -1,39 +1,37 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { useRef } from "react";
-import Avatar from "@mui/material/Avatar";
-import { RootState } from "../../redux/configStore";
-import { useSelector } from "react-redux";
 import { createAvatar } from "@dicebear/core";
 import { personas } from "@dicebear/collection";
 import { useAppSelector } from "../../redux/configStore.hooks";
-import { StyledEngineProvider } from "@mui/styled-engine-sc";
 import { throttle } from "lodash";
-import { FavoriteRounded } from "@mui/icons-material";
+import Surprised from "../../assets/emoji/surprised.png";
+import Sad from "../../assets/emoji/sad.png";
+import Angry from "../../assets/emoji/angry.png";
+import Happy from "../../assets/emoji/happy.png";
+import Fearful from "../../assets/emoji/fearful.png";
+import Disgusted from "../../assets/emoji/disgusted.png";
 
 const emotionKeyFrame = keyframes`
   0% {
     opacity: 1;
-    top: 6px;
-    left: 49px;
   }
   25% {
-    left: 39px;
+    transform: translateX(-10px);
   }
-  55% {
-    left: 54px;
+  60% {
+    transform: translateX(5px);
   }
   100% {
     opacity: 0;
-    top: -44px;
-    left: 51px;
+    top: -50px;
+    transform: translateX(2px);
   }
 `;
 
 const AvatarCompContainer = styled.div`
   position: relative;
-  margin-left: 100px; ///////
   width: 120px;
   height: 120px;
   & > img.avatar-comp-avatar {
@@ -45,62 +43,115 @@ const AvatarCompContainer = styled.div`
     height: 20px;
     & > span {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 6px;
-      left: 49px;
+      width: 20px;
+      height: 20px;
+      top: 0px;
+      left: 50px;
       right: 0;
       font-size: 30px;
       color: red;
       z-index: 10;
-      animation: ${emotionKeyFrame} 1.5s ease backwards;
+      opacity: 0;
+      & > img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      &.active {
+        animation: ${emotionKeyFrame} 1.5s ease backwards;
+      }
     }
   }
 `;
 
 type AvatarCompPropsType = {
   currentState: string;
+  currentScore: number;
 };
 
 export default function AvatarComp({
   currentState,
+  currentScore,
 }: AvatarCompPropsType): JSX.Element {
   const avatar = useAppSelector((state) => state.user.userData.avatar!);
   const parentEl = useRef<HTMLDivElement>(null);
+  const happyEl = useRef<HTMLDivElement>(null);
+  const sadEl = useRef<HTMLDivElement>(null);
+  const angryEl = useRef<HTMLDivElement>(null);
+  const fearfulEl = useRef<HTMLDivElement>(null);
+  const disgustedEl = useRef<HTMLDivElement>(null);
+  const surprisedEl = useRef<HTMLDivElement>(null);
 
   const dataUri = createAvatar(personas, {
     ...JSON.parse(avatar),
   }).toDataUriSync();
 
-  const createHeart = (state: string) => {
-    const el = document.createElement("span");
-    // el.innerHTML = "!" + state;
-    parentEl.current?.appendChild(el);
-    setTimeout(() => {
-      el.remove();
-    }, 1500);
+  const createEmotion = (state: string) => {
+    if (state === "happy") {
+      happyEl.current?.classList.toggle("active");
+      setTimeout(() => {
+        happyEl.current?.classList.toggle("active");
+      }, 1500);
+    } else if (state === "sad") {
+      sadEl.current?.classList.toggle("active");
+      setTimeout(() => {
+        sadEl.current?.classList.toggle("active");
+      }, 1500);
+    } else if (state === "fearful") {
+      fearfulEl.current?.classList.toggle("active");
+      setTimeout(() => {
+        fearfulEl.current?.classList.toggle("active");
+      }, 1500);
+    } else if (state === "disgusted") {
+      disgustedEl.current?.classList.toggle("active");
+      setTimeout(() => {
+        disgustedEl.current?.classList.toggle("active");
+      }, 1500);
+    } else if (state === "angry") {
+      angryEl.current?.classList.toggle("active");
+      setTimeout(() => {
+        angryEl.current?.classList.toggle("active");
+      }, 1500);
+    } else if (state === "surprised") {
+      surprisedEl.current?.classList.toggle("active");
+      setTimeout(() => {
+        surprisedEl.current?.classList.toggle("active");
+      }, 1500);
+    }
   };
 
   const throttled = useCallback(
-    throttle((state) => createHeart(state), 5000),
+    throttle((state) => createEmotion(state), 5000),
     []
   );
 
   useEffect(() => {
-    throttled(currentState);
-  }, [currentState]);
+    if (currentState && currentState !== "neutral") {
+      throttled(currentState);
+    }
+  }, [currentState, currentScore]);
 
   return (
     <AvatarCompContainer>
-      <img
-        className="avatar-comp-avatar"
-        alt="Sample"
-        src={dataUri}
-        // onClick={createHeart}
-      />
+      <img className="avatar-comp-avatar" alt="Sample" src={dataUri} />
       <div className="avatar-comp-emotion" ref={parentEl}>
-        <span>
-          <FavoriteRounded id="heart-icon" />
+        <span ref={happyEl}>
+          <img src={Happy} alt="" />
+        </span>
+        <span ref={sadEl}>
+          <img src={Sad} alt="" />
+        </span>
+        <span ref={angryEl}>
+          <img src={Angry} alt="" />
+        </span>
+        <span ref={fearfulEl}>
+          <img src={Fearful} alt="" />
+        </span>
+        <span ref={disgustedEl}>
+          <img src={Disgusted} alt="" />
+        </span>
+        <span ref={surprisedEl}>
+          <img src={Surprised} alt="" />
         </span>
       </div>
     </AvatarCompContainer>
