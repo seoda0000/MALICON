@@ -274,9 +274,9 @@ export default function ProfilePage(): JSX.Element {
               {isMine ? (
                 <></>
               ) : isSubscribing ? (
-                <ButtonComp onClick={onClickSubscribe}>FOLLOW</ButtonComp>
+                <ButtonComp onClick={onClickSubscribe} text="FOLLOW" />
               ) : (
-                <ButtonComp onClick={onClickSubscribe}>FOLLOW</ButtonComp>
+                <ButtonComp onClick={onClickSubscribe} text="FOLLOW" />
               )}
               {/* {isMine ? (
                 <></>

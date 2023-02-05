@@ -74,7 +74,6 @@ export default function AvatarComp({
   currentScore,
 }: AvatarCompPropsType): JSX.Element {
   const avatar = useAppSelector((state) => state.user.userData.avatar!);
-  const parentEl = useRef<HTMLDivElement>(null);
   const happyEl = useRef<HTMLDivElement>(null);
   const sadEl = useRef<HTMLDivElement>(null);
   const angryEl = useRef<HTMLDivElement>(null);
@@ -134,7 +133,7 @@ export default function AvatarComp({
   return (
     <AvatarCompContainer>
       <img className="avatar-comp-avatar" alt="Sample" src={dataUri} />
-      <div className="avatar-comp-emotion" ref={parentEl}>
+      <div className="avatar-comp-emotion">
         <span ref={happyEl}>
           <img src={Happy} alt="" />
         </span>

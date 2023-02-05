@@ -1,10 +1,13 @@
 import styled from "@emotion/styled";
 import React from "react";
 
-const ButtonWrapper = styled.div`
+const ButtonWrapper = styled.div<{
+  width: number | undefined;
+  height: number | undefined;
+}>`
   position: relative;
-  width: 90px;
-  height: 35px;
+  width: ${({ width }) => (width ? `${width}px` : "90px")};
+  height: ${({ height }) => (height ? `${height}px` : "35px")};
   & > button {
     position: absolute;
     left: -3px;
@@ -44,18 +47,22 @@ const ButtonWrapper = styled.div`
 `;
 
 type ButtonCompPropsType = {
-  children: React.ReactNode;
+  text: string;
   onClick: () => void;
+  width?: number;
+  height?: number;
 };
 
 export default function ButtonComp({
-  children,
+  text,
   onClick,
+  width,
+  height,
 }: ButtonCompPropsType): JSX.Element {
   return (
-    <ButtonWrapper>
+    <ButtonWrapper width={width} height={height}>
       <button onClick={onClick}>
-        <span>{children}</span>
+        <span>{text}</span>
       </button>
       <div></div>
     </ButtonWrapper>
