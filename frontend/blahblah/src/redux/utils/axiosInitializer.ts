@@ -6,3 +6,10 @@ export function axiosInitializer() {
   });
   return instance;
 }
+
+export function openviduInitializer() {
+  let instance = axios.create({
+    baseURL: "https://blahblah.movebxeax.me/stream-service",
+  });
+  return instance;
+}
