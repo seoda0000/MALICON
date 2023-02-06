@@ -3,13 +3,11 @@ import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -21,8 +19,6 @@ import { ReactNode } from "react";
 import Menu from "@mui/material/Menu";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import Container from "@mui/material/Container";
-// import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
@@ -31,6 +27,7 @@ import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
 import AvatarShortcutButton from "./AvatarShortcutButton";
+// import ProfileAvatar from "../auth/ProfileAvatar";
 import { getAccessToken, removeToken } from "../../redux/modules/user/token";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
 import { getMeWithTokenAction } from "../../redux/modules/user";
@@ -44,7 +41,7 @@ import SubscriberItem from "../auth/SubscriberItem";
 import { getSubscribersAction } from "../../redux/modules/subscribe";
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import FaceIcon from "@mui/icons-material/Face";
-import SignupModal from "../auth/SignupModal";
+import BroadcastModal from "../broadcast/BroadcastModal";
 
 interface LayoutProps {
   children: ReactNode;
@@ -161,6 +158,8 @@ export default function Layout(props: LayoutProps) {
 
 
 
+  // 로그아웃
+
   const logout = () => {
     removeToken();
     console.log("로그아웃");
@@ -178,6 +177,12 @@ export default function Layout(props: LayoutProps) {
       }
     }
   }, []);
+
+  // 모달 조작
+  const [openBroadcastModal, setOpenBroadcastModal] = useState<boolean>(false);
+  const onClickBroadcast = () => {
+    setOpenBroadcastModal((prev) => !prev);
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -408,6 +413,32 @@ export default function Layout(props: LayoutProps) {
             {/* 방송하기 버튼 */}
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
+                onClick={onClickBroadcast}
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <PodcastsIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="방송하기"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+
+            {/* openvidu test 버튼 */}
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
                 component={Link}
                 to="/video"
                 sx={{
@@ -426,7 +457,7 @@ export default function Layout(props: LayoutProps) {
                   <PodcastsIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary="방송하기"
+                  primary="openvidu"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>
@@ -508,8 +539,13 @@ export default function Layout(props: LayoutProps) {
       {openSigninModal && (
         <SigninModal open={openSigninModal} setOpen={setOpenSigninModal} />
       )}
-      {openSignupModal && (
-        <SignupModal open={openSignupModal} setOpen={setOpenSignupModal} />
+
+      {/* 방송 모달 */}
+      {openBroadcastModal && (
+        <BroadcastModal
+          open={openBroadcastModal}
+          setOpen={setOpenBroadcastModal}
+        />
       )}
     </Box>
   );

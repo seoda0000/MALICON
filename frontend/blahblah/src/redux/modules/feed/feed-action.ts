@@ -26,7 +26,7 @@ export const fetchFeedData = createAsyncThunk(
         },
       });
 
-      const feeds = response.data;
+      const feeds = response.data.content;
 
       console.log("피드목록: ", feeds);
 
