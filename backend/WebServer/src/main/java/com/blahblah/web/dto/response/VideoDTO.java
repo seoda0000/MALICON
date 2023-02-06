@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import java.util.List;
+
 @Builder
 @Getter
 @ToString
@@ -24,6 +26,7 @@ public class VideoDTO {
     private long views;
     private String pathUrl;
     private String createDate;
+    private String hashtags;
     private Page<CommentDTO> comments;
 
     public Page<VideoDTO> toDtoList(Page<VideoEntity> videoList){
@@ -40,6 +43,7 @@ public class VideoDTO {
                 .pathUrl(v.getPathUrl())
                 .createDate(v.getCreateDate().toString())
                 .userId(v.getUserEntity().getUserId())
+                .hashtags(v.getHashtags())
                 .comments(new CommentDTO().toVDtoList(new PageImpl<>(v.getComments().subList(start, Math.min(end, v.getComments().size())), pageRequest, v.getComments().size())))
                 .build());
         return videos;

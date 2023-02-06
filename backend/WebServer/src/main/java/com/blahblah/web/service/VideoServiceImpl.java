@@ -32,6 +32,7 @@ public class VideoServiceImpl implements VideoService{
                 .userEntity(userRepository.findById(videoDTO.getUserPK()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "사용자가 유효하지 않습니다.")))
                 .title(videoDTO.getTitle())
                 .views(0)
+                .hashtags(videoDTO.getHashtags())
                 .pathUrl(videoDTO.getPathUrl())
                 .build();
         return videoRepository.save(v);
@@ -84,6 +85,7 @@ public class VideoServiceImpl implements VideoService{
                 .pathUrl(v.getPathUrl())
                 .comments(new CommentDTO().toVDtoList(new PageImpl<>(v.getComments().subList(start, Math.min(end, v.getComments().size())), pageRequest, v.getComments().size())))
                 .title(v.getTitle())
+                .hashtags(v.getHashtags())
                 .createDate(v.getCreateDate().toString())
                 .views(v.getViews()+1)
                 .build();
