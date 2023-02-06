@@ -9,7 +9,6 @@ export type FeedType = {
 
   userPK: number;
   userId: string;
-  userName: string;
   userAvatar: string | null;
   userNickName: string;
 

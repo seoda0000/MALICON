@@ -9,6 +9,7 @@ import { FeedRemoveType } from "../../../model/feed/feedRemoveType";
 import { getAccessToken } from "../user/token";
 import { axiosInitializer } from "../../utils/axiosInitializer";
 import { CommentPostType } from "../../../model/feed/commentPostType copy";
+import feed from ".";
 // 피드 목록 가져오기
 export const fetchFeedData = createAsyncThunk(
   "feed/fetchFeedData",
@@ -17,9 +18,7 @@ export const fetchFeedData = createAsyncThunk(
       // const dispatch = useDispatch<AppDispatch>();
       const axios = axiosInitializer();
 
-      console.log("액세스 토큰", getAccessToken());
-
-      const response = await axios.get("/api/articles/subscribe", {
+      const response = await axios.get("/api/articles", {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Baerer " + getAccessToken(),
@@ -27,12 +26,27 @@ export const fetchFeedData = createAsyncThunk(
       });
 
       const feeds = response.data.content;
-
       console.log("피드목록: ", feeds);
+      const newFeeds = feeds.map((feed: any) => {
+        return {
+          id: feed.id,
+          title: feed.title,
+          content: feed.content,
+          createDate: feed.createDate,
+          lastModifiedDate: feed.lastModifiedDate,
+
+          userPK: feed.userPK,
+          userId: feed.userId,
+          userNickname: feed.nickName,
+          userAvatar: feed.avatar,
+
+          commentList: feed.commentList.content,
+        };
+      });
 
       thunkAPI.dispatch(
         feedActions.replaceFeed({
-          feeds: feeds,
+          feeds: newFeeds,
         })
       );
 

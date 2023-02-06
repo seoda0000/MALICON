@@ -4,11 +4,11 @@ export type CommentType = {
   createDate: string;
   lastModifiedDate: string;
 
-  articleId: number;
+  articleId?: number;
+  videoId?: number;
 
   userPK: number;
   userId: string;
-  //   userAvatar: string | null;
-  //   userNickName: string;
+  userAvatar?: string | null;
+  userNickName: string;
 };
-
