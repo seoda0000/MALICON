@@ -1,10 +1,11 @@
 import { Box, Button, FormControl, Input, InputLabel } from "@mui/material";
 import React, { useState } from "react";
 import { useAppDispatch } from "../../redux/configStore.hooks";
-
+import { startSession } from "../../redux/modules/broadcast";
 import BasicModal from "../ui/BasicModal";
 import ChipsArray from "./ChipsArray";
-
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../redux/configStore";
 interface ChipData {
   key: number;
   label: string;
@@ -19,7 +20,7 @@ const buttonBoxStyle = {
 };
 
 export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [title, setTitle] = useState<string>("");
 
@@ -63,7 +64,14 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const chipList = chipData.filter((chip) => chip.selected === true);
-    console.log(JSON.stringify(chipList));
+
+    const sessionData = {
+      title,
+      hashTag: JSON.stringify(chipList),
+    };
+
+    dispatch(startSession(sessionData));
+
     onCloseModal();
   };
 

@@ -10,14 +10,14 @@ import { EffectCards, Navigation, Pagination } from "swiper";
 import { Grid } from "@mui/material";
 // Import Swiper styles
 
-const BroadcastCarousel: React.FC<{}> = (props) => {
+const BroadcastCarousel: React.FC<{ sessions: any[] }> = (props) => {
   return (
     <Grid container justifyContent={"center"} alignItems={"center"}>
       <Grid item>
         <div
           style={{
             height: "100",
-            maxHeight: "40vw",
+            // maxHeight: "40vw",
             minHeight: 0,
             minWidth: 0,
             maxWidth: "70vw",
@@ -49,72 +49,23 @@ const BroadcastCarousel: React.FC<{}> = (props) => {
           >
             <SwiperSlide>
               <img
-                src="https://i.ytimg.com/an_webp/pRKqQqHRGGI/mqdefault_6s.webp?du=3000&sqp=CP6Xgp8G&rs=AOn4CLCvPpT57lcbcb74BxqejJExqrRZ8w"
+                src="https://i.ytimg.com/vi/qe0gepQh8N0/maxresdefault.jpg"
                 alt=""
                 style={{ width: "90%" }}
               />
             </SwiperSlide>
             <SwiperSlide>
               <img
-                src="https://i.ytimg.com/vi/WwM95qPPOLA/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBHkOg7NDIiI_Uot3umfejXNGOC5A"
+                src="https://i.ytimg.com/vi/UzbBohF8Ba0/maxresdefault.jpg"
                 alt=""
-                style={{ width: "100%" }}
+                style={{ width: "90%" }}
               />
             </SwiperSlide>
             <SwiperSlide>
               <img
-                src="https://media.wired.co.uk/photos/60c8730fa81eb7f50b44037e/3:2/w_3329,h_2219,c_limit/1521-WIRED-Cat.jpeg"
+                src="https://i.ytimg.com/vi/7qIuReWbE28/maxresdefault.jpg"
                 alt=""
-                style={{ width: "100%" }}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                src="https://media.wired.co.uk/photos/60c8730fa81eb7f50b44037e/3:2/w_3329,h_2219,c_limit/1521-WIRED-Cat.jpeg"
-                alt=""
-                style={{ width: "100%" }}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                src="https://i.ytimg.com/an_webp/REPZc2nzlyw/mqdefault_6s.webp?du=3000&sqp=CMDqgZ8G&rs=AOn4CLBtndlUPQM9S19n0_MK3I0CoJJmrw"
-                alt=""
-                style={{ width: "100%" }}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                // src="https://smentcorporation.s3.amazonaws.com/upload/editor/presscenter/2022/11/25/Nr3vuojPFK8a074b742e78438d8e115e89870a22d1shia4t95R0nof2pitw.zfe.jpg"
-                alt=""
-                style={{ width: "100%" }}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                src="https://media.wired.co.uk/photos/60c8730fa81eb7f50b44037e/3:2/w_3329,h_2219,c_limit/1521-WIRED-Cat.jpeg"
-                alt=""
-                style={{ width: "100%" }}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                src="https://media.wired.co.uk/photos/60c8730fa81eb7f50b44037e/3:2/w_3329,h_2219,c_limit/1521-WIRED-Cat.jpeg"
-                alt=""
-                style={{ width: "100%" }}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                src="https://media.wired.co.uk/photos/60c8730fa81eb7f50b44037e/3:2/w_3329,h_2219,c_limit/1521-WIRED-Cat.jpeg"
-                alt=""
-                style={{ width: "100%" }}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                src="https://media.wired.co.uk/photos/60c8730fa81eb7f50b44037e/3:2/w_3329,h_2219,c_limit/1521-WIRED-Cat.jpeg"
-                alt=""
-                style={{ width: "100%" }}
+                style={{ width: "90%" }}
               />
             </SwiperSlide>
           </Swiper>

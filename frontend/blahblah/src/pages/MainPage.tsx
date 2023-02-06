@@ -9,6 +9,10 @@ import { AppDispatch } from "../redux/configStore";
 import { fetchSessionData } from "../redux/modules/broadcast";
 import BroadcastCarousel from "../components/broadcast/broadcastCarousel";
 
+// 더미 데이터
+
+// ==============================
+
 let isInitial = true;
 
 function MainPage() {
@@ -19,7 +23,7 @@ function MainPage() {
     if (isInitial) {
       isInitial = false;
       // 절찬리 진행 이후 작업
-      // dispatch(fetchSessionData());
+      dispatch(fetchSessionData());
       return;
     }
   }, [broadcast, dispatch]);
@@ -44,7 +48,7 @@ function MainPage() {
 
         <h1>지금 방영중인 실시간 동영상</h1>
         {/* <BroadcastList sessions={broadcast.sessions} /> */}
-        <BroadcastCarousel />
+        <BroadcastCarousel sessions={broadcast.sessions} />
         <h1>추천 동영상</h1>
         <VideoList />
       </div>
