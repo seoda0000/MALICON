@@ -2,16 +2,20 @@ package io.openvidu.basic.java.controller;
 
 import java.util.*;
 
+import io.openvidu.basic.java.controller.exception.CustomException;
 import io.openvidu.basic.java.redis.dto.LiveRoomDto;
 import io.openvidu.basic.java.redis.dto.UserDto;
 import io.openvidu.basic.java.redis.entity.LiveRoomEntity;
 import io.openvidu.basic.java.redis.repository.LiveRoomRepository;
+import io.openvidu.basic.java.util.JwtUtil;
 import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,61 +24,43 @@ public class Controller {
 
 	private final OpenVidu openvidu;
 
-	private final LiveRoomRepository liveRoomRepository;//openvidu 서버와 연결해 놓은 코드
+	private final LiveRoomRepository liveRoomRepository;
 
-	/**
-	 * @param params The Session properties
-	 * @return The Session ID
-	 */
 	//방 생성
 	@PostMapping("/api/sessions") //
-	public ResponseEntity<?> initializeSession(@RequestBody(required = false) Map<String, Object> params)
+	public ResponseEntity<?> initializeSession(@RequestBody(required = false) Map<String, Object> params,
+											   HttpServletRequest request)
 			throws OpenViduJavaClientException, OpenViduHttpException {
 		log.info("\n----------- initializeSession START -----------");
 
-		showParams(params);
+		// request header에 있는 토큰으로 유저정보 가져오기
+		String accessToken = JwtUtil.getAccessTokenFromHeader(request);
+		UserDto userInfo = JwtUtil.getUserDtoFromClaims(JwtUtil.parseClaims(accessToken));
 
 		//session 생성
 		//customSessionId => userId 가 들어있어야 한다.
-		SessionProperties properties = SessionProperties.fromJson(params).build();
+		SessionProperties properties = SessionProperties.fromJson(Map.of("customSessionId", userInfo.getUserId())).build();
 		Session session = openvidu.createSession(properties);
 
-
 		//파라미터 정보 출력
-		//{title:"방제", customSessionId:"유저아이디1", avatar:jsonStringify, nickName: "닉네임"
+		//{title:"방제"}
+		// userId로 sessionId 설정
 		String sessionId = session.getSessionId();
 		String title = (String)params.get("title");
-		String userId = (String)params.get("customSessionId");
-		String avatar = (String)params.get("avatar");
-		String nickName = (String)params.get("nickName");
 		Date date = new Date();
-
-		UserDto userDto = UserDto.builder()
-				.avatar(avatar)
-				.userId(userId)
-				.nickName(nickName)
-				.build();
-
-
 
 		//LiveRoomEntity 생성
 		LiveRoomEntity liveRoomEntity = LiveRoomEntity.builder()
 				.title(title)
-				.streamer(userDto)
+				.streamer(userInfo)
 				.startAt(date)
 				.sessionId(sessionId)
 				.build();
 
-
+		//redis에 저장
 		liveRoomRepository.save(liveRoomEntity);
 		LiveRoomDto liveRoomDto = entityToDto(liveRoomEntity);
-
 		log.info("liveRoomEntity1 : "+ liveRoomEntity); // 가져온 방 정보뽑아보기
-
-		//redis에 저장
-
-
-
 
 		return new ResponseEntity<>(liveRoomDto, HttpStatus.OK);
 	}
@@ -82,38 +68,35 @@ public class Controller {
 	 //세션 토큰 가져오기!
 	@PostMapping("/api/sessions/{sessionId}/connections")
 	public ResponseEntity<?> createConnection(@PathVariable("sessionId") String sessionId,
-												   @RequestBody(required = false) Map<String, Object> params)
+											  HttpServletRequest request)
 			throws OpenViduJavaClientException, OpenViduHttpException {
 
 		log.info("\n----------- createconnection START -----------");
 		log.info("url 패스에 들어있는 session Id : " + sessionId); // === 최초 title이랑 같음
-		showParams(params);
 
 		//이미 있는 세션을 sessionId를 통해 가져오게 된다.
 		Session session = openvidu.getActiveSession(sessionId);
 
 		//세션이 존재하지 않는다면 연결을 만들 수 없다.
-		if (session == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		if (session == null || !liveRoomRepository.existsById(sessionId))
+			throw new CustomException(HttpStatus.NOT_FOUND, "방정보가 존재하지 않습니다.");
 
 		ConnectionProperties properties;
-
+		Connection connection;
 		//연결과 토큰 만들기
 
-		if(!liveRoomRepository.existsById(sessionId)){
-			return new ResponseEntity<>("session not found", HttpStatus.NOT_FOUND);
+		String accessToken = JwtUtil.getAccessTokenFromHeader(request);
+		UserDto userInfo = JwtUtil.getUserDtoFromClaims(JwtUtil.parseClaims(accessToken));
+
+		// 로그인 된 userId와 sessionId가 같을 때
+		if(userInfo.getUserId().equals(sessionId))
+		{
+			properties = new ConnectionProperties.Builder().role(OpenViduRole.PUBLISHER).build();
+			connection = session.createConnection(properties);
+		}else {
+			properties = new ConnectionProperties.Builder().role(OpenViduRole.SUBSCRIBER).build();
+			connection = session.createConnection(properties);
 		}
-
-
-		if(sessionId.equals(liveRoomRepository.findById(sessionId).orElseThrow(() -> new RuntimeException("찾는거 없지롱")).getSessionId())){
-			properties = ConnectionProperties.fromJson(params).role(OpenViduRole.PUBLISHER).build();
-			Connection connection = session.createConnection(properties);
-			return new ResponseEntity<>(connection, HttpStatus.OK);
-		}
-		properties = ConnectionProperties.fromJson(params).role(OpenViduRole.SUBSCRIBER).build();
-		Connection connection = session.createConnection(properties);
-
 		return new ResponseEntity<>(connection, HttpStatus.OK);
 	}
 
@@ -121,10 +104,6 @@ public class Controller {
 	//방목록 가져오기
 	@PostMapping("api/rooms")
 	public ResponseEntity<?> getRoomList() throws Exception {
-
-		log.info("\n----------- getRoolList START -----------");
-
-
 		log.info("방목록 시작-------------------------------------");
 
 		//반환할 배열 생성
@@ -153,14 +132,11 @@ public class Controller {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-
 	//방송 정보 수정(방제 변경)
 	@PutMapping("api/sessions")
 	public ResponseEntity<?> updateRoom(@RequestBody(required = false) Map<String, Object> params){
 
 		log.info("\n----------- updateRoom START -----------");
-
-		showParams(params);
 
 		String title = (String)params.get("title");
 		String sessionId = (String)params.get("sessionId");
@@ -169,13 +145,8 @@ public class Controller {
 		liveRoomEntity.setTitle(title);
 		liveRoomRepository.save(liveRoomEntity);
 
-
 		return new ResponseEntity<>(title, HttpStatus.OK);
 	}
-
-
-
-
 
 	//현제 방송중인지 여부 확인
 	@GetMapping("api/sessions/onAir")
@@ -192,22 +163,20 @@ public class Controller {
 		return new ResponseEntity<>(onAir, HttpStatus.OK);
 	}
 
-
 	//썸네일 저장하기
 	@PostMapping("api/sessions/thumbnail/{sessionId}")
 	public ResponseEntity<?> saveThumbnail(@PathVariable("sessionId") String sessionId , @RequestBody(required = false) Map<String, Object> params){
 
 		log.info("\n----------- saveThumbnail START -----------");
-		showParams(params);
 
 		//session이 없을경우
-		if(!liveRoomRepository.existsById(sessionId)){
-			return new ResponseEntity<>("session not found", HttpStatus.NOT_FOUND);
-		}
-
+		if(openvidu.getActiveSession(sessionId) == null)
+			throw new CustomException(HttpStatus.NOT_FOUND, "썸네일을 저장할 세션이 없습니다.");
 
 		//session에 thumbnail 저장
-		LiveRoomEntity liveRoomEntity = liveRoomRepository.findById(sessionId).get();
+		LiveRoomEntity liveRoomEntity = liveRoomRepository.findById(sessionId).orElseThrow(
+				()->new CustomException(HttpStatus.NOT_FOUND, "썸네일을 저장할 방송이 없습니다.")
+		);
 		liveRoomEntity.setThumbnail((String)params.get("thumbnail"));
 		liveRoomRepository.save(liveRoomEntity);
 
