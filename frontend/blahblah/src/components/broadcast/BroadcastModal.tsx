@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useAppDispatch } from "../../redux/configStore.hooks";
 
 import BasicModal from "../ui/BasicModal";
+import ChipsArray from "./ChipsArray";
 
 const buttonBoxStyle = {
   display: "flex",
@@ -50,6 +51,7 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
           <InputLabel>방송 제목</InputLabel>
           <Input id="title" value={title} onChange={onChangeTitle} required />
         </FormControl>
+        <ChipsArray />
         <Box sx={buttonBoxStyle}>
           <Button variant="contained" type="submit">
             방송 시작
