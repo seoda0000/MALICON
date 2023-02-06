@@ -1,12 +1,10 @@
 package io.openvidu.basic.java.util;
 
 import io.jsonwebtoken.*;
-import io.openvidu.basic.java.redis.dto.UserDto;
+import io.openvidu.basic.java.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;

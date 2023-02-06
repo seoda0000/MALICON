@@ -1,4 +1,4 @@
-package io.openvidu.basic.java.redis.dto;
+package io.openvidu.basic.java.dto;
 
 
 import lombok.*;

@@ -1,7 +1,6 @@
 package io.openvidu.basic.java.redis.entity;
 
-import io.openvidu.basic.java.redis.dto.UserDto;
-import io.openvidu.java.client.OpenViduRole;
+import io.openvidu.basic.java.dto.UserDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
@@ -37,5 +36,5 @@ public class LiveRoomEntity {
     //스트리머 정보
     private UserDto streamer;
 
-
+    private String hashTag;
 }

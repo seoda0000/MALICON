@@ -45,6 +45,7 @@ import SubscriberItem from "../auth/SubscriberItem";
 import { getSubscribersAction } from "../../redux/modules/subscribe";
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import FaceIcon from "@mui/icons-material/Face";
+import SignupModal from "../auth/SignupModal";
 
 interface LayoutProps {
   children: ReactNode;
@@ -131,6 +132,7 @@ export default function Layout(props: LayoutProps) {
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [openSigninModal, setOpenSigninModal] = useState<boolean>(false);
+  const [openSignupModal, setOpenSignupModal] = useState<boolean>(false);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -153,6 +155,12 @@ export default function Layout(props: LayoutProps) {
     handleCloseUserMenu();
     setOpenSigninModal((prev) => !prev);
   };
+  const onClickSignup = () => {
+    handleCloseUserMenu();
+    setOpenSignupModal((prev) => !prev);
+  };
+
+
 
   const logout = () => {
     removeToken();
@@ -310,7 +318,7 @@ export default function Layout(props: LayoutProps) {
                       <MenuItem
                         key={item}
                         onClick={
-                          item === "Login" ? onClickSignin : handleCloseUserMenu
+                          item === "Login" ? onClickSignin : onClickSignup
                         }
                       >
                         <Typography textAlign="center">{item}</Typography>
@@ -500,6 +508,9 @@ export default function Layout(props: LayoutProps) {
       {/* 모달 */}
       {openSigninModal && (
         <SigninModal open={openSigninModal} setOpen={setOpenSigninModal} />
+      )}
+      {openSignupModal && (
+        <SignupModal open={openSignupModal} setOpen={setOpenSignupModal} />
       )}
     </Box>
   );

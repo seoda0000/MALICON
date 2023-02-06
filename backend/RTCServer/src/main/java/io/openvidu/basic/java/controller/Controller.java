@@ -3,8 +3,9 @@ package io.openvidu.basic.java.controller;
 import java.util.*;
 
 import io.openvidu.basic.java.controller.exception.CustomException;
-import io.openvidu.basic.java.redis.dto.LiveRoomDto;
-import io.openvidu.basic.java.redis.dto.UserDto;
+import io.openvidu.basic.java.dto.LiveRoomDto;
+import io.openvidu.basic.java.dto.UserDto;
+import io.openvidu.basic.java.dto.request.CreateRoomDto;
 import io.openvidu.basic.java.redis.entity.LiveRoomEntity;
 import io.openvidu.basic.java.redis.repository.LiveRoomRepository;
 import io.openvidu.basic.java.util.JwtUtil;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class Controller {
 
 	private final OpenVidu openvidu;
@@ -28,7 +31,7 @@ public class Controller {
 
 	//방 생성
 	@PostMapping("/api/sessions") //
-	public ResponseEntity<?> initializeSession(@RequestBody(required = false) Map<String, Object> params,
+	public ResponseEntity<?> initializeSession(@RequestBody CreateRoomDto roomDto,
 											   HttpServletRequest request)
 			throws OpenViduJavaClientException, OpenViduHttpException {
 		log.info("\n----------- initializeSession START -----------");
@@ -46,7 +49,8 @@ public class Controller {
 		//{title:"방제"}
 		// userId로 sessionId 설정
 		String sessionId = session.getSessionId();
-		String title = (String)params.get("title");
+		String title = roomDto.getTitle();
+		String hashTag = roomDto.getHashTag();
 		Date date = new Date();
 
 		//LiveRoomEntity 생성
@@ -55,6 +59,7 @@ public class Controller {
 				.streamer(userInfo)
 				.startAt(date)
 				.sessionId(sessionId)
+				.hashTag(hashTag)
 				.build();
 
 		//redis에 저장
@@ -66,6 +71,7 @@ public class Controller {
 	}
 
 	 //세션 토큰 가져오기!
+	@Transactional(readOnly = true)
 	@PostMapping("/api/sessions/{sessionId}/connections")
 	public ResponseEntity<?> createConnection(@PathVariable("sessionId") String sessionId,
 											  HttpServletRequest request)
@@ -102,6 +108,7 @@ public class Controller {
 
 
 	//방목록 가져오기
+	@Transactional(readOnly = true)
 	@PostMapping("api/rooms")
 	public ResponseEntity<?> getRoomList() throws Exception {
 		log.info("방목록 시작-------------------------------------");
@@ -149,6 +156,7 @@ public class Controller {
 	}
 
 	//현제 방송중인지 여부 확인
+	@Transactional(readOnly = true)
 	@GetMapping("api/sessions/onAir")
 	public ResponseEntity<?> isOnAir(@RequestBody(required = false) Map<String, Object> params){
 
@@ -218,7 +226,4 @@ public class Controller {
 
 		return liveRoomDto;
 	}
-
-
-
 }
