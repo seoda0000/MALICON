@@ -1,7 +1,8 @@
 package io.openvidu.basic.java.controller.exception.handler;
 
-import com.blahblah.web.controller.exception.CustomException;
-import com.blahblah.web.controller.exception.ErrorCode;
+
+import io.openvidu.basic.java.controller.exception.CustomException;
+import io.openvidu.basic.java.controller.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
