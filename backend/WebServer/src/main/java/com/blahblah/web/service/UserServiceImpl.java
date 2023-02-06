@@ -120,6 +120,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public boolean checkUser(UserEntity userEntity){
+        UserEntity idUser = userRepository.findByUserId(userEntity.getUserId()).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "존재하지 않는 아이디입니다."));
+        UserEntity emailUser = userRepository.findByEmail(userEntity.getEmail());
+        if(emailUser==null || idUser.getId()!=emailUser.getId()){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public boolean updateUser(UserDTO userDTO) {
         UserEntity user = userRepository.findByUserId(userDTO.getUserId()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."));
         UserEntity updatedUser = UserEntity.builder().id(userDTO.getId()==null?user.getId():userDTO.getId())

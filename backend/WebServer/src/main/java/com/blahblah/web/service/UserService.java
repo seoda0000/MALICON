@@ -26,6 +26,8 @@ public interface UserService {
 
     UserDTO readUserByUserId(String userId);
 
+    boolean checkUser(UserEntity userEntity);
+
     boolean updateUser(UserDTO userDTO);
 
     void deleteUserByUserId(String userId);
