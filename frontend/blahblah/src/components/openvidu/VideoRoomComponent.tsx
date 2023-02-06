@@ -12,7 +12,7 @@ import ToolbarComponent from "./toolbar/ToolbarComponent";
 
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production" ? "" : "http://localhost:5000/";
+  process.env.NODE_ENV === "production" ? "" : "http://localhost:33332/";
 const canvas = document.createElement("canvas");
 canvas.width = 320;
 canvas.height = 240;
