@@ -35,7 +35,7 @@ public class SubscribeArticleDTO {
     private Page<CommentDTO> commentList;
 
     public Page<SubscribeArticleDTO> toDtoList(Page<ArticleEntity> articleList){
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "create_date"));
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
         int start = (int) pageRequest.getOffset();
         int end = start+pageRequest.getPageSize();
         Page<SubscribeArticleDTO> dtoList = articleList.map(a ->

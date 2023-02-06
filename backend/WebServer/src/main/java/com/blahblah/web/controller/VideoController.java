@@ -25,7 +25,14 @@ public class VideoController {
     @PostMapping
     public ResponseEntity createVideo(@RequestBody VideoDTO videoDTO, HttpServletRequest request){
         long userPK = JWTutil.getLongIdByAccessToken(request);
-        VideoEntity result = videoService.createVideo(videoDTO);
+        VideoDTO video = VideoDTO.builder()
+                .userPK(userPK)
+                .userId(videoDTO.getUserId())
+                .title(videoDTO.getTitle())
+                .hashtags(videoDTO.getHashtags())
+                .pathUrl(videoDTO.getPathUrl())
+                .build();
+        VideoEntity result = videoService.createVideo(video);
         if(result==null){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("비디오 저장 실패"));
         }else{
@@ -70,12 +77,12 @@ public class VideoController {
         return ResponseEntity.ok(video);
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteVideo(@RequestBody VideoDTO videoDTO, HttpServletRequest request){
+    @DeleteMapping("/{videoId}/{userPK}")
+    public ResponseEntity deleteVideo(@PathVariable long videoId, @PathVariable long userPK, HttpServletRequest request){
         long userId = JWTutil.getLongIdByAccessToken(request);
-        if(videoDTO.getUserPK()!=userId) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
+        if(userPK!=userId) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
 
-        videoService.deleteVideo(videoDTO.getId());
+        videoService.deleteVideo(videoId);
         return ResponseEntity.status(HttpStatus.OK).body(new Message("동영상 삭제 완료"));
 
     }

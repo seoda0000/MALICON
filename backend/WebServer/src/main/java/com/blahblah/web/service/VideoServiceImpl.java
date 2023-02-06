@@ -40,7 +40,7 @@ public class VideoServiceImpl implements VideoService{
 
     @Override
     public Page<VideoDTO> readVideos(long userPK) {
-        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createDate"));
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "create_date"));
 
         Page<VideoEntity> result = videoRepository.findAllBy(userPK, pageRequest);
         Page<VideoDTO> videos = new VideoDTO().toDtoList(result);
@@ -50,7 +50,7 @@ public class VideoServiceImpl implements VideoService{
 
     @Override
     public Page<VideoDTO> readMyVideos(long userPK) {
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "create_date"));
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
 
         Page<VideoEntity> result = videoRepository.findAllByUserId(userPK, pageRequest);
         Page<VideoDTO> videos = new VideoDTO().toDtoList(result);
@@ -68,7 +68,7 @@ public class VideoServiceImpl implements VideoService{
 
     @Override
     public VideoDTO getVideo(long videoId) {
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "create_date"));
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
         int start = (int) pageRequest.getOffset();
         int end = start+pageRequest.getPageSize();
 

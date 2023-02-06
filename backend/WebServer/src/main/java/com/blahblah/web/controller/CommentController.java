@@ -42,12 +42,12 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteComment(@RequestBody CommentDTO commentDTO, HttpServletRequest request){
+    @DeleteMapping("/{commentId}/{userPK}")
+    public ResponseEntity deleteComment(@PathVariable long commentId, @PathVariable long userPK, HttpServletRequest request){
         long userId = JWTutil.getLongIdByAccessToken(request);
-        if(commentDTO.getUserPK()!= userId) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
+        if(userPK!= userId) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
 
-        commentService.deleteComment(commentDTO.getId());
+        commentService.deleteComment(commentId);
         return ResponseEntity.status(HttpStatus.OK).body(new Message("댓글 삭제 완료"));
     }
 }

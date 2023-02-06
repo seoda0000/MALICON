@@ -50,11 +50,11 @@ public class ArticleController {
         else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteArticle(@RequestBody ArticleDTO articleDTO, HttpServletRequest request){
-        if(JWTutil.getLongIdByAccessToken(request) != articleDTO.getUserPK()) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
+    @DeleteMapping("/{articleId}/{userPK}")
+    public ResponseEntity deleteArticle(@PathVariable long articleId, @PathVariable long userPK, HttpServletRequest request){
+        if(JWTutil.getLongIdByAccessToken(request) != userPK) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
 
-        articleService.deleteArticle(articleDTO.getId());
+        articleService.deleteArticle(articleId);
         return ResponseEntity.status(HttpStatus.OK).body(new Message("피드 삭제 완료"));
     }
 

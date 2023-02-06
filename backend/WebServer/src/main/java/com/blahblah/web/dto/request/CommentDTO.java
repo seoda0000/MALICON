@@ -12,9 +12,12 @@ import org.springframework.data.domain.Page;
 public class CommentDTO {
 
     private long id;
+
     private long userPK;
 
     private String userId;
+
+    private String nickName;
 
     private long articleId;
 
@@ -35,6 +38,7 @@ public class CommentDTO {
                 .userPK(c.getUserEntity().getId())
                 .userId(c.getUserEntity().getUserId())
                 .content(c.getContent())
+                .nickName(c.getUserEntity().getNickName())
                 .avatar(c.getUserEntity().getAvatar())
                 .createDate(c.getCreateDate().toString())
                 .lastModifiedDate(c.getLastModifiedDate().toString())
@@ -48,6 +52,7 @@ public class CommentDTO {
                 .articleId((c.getArticleEntity())==null?null:c.getArticleEntity().getId())
                 .userPK(c.getUserEntity().getId())
                 .userId(c.getUserEntity().getUserId())
+                .nickName(c.getUserEntity().getNickName())
                 .content(c.getContent())
                 .avatar(c.getUserEntity().getAvatar())
                 .createDate(c.getCreateDate().toString())
