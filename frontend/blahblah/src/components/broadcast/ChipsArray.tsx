@@ -4,64 +4,20 @@ import Paper from "@mui/material/Paper";
 import TagFacesIcon from "@mui/icons-material/TagFaces";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
 import { useEffect, useState } from "react";
-
 interface ChipData {
   key: number;
   label: string;
   selected: boolean;
 }
 
-const HASH_TAG_LIST = [
-  { key: 0, label: "실시간", selected: true },
-  { key: 1, label: "노래", selected: false },
-  { key: 2, label: "게임", selected: false },
-  { key: 3, label: "요리", selected: false },
-  { key: 4, label: "팬미팅", selected: false },
-  { key: 5, label: "악기", selected: false },
-  { key: 6, label: "댄스", selected: false },
-  { key: 7, label: "패션", selected: false },
-  { key: 8, label: "그림", selected: false },
-  { key: 9, label: "한국어", selected: false },
-  { key: 10, label: "English", selected: false },
-];
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
-export default function ChipsArray() {
-  const [chipData, setChipData] = useState<readonly ChipData[]>([
-    { key: 0, label: "실시간", selected: true },
-    { key: 1, label: "노래", selected: false },
-    { key: 2, label: "게임", selected: false },
-    { key: 3, label: "요리", selected: false },
-    { key: 4, label: "팬미팅", selected: false },
-    { key: 5, label: "악기", selected: false },
-    { key: 6, label: "댄스", selected: false },
-    { key: 7, label: "패션", selected: false },
-    { key: 8, label: "그림", selected: false },
-    { key: 9, label: "한국어", selected: false },
-    { key: 10, label: "English", selected: false },
-  ]);
-  useEffect(() => {}, [chipData]);
-  const handleDelete = (chipToDelete: ChipData) => () => {
-    setChipData((chips) =>
-      chips.filter((chip) => chip.key !== chipToDelete.key)
-    );
-  };
-
-  const handleClick = (e: any) => {
-    const target = e.target.innerHTML;
-    console.log(target);
-    setChipData((chips) =>
-      chips.map((chip) => {
-        if (chip.label === target) {
-          chip.selected = !chip.selected;
-        }
-        return chip;
-      })
-    );
-    console.log(chipData);
-  };
+const ChipsArray: React.FC<{ chipData: ChipData[]; handleClick: any }> = (
+  props
+) => {
+  useEffect(() => {}, [props.chipData]);
 
   return (
     <Paper
@@ -75,7 +31,7 @@ export default function ChipsArray() {
       }}
       component="ul"
     >
-      {chipData.map((data) => {
+      {props.chipData.map((data) => {
         let icon;
 
         if (data.label === "실시간") {
@@ -94,11 +50,13 @@ export default function ChipsArray() {
               color={color}
               icon={icon}
               label={data.label}
-              onClick={handleClick}
+              onClick={props.handleClick}
             />
           </ListItem>
         );
       })}
     </Paper>
   );
-}
+};
+
+export default ChipsArray;
