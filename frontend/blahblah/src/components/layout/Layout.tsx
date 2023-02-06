@@ -32,6 +32,7 @@ import { getAccessToken, removeToken } from "../../redux/modules/user/token";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
 import { getMeWithTokenAction } from "../../redux/modules/user";
 import SigninModal from "../auth/SigninModal";
+import SignupModal from "../auth/SignupModal";
 import ProfileImage from "../common/ProfileImage";
 import { auto } from "@popperjs/core";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
