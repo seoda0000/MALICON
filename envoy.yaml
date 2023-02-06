@@ -31,6 +31,8 @@ static_resources:
               routes:
               - match: { prefix: "/web-service/" }
                 route: { cluster: blahblah_backend }
+              - match: { prefix: "/stream-service/" }
+                route: { cluster: blahblah_backend }
               - match: { prefix: "/" }
                 route: { cluster: blahblah_frontend }
           http_filters:
