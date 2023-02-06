@@ -8,7 +8,9 @@ import "swiper/css/scrollbar";
 import "swiper/css/effect-cards";
 import { EffectCards, Navigation, Pagination } from "swiper";
 import { Grid } from "@mui/material";
+import BroadcastCarouselItem from "./broadcastCarouselItem";
 // Import Swiper styles
+import CarouselComp from "../common/CarouselComp";
 
 const BroadcastCarousel: React.FC<{ sessions: any[] }> = (props) => {
   return (
@@ -47,27 +49,21 @@ const BroadcastCarousel: React.FC<{ sessions: any[] }> = (props) => {
             onSwiper={(swiper) => console.log(swiper)}
             className="mySwiper"
           >
-            <SwiperSlide>
-              <img
-                src="https://i.ytimg.com/vi/qe0gepQh8N0/maxresdefault.jpg"
-                alt=""
-                style={{ width: "90%" }}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                src="https://i.ytimg.com/vi/UzbBohF8Ba0/maxresdefault.jpg"
-                alt=""
-                style={{ width: "90%" }}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                src="https://i.ytimg.com/vi/7qIuReWbE28/maxresdefault.jpg"
-                alt=""
-                style={{ width: "90%" }}
-              />
-            </SwiperSlide>
+            {props.sessions.length !== 0 ? (
+              props.sessions.map((session) => (
+                <SwiperSlide>
+                  <CarouselComp nth={3} title={session.title} caption={true}>
+                    <img
+                      src={session.thumbnail}
+                      alt={session.title}
+                      // style={{ width: "90%" }}
+                    />
+                  </CarouselComp>
+                </SwiperSlide>
+              ))
+            ) : (
+              <div>실시간 방송이 없습니다.</div>
+            )}
           </Swiper>
         </div>
       </Grid>

@@ -43,6 +43,10 @@ import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import FaceIcon from "@mui/icons-material/Face";
 import BroadcastModal from "../broadcast/BroadcastModal";
 
+import VideoRoomComponent from "../openvidu/VideoRoomComponent";
+import { RootState } from "../../redux/configStore";
+import { useSelector } from "react-redux";
+
 interface LayoutProps {
   children: ReactNode;
 }
@@ -183,6 +187,9 @@ export default function Layout(props: LayoutProps) {
   const onClickBroadcast = () => {
     setOpenBroadcastModal((prev) => !prev);
   };
+
+  // 비디오 조작
+  const isViewed = useSelector((state: RootState) => state.feed);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -547,6 +554,9 @@ export default function Layout(props: LayoutProps) {
           setOpen={setOpenBroadcastModal}
         />
       )}
+
+      {/* 오픈비두 창 */}
+      {/* {isViewed && <VideoRoomComponent />} */}
     </Box>
   );
 }

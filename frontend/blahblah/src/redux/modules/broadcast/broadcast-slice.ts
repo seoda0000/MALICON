@@ -4,6 +4,7 @@ import { BroadcastStateType } from "../../../model/broadcast/broadcastStateType"
 
 const initialState: BroadcastStateType = {
   sessions: [],
+  isViewed: false,
 };
 
 const broadcastSlice = createSlice({
