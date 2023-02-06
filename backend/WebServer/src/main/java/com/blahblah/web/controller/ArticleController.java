@@ -58,7 +58,7 @@ public class ArticleController {
         return ResponseEntity.status(HttpStatus.OK).body(new Message("피드 삭제 완료"));
     }
 
-    @GetMapping("/subscribe")
+    @GetMapping
     public ResponseEntity readArticle(HttpServletRequest request){
         long id = JWTutil.getLongIdByAccessToken(request);
 

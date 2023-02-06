@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
 
-    private static final String FROM_ADDRESS = "tmdgml1754@naver.com";
+    private static final String FROM_ADDRESS = "admin@blahblah.movebxeax.me";
 
     @Override
     @Transactional(readOnly = true)

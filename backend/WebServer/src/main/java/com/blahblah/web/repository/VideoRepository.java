@@ -20,7 +20,6 @@ public interface VideoRepository extends JpaRepository<VideoEntity, Long> {
 
     void deleteById(long id);
 
-
     @Modifying
     @Query(value="update videos v set v.views=v.views+1 where v.id=?", nativeQuery = true)
     int updateViewsById(@Param("id") long id);

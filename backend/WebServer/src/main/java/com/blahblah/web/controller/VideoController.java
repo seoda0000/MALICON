@@ -51,6 +51,16 @@ public class VideoController {
         return ResponseEntity.ok(videoList);
     }
 
+    @GetMapping("/main")
+    public ResponseEntity readAllVideo(){
+        Page<VideoDTO> videoList = videoService.readAllVideos();
+        if(videoList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("지난 동영상이 없습니다."));
+        }
+        return ResponseEntity.ok(videoList);
+
+    }
+
     @GetMapping("/details/{videoId}")
     public ResponseEntity videoDetail(@PathVariable long videoId){
         VideoDTO video = videoService.getVideo(videoId);
