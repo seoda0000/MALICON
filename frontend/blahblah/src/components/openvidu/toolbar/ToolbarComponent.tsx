@@ -1,24 +1,24 @@
 import React, { Component } from "react";
 import "./ToolbarComponent.css";
 
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
 
-import Mic from "@material-ui/icons/Mic";
-import MicOff from "@material-ui/icons/MicOff";
-import Videocam from "@material-ui/icons/Videocam";
-import VideocamOff from "@material-ui/icons/VideocamOff";
-import Fullscreen from "@material-ui/icons/Fullscreen";
-import FullscreenExit from "@material-ui/icons/FullscreenExit";
-import SwitchVideoIcon from "@material-ui/icons/SwitchVideo";
-import PictureInPicture from "@material-ui/icons/PictureInPicture";
-import ScreenShare from "@material-ui/icons/ScreenShare";
-import StopScreenShare from "@material-ui/icons/StopScreenShare";
-import Tooltip from "@material-ui/core/Tooltip";
-import PowerSettingsNew from "@material-ui/icons/PowerSettingsNew";
-import QuestionAnswer from "@material-ui/icons/QuestionAnswer";
+import Mic from "@mui/icons-material/Mic";
+import MicOff from "@mui/icons-material/MicOff";
+import Videocam from "@mui/icons-material/Videocam";
+import VideocamOff from "@mui/icons-material/VideocamOff";
+import Fullscreen from "@mui/icons-material/Fullscreen";
+import FullscreenExit from "@mui/icons-material/FullscreenExit";
+import SwitchVideoIcon from "@mui/icons-material/SwitchVideo";
+import PictureInPicture from "@mui/icons-material/PictureInPicture";
+import ScreenShare from "@mui/icons-material/ScreenShare";
+import StopScreenShare from "@mui/icons-material/StopScreenShare";
+import Tooltip from "@mui/material/Tooltip";
+import PowerSettingsNew from "@mui/icons-material/PowerSettingsNew";
+import QuestionAnswer from "@mui/icons-material/QuestionAnswer";
 
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
 
 const logo = require("../../../assets/img/onair_turnoff.png");
 

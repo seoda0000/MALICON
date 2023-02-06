@@ -2,16 +2,16 @@ import React, { Component } from "react";
 import "./StreamComponent.css";
 import OvVideoComponent from "./OvVideo";
 
-import MicOff from "@material-ui/icons/MicOff";
-import VideocamOff from "@material-ui/icons/VideocamOff";
-import VolumeUp from "@material-ui/icons/VolumeUp";
-import VolumeOff from "@material-ui/icons/VolumeOff";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import IconButton from "@material-ui/core/IconButton";
-import HighlightOff from "@material-ui/icons/HighlightOff";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import MicOff from "@mui/icons-material/MicOff";
+import VideocamOff from "@mui/icons-material/VideocamOff";
+import VolumeUp from "@mui/icons-material/VolumeUp";
+import VolumeOff from "@mui/icons-material/VolumeOff";
+import FormControl from "@mui/material/FormControl";
+import Input from "@mui/material/Input";
+import InputLabel from "@mui/material/InputLabel";
+import IconButton from "@mui/material/IconButton";
+import HighlightOff from "@mui/icons-material/HighlightOff";
+import FormHelperText from "@mui/material/FormHelperText";
 
 // 타입 생성
 interface StreamProps {

@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import IconButton from "@material-ui/core/IconButton";
-import Fab from "@material-ui/core/Fab";
-import HighlightOff from "@material-ui/icons/HighlightOff";
-import Send from "@material-ui/icons/Send";
+import Fab from "@mui/material/Fab";
+import Tooltip from "@mui/material/Tooltip";
+
+import Send from "@mui/icons-material/Send";
 
 import "./ChatComponent.css";
-import { Tooltip } from "@material-ui/core";
-import StreamComponent from "../stream/StreamComponent";
 
 // 타입 생성
 interface MessageType {
