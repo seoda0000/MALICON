@@ -44,3 +44,11 @@ spring:
           - Path=/web-service/**
         filters:
           - RewritePath=/web-service/(?<segment>.*), /$\{segment}
+
+      - id: stream-service
+        uri: http://172.17.0.1:33332
+        predicates:
+          - Path=/stream-service/**
+        filters:
+          - RewritePath=/stream-service/(?<segment>.*), /$\{segment}
+          - JwtAuthenticationFilter

@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +46,8 @@ public class JWTutil {
                 .setExpiration(new Date(now.getTime() + ACCESS_EXPIRATION_TIME))
                 .claim("id", user.getId())
                 .claim("userId",user.getUserId())
-                .claim("name",user.getNickName())
+                .claim("nickName",user.getNickName())
+                .claim("avatar",user.getAvatar())
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
