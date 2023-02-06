@@ -11,8 +11,8 @@ import "react-quill/dist/quill.snow.css";
 
 import { AppDispatch } from "../../redux/configStore";
 import { useDispatch, useSelector } from "react-redux";
-import { postFeedData, editFeedData } from "../../redux/modules/feed";
 import { RootState } from "../../redux/configStore";
+import { postFeedData, editFeedData } from "../../redux/modules/feed";
 // const buttonBoxStyle = {
 //   display: "flex",
 //   justifyContent: "center",

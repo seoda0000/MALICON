@@ -22,6 +22,10 @@ import EditorModal from "./EditorModal";
 import FeedRemoveDialog from "./FeedRemoveDialog";
 import { useEffect, useState } from "react";
 import { FeedType } from "../../model/feed/feedType";
+import { AppDispatch } from "../../redux/configStore";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/configStore";
+import { likeFeedAction } from "../../redux/modules/feed";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -60,6 +64,13 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
     setopenRemoveDialog(false);
   };
 
+  // 피드 좋아요
+  const dispatch = useDispatch<AppDispatch>();
+  const likeFeedHandler = () => {
+    const articleId = props.feed.id;
+    dispatch(likeFeedAction(articleId));
+  };
+
   return (
     <div>
       {/* <Card sx={{ maxWidth: 345 }}> */}
@@ -81,7 +92,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
           <div>{parse(props.feed.content)}</div>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
+          <IconButton aria-label="add to favorites" onClick={likeFeedHandler}>
             {props.feed.like ? (
               <FavoriteIcon color="error" />
             ) : (
