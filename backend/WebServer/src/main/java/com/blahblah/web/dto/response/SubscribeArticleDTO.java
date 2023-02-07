@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import java.util.List;
+
 @Getter
 @Builder
 @ToString
@@ -32,25 +34,28 @@ public class SubscribeArticleDTO {
 
     private String lastModifiedDate;
 
+    private boolean like;
+
     private Page<CommentDTO> commentList;
 
-    public Page<SubscribeArticleDTO> toDtoList(Page<ArticleEntity> articleList){
+    public Page<SubscribeArticleDTO> toDtoList(Page<ArticleEntity> articleList, List<Long> likes){
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
         int start = (int) pageRequest.getOffset();
         int end = start+pageRequest.getPageSize();
         Page<SubscribeArticleDTO> dtoList = articleList.map(a ->
-                SubscribeArticleDTO.builder()
-                .id(a.getId())
-                .userPK(a.getUserEntity().getId())
-                .userId(a.getUserEntity().getUserId())
-                .nickName(a.getUserEntity().getNickName())
-                .avatar(a.getUserEntity().getAvatar())
-                .title(a.getTitle())
-                .content(a.getContent())
-                .createDate(a.getCreateDate().toString())
-                .lastModifiedDate(a.getLastModifiedDate().toString())
-                .commentList(new CommentDTO().toADtoList(new PageImpl<>(a.getComments().subList(start, Math.min(end, a.getComments().size())), pageRequest, a.getComments().size())))
-                .build());
+                        SubscribeArticleDTO.builder()
+                        .id(a.getId())
+                        .userPK(a.getUserEntity().getId())
+                        .userId(a.getUserEntity().getUserId())
+                        .nickName(a.getUserEntity().getNickName())
+                        .avatar(a.getUserEntity().getAvatar())
+                        .title(a.getTitle())
+                        .content(a.getContent())
+                        .createDate(a.getCreateDate().toString())
+                        .lastModifiedDate(a.getLastModifiedDate().toString())
+                        .like(likes.contains(a.getId()))
+                        .commentList(new CommentDTO().toADtoList(new PageImpl<>(a.getComments().subList(start, Math.min(end, a.getComments().size())), pageRequest, a.getComments().size())))
+                        .build());
         return dtoList;
     }
 

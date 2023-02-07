@@ -4,8 +4,10 @@ import com.blahblah.web.controller.exception.CustomException;
 import com.blahblah.web.dto.request.ArticleDTO;
 import com.blahblah.web.dto.response.SubscribeArticleDTO;
 import com.blahblah.web.entity.ArticleEntity;
+import com.blahblah.web.entity.LikeArticleEntity;
 import com.blahblah.web.repository.ArticleRepository;
 import com.blahblah.web.repository.CommentRepository;
+import com.blahblah.web.repository.LikeArticleRepository;
 import com.blahblah.web.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Transactional
 @Service
 @RequiredArgsConstructor
@@ -24,6 +29,7 @@ public class ArticleServiceImpl implements ArticleService{
 
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
+    private final LikeArticleRepository likeArticleRepository;
 
     @Override
     public ArticleEntity createArticle(ArticleDTO articleDTO) {
@@ -58,20 +64,30 @@ public class ArticleServiceImpl implements ArticleService{
     @Override
     public Page<SubscribeArticleDTO> readArticle(long id) {
 
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "create_date"));
         Page<ArticleEntity> result = articleRepository.findAllBy(id, pageRequest);
-        
-        Page<SubscribeArticleDTO> DTOList = new SubscribeArticleDTO().toDtoList(result);
+
+        List<LikeArticleEntity> likeEntities =  likeArticleRepository.findAllByUserId(id);
+        List<Long> likes = new ArrayList<>();
+        for(LikeArticleEntity like: likeEntities){
+            likes.add(like.getArticleEntity().getId());
+        }
+        Page<SubscribeArticleDTO> DTOList = new SubscribeArticleDTO().toDtoList(result, likes);
 
         return DTOList;
     }
 
     @Override
-    public Page<SubscribeArticleDTO> readMyArticle(long userPK) {
+    public Page<SubscribeArticleDTO> readMyArticle(long userPK, long id) {
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
 
         Page<ArticleEntity> result = articleRepository.findAllByUserId(userPK, pageRequest);
-        Page<SubscribeArticleDTO> articles = new SubscribeArticleDTO().toDtoList(result);
+        List<LikeArticleEntity> likeEntities =  likeArticleRepository.findAllByUserId(id);
+        List<Long> likes = new ArrayList<>();
+        for(LikeArticleEntity like: likeEntities){
+            likes.add(like.getArticleEntity().getId());
+        }
+        Page<SubscribeArticleDTO> articles = new SubscribeArticleDTO().toDtoList(result, likes);
 
         return articles;
     }
