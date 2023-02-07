@@ -1,12 +1,11 @@
 package io.openvidu.basic.java.dto.request;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Builder
 @Getter
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class CreateRoomDto {
     private String title;
     private String hashTag;
