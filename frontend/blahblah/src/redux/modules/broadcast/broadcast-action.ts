@@ -58,8 +58,11 @@ export const startSession = createAsyncThunk(
         })
         .then(({ data }: any) => {
           console.log("방송 시작: ", data);
+          thunkAPI.dispatch(
+            broadcastActions.loadCurrentSession({ currentSession: data })
+          );
 
-          thunkAPI.dispatch(fetchSessionData());
+          // thunkAPI.dispatch(fetchSessionData());
         });
 
       // return data;

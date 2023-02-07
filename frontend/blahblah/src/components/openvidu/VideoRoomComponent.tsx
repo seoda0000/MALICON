@@ -9,6 +9,7 @@ import "./VideoRoomComponent.css";
 import OpenViduLayout from "../layout/openvidu-layout";
 import UserModel from "../../model/openvidu/user-model";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
+import { getAccessToken } from "../../redux/modules/user/token";
 
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
@@ -22,7 +23,7 @@ const context = (canvas as HTMLCanvasElement).getContext("2d");
 // 타입 생성
 interface VideoRoomProps {
   user?: any;
-  sessionName?: any;
+  sessionName?: string;
   token?: any;
   error?: any;
   joinSession?: any;
@@ -798,7 +799,10 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         nickName: "된장찌개",
       },
       {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
       }
     );
     return response.data; // The sessionId
@@ -812,7 +816,10 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         "/connections",
       {},
       {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
       }
     );
     return response.data.token; // The token
@@ -822,7 +829,10 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     const response = await axios.delete(
       APPLICATION_SERVER_URL + "api/sessions/" + sessionId,
       {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
       }
     );
     return response.data; // The sessionId
@@ -835,7 +845,10 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         thumbnail: thumbnailImage,
       },
       {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
       }
     );
     return response.data;

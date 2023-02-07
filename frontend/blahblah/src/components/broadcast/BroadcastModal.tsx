@@ -6,6 +6,8 @@ import BasicModal from "../ui/BasicModal";
 import ChipsArray from "./ChipsArray";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux/configStore";
+import { useNavigate } from "react-router-dom";
+
 interface ChipData {
   key: number;
   label: string;
@@ -61,6 +63,8 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
     console.log(chipData);
   };
 
+  // 방송 시작
+  const navigate = useNavigate();
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const chipList = chipData.filter((chip) => chip.selected === true);
@@ -73,6 +77,7 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
     dispatch(startSession(sessionData));
 
     onCloseModal();
+    navigate("/video");
   };
 
   return (

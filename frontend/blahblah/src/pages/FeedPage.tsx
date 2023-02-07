@@ -1,23 +1,16 @@
 import Box from "@mui/material/Box";
-
 import { Paper } from "@mui/material";
 import VideoCard from "../components/video/VideoCard";
 import Grid from "@mui/material/Grid";
 import FeedList from "../components/feed/FeedList";
-
-import { useSelector, useDispatch } from "react-redux";
-
-import { fetchFeedData } from "../redux/modules/feed/feed-action";
-import { useEffect, useState } from "react";
-
-import { AppDispatch } from "../redux/configStore";
-
 import EditorModal from "../components/feed/EditorModal";
-
 import Button from "@mui/material/Button";
-
 import CreateIcon from "@mui/icons-material/Create";
 
+import { useSelector, useDispatch } from "react-redux";
+import { fetchFeedData } from "../redux/modules/feed/feed-action";
+import { useEffect, useState } from "react";
+import { AppDispatch } from "../redux/configStore";
 import { RootState } from "../redux/configStore";
 
 const drawerWidth = 300;
