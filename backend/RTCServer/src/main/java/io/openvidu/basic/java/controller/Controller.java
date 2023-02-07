@@ -1,5 +1,6 @@
 package io.openvidu.basic.java.controller;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import io.openvidu.basic.java.controller.exception.CustomException;
@@ -7,7 +8,9 @@ import io.openvidu.basic.java.dto.LiveRoomDto;
 import io.openvidu.basic.java.dto.UserDto;
 import io.openvidu.basic.java.dto.request.CreateRoomDto;
 import io.openvidu.basic.java.redis.entity.LiveRoomEntity;
+import io.openvidu.basic.java.redis.entity.UserEntity;
 import io.openvidu.basic.java.redis.repository.LiveRoomRepository;
+import io.openvidu.basic.java.redis.repository.UserEntityRepository;
 import io.openvidu.basic.java.util.JwtUtil;
 
 import io.openvidu.java.client.*;
@@ -30,6 +33,8 @@ public class Controller {
 
 	private final LiveRoomRepository liveRoomRepository;
 
+	private final UserEntityRepository userEntityRepository;
+
 	//방 생성
 	@PostMapping("/api/sessions") //
 	public ResponseEntity<?> initializeSession(@RequestBody CreateRoomDto roomDto,
@@ -39,9 +44,13 @@ public class Controller {
 
 		// request header에 있는 토큰으로 유저정보 가져오기
 		String accessToken = JwtUtil.getAccessTokenFromHeader(request);
-		UserDto userInfo = JwtUtil.getUserDtoFromClaims(JwtUtil.parseClaims(accessToken));
+		Long id = JwtUtil.getIdFromClaims(JwtUtil.parseClaims(accessToken));
 
-		log.info(userInfo.toString());
+		UserEntity userInfo = userEntityRepository.findById(id).orElseThrow(
+				()->new CustomException(HttpStatus.NOT_FOUND, "존재하지 않는 아이디입니다.")
+		);
+
+		log.info("유저 정보 : " + userInfo);
 
 		//session 생성
 		//customSessionId => userId 가 들어있어야 한다.
@@ -54,13 +63,16 @@ public class Controller {
 		String sessionId = session.getSessionId();
 		String title = roomDto.getTitle();
 		String hashTag = roomDto.getHashTag();
-		Date date = new Date();
+		LocalDateTime date = LocalDateTime.now();
 
 		//LiveRoomEntity 생성
 		LiveRoomEntity liveRoomEntity = LiveRoomEntity.builder()
 				.title(title)
-				.streamer(userInfo)
-				.startAt(date)
+				.streamer(UserDto.builder()
+						.avatar(userInfo.getAvatar())
+						.nickName(userInfo.getNickName())
+						.userId(userInfo.getUserId()).build())
+				.startAt(date.toString())
 				.sessionId(sessionId)
 				.hashTag(hashTag)
 				.build();
@@ -95,7 +107,11 @@ public class Controller {
 		//연결과 토큰 만들기
 
 		String accessToken = JwtUtil.getAccessTokenFromHeader(request);
-		UserDto userInfo = JwtUtil.getUserDtoFromClaims(JwtUtil.parseClaims(accessToken));
+		Long id = JwtUtil.getIdFromClaims(JwtUtil.parseClaims(accessToken));
+
+		UserEntity userInfo = userEntityRepository.findById(id).orElseThrow(
+				()->new CustomException(HttpStatus.NOT_FOUND, "존재하지 않는 아이디입니다.")
+		);
 
 		// 로그인 된 userId와 sessionId가 같을 때
 		if(userInfo.getUserId().equals(sessionId))
@@ -120,8 +136,11 @@ public class Controller {
 		List<LiveRoomDto> roomList = new ArrayList<>();
 
 		//모든 라이브방 목록 저장
-		liveRoomRepository.findAll().forEach((room)->{roomList.add(entityToDto(room));});
+		Iterator<LiveRoomEntity> it = liveRoomRepository.findAll().iterator();
 
+		while(it.hasNext()){
+			roomList.add(entityToDto(it.next()));
+		}
 
 		log.info("방목록 끝-------------------------------------");
 
@@ -210,7 +229,7 @@ public class Controller {
 	public LiveRoomDto entityToDto (LiveRoomEntity liveRoomEntity){
 
 		String title = liveRoomEntity.getTitle();
-		Date startAt = liveRoomEntity.getStartAt();
+		String startAt = liveRoomEntity.getStartAt();
 		String thumbnail = liveRoomEntity.getThumbnail();
 		String sessionId = liveRoomEntity.getSessionId();
 		UserDto streamer = liveRoomEntity.getStreamer();
@@ -225,7 +244,6 @@ public class Controller {
 				.startAt(startAt)
 				.thumbnail(thumbnail)
 				.build();
-
 
 		return liveRoomDto;
 	}

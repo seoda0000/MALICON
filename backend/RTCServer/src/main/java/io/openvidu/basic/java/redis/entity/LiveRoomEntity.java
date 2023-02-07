@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @RedisHash("LiveRoom")
@@ -28,7 +29,7 @@ public class LiveRoomEntity {
     private String title;
 
     //방송 시작시간
-    private Date startAt;
+    private String startAt;
 
     //썸네일
     private String thumbnail;
