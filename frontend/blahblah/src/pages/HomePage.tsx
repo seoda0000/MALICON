@@ -20,7 +20,7 @@ function HomePage() {
           <Route path="/avatar" element={<AvatarPage />} />
           {/* <Route path="/faceapi" element={<FaceapiSamplePage />} /> */}
           <Route path="/profile/:userpk" element={<ProfilePage />} />
-          <Route path="/video" element={<VideoPage />} />
+          {/* <Route path="/video" element={<VideoPage />} /> */}
         </Routes>
       </Layout>
     </div>
