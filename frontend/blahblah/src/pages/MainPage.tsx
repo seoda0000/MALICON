@@ -60,7 +60,7 @@ function MainPage() {
     if (isInitial) {
       isInitial = false;
       // 절찬리 진행 이후 작업
-      // dispatch(fetchSessionData());
+      dispatch(fetchSessionData());
       return;
     }
   }, [broadcast, dispatch]);

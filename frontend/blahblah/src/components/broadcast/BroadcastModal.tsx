@@ -6,6 +6,8 @@ import BasicModal from "../ui/BasicModal";
 import ChipsArray from "./ChipsArray";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux/configStore";
+import { useNavigate } from "react-router-dom";
+
 interface ChipData {
   key: number;
   label: string;
@@ -34,22 +36,33 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
 
   // chips
   const [chipData, setChipData] = useState<ChipData[]>([
-    { key: 0, label: "실시간", selected: true },
-    { key: 1, label: "노래", selected: false },
-    { key: 2, label: "게임", selected: false },
-    { key: 3, label: "요리", selected: false },
-    { key: 4, label: "팬미팅", selected: false },
-    { key: 5, label: "악기", selected: false },
-    { key: 6, label: "댄스", selected: false },
-    { key: 7, label: "패션", selected: false },
-    { key: 8, label: "그림", selected: false },
-    { key: 9, label: "한국어", selected: false },
-    { key: 10, label: "English", selected: false },
+    { key: 0, label: "K-POP", selected: false },
+    { key: 1, label: "발라드", selected: false },
+    { key: 2, label: "락", selected: false },
+    { key: 3, label: "트로트", selected: false },
+    { key: 4, label: "디스코", selected: false },
+    { key: 5, label: "팝", selected: false },
+    { key: 6, label: "재즈", selected: false },
+    { key: 7, label: "클래식", selected: false },
+    { key: 8, label: "CCM", selected: false },
+    { key: 9, label: "힙합", selected: false },
+    { key: 10, label: "컨트리", selected: false },
+    { key: 11, label: "레게", selected: false },
+    { key: 12, label: "댄스", selected: false },
+    { key: 13, label: "EDM", selected: false },
+    { key: 14, label: "통기타", selected: false },
+    { key: 15, label: "피아노", selected: false },
+    { key: 16, label: "밴드", selected: false },
+    { key: 17, label: "리코더", selected: false },
+    { key: 18, label: "팬 미팅", selected: false },
+    { key: 19, label: "인디", selected: false },
+    { key: 20, label: "솔로", selected: false },
+    { key: 21, label: "듀엣", selected: false },
+    { key: 22, label: "그룹", selected: false },
   ]);
 
   const handleClick = (e: any) => {
     const target = e.target.innerHTML;
-    console.log(target);
     setChipData((chips) =>
       chips.map((chip) => {
         if (chip.label === target) {
@@ -58,9 +71,10 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
         return chip;
       })
     );
-    console.log(chipData);
   };
 
+  // 방송 시작
+  const navigate = useNavigate();
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const chipList = chipData.filter((chip) => chip.selected === true);
@@ -73,6 +87,7 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
     dispatch(startSession(sessionData));
 
     onCloseModal();
+    navigate("/video");
   };
 
   return (

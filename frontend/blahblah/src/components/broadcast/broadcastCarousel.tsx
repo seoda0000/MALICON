@@ -18,15 +18,47 @@ const BroadcastCarousel: React.FC<{ sessions: any[] }> = (props) => {
       <Grid item>
         <div
           style={{
-            height: "100",
+            // height: "100",
             // maxHeight: "40vw",
-            minHeight: 0,
-            minWidth: 0,
-            maxWidth: "70vw",
+            // minHeight: 0,
+            // minWidth: 0,
+            maxWidth: "60vw",
             width: "100%",
-            overflow: "hidden",
+            // overflow: "hidden",
           }}
         >
+          {/* 캐러셀 안 나올 때 아래 h1 태그를 추가해볼 것 */}
+          {/* <h1 style={{ color: "white" }}>Hi</h1> */}
+          <Swiper
+            modules={[EffectCards, Navigation, Pagination]}
+            navigation
+            effect={"cards"}
+            spaceBetween={30}
+            pagination={{ clickable: true }}
+            loop={true}
+            slidesPerView={1}
+            onSlideChange={() => console.log("slide change")}
+            onSwiper={(swiper) => console.log(swiper)}
+            className="mySwiper"
+          >
+            {props.sessions.length !== 0 ? (
+              props.sessions.map((session) => (
+                <SwiperSlide key={session.sessionId}>
+                  <CarouselComp nth={3} title={session.title} caption={true}>
+                    <img
+                      src={session.thumbnail}
+                      alt={session.title}
+                      // style={{ width: "90%" }}
+                    />
+                  </CarouselComp>
+                </SwiperSlide>
+              ))
+            ) : (
+              <div>실시간 방송이 없습니다.</div>
+            )}
+          </Swiper>
+
+          <h1>예시</h1>
           <Swiper
             modules={[EffectCards, Navigation, Pagination]}
             navigation
@@ -40,7 +72,7 @@ const BroadcastCarousel: React.FC<{ sessions: any[] }> = (props) => {
             //     translate: ["100%", 0, 0],
             //   },
             // }}
-            style={{ width: "auto" }}
+            // style={{ width: "auto" }}
             spaceBetween={30}
             pagination={{ clickable: true }}
             loop={true}
@@ -51,7 +83,7 @@ const BroadcastCarousel: React.FC<{ sessions: any[] }> = (props) => {
           >
             {props.sessions.length !== 0 ? (
               props.sessions.map((session) => (
-                <SwiperSlide>
+                <SwiperSlide key={session.sessionId}>
                   <CarouselComp nth={3} title={session.title} caption={true}>
                     <img
                       src={session.thumbnail}
