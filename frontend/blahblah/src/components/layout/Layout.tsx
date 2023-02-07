@@ -548,6 +548,11 @@ export default function Layout(props: LayoutProps) {
         <SigninModal open={openSigninModal} setOpen={setOpenSigninModal} />
       )}
 
+      {/* 모달 */}
+      {openSignupModal && (
+        <SignupModal open={openSignupModal} setOpen={setOpenSignupModal} />
+      )}
+
       {/* 방송 모달 */}
       {openBroadcastModal && (
         <BroadcastModal
