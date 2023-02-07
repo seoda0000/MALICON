@@ -69,8 +69,9 @@ public class VideoController {
     }
 
     @GetMapping("/details/{videoId}")
-    public ResponseEntity videoDetail(@PathVariable long videoId){
-        VideoDTO video = videoService.getVideo(videoId);
+    public ResponseEntity videoDetail(@PathVariable long videoId, HttpServletRequest request){
+        long userPK = JWTutil.getLongIdByAccessToken(request);
+        VideoDTO video = videoService.getVideo(videoId, userPK);
         if(video==null){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("상세 조회 실패"));
         }

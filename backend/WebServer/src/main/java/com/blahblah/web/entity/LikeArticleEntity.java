@@ -16,6 +16,9 @@ import javax.persistence.*;
 @IdClass(LikeArticleEntityPK.class)
 public class LikeArticleEntity {
 
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private long userId;
+
     @Id
     @ManyToOne(
             targetEntity = UserEntity.class,

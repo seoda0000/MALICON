@@ -27,6 +27,7 @@ public class VideoDTO {
     private String pathUrl;
     private String createDate;
     private String hashtags;
+    private boolean like;
     private Page<CommentDTO> comments;
 
     public Page<VideoDTO> toDtoList(Page<VideoEntity> videoList){
