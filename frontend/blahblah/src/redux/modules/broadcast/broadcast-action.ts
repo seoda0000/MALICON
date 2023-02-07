@@ -14,8 +14,6 @@ export const fetchSessionData = createAsyncThunk(
       // const dispatch = useDispatch<AppDispatch>();
       const axios = openviduInitializer();
 
-      console.log("액세스 토큰", getAccessToken());
-
       const response = await axios.get("/api/rooms", {
         headers: {
           "Content-Type": "application/json",

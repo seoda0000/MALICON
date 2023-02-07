@@ -161,8 +161,6 @@ export default function Layout(props: LayoutProps) {
     setOpenSignupModal((prev) => !prev);
   };
 
-
-
   // 로그아웃
 
   const logout = () => {
@@ -439,33 +437,6 @@ export default function Layout(props: LayoutProps) {
                 </ListItemIcon>
                 <ListItemText
                   primary="방송하기"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-
-            {/* openvidu test 버튼 */}
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                component={Link}
-                to="/video"
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <PodcastsIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="openvidu"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>
