@@ -84,10 +84,11 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
       hashTag: JSON.stringify(chipList),
     };
 
-    dispatch(startSession(sessionData));
-
-    onCloseModal();
-    navigate("/video");
+    // 리덕스에 저장하기 전에 호출되어서 프롭스에 안담겼음
+    dispatch(startSession(sessionData)).then(()=>{
+      onCloseModal();
+      navigate("/video");
+    });
   };
 
   return (

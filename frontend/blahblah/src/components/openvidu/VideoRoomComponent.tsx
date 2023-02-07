@@ -16,11 +16,6 @@ const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production"
     ? ""
     : "https://blahblah.movebxeax.me/stream-service/";
-const canvas = document.createElement("canvas");
-canvas.width = 320;
-canvas.height = 240;
-
-const context = (canvas as HTMLCanvasElement).getContext("2d");
 
 // 타입 생성
 interface VideoRoomProps {
@@ -87,9 +82,10 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       ? this.props.sessionName
       : "sessionA";
 
+      console.log("session 이름그 : ",sessionName);
     this.remotes = [];
     this.localUserAccessAllowed = false;
-    this.isPublisher = userName === "streamer";
+    this.isPublisher = false;
     this.state = {
       mySessionId: sessionName,
       myUserName: userName,
@@ -787,34 +783,34 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
 
   // ========================================================
   async getToken() {
-    const sessionId = await this.createSession(this.state.mySessionId);
-    return await this.createToken(sessionId);
+    // const sessionId = await this.createSession(this.state.mySessionId);
+    return await this.createToken(this.state.mySessionId);
   }
 
-  async createSession(sessionId: any) {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions",
-      {
-        customSessionId: sessionId,
-        title: "김치찌개",
-        avatar: "hhihi",
-        nickName: "된장찌개",
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Baerer " + getAccessToken(),
-        },
-      }
-    );
-    return response.data; // The sessionId
-  }
+  // async createSession(sessionId: any) {
+  //   const response = await axios.post(
+  //     APPLICATION_SERVER_URL + "api/sessions",
+  //     {
+  //       customSessionId: sessionId,
+  //       title: "김치찌개",
+  //       avatar: "hhihi",
+  //       nickName: "된장찌개",
+  //     },
+  //     {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: "Baerer " + getAccessToken(),
+  //       },
+  //     }
+  //   );
+  //   return response.data; // The sessionId
+  // }
 
   async createToken(sessionId: any) {
-    const response = await axios.post(
+    const {data} = await axios.post(
       APPLICATION_SERVER_URL +
         "api/sessions/" +
-        sessionId.sessionId +
+        sessionId +
         "/connections",
       {},
       {
@@ -824,11 +820,13 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         },
       }
     );
-    return response.data.token; // The token
+    this.isPublisher = (data.role === "PUBLISHER");
+    console.log("커넥션 : ", data, " isPulisher : " , this.isPublisher);
+    return data.token; // The token
   }
 
   async deleteSession(sessionId: any) {
-    const response = await axios.delete(
+    const {data} = await axios.delete(
       APPLICATION_SERVER_URL + "api/sessions/" + sessionId,
       {
         headers: {
@@ -837,11 +835,11 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         },
       }
     );
-    return response.data; // The sessionId
+    return data; // The sessionId
   }
 
   async createThumbnail(sessionId: any, thumbnailImage: any) {
-    const response = await axios.post(
+    const {data} = await axios.post(
       APPLICATION_SERVER_URL + "api/sessions/thumbnail/" + sessionId,
       {
         thumbnail: thumbnailImage,
@@ -853,7 +851,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         },
       }
     );
-    return response.data;
+    return data;
   }
 }
 export default VideoRoomComponent;
