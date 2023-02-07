@@ -51,7 +51,7 @@ const BroadcastCarousel: React.FC<{ sessions: any[] }> = (props) => {
           >
             {props.sessions.length !== 0 ? (
               props.sessions.map((session) => (
-                <SwiperSlide>
+                <SwiperSlide key={session.sessionId}>
                   <CarouselComp nth={3} title={session.title} caption={true}>
                     <img
                       src={session.thumbnail}
