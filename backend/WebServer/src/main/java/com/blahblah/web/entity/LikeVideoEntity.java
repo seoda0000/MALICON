@@ -15,6 +15,10 @@ import javax.persistence.*;
 @AllArgsConstructor
 @IdClass(LikeVideoEntityPK.class)
 public class LikeVideoEntity {
+
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private long userId;
+
     @Id
     @ManyToOne(
             targetEntity = UserEntity.class,
@@ -22,6 +26,9 @@ public class LikeVideoEntity {
     )
     @JoinColumn(name="user_id")
     private UserEntity userEntity;
+
+    @Column(name = "video_id", insertable = false, updatable = false)
+    private long videoId;
 
     @Id
     @ManyToOne(

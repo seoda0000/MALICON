@@ -6,6 +6,7 @@ import com.blahblah.web.dto.request.ArticleDTO;
 import com.blahblah.web.dto.response.Message;
 import com.blahblah.web.dto.response.SubscribeArticleDTO;
 import com.blahblah.web.entity.ArticleEntity;
+import com.blahblah.web.repository.ArticleRepository;
 import com.blahblah.web.service.ArticleService;
 import com.blahblah.web.util.JWTutil;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RequiredArgsConstructor
 public class ArticleController {
+    private final ArticleRepository articleRepository;
 
     private final ArticleService articleService;
 
@@ -50,11 +52,20 @@ public class ArticleController {
         else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    @DeleteMapping("/{articleId}/{userPK}")
-    public ResponseEntity deleteArticle(@PathVariable long articleId, @PathVariable long userPK, HttpServletRequest request){
-        if(JWTutil.getLongIdByAccessToken(request) != userPK) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
+//    @DeleteMapping("/{articleId}/{userPK}")
+//    public ResponseEntity deleteArticle(@PathVariable long articleId, @PathVariable long userPK, HttpServletRequest request){
+//        if(JWTutil.getLongIdByAccessToken(request) != userPK) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
+//
+//        articleService.deleteArticle(articleId);
+//        return ResponseEntity.status(HttpStatus.OK).body(new Message("피드 삭제 완료"));
+//    }
 
-        articleService.deleteArticle(articleId);
+    @DeleteMapping
+    public ResponseEntity deleteArticle(@RequestBody ArticleDTO articleDTO, HttpServletRequest request){
+
+        if(JWTutil.getLongIdByAccessToken(request) != articleDTO.getUserPK()) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
+
+        articleService.deleteArticle(articleDTO.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new Message("피드 삭제 완료"));
     }
 

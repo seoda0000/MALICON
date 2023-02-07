@@ -14,7 +14,7 @@ public interface VideoService {
 
     Page<VideoDTO> readAllVideos();
 
-    VideoDTO getVideo(long videoId);
+    VideoDTO getVideo(long videoId, long userPK);
 
     void deleteVideo(long id);
 
