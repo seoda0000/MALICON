@@ -13,6 +13,8 @@ public class ArticleDTO {
 
     private long userPK;
 
+    private boolean like;
+
     private String userId;
 
     private String title;

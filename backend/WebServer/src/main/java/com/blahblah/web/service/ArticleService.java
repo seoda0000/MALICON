@@ -17,6 +17,6 @@ public interface ArticleService {
 
     Page<SubscribeArticleDTO> readArticle(long id);
 
-    Page<SubscribeArticleDTO> readMyArticle(long id);
+    Page<SubscribeArticleDTO> readMyArticle(long userPK, long id);
 
 }

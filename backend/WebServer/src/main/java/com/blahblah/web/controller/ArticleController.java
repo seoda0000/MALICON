@@ -24,10 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RequiredArgsConstructor
 public class ArticleController {
-    private final ArticleRepository articleRepository;
-
     private final ArticleService articleService;
-
 
     @PostMapping
     public ResponseEntity insertArticle(@RequestBody @Validated ArticleDTO articleDTO, HttpServletRequest request){
@@ -52,13 +49,6 @@ public class ArticleController {
         else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-//    @DeleteMapping("/{articleId}/{userPK}")
-//    public ResponseEntity deleteArticle(@PathVariable long articleId, @PathVariable long userPK, HttpServletRequest request){
-//        if(JWTutil.getLongIdByAccessToken(request) != userPK) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
-//
-//        articleService.deleteArticle(articleId);
-//        return ResponseEntity.status(HttpStatus.OK).body(new Message("피드 삭제 완료"));
-//    }
 
     @DeleteMapping
     public ResponseEntity deleteArticle(@RequestBody ArticleDTO articleDTO, HttpServletRequest request){
@@ -79,8 +69,9 @@ public class ArticleController {
     }
 
     @GetMapping("/{userPK}")
-    public ResponseEntity readMyArticle(@PathVariable long userPK){
-        Page<SubscribeArticleDTO> articleList = articleService.readMyArticle(userPK);
+    public ResponseEntity readMyArticle(@PathVariable long userPK, HttpServletRequest request){
+        long id = JWTutil.getLongIdByAccessToken(request);
+        Page<SubscribeArticleDTO> articleList = articleService.readMyArticle(userPK, id);
         if(articleList.isEmpty()){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("피트 목록이 없습니다"));
         }
