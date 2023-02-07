@@ -3,7 +3,9 @@ package com.blahblah.web.service;
 import com.blahblah.web.controller.exception.CustomException;
 import com.blahblah.web.dto.request.CommentDTO;
 import com.blahblah.web.dto.response.VideoDTO;
+import com.blahblah.web.entity.LikeVideoEntity;
 import com.blahblah.web.entity.VideoEntity;
+import com.blahblah.web.repository.LikeVideoRepository;
 import com.blahblah.web.repository.UserRepository;
 import com.blahblah.web.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +18,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class VideoServiceImpl implements VideoService{
+    private final LikeVideoRepository likeVideoRepository;
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
 
@@ -67,7 +71,7 @@ public class VideoServiceImpl implements VideoService{
     }
 
     @Override
-    public VideoDTO getVideo(long videoId) {
+    public VideoDTO getVideo(long videoId, long userPK) {
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
         int start = (int) pageRequest.getOffset();
         int end = start+pageRequest.getPageSize();
@@ -76,6 +80,9 @@ public class VideoServiceImpl implements VideoService{
 
         videoRepository.updateViewsById(v.getId());
 
+        LikeVideoEntity result = likeVideoRepository.findByUserIdAndVideoId(userPK, v.getId());
+        boolean check = false;
+        if(result!=null) check = true;
         VideoDTO video = VideoDTO.builder()
                 .id(v.getId())
                 .avatar(v.getUserEntity().getAvatar())
@@ -85,6 +92,7 @@ public class VideoServiceImpl implements VideoService{
                 .pathUrl(v.getPathUrl())
                 .comments(new CommentDTO().toVDtoList(new PageImpl<>(v.getComments().subList(start, Math.min(end, v.getComments().size())), pageRequest, v.getComments().size())))
                 .title(v.getTitle())
+                .like(check)
                 .hashtags(v.getHashtags())
                 .createDate(v.getCreateDate().toString())
                 .views(v.getViews()+1)

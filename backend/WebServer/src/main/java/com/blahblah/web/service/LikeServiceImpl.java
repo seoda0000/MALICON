@@ -1,6 +1,7 @@
 package com.blahblah.web.service;
 
 import com.blahblah.web.controller.exception.CustomException;
+import com.blahblah.web.entity.ArticleEntity;
 import com.blahblah.web.entity.LikeArticleEntity;
 import com.blahblah.web.entity.LikeVideoEntity;
 import com.blahblah.web.repository.*;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -29,6 +32,16 @@ public class LikeServiceImpl implements LikeService{
                 .userEntity(userRepository.findById(userPK).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "사용자가 유효하지 않습니다.")))
                 .build();
         return likeArticleRepository.save(like);
+    }
+
+    @Override
+    public List<Long> getLikeArticles(long userPK) {
+        List<LikeArticleEntity> result =  likeArticleRepository.findAllByUserId(userPK);
+        List<Long> articleIds = new ArrayList<>();
+        for(LikeArticleEntity like: result){
+            articleIds.add(like.getArticleEntity().getId());
+        }
+        return articleIds;
     }
 
     @Override

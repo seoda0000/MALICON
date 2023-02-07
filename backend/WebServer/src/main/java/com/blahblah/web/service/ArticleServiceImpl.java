@@ -60,7 +60,7 @@ public class ArticleServiceImpl implements ArticleService{
 
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
         Page<ArticleEntity> result = articleRepository.findAllBy(id, pageRequest);
-
+        
         Page<SubscribeArticleDTO> DTOList = new SubscribeArticleDTO().toDtoList(result);
 
         return DTOList;
