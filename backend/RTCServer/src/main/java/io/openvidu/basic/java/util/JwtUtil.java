@@ -4,6 +4,7 @@ package io.openvidu.basic.java.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import io.openvidu.basic.java.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,16 +13,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Key;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class JwtUtil {
-    private static String SECRET_KEY;
+    private static Key SECRET_KEY;
 
     @Autowired
     private JwtUtil(@Value("${jwt.secret}") String secretKey){
-        SECRET_KEY = secretKey;
+        SECRET_KEY = Keys.hmacShaKeyFor(secretKey.getBytes());
+
     };
 
     public static String getAccessTokenFromHeader(HttpServletRequest request){
