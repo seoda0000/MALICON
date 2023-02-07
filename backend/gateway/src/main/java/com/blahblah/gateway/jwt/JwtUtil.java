@@ -2,20 +2,24 @@ package com.blahblah.gateway.jwt;
 
 import com.blahblah.gateway.exception.JwtAuthenticationException;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
+
 @Component
 @Slf4j
 public class JwtUtil {
-    private static String SECRET_KEY;
+    private static Key SECRET_KEY;
 
     @Autowired
     private JwtUtil(@Value("${jwt.secret}") String secretKey){
-        SECRET_KEY = secretKey;
+        SECRET_KEY = Keys.hmacShaKeyFor(secretKey.getBytes());
+
     };
 
     public static boolean isValidToken(String token){
