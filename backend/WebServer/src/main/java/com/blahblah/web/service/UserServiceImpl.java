@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
 
     private static final String FROM_ADDRESS = "admin@blahblah.movebxeax.me";
@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService{
         UserEntity user = userRepository.findByUserId(userDTO.getUserId()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."));
         UserEntity updatedUser = UserEntity.builder().id(userDTO.getId()==null?user.getId():userDTO.getId())
                 .userId(userDTO.getUserId()==null?user.getUserId():userDTO.getUserId())
-                .password(userDTO.getPassword()==null?passwordEncoder.encode(user.getPassword()):passwordEncoder.encode(userDTO.getPassword()))
+                .password(userDTO.getPassword()==null?user.getPassword():passwordEncoder.encode(userDTO.getPassword()))
                 .nickName(userDTO.getNickName()==null?user.getNickName():userDTO.getNickName())
                 .phoneNumber(userDTO.getPhoneNumber()==null?user.getPhoneNumber():userDTO.getPhoneNumber())
                 .lightStick(userDTO.getLightStick()==null?user.getLightStick():userDTO.getLightStick())
