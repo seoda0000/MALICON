@@ -26,15 +26,18 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Builder.Default
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
     private List<ArticleEntity> articles = new ArrayList<>();
 
     @OneToOne(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
     private AboutMeEntity aboutMe;
 
+    @Builder.Default
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
     private List<UserSubscribeEntity> subscribes= new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
     private List<VideoEntity> videos = new ArrayList<>();
 
