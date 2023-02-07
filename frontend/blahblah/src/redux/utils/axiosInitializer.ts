@@ -9,7 +9,7 @@ export function axiosInitializer() {
 
 export function openviduInitializer() {
   let instance = axios.create({
-    // baseURL: "http://localhost:33332",
+    //baseURL: "http://localhost:33332",
     baseURL: "https://blahblah.movebxeax.me/stream-service",
   });
   return instance;
