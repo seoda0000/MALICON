@@ -41,6 +41,8 @@ public class Controller {
 		String accessToken = JwtUtil.getAccessTokenFromHeader(request);
 		UserDto userInfo = JwtUtil.getUserDtoFromClaims(JwtUtil.parseClaims(accessToken));
 
+		log.info(userInfo.toString());
+
 		//session 생성
 		//customSessionId => userId 가 들어있어야 한다.
 		SessionProperties properties = SessionProperties.fromJson(Map.of("customSessionId", userInfo.getUserId())).build();
@@ -110,7 +112,7 @@ public class Controller {
 
 	//방목록 가져오기
 	@Transactional(readOnly = true)
-	@PostMapping("api/rooms")
+	@GetMapping("api/rooms")
 	public ResponseEntity<?> getRoomList() throws Exception {
 		log.info("방목록 시작-------------------------------------");
 
