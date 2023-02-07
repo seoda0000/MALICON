@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.openvidu.basic.java.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class JwtUtil {
     private static String SECRET_KEY;
+
+    @Autowired
     private JwtUtil(@Value("${jwt.secret}") String secretKey){
         SECRET_KEY = secretKey;
     };
