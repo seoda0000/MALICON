@@ -4,8 +4,6 @@ import lombok.*;
 
 @Builder
 @Getter
-@RequiredArgsConstructor
-@AllArgsConstructor
 public class CreateRoomDto {
     private String title;
     private String hashTag;
