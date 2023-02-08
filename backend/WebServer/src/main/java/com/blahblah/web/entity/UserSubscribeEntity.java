@@ -25,6 +25,8 @@ public class UserSubscribeEntity implements Serializable {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
+    @Column(name = "subscribe_user_id", insertable = false, updatable = false)
+    private long subscribeUserId;
     @Id
     @ManyToOne(
             targetEntity = UserEntity.class,
