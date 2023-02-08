@@ -57,46 +57,6 @@ const BroadcastCarousel: React.FC<{ sessions: any[] }> = (props) => {
               <div>실시간 방송이 없습니다.</div>
             )}
           </Swiper>
-
-          <h1>예시</h1>
-          <Swiper
-            modules={[EffectCards, Navigation, Pagination]}
-            navigation
-            effect={"cards"}
-            // creativeEffect={{
-            //   prev: {
-            //     shadow: true,
-            //     translate: [0, 0, -400],
-            //   },
-            //   next: {
-            //     translate: ["100%", 0, 0],
-            //   },
-            // }}
-            // style={{ width: "auto" }}
-            spaceBetween={30}
-            pagination={{ clickable: true }}
-            loop={true}
-            slidesPerView={1}
-            onSlideChange={() => console.log("slide change")}
-            onSwiper={(swiper) => console.log(swiper)}
-            className="mySwiper"
-          >
-            {props.sessions.length !== 0 ? (
-              props.sessions.map((session) => (
-                <SwiperSlide key={session.sessionId}>
-                  <CarouselComp nth={3} title={session.title} caption={true}>
-                    <img
-                      src={session.thumbnail}
-                      alt={session.title}
-                      // style={{ width: "90%" }}
-                    />
-                  </CarouselComp>
-                </SwiperSlide>
-              ))
-            ) : (
-              <div>실시간 방송이 없습니다.</div>
-            )}
-          </Swiper>
         </div>
       </Grid>
     </Grid>
