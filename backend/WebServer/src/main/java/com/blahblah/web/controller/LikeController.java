@@ -1,5 +1,6 @@
 package com.blahblah.web.controller;
 
+import com.blahblah.web.dto.LikeDTO;
 import com.blahblah.web.dto.response.Message;
 import com.blahblah.web.entity.LikeArticleEntity;
 import com.blahblah.web.entity.LikeVideoEntity;
@@ -23,10 +24,10 @@ public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/articles/{articleId}")
-    public ResponseEntity createLikeArticle(@PathVariable long articleId, HttpServletRequest request){
+    @PostMapping("/articles")
+    public ResponseEntity createLikeArticle(@RequestBody LikeDTO likeDTO, HttpServletRequest request){
         long userPK = JWTutil.getLongIdByAccessToken(request);
-        LikeArticleEntity result = likeService.addLikeArticle(userPK, articleId);
+        LikeArticleEntity result = likeService.addLikeArticle(userPK, likeDTO.getArticleId());
         if(result == null){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("피드 좋아요 실패"));
         }else {
@@ -49,10 +50,10 @@ public class LikeController {
         return ResponseEntity.status(HttpStatus.OK).body(new Message("피드 좋아요 취소 성공"));
     }
 
-    @PostMapping("/videos/{videoId}")
-    public ResponseEntity createLikeVideo(@PathVariable long videoId, HttpServletRequest request){
+    @PostMapping("/videos")
+    public ResponseEntity createLikeVideo(@RequestBody LikeDTO likeDTO, HttpServletRequest request){
         long userPK = JWTutil.getLongIdByAccessToken(request);
-        LikeVideoEntity result = likeService.addLikeVideo(userPK, videoId);
+        LikeVideoEntity result = likeService.addLikeVideo(userPK, likeDTO.getVideoId());
         if(result == null){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("비디오 좋아요 실패"));
         }else {

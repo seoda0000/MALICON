@@ -21,14 +21,14 @@ import java.util.List;
 public class SubscribeController{
     private final SubscribeService subscribeService;
 
-    @PostMapping("/{subscribeId}")
-    public ResponseEntity createSubscribe(@PathVariable long subscribeId, HttpServletRequest request){
+    @PostMapping
+    public ResponseEntity createSubscribe(@RequestBody SubscribeDTO subscribeDTO, HttpServletRequest request){
         long userId = JWTutil.getLongIdByAccessToken(request);
 
-        if(userId==subscribeId){
+        if(userId==subscribeDTO.getUserPK()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("본인은 구독할 수 없음"));
         }
-        UserSubscribeEntity sub = subscribeService.addSubscribe(userId, subscribeId);
+        UserSubscribeEntity sub = subscribeService.addSubscribe(userId, subscribeDTO.getUserPK());
         if(sub == null){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("구독 실패"));
         }else {
