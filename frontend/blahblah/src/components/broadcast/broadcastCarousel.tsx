@@ -17,7 +17,9 @@ import { AppDispatch } from "../../redux/configStore";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { broadcastActions } from "../../redux/modules/broadcast/broadcast-slice";
+import CardComp from "../common/CardComp";
 
+const basicCarousel = require("../../assets/img/carousel_basic.png");
 const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -51,7 +53,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
           }}
         >
           {/* 캐러셀 안 나올 때 아래 h1 태그를 추가해볼 것 */}
-          <h1 style={{ color: "white" }}>Hi</h1>
+          {/* <h1 style={{ color: "white" }}>Hi</h1> */}
           <Swiper
             modules={[EffectCards, Navigation, Pagination]}
             navigation
@@ -65,10 +67,10 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
             className="mySwiper"
           >
             {props.sessions.length !== 0 ? (
-              props.sessions.map((session) => (
+              props.sessions.map((session, index) => (
                 <SwiperSlide key={session.sessionId} onClick={onClickHandler}>
                   <CarouselComp
-                    nth={3}
+                    nth={index}
                     title={session.title}
                     nickname={session.streamer.nickName}
                     caption={true}
@@ -85,7 +87,9 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
                 </SwiperSlide>
               ))
             ) : (
-              <div>실시간 방송이 없습니다.</div>
+              <CardComp nth={0} caption={true}>
+                <img src={basicCarousel} style={{ width: "90%" }} />
+              </CardComp>
             )}
           </Swiper>
         </div>
