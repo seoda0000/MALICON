@@ -3,12 +3,12 @@ import "./App.css";
 
 import LandingPage from "./pages/LandingPage";
 import HomePage from "./pages/HomePage";
-import VideoPage from "./pages/VideoPage";
+import BroadcastPage from "./pages/BroadcastPage";
 function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/video" element={<VideoPage />} />
+      <Route path="/broadcast" element={<BroadcastPage />} />
       <Route path="/*" element={<HomePage />} />
     </Routes>
   );

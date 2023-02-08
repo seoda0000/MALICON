@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/joy";
 import React from "react";
+import CarouselChips from "../broadcast/CarouselChips";
 import ProfileImage from "./ProfileImage";
 
 const CardWrapper = styled(Card)<{ nth: number }>`
@@ -81,7 +82,8 @@ type CardCompPropsType = {
   caption?: boolean;
   nickname?: string;
   userAvatar?: string;
-  hashTags?: string;
+  hashTag?: string;
+  startAt?: string;
 };
 
 export default function CarouselComp({
@@ -91,7 +93,8 @@ export default function CarouselComp({
   caption,
   nickname,
   userAvatar,
-  hashTags,
+  hashTag,
+  startAt,
 }: CardCompPropsType): JSX.Element {
   return (
     <CardWrapper nth={nth}>
@@ -148,6 +151,13 @@ export default function CarouselComp({
                 >
                   {nickname}
                 </Typography>
+                <Typography
+                  level="h3"
+                  noWrap
+                  sx={{ fontSize: "sm", color: "#fff", marginLeft: "5px" }}
+                >
+                  {startAt}
+                </Typography>
               </Box>
               <Box
                 sx={{
@@ -156,7 +166,7 @@ export default function CarouselComp({
                   display: "flex",
                 }}
               >
-                <Typography level="h1" noWrap sx={{ fontSize: "lg" }}>
+                <Typography level="h1" noWrap sx={{ fontSize: "lg", mr: 1 }}>
                   <Link
                     href="#dribbble-shot"
                     overlay
@@ -171,13 +181,8 @@ export default function CarouselComp({
                     {title}
                   </Link>
                 </Typography>
-                <Typography
-                  level="h3"
-                  noWrap
-                  sx={{ fontSize: "sm", color: "#fff", marginLeft: "5px" }}
-                >
-                  {hashTags && JSON.parse(hashTags)}
-                </Typography>
+
+                <CarouselChips chipData={JSON.parse(hashTag as string)} />
               </Box>
             </Box>
           </Box>

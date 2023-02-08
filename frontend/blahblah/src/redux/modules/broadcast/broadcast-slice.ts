@@ -16,7 +16,7 @@ const initialState: BroadcastStateType = {
     startAt: "",
     thumbnail: "",
     streamer: { userId: "", nickName: "", avatar: "" },
-    hashtags: "",
+    hashTag: "",
   },
 };
 

@@ -15,15 +15,11 @@ const BroadcastListItem: React.FC<{ session: any }> = (props) => {
     dispatch(
       broadcastActions.joinSession({ sessionId: props.session.sessionId })
     );
-    console.log("여기요!!!!!!!!!!!", broadcast.currentSession.sessionId);
   };
 
   const onClickHandler = () => {
-    // 리덕스에 저장하기 전에 호출되어서 프롭스에 안담겼음
-    // await broadcastActions.joinSession({ sessionId: props.session.sessionId });
     joinSessionStart().then(() => {
-      console.log("gggggggggggggggggggg", broadcast.currentSession.sessionId);
-      navigate("/video");
+      navigate("/broadcast");
     });
   };
 

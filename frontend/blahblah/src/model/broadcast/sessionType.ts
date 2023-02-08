@@ -7,5 +7,5 @@ export type SessionType = {
   startAt: string;
   thumbnail: string;
   streamer: StreamerType;
-  hashtags: string;
+  hashTag: string;
 };

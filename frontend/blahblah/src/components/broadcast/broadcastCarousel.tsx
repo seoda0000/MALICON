@@ -12,22 +12,29 @@ import BroadcastCarouselItem from "./broadcastCarouselItem";
 // Import Swiper styles
 import CarouselComp from "../common/CarouselComp";
 import { SessionType } from "../../model/broadcast/sessionType";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux/configStore";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { broadcastActions } from "../../redux/modules/broadcast/broadcast-slice";
 
 const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
-  // 방송 진입
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const [index, setIndex] = useState(0);
 
-  // const joinSession() {
-  //   // 리덕스에 저장하기 전에 호출되어서 프롭스에 안담겼음
-  //   dispatch(joinSession(sessionId)).then(()=>{
-  //     navigate("/video");
-  //   });
-
-  // }
+  const joinSessionStart = async () => {
+    dispatch(
+      broadcastActions.joinSession({
+        sessionId: props.sessions[index].sessionId,
+      })
+    );
+  };
+  const onClickHandler = () => {
+    joinSessionStart().then(() => {
+      navigate("/broadcast");
+    });
+  };
 
   return (
     <Grid container justifyContent={"center"} alignItems={"center"}>
@@ -44,7 +51,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
           }}
         >
           {/* 캐러셀 안 나올 때 아래 h1 태그를 추가해볼 것 */}
-          {/* <h1 style={{ color: "white" }}>Hi</h1> */}
+          <h1 style={{ color: "white" }}>Hi</h1>
           <Swiper
             modules={[EffectCards, Navigation, Pagination]}
             navigation
@@ -53,20 +60,21 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
             pagination={{ clickable: true }}
             loop={true}
             slidesPerView={1}
-            onSlideChange={(swiper) => console.log(swiper)}
+            onSlideChange={(swiper) => setIndex(swiper.realIndex)}
             onSwiper={(swiper) => console.log(swiper)}
             className="mySwiper"
           >
             {props.sessions.length !== 0 ? (
               props.sessions.map((session) => (
-                <SwiperSlide key={session.sessionId}>
+                <SwiperSlide key={session.sessionId} onClick={onClickHandler}>
                   <CarouselComp
                     nth={3}
                     title={session.title}
                     nickname={session.streamer.nickName}
                     caption={true}
                     userAvatar={session.streamer.avatar}
-                    hashTags={session.hashtags}
+                    hashTag={session.hashTag}
+                    startAt={session.startAt}
                   >
                     <img
                       src={session.thumbnail}

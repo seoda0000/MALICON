@@ -27,7 +27,6 @@ export const fetchFeedData = createAsyncThunk(
       });
 
       const feeds = response.data.content;
-      console.log("피드목록: ", feeds);
       const newFeeds = feeds.map((feed: any) => {
         return {
           id: feed.id,
@@ -186,13 +185,16 @@ export const removeCommentData = createAsyncThunk(
       const axios = axiosInitializer();
 
       await axios
-        .delete<FeedRemoveType>("/api/comments", {
-          data: removeData,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Baerer " + getAccessToken(),
-          },
-        })
+        .delete<FeedRemoveType>(
+          `/api/comments/${removeData.id}/${removeData.userPK}`,
+          {
+            // data: removeData,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Baerer " + getAccessToken(),
+            },
+          }
+        )
         .then((data) => {
           console.log("덧글 삭제: ", data);
           thunkAPI.dispatch(fetchFeedData());
@@ -213,12 +215,16 @@ export const likeFeedAction = createAsyncThunk(
       const axios = axiosInitializer();
 
       await axios
-        .post(`/api/likes/articles/${articleId}`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Baerer " + getAccessToken(),
-          },
-        })
+        .post(
+          `/api/likes/articles/`,
+          { articleId: articleId },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Baerer " + getAccessToken(),
+            },
+          }
+        )
         .then(({ data }: any) => {
           console.log("피드 좋아요: ", data);
 

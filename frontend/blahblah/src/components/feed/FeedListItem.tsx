@@ -26,6 +26,7 @@ import { AppDispatch } from "../../redux/configStore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/configStore";
 import { likeFeedAction } from "../../redux/modules/feed";
+import { likeCancelAction } from "../../redux/modules/feed";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -70,8 +71,10 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
     const articleId = props.feed.id;
     dispatch(likeFeedAction(articleId));
   };
-
-  console.log("피드피드", props.feed);
+  const likeCancelHandler = () => {
+    const articleId = props.feed.id;
+    dispatch(likeCancelAction(articleId));
+  };
 
   return (
     <div>
@@ -94,11 +97,11 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
           <div>{parse(props.feed.content)}</div>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites" onClick={likeFeedHandler}>
+          <IconButton aria-label="add to favorites">
             {props.feed.like ? (
-              <FavoriteIcon color="error" />
+              <FavoriteIcon color="error" onClick={likeCancelHandler} />
             ) : (
-              <FavoriteIcon />
+              <FavoriteIcon onClick={likeFeedHandler} />
             )}
           </IconButton>
           <IconButton aria-label="share">
