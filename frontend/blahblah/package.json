@@ -28,6 +28,7 @@
     "face-api.js": "^0.22.2",
     "gsap": "^3.11.4",
     "html-react-parser": "^3.0.8",
+    "html2canvas": "^1.4.1",
     "jquery": "3.5.0",
     "lodash": "^4.17.21",
     "openvidu-browser": "2.25.0",

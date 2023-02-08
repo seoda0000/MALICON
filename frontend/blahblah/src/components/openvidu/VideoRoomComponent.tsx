@@ -10,6 +10,7 @@ import OpenViduLayout from "../layout/openvidu-layout";
 import UserModel from "../../model/openvidu/user-model";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import { getAccessToken } from "../../redux/modules/user/token";
+import html2canvas from "html2canvas";
 
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
@@ -199,7 +200,9 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.state.session
       .connect(token, { clientData: this.state.myUserName })
       .then(() => {
-        this.connectWebCam();
+        this.connectWebCam().then(()=>{
+          this.sendThumbnail()
+        })
       })
       .catch((error: any) => {
         if (this.props.error) {
@@ -677,27 +680,10 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   // }
 
   async captureThumbnail() {
-    let streamId = localUser.getStreamManager().stream.streamId;
-    let video = document.getElementById("video-" + streamId);
-    if (!video) return;
-    let canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const canvas_2d = (canvas as HTMLCanvasElement).getContext("2d");
-
-    (canvas_2d as CanvasRenderingContext2D).drawImage(
-      video as any,
-      0,
-      0,
-      video.videoWidth,
-      video.videoHeight
-    );
-
-    //let imageData = canvas.toDataURL('image/jpeg', 0.1);
-    let imageData = await encodeURIComponent(
-      canvas.toDataURL("image/jpeg", 0.1).split(",")[1]
-    );
-    return imageData;
+    let id = "video-" + localUser.getStreamManager().stream.streamId;
+    return await html2canvas(document.getElementById(id) as HTMLElement).then(canvas=>{
+      return encodeURIComponent(canvas.toDataURL('img/jpeg', 0.1).split(',')[1])
+    })
   }
 
   async sendThumbnail() {
