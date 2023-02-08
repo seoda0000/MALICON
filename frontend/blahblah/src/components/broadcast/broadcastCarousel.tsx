@@ -74,6 +74,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
                     caption={true}
                     userAvatar={session.streamer.avatar}
                     hashTag={session.hashTag}
+                    startAt={session.startAt}
                   >
                     <img
                       src={session.thumbnail}

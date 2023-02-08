@@ -83,6 +83,7 @@ type CardCompPropsType = {
   nickname?: string;
   userAvatar?: string;
   hashTag?: string;
+  startAt?: string;
 };
 
 export default function CarouselComp({
@@ -93,6 +94,7 @@ export default function CarouselComp({
   nickname,
   userAvatar,
   hashTag,
+  startAt,
 }: CardCompPropsType): JSX.Element {
   console.log(hashTag);
   return (
@@ -150,6 +152,13 @@ export default function CarouselComp({
                 >
                   {nickname}
                 </Typography>
+                <Typography
+                  level="h3"
+                  noWrap
+                  sx={{ fontSize: "sm", color: "#fff", marginLeft: "5px" }}
+                >
+                  {startAt}
+                </Typography>
               </Box>
               <Box
                 sx={{
@@ -158,7 +167,7 @@ export default function CarouselComp({
                   display: "flex",
                 }}
               >
-                <Typography level="h1" noWrap sx={{ fontSize: "lg" }}>
+                <Typography level="h1" noWrap sx={{ fontSize: "lg", mr: 1 }}>
                   <Link
                     href="#dribbble-shot"
                     overlay
@@ -173,13 +182,7 @@ export default function CarouselComp({
                     {title}
                   </Link>
                 </Typography>
-                <Typography
-                  level="h3"
-                  noWrap
-                  sx={{ fontSize: "sm", color: "#fff", marginLeft: "5px" }}
-                >
-                  {/* {hashTag} */}
-                </Typography>
+
                 <CarouselChips chipData={JSON.parse(hashTag as string)} />
               </Box>
             </Box>
