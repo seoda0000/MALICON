@@ -1,4 +1,5 @@
 import { ReduxStateType } from "../reduxStateType";
+import { SubscriberType } from "../subscribe/subscriberType";
 import { ProfileFeedType } from "./profileFeedType";
 import { ProfileUserType } from "./profileUserType";
 import { VideoType } from "./VideoType";
@@ -17,5 +18,7 @@ export type ProfileStateType = {
   getFeed: ReduxStateType;
   getVideo?: ReduxStateType;
   getIsOnAir?: ReduxStateType;
+  subscribers: SubscriberType[];
+  getSub: ReduxStateType;
 };
 

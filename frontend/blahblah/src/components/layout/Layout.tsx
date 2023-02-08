@@ -39,7 +39,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { BoldKoreanFont } from "../../theme/font";
 import { ThemeProvider } from "@mui/material/styles";
 import SubscriberItem from "../auth/SubscriberItem";
-import { getSubscribersAction } from "../../redux/modules/subscribe";
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import FaceIcon from "@mui/icons-material/Face";
 import BroadcastModal from "../broadcast/BroadcastModal";
@@ -49,6 +48,7 @@ import { RootState } from "../../redux/configStore";
 import { useSelector } from "react-redux";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AccountModal from "../auth/AccountModal";
+import { getSubscribersAction } from "../../redux/modules/profile";
 
 interface LayoutProps {
   children: ReactNode;
@@ -130,7 +130,8 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Layout(props: LayoutProps) {
   const loggedUser = useAppSelector((state) => state.user.userData);
-  const subscribers = useAppSelector((state) => state.subscribe.subscribers);
+  // const subscribers = useAppSelector((state) => state.subscribe.subscribers);
+  const subscribers = useAppSelector((state) => state.profile.subscribers);
   const dispatch = useAppDispatch();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -569,3 +570,4 @@ export default function Layout(props: LayoutProps) {
     </Box>
   );
 }
+

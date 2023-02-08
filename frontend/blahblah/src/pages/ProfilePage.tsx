@@ -134,7 +134,7 @@ export default function ProfilePage(): JSX.Element {
 
   const onClickSubscribe = () => {
     if (!isSubscribing) {
-      // dispatch(subscribeAction(userpk)); // 확인필요
+      dispatch(subscribeAction(userpk)); // 확인필요
       console.log("구독!!");
     } else {
       dispatch(unSubscribeAction(userpk));
@@ -205,7 +205,7 @@ export default function ProfilePage(): JSX.Element {
     // 프로필 가져오기
     dispatch(getAboutMeAction(userpk));
 
-    // 팔로잉 목록 가져오기
+    // 팔로잉 목록 가져오기 (구독중인지확인)
     dispatch(getIsSubscribeAction());
 
     // 생방송 중 여부 가져오기
@@ -274,31 +274,10 @@ export default function ProfilePage(): JSX.Element {
               {isMine ? (
                 <></>
               ) : isSubscribing ? (
-                <ButtonComp onClick={onClickSubscribe} text="FOLLOW" />
+                <ButtonComp onClick={onClickSubscribe} text="FOLLOW하고있다" />
               ) : (
-                <ButtonComp onClick={onClickSubscribe} text="FOLLOW" />
+                <ButtonComp onClick={onClickSubscribe} text="FOLLOW해라" />
               )}
-              {/* {isMine ? (
-                <></>
-              ) : isSubscribing ? (
-                <Button
-                  variant="outlined"
-                  size="small"
-                  endIcon={<CheckRounded />}
-                  onClick={onClickSubscribe}
-                >
-                  follow
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  size="small"
-                  endIcon={<PersonAdd />}
-                  onClick={onClickSubscribe}
-                >
-                  follow
-                </Button>
-              )} */}
             </div>
             <div className="aboutme-wrapper">
               {!isEditAboutMe && <p>{user.aboutMe}</p>}
