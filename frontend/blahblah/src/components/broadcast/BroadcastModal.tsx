@@ -84,11 +84,15 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
       hashTag: JSON.stringify(chipList),
     };
 
-    // 리덕스에 저장하기 전에 호출되어서 프롭스에 안담겼음
-    dispatch(startSession(sessionData)).then(() => {
-      onCloseModal();
-      navigate("/broadcast");
-    });
+    if (title === "") {
+      alert("방송 제목을 입력하세요.");
+    } else {
+      // 리덕스에 저장하기 전에 호출되어서 프롭스에 안담겼음
+      dispatch(startSession(sessionData)).then(() => {
+        onCloseModal();
+        navigate("/broadcast");
+      });
+    }
   };
 
   return (
