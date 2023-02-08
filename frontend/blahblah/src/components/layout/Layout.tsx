@@ -47,6 +47,8 @@ import BroadcastModal from "../broadcast/BroadcastModal";
 import VideoRoomComponent from "../openvidu/VideoRoomComponent";
 import { RootState } from "../../redux/configStore";
 import { useSelector } from "react-redux";
+import SettingsIcon from "@mui/icons-material/Settings";
+import AccountModal from "../auth/AccountModal";
 
 interface LayoutProps {
   children: ReactNode;
@@ -190,6 +192,8 @@ export default function Layout(props: LayoutProps) {
   // 비디오 조작
   const isViewed = useSelector((state: RootState) => state.feed);
 
+  // 회원정보 수정 모달 조작
+  const [openAccountModal, setOpenAccountModal] = useState<boolean>(false);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -253,9 +257,10 @@ export default function Layout(props: LayoutProps) {
               </IconButton>
             </Box>
 
-            {/* Drawer 열렸을 때 알림 아이콘 */}
+            {/* Drawer 열렸을 때 작은 아이콘들 */}
             {open && loggedUser.isLoggedIn && (
               <MenuItem>
+                {/* 알림 아이콘 */}
                 <IconButton
                   size="large"
                   aria-label="show 17 new notifications"
@@ -264,6 +269,15 @@ export default function Layout(props: LayoutProps) {
                   <Badge badgeContent={17} color="error">
                     <NotificationsIcon />
                   </Badge>
+                </IconButton>
+                {/* 설정 아이콘 */}
+                <IconButton
+                  size="large"
+                  aria-label="show 17 new notifications"
+                  color="inherit"
+                  onClick={() => setOpenAccountModal((prev) => !prev)}
+                >
+                  <SettingsIcon />
                 </IconButton>
               </MenuItem>
             )}
@@ -514,14 +528,19 @@ export default function Layout(props: LayoutProps) {
         {/* <AvatarShortcutButton /> */}
       </Box>
 
-      {/* 모달 */}
+      {/* 로그인 모달 */}
       {openSigninModal && (
         <SigninModal open={openSigninModal} setOpen={setOpenSigninModal} />
       )}
 
-      {/* 모달 */}
+      {/* 회원가입 모달 */}
       {openSignupModal && (
         <SignupModal open={openSignupModal} setOpen={setOpenSignupModal} />
+      )}
+
+      {/* 회원정보 수정 모달 */}
+      {openAccountModal && (
+        <AccountModal open={openAccountModal} setOpen={setOpenAccountModal} />
       )}
 
       {/* 방송 모달 */}
