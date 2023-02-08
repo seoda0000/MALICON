@@ -111,9 +111,9 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.toggleChat = this.toggleChat.bind(this);
     this.checkNotification = this.checkNotification.bind(this);
     this.checkSize = this.checkSize.bind(this);
-    this.sendSignalEndBroadCast = this.sendSignalEndBroadCast.bind(this);
-    this.afterEndBroadCast = this.afterEndBroadCast.bind(this);
-    this.exitButton = this.exitButton.bind(this);
+    //this.sendSignalEndBroadCast = this.sendSignalEndBroadCast.bind(this);
+    //this.afterEndBroadCast = this.afterEndBroadCast.bind(this);
+    //this.exitButton = this.exitButton.bind(this);
     this.captureThumbnail = this.captureThumbnail.bind(this);
     this.sendThumbnail = this.sendThumbnail.bind(this);
   }
@@ -241,7 +241,6 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
 
     // 내가 스트리머 라면 방송 송출가능
     if (this.state.session.capabilities.publish && this.isPublisher) {
-      publisher.on("accessAllowed", () => {
         this.state.session.publish(publisher).then(() => {
           this.updateSubscribers();
           this.localUserAccessAllowed = true;
@@ -249,8 +248,8 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
             this.props.joinSession();
           }
         });
-      });
-    } else {
+      }
+     else {
       //내가 시청자라면 방송송출 안하고 다른 사람꺼 받아오기만한다.
       this.updateSubscribers();
     }
@@ -260,10 +259,12 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     localUser.setStreamManager(publisher);
     this.subscribeToUserChanged();
     this.subscribeToStreamDestroyed();
-    this.afterEndBroadCast();
-    this.sendSignalUserChanged({
-      isScreenShareActive: localUser.isScreenShareActive(),
-    });
+    //this.afterEndBroadCast();
+    if(this.isPublisher){
+      this.sendSignalUserChanged({
+        isScreenShareActive: localUser.isScreenShareActive(),
+      });
+    }
 
     this.setState(
       { currentVideoDevice: videoDevices[0], localUser: localUser },
@@ -287,7 +288,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         subscribers: subscribers,
       },
       () => {
-        if (this.state.localUser) {
+        if (this.state.localUser && this.isPublisher) {
           this.sendSignalUserChanged({
             isAudioActive: this.state.localUser.isAudioActive(),
             isVideoActive: this.state.localUser.isVideoActive(),
@@ -304,10 +305,8 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     console.log("Leave!!!!!!!!!!!!!!!!!!!!!!");
     const mySession = this.state.session;
 
-    if (mySession) {
-      mySession.disconnect();
-    }
-
+    if (mySession) mySession.disconnect();
+    
     // Empty all properties...
     this.OV = null;
     this.setState({
@@ -359,26 +358,28 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   subscribeToStreamCreated() {
-    this.state.session.on("streamCreated", (event: any) => {
-      const subscriber = this.state.session.subscribe(event.stream, undefined);
-      // var subscribers = this.state.subscribers;
-      subscriber.on("streamPlaying", (e: any) => {
-        this.checkSomeoneShareScreen();
-        subscriber.videos[0].video.parentElement.classList.remove(
-          "custom-class"
-        );
+    if(this.isPublisher){
+      this.state.session.on("streamCreated", (event: any) => {
+        const subscriber = this.state.session.subscribe(event.stream, undefined);
+        // var subscribers = this.state.subscribers;
+        // subscriber.on("streamPlaying", (e: any) => {
+        //   this.checkSomeoneShareScreen();
+        //   subscriber.videos[0].video.parentElement.classList.remove(
+        //     "custom-class"
+        //   );
+        // });
+        const newUser = new UserModel();
+        newUser.setStreamManager(subscriber);
+        newUser.setConnectionId(event.stream.connection.connectionId);
+        newUser.setType("remote");
+        const nickname = event.stream.connection.data.split("%")[0];
+        newUser.setNickname(JSON.parse(nickname).clientData);
+        this.remotes.push(newUser);
+        if (this.localUserAccessAllowed) {
+          this.updateSubscribers();
+        }
       });
-      const newUser = new UserModel();
-      newUser.setStreamManager(subscriber);
-      newUser.setConnectionId(event.stream.connection.connectionId);
-      newUser.setType("remote");
-      const nickname = event.stream.connection.data.split("%")[0];
-      newUser.setNickname(JSON.parse(nickname).clientData);
-      this.remotes.push(newUser);
-      if (this.localUserAccessAllowed) {
-        this.updateSubscribers();
-      }
-    });
+    }
   }
 
   // 스트리머가 방송을 종료하면 streamDestroyed 이벤트 발생
@@ -623,28 +624,28 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   // 커스텀 함수
-  sendSignalEndBroadCast() {
-    const signalOptions = {
-      data: "zz",
-      type: "EndBroadCast",
-    };
-    this.state.session.signal(signalOptions);
-  }
+  // sendSignalEndBroadCast() {
+  //   const signalOptions = {
+  //     data: "zz",
+  //     type: "EndBroadCast",
+  //   };
+  //   this.state.session.signal(signalOptions);
+  // }
 
-  afterEndBroadCast() {
-    this.state.session.on("signal:EndBroadCast", (event: any) => {
-      this.leaveSession();
-      window.location.replace("http://naver.com");
-    });
-  }
+  // afterEndBroadCast() {
+  //   this.state.session.on("signal:EndBroadCast", (event: any) => {
+  //     this.leaveSession();
+  //     window.location.replace("http://naver.com");
+  //   });
+  // }
 
-  async exitButton() {
-    if (this.isPublisher) {
-      await this.sendSignalEndBroadCast();
-      await this.deleteSession(this.mySessionId);
-    }
-    this.leaveSession();
-  }
+  // async exitButton() {
+  //   if (this.isPublisher) {
+  //     await this.sendSignalEndBroadCast();
+  //     await this.deleteSession(this.mySessionId);
+  //   }
+  //   this.leaveSession();
+  // }
 
   async captureThumbnail() {
     let streamId = localUser.getStreamManager().stream.streamId;
@@ -696,7 +697,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
           stopScreenShare={this.stopScreenShare}
           toggleFullscreen={this.toggleFullscreen}
           switchCamera={this.switchCamera}
-          exitButton={this.exitButton}
+          exitButton={this.leaveSession}
           toggleChat={this.toggleChat}
           isPublisher={this.isPublisher}
         />
