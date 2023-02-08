@@ -71,19 +71,21 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
     dispatch(likeFeedAction(articleId));
   };
 
+  console.log("피드피드", props.feed);
+
   return (
     <div>
       {/* <Card sx={{ maxWidth: 345 }}> */}
       <Card>
         <CardHeader
-          // avatar={<FeedProfileImage avatar={props.feed.userAvatar} />}
+          avatar={<FeedProfileImage avatar={props.feed.userAvatar} />}
           action={
             <FeedSettingButton
               onClickEditor={onClickEditor}
               handleClickOpen={handleClickOpen}
             />
           }
-          title={props.feed.userNickName}
+          title={props.feed.userNickname}
           subheader={props.feed.createDate}
         />
 
