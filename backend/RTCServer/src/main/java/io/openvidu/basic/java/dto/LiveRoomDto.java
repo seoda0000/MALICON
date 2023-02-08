@@ -26,4 +26,5 @@ public class LiveRoomDto {
 
     private UserDto streamer; //스트리머에 대한 정보
 
+    private String hashTag;
 }
