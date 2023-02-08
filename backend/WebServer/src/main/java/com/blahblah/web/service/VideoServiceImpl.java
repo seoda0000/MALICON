@@ -81,6 +81,7 @@ public class VideoServiceImpl implements VideoService{
         videoRepository.updateViewsById(v.getId());
 
         LikeVideoEntity result = likeVideoRepository.findByUserIdAndVideoId(userPK, v.getId());
+        List<LikeVideoEntity> list = likeVideoRepository.findAllByVideoId(v.getId());
         boolean check = false;
         if(result!=null) check = true;
         VideoDTO video = VideoDTO.builder()
@@ -93,6 +94,7 @@ public class VideoServiceImpl implements VideoService{
                 .comments(new CommentDTO().toVDtoList(new PageImpl<>(v.getComments().subList(start, Math.min(end, v.getComments().size())), pageRequest, v.getComments().size())))
                 .title(v.getTitle())
                 .like(check)
+                .likeCnt(list.size())
                 .hashtags(v.getHashtags())
                 .createDate(v.getCreateDate().toString())
                 .views(v.getViews()+1)

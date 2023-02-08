@@ -19,4 +19,5 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
     @Query(value="select * from articles a where a.user_id=(select us.subscribe_user_id from user_subscribes us where us.user_id = :id) or a.user_id=:id", nativeQuery = true)
     Page<ArticleEntity> findAllBy(@Param("id") long id, Pageable pageable);
 
+    List<ArticleEntity> findAllById(long id);
 }

@@ -5,6 +5,7 @@ import com.blahblah.web.dto.request.ArticleDTO;
 import com.blahblah.web.dto.response.SubscribeArticleDTO;
 import com.blahblah.web.entity.ArticleEntity;
 import com.blahblah.web.entity.LikeArticleEntity;
+import com.blahblah.web.entity.LikeVideoEntity;
 import com.blahblah.web.repository.ArticleRepository;
 import com.blahblah.web.repository.CommentRepository;
 import com.blahblah.web.repository.LikeArticleRepository;
@@ -72,7 +73,12 @@ public class ArticleServiceImpl implements ArticleService{
         for(LikeArticleEntity like: likeEntities){
             likes.add(like.getArticleEntity().getId());
         }
-        Page<SubscribeArticleDTO> DTOList = new SubscribeArticleDTO().toDtoList(result, likes);
+        List<LikeArticleEntity> list = likeArticleRepository.findAllBy();
+        List<Long> articleList = new ArrayList<>();
+        for(LikeArticleEntity article: list){
+            articleList.add(article.getArticleEntity().getId());
+        }
+        Page<SubscribeArticleDTO> DTOList = new SubscribeArticleDTO().toDtoList(result, likes, articleList);
 
         return DTOList;
     }
@@ -83,11 +89,16 @@ public class ArticleServiceImpl implements ArticleService{
 
         Page<ArticleEntity> result = articleRepository.findAllByUserId(userPK, pageRequest);
         List<LikeArticleEntity> likeEntities =  likeArticleRepository.findAllByUserId(id);
+        List<LikeArticleEntity> list = likeArticleRepository.findAllBy();
         List<Long> likes = new ArrayList<>();
         for(LikeArticleEntity like: likeEntities){
             likes.add(like.getArticleEntity().getId());
         }
-        Page<SubscribeArticleDTO> articles = new SubscribeArticleDTO().toDtoList(result, likes);
+        List<Long> articleList = new ArrayList<>();
+        for(LikeArticleEntity article: list){
+            articleList.add(article.getArticleEntity().getId());
+        }
+        Page<SubscribeArticleDTO> articles = new SubscribeArticleDTO().toDtoList(result, likes, articleList);
 
         return articles;
     }

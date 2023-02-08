@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface LikeVideoRepository extends JpaRepository<LikeVideoEntity, Long> {
     LikeVideoEntity findByUserIdAndVideoId(long userId, long videoId);
+
+    List<LikeVideoEntity> findAllByVideoId(long videoId);
 }

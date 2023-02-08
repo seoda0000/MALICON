@@ -28,6 +28,7 @@ public class VideoDTO {
     private String createDate;
     private String hashtags;
     private boolean like;
+    private long likeCnt;
     private Page<CommentDTO> comments;
 
     public Page<VideoDTO> toDtoList(Page<VideoEntity> videoList){

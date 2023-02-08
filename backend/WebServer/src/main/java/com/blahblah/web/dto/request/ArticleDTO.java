@@ -15,6 +15,8 @@ public class ArticleDTO {
 
     private boolean like;
 
+    private long likeCnt;
+
     private String userId;
 
     private String title;
