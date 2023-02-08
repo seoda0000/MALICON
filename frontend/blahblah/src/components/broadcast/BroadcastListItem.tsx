@@ -19,7 +19,7 @@ const BroadcastListItem: React.FC<{ session: any }> = (props) => {
 
   const onClickHandler = () => {
     joinSessionStart().then(() => {
-      navigate("/video");
+      navigate("/broadcast");
     });
   };
 
