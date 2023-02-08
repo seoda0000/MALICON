@@ -233,6 +233,7 @@ public class Controller {
 		String thumbnail = liveRoomEntity.getThumbnail();
 		String sessionId = liveRoomEntity.getSessionId();
 		UserDto streamer = liveRoomEntity.getStreamer();
+		String hashTag = liveRoomEntity.getHashTag();
 		int viewerNumber = openvidu.getActiveSession(sessionId).getActiveConnections().size();
 
 
@@ -243,6 +244,7 @@ public class Controller {
 				.viewerNumber(viewerNumber)
 				.startAt(startAt)
 				.thumbnail(thumbnail)
+				.hashTag(hashTag)
 				.build();
 
 		return liveRoomDto;
