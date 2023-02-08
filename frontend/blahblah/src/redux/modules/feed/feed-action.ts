@@ -34,7 +34,7 @@ export const fetchFeedData = createAsyncThunk(
           content: feed.content,
           createDate: feed.createDate,
           lastModifiedDate: feed.lastModifiedDate,
-
+          like: feed.like,
           userPK: feed.userPK,
           userId: feed.userId,
           userNickname: feed.nickName,

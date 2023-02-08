@@ -81,6 +81,7 @@ type CardCompPropsType = {
   caption?: boolean;
   nickname?: string;
   userAvatar?: string;
+  hashTags?: string;
 };
 
 export default function CarouselComp({
@@ -90,6 +91,7 @@ export default function CarouselComp({
   caption,
   nickname,
   userAvatar,
+  hashTags,
 }: CardCompPropsType): JSX.Element {
   return (
     <CardWrapper nth={nth}>
@@ -147,21 +149,36 @@ export default function CarouselComp({
                   {nickname}
                 </Typography>
               </Box>
-              <Typography level="h2" noWrap sx={{ fontSize: "lg" }}>
-                <Link
-                  href="#dribbble-shot"
-                  overlay
-                  underline="none"
-                  sx={{
-                    color: "#fff",
-                    textOverflow: "ellipsis",
-                    overflow: "hidden",
-                    display: "block",
-                  }}
+              <Box
+                sx={{
+                  alignItems: "center",
+                  justifyItems: "center",
+                  display: "flex",
+                }}
+              >
+                <Typography level="h1" noWrap sx={{ fontSize: "lg" }}>
+                  <Link
+                    href="#dribbble-shot"
+                    overlay
+                    underline="none"
+                    sx={{
+                      color: "#fff",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      display: "block",
+                    }}
+                  >
+                    {title}
+                  </Link>
+                </Typography>
+                <Typography
+                  level="h3"
+                  noWrap
+                  sx={{ fontSize: "sm", color: "#fff", marginLeft: "5px" }}
                 >
-                  {title}
-                </Link>
-              </Typography>
+                  {hashTags && JSON.parse(hashTags)}
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </CardCover>

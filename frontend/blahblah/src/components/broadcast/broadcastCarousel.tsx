@@ -50,6 +50,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
                     nickname={session.streamer.nickName}
                     caption={true}
                     userAvatar={session.streamer.avatar}
+                    hashTags={session.hashtags}
                   >
                     <img
                       src={session.thumbnail}

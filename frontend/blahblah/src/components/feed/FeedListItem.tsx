@@ -82,7 +82,11 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
         </CardContent>
         <CardActions disableSpacing>
           <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
+            {props.feed.like ? (
+              <FavoriteIcon color="error" />
+            ) : (
+              <FavoriteIcon />
+            )}
           </IconButton>
           <IconButton aria-label="share">
             <ShareIcon />
