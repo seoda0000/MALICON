@@ -51,7 +51,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
           }}
         >
           {/* 캐러셀 안 나올 때 아래 h1 태그를 추가해볼 것 */}
-          <h1 style={{ color: "white" }}>Hi</h1>
+          {/* <h1 style={{ color: "white" }}>Hi</h1> */}
           <Swiper
             modules={[EffectCards, Navigation, Pagination]}
             navigation
