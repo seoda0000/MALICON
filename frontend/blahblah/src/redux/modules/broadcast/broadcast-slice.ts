@@ -30,6 +30,9 @@ const broadcastSlice = createSlice({
     loadCurrentSession(state, action) {
       state.currentSession = action.payload.currentSession;
     },
+    joinSession(state, action) {
+      state.currentSession.sessionId = action.payload.sessionId;
+    },
   },
 });
 
