@@ -39,11 +39,7 @@ public class JwtUtil {
         }
     }
 
-    public static UserDto getUserDtoFromClaims(Claims claims){
-        return UserDto.builder()
-                .userId((String)claims.get("userId"))
-                .avatar((String) claims.get("avatar"))
-                .nickName((String) claims.get("nickName"))
-                .build();
+    public static Long getIdFromClaims(Claims claims){
+        return ((Integer)claims.get("id")).longValue();
     }
 }
