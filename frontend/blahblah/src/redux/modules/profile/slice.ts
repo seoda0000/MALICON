@@ -10,6 +10,7 @@ import {
   updateAboutMeAction,
   addAboutMeAction,
   getSubscribersAction,
+  getVideoAction,
 } from "./thunk";
 
 const initialState: ProfileStateType = {
@@ -25,7 +26,7 @@ const initialState: ProfileStateType = {
   isSubscribing: false,
   subscribers: [],
   feedData: null,
-  videoData: null,
+  videoData: [],
   getAboutMe: { loading: false, data: null, error: null },
   addAboutMe: { loading: false, data: null, error: null },
   updateAboutMe: { loading: false, data: null, error: null },
@@ -34,6 +35,7 @@ const initialState: ProfileStateType = {
   subscribe: { loading: false, data: null, error: null },
   unSubscribe: { loading: false, data: null, error: null },
   getFeed: { loading: false, data: null, error: null },
+  getVideo: { loading: false, data: null, error: null },
 };
 
 const profileSlice = createSlice({
@@ -201,6 +203,23 @@ const profileSlice = createSlice({
         state.getFeed.loading = false;
         state.getFeed.data = null;
         state.getFeed.error = payload;
+      })
+      .addCase(getVideoAction.pending, (state) => {
+        state.getVideo.loading = true;
+        state.getVideo.data = null;
+        state.getVideo.error = null;
+      })
+      .addCase(getVideoAction.fulfilled, (state, { payload }) => {
+        state.getVideo.loading = false;
+        state.getVideo.data = payload;
+        state.getVideo.error = null;
+
+        state.videoData = payload;
+      })
+      .addCase(getVideoAction.rejected, (state, { payload }) => {
+        state.getVideo.loading = false;
+        state.getVideo.data = null;
+        state.getVideo.error = payload;
       });
   },
 });

@@ -23,6 +23,7 @@ import {
   getFeedAction,
   updateAboutMeAction,
   addAboutMeAction,
+  getVideoAction,
 } from "../redux/modules/profile/thunk";
 import { updateUserAction } from "../redux/modules/user";
 import ButtonComp from "../components/common/ButtonComp";
@@ -115,6 +116,7 @@ export default function ProfilePage(): JSX.Element {
   const { userpk } = useParams() as { userpk: string };
   const loggedUser = useAppSelector((state) => state.user.userData);
   const user = useAppSelector((state) => state.profile.userData);
+  const videos = useAppSelector((state) => state.profile.videoData);
   const feeds = useAppSelector((state) => state.profile.feedData);
   const isSubscribing = useAppSelector((state) => state.profile.isSubscribing);
   const dispatch = useAppDispatch();
@@ -211,6 +213,7 @@ export default function ProfilePage(): JSX.Element {
     // 생방송 중 여부 가져오기
 
     // 지난 동영상 목록 가져오기
+    dispatch(getVideoAction(userpk));
 
     // 피드 목록 가져오기
     // dispatch(getFeedAction(userpk)); // 확인필요
@@ -323,7 +326,7 @@ export default function ProfilePage(): JSX.Element {
       </InfoContainer>
       <VideoContainer>
         <h2>Videos</h2>
-        <Carousel />
+        <Carousel items={videos} />
       </VideoContainer>
       <FeedContainer>
         <h2>Feed</h2>

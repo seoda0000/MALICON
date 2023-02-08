@@ -151,6 +151,25 @@ export const unSubscribeAction = createAsyncThunk(
   }
 );
 
+export const getVideoAction = createAsyncThunk(
+  "GET_VIDEO",
+  async (userPK: string, { rejectWithValue }) => {
+    try {
+      const axios = axiosInitializer();
+      const { data } = await axios.get(`/api/videos/${parseInt(userPK)}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authroization: "Bearer " + getAccessToken(),
+        },
+      });
+
+      return data;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
 // 피드 가져오기
 export const getFeedAction = createAsyncThunk(
   "GET_FEED",

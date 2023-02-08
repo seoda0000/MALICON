@@ -8,7 +8,7 @@ export type ProfileStateType = {
   userData: ProfileUserType;
   isSubscribing: boolean;
   feedData: ProfileFeedType[] | null;
-  videoData: VideoType[] | null;
+  videoData: VideoType[];
   getAboutMe: ReduxStateType;
   addAboutMe: ReduxStateType;
   updateAboutMe: ReduxStateType;
@@ -16,7 +16,7 @@ export type ProfileStateType = {
   subscribe: ReduxStateType;
   unSubscribe: ReduxStateType;
   getFeed: ReduxStateType;
-  getVideo?: ReduxStateType;
+  getVideo: ReduxStateType;
   getIsOnAir?: ReduxStateType;
   subscribers: SubscriberType[];
   getSub: ReduxStateType;
