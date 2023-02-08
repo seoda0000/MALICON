@@ -11,8 +11,8 @@ import { Grid } from "@mui/material";
 import BroadcastCarouselItem from "./broadcastCarouselItem";
 // Import Swiper styles
 import CarouselComp from "../common/CarouselComp";
-
-const BroadcastCarousel: React.FC<{ sessions: any[] }> = (props) => {
+import { SessionType } from "../../model/broadcast/sessionType";
+const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
   return (
     <Grid container justifyContent={"center"} alignItems={"center"}>
       <Grid item>
@@ -44,47 +44,14 @@ const BroadcastCarousel: React.FC<{ sessions: any[] }> = (props) => {
             {props.sessions.length !== 0 ? (
               props.sessions.map((session) => (
                 <SwiperSlide key={session.sessionId}>
-                  <CarouselComp nth={3} title={session.title} caption={true}>
-                    <img
-                      src={session.thumbnail}
-                      alt={session.title}
-                      // style={{ width: "90%" }}
-                    />
-                  </CarouselComp>
-                </SwiperSlide>
-              ))
-            ) : (
-              <div>실시간 방송이 없습니다.</div>
-            )}
-          </Swiper>
-
-          <h1>예시</h1>
-          <Swiper
-            modules={[EffectCards, Navigation, Pagination]}
-            navigation
-            effect={"cards"}
-            // creativeEffect={{
-            //   prev: {
-            //     shadow: true,
-            //     translate: [0, 0, -400],
-            //   },
-            //   next: {
-            //     translate: ["100%", 0, 0],
-            //   },
-            // }}
-            // style={{ width: "auto" }}
-            spaceBetween={30}
-            pagination={{ clickable: true }}
-            loop={true}
-            slidesPerView={1}
-            onSlideChange={() => console.log("slide change")}
-            onSwiper={(swiper) => console.log(swiper)}
-            className="mySwiper"
-          >
-            {props.sessions.length !== 0 ? (
-              props.sessions.map((session) => (
-                <SwiperSlide key={session.sessionId}>
-                  <CarouselComp nth={3} title={session.title} caption={true}>
+                  <CarouselComp
+                    nth={3}
+                    title={session.title}
+                    nickname={session.streamer.nickName}
+                    caption={true}
+                    userAvatar={session.streamer.avatar}
+                    hashTags={session.hashtags}
+                  >
                     <img
                       src={session.thumbnail}
                       alt={session.title}

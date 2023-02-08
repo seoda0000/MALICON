@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/joy";
 import React from "react";
+import ProfileImage from "./ProfileImage";
 
 const CardWrapper = styled(Card)<{ nth: number }>`
   width: 100%;
@@ -78,6 +79,9 @@ type CardCompPropsType = {
   nth: number;
   title?: string;
   caption?: boolean;
+  nickname?: string;
+  userAvatar?: string;
+  hashTags?: string;
 };
 
 export default function CarouselComp({
@@ -85,6 +89,9 @@ export default function CarouselComp({
   nth,
   title,
   caption,
+  nickname,
+  userAvatar,
+  hashTags,
 }: CardCompPropsType): JSX.Element {
   return (
     <CardWrapper nth={nth}>
@@ -120,27 +127,58 @@ export default function CarouselComp({
               sx={{
                 p: 2,
                 display: "flex",
-                alignItems: "center",
                 gap: 1.5,
                 flexGrow: 1,
                 alignSelf: "flex-end",
+                flexDirection: "column",
               }}
             >
-              <Typography level="h2" noWrap sx={{ fontSize: "lg" }}>
-                <Link
-                  href="#dribbble-shot"
-                  overlay
-                  underline="none"
-                  sx={{
-                    color: "#fff",
-                    textOverflow: "ellipsis",
-                    overflow: "hidden",
-                    display: "block",
-                  }}
+              <Box
+                sx={{
+                  alignItems: "center",
+                  justifyItems: "center",
+                  display: "flex",
+                }}
+              >
+                <ProfileImage userAvatar={userAvatar} />
+                <Typography
+                  level="h3"
+                  noWrap
+                  sx={{ fontSize: "sm", color: "#fff", marginLeft: "5px" }}
                 >
-                  {title}
-                </Link>
-              </Typography>
+                  {nickname}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  alignItems: "center",
+                  justifyItems: "center",
+                  display: "flex",
+                }}
+              >
+                <Typography level="h1" noWrap sx={{ fontSize: "lg" }}>
+                  <Link
+                    href="#dribbble-shot"
+                    overlay
+                    underline="none"
+                    sx={{
+                      color: "#fff",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      display: "block",
+                    }}
+                  >
+                    {title}
+                  </Link>
+                </Typography>
+                <Typography
+                  level="h3"
+                  noWrap
+                  sx={{ fontSize: "sm", color: "#fff", marginLeft: "5px" }}
+                >
+                  {hashTags && JSON.parse(hashTags)}
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </CardCover>

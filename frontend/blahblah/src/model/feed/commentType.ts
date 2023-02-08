@@ -9,6 +9,6 @@ export type CommentType = {
 
   userPK: number;
   userId: string;
-  userAvatar?: string | null;
-  userNickName: string;
+  avatar?: string;
+  nickName: string;
 };

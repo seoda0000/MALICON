@@ -59,7 +59,6 @@ function MainPage() {
   useEffect(() => {
     if (isInitial) {
       isInitial = false;
-      // 절찬리 진행 이후 작업
       dispatch(fetchSessionData());
       return;
     }
@@ -85,7 +84,9 @@ function MainPage() {
 
         <h1>지금 방영중인 실시간 동영상</h1>
         {/* <BroadcastList sessions={broadcast.sessions} /> */}
-        <BroadcastCarousel sessions={SAMPLE_SESSIONS} />
+        <BroadcastCarousel sessions={broadcast.sessions} />
+        {/* <h1>예시</h1> */}
+        {/* <BroadcastCarousel sessions={SAMPLE_SESSIONS} /> */}
         <h1>추천 동영상</h1>
         <VideoList />
       </div>

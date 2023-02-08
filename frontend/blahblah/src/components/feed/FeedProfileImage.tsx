@@ -4,6 +4,7 @@ import { personas, pixelArt } from "@dicebear/collection";
 
 const FeedProfileImage: React.FC<{
   avatar: string;
+  // small?: boolean;
   // onRemoveTodo: () => void;
 }> = (props) => {
   const dataUri = createAvatar(personas, {
@@ -15,7 +16,7 @@ const FeedProfileImage: React.FC<{
     <Avatar
       alt="Sample"
       src={dataUri}
-      // sx={{ width: 56, height: 56 }}
+      // sx={{ width: props.small ? 30 : 40, height: props.small ? 30 : 40 }}
     />
   );
 };

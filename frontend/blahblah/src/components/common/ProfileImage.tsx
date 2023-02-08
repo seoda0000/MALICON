@@ -7,16 +7,26 @@ import { personas, pixelArt } from "@dicebear/collection";
 type ProfileImagePropsType = {
   big?: boolean;
   border?: boolean;
+  userAvatar?: string;
 };
 
 export default function ProfileImage({
   big,
   border,
+  userAvatar,
 }: ProfileImagePropsType): JSX.Element {
   const avatar = useSelector((state: RootState) => state.user.userData.avatar!);
 
+  let avatarString;
+
+  if (userAvatar) {
+    avatarString = userAvatar;
+  } else {
+    avatarString = avatar;
+  }
+
   const dataUri = createAvatar(personas, {
-    ...JSON.parse(avatar),
+    ...JSON.parse(avatarString),
     backgroundColor: ["ffdfbf"],
   }).toDataUriSync();
 
@@ -33,4 +43,3 @@ export default function ProfileImage({
     />
   );
 }
-

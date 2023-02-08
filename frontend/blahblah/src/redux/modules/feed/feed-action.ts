@@ -9,6 +9,7 @@ import { FeedRemoveType } from "../../../model/feed/feedRemoveType";
 import { getAccessToken } from "../user/token";
 import { axiosInitializer } from "../../utils/axiosInitializer";
 import { CommentPostType } from "../../../model/feed/commentPostType copy";
+
 import feed from ".";
 // 피드 목록 가져오기
 export const fetchFeedData = createAsyncThunk(
@@ -34,7 +35,7 @@ export const fetchFeedData = createAsyncThunk(
           content: feed.content,
           createDate: feed.createDate,
           lastModifiedDate: feed.lastModifiedDate,
-
+          like: feed.like,
           userPK: feed.userPK,
           userId: feed.userId,
           userNickname: feed.nickName,
@@ -198,6 +199,66 @@ export const removeCommentData = createAsyncThunk(
         });
     } catch (e) {
       console.error(e);
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
+// 피드 좋아요
+
+export const likeFeedAction = createAsyncThunk(
+  "feed/likeFeedAction",
+  async (articleId: number, thunkAPI) => {
+    try {
+      const axios = axiosInitializer();
+
+      await axios
+        .post(`/api/likes/articles/${articleId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        })
+        .then(({ data }: any) => {
+          console.log("피드 좋아요: ", data);
+
+          thunkAPI.dispatch(fetchFeedData());
+
+          console.log("피드 리스트 갱신 완료");
+        });
+    } catch (e: any) {
+      console.log("피드 좋아요 실패");
+      console.error(e.response.data);
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
+// 피드 좋아요 취소
+
+export const likeCancelAction = createAsyncThunk(
+  "feed/likeCancelAction",
+  async (articleId: number, thunkAPI) => {
+    try {
+      const axios = axiosInitializer();
+
+      await axios
+        .delete(`/api/likes/articles/${articleId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        })
+        .then(({ data }: any) => {
+          console.log("피드 좋아요 취소: ", data);
+
+          thunkAPI.dispatch(fetchFeedData());
+
+          console.log("피드 리스트 갱신 완료");
+        });
+    } catch (e: any) {
+      console.log("피드 좋아요 치소 실패");
+      console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
