@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/joy";
 import React from "react";
+import CarouselChips from "../broadcast/CarouselChips";
 import ProfileImage from "./ProfileImage";
 
 const CardWrapper = styled(Card)<{ nth: number }>`
@@ -81,7 +82,7 @@ type CardCompPropsType = {
   caption?: boolean;
   nickname?: string;
   userAvatar?: string;
-  hashTags?: string;
+  hashTag?: string;
 };
 
 export default function CarouselComp({
@@ -91,8 +92,9 @@ export default function CarouselComp({
   caption,
   nickname,
   userAvatar,
-  hashTags,
+  hashTag,
 }: CardCompPropsType): JSX.Element {
+  console.log(hashTag);
   return (
     <CardWrapper nth={nth}>
       <Box sx={{ position: "relative" }}>
@@ -176,8 +178,9 @@ export default function CarouselComp({
                   noWrap
                   sx={{ fontSize: "sm", color: "#fff", marginLeft: "5px" }}
                 >
-                  {hashTags && JSON.parse(hashTags)}
+                  {/* {hashTag} */}
                 </Typography>
+                <CarouselChips chipData={JSON.parse(hashTag as string)} />
               </Box>
             </Box>
           </Box>
