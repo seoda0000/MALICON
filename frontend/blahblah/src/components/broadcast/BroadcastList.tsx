@@ -1,5 +1,6 @@
 import { SessionType } from "../../model/broadcast/sessionType";
 import BroadcastListItem from "./BroadcastListItem";
+
 const BroadcastList: React.FC<{ sessions: SessionType[] }> = (props) => {
   return (
     <div>

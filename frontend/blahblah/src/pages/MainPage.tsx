@@ -83,7 +83,7 @@ function MainPage() {
         {openModal && <AccountModal open={openModal} setOpen={setOpenModal} />}
 
         <h1>지금 방영중인 실시간 동영상</h1>
-        {/* <BroadcastList sessions={broadcast.sessions} /> */}
+        <BroadcastList sessions={broadcast.sessions} />
         <BroadcastCarousel sessions={broadcast.sessions} />
         {/* <h1>예시</h1> */}
         {/* <BroadcastCarousel sessions={SAMPLE_SESSIONS} /> */}

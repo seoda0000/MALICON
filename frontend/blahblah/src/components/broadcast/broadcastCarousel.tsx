@@ -12,7 +12,23 @@ import BroadcastCarouselItem from "./broadcastCarouselItem";
 // Import Swiper styles
 import CarouselComp from "../common/CarouselComp";
 import { SessionType } from "../../model/broadcast/sessionType";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../redux/configStore";
+
 const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
+  // 방송 진입
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  // const joinSession() {
+  //   // 리덕스에 저장하기 전에 호출되어서 프롭스에 안담겼음
+  //   dispatch(joinSession(sessionId)).then(()=>{
+  //     navigate("/video");
+  //   });
+
+  // }
+
   return (
     <Grid container justifyContent={"center"} alignItems={"center"}>
       <Grid item>
@@ -37,7 +53,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
             pagination={{ clickable: true }}
             loop={true}
             slidesPerView={1}
-            onSlideChange={() => console.log("slide change")}
+            onSlideChange={(swiper) => console.log(swiper)}
             onSwiper={(swiper) => console.log(swiper)}
             className="mySwiper"
           >
