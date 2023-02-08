@@ -234,7 +234,8 @@ public class Controller {
 		String sessionId = liveRoomEntity.getSessionId();
 		UserDto streamer = liveRoomEntity.getStreamer();
 		String hashTag = liveRoomEntity.getHashTag();
-		int viewerNumber = openvidu.getActiveSession(sessionId).getActiveConnections().size();
+		Session ActiveSession = openvidu.getActiveSession(sessionId);
+		int viewerNumber = ActiveSession == null? -31:ActiveSession.getActiveConnections().size();
 
 
 		LiveRoomDto liveRoomDto = LiveRoomDto.builder()
