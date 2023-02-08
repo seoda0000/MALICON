@@ -1,25 +1,15 @@
-import React, { useRef, useState } from "react";
-import * as faceapi from "face-api.js";
+import React, { RefObject, useEffect, useState } from "react";
+import * as faceapi from "@vladmandic/face-api";
 import AvatarComp from "../common/AvatarComp";
 
-// video size
-const constraints = {
-  video: {
-    width: 1920,
-    height: 1080,
-  },
-  audio: false,
-};
-
-export default function FaceExpressionRecognition() {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+export default function FaceExpressionRecognition(props: { videoRef: React.RefObject<HTMLVideoElement>; }) {
+  const videoRef = props.videoRef as RefObject<HTMLVideoElement>;
 
   const [currentState, setCurrentState] = useState<string>("");
   const [currentScore, setCurrentScore] = useState<number>(0);
 
-  const onPlay = async () => {
-    if (videoRef.current === null) return;
+  const startPredict = async () => {
+    if (videoRef.current === null) { console.log("fuck"); return };
 
     const displaySize = {
       width: videoRef.current.width,
@@ -38,10 +28,6 @@ export default function FaceExpressionRecognition() {
       const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
       resizedDetections.forEach((detection, i) => {
-        // console.log(
-        //   detection.expressions.asSortedArray()[0].expression,
-        //   detection.expressions.asSortedArray()[0].probability
-        // );
         setCurrentState(detection.expressions.asSortedArray()[0].expression);
         setCurrentScore(detection.expressions.asSortedArray()[0].probability);
       });
@@ -54,7 +40,7 @@ export default function FaceExpressionRecognition() {
     setTimeout(loop, 500);
   };
 
-  const startDetecting = async () => {
+  const init = async () => {
     const loadModels = async () => {
       const MODEL_URL = process.env.PUBLIC_URL + "/models";
 
@@ -65,40 +51,22 @@ export default function FaceExpressionRecognition() {
         faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
         faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
       ]).then(() => {
-        startVideo();
+        startPredict();
       });
     };
 
     loadModels();
   };
 
-  // Request Video Privilege
-  const startVideo = () => {
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then((stream) => ((videoRef.current as any).srcObject = stream))
-      .catch((err) => console.error(err));
-  };
+  useEffect(() => {
+    init();
+  }, []);
 
   return (
     <div>
-      <h2>Face-Api Test</h2>
-
-      <div ref={wrapRef}>
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          onPlay={onPlay}
-          width={1280}
-          height={720}
-        />
-      </div>
-      <button onClick={startDetecting}>Start</button>
       <div>
         Your Current State is {currentState} {currentScore * 100} %
       </div>
-
       <AvatarComp currentState={currentState} currentScore={currentScore} />
     </div>
   );
