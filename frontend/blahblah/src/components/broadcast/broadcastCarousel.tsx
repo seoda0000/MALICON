@@ -11,8 +11,8 @@ import { Grid } from "@mui/material";
 import BroadcastCarouselItem from "./broadcastCarouselItem";
 // Import Swiper styles
 import CarouselComp from "../common/CarouselComp";
-
-const BroadcastCarousel: React.FC<{ sessions: any[] }> = (props) => {
+import { SessionType } from "../../model/broadcast/sessionType";
+const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
   return (
     <Grid container justifyContent={"center"} alignItems={"center"}>
       <Grid item>
@@ -44,7 +44,13 @@ const BroadcastCarousel: React.FC<{ sessions: any[] }> = (props) => {
             {props.sessions.length !== 0 ? (
               props.sessions.map((session) => (
                 <SwiperSlide key={session.sessionId}>
-                  <CarouselComp nth={3} title={session.title} caption={true}>
+                  <CarouselComp
+                    nth={3}
+                    title={session.title}
+                    nickname={session.streamer.nickName}
+                    caption={true}
+                    userAvatar={session.streamer.avatar}
+                  >
                     <img
                       src={session.thumbnail}
                       alt={session.title}
