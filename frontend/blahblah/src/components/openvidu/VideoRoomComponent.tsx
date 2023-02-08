@@ -105,15 +105,15 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.nicknameChanged = this.nicknameChanged.bind(this);
     this.toggleFullscreen = this.toggleFullscreen.bind(this);
     this.switchCamera = this.switchCamera.bind(this);
-    this.screenShare = this.screenShare.bind(this);
-    this.stopScreenShare = this.stopScreenShare.bind(this);
+    // this.screenShare = this.screenShare.bind(this);
+    // this.stopScreenShare = this.stopScreenShare.bind(this);
     this.closeDialogExtension = this.closeDialogExtension.bind(this);
     this.toggleChat = this.toggleChat.bind(this);
     this.checkNotification = this.checkNotification.bind(this);
     this.checkSize = this.checkSize.bind(this);
-    this.sendSignalEndBroadCast = this.sendSignalEndBroadCast.bind(this);
-    this.afterEndBroadCast = this.afterEndBroadCast.bind(this);
-    this.exitButton = this.exitButton.bind(this);
+    // this.sendSignalEndBroadCast = this.sendSignalEndBroadCast.bind(this);
+    // this.afterEndBroadCast = this.afterEndBroadCast.bind(this);
+    // this.exitButton = this.exitButton.bind(this);
     this.captureThumbnail = this.captureThumbnail.bind(this);
     this.sendThumbnail = this.sendThumbnail.bind(this);
   }
@@ -240,17 +240,27 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     });
 
     // 내가 스트리머 라면 방송 송출가능
+    // if (this.state.session.capabilities.publish && this.isPublisher) {
+    //   publisher.on("accessAllowed", () => {
+    //     this.state.session.publish(publisher).then(() => {
+    //       this.updateSubscribers();
+    //       this.localUserAccessAllowed = true;
+    //       if (this.props.joinSession) {
+    //         this.props.joinSession();
+    //       }
+    //     });
+    //   });
+    // }
     if (this.state.session.capabilities.publish && this.isPublisher) {
-      publisher.on("accessAllowed", () => {
-        this.state.session.publish(publisher).then(() => {
-          this.updateSubscribers();
-          this.localUserAccessAllowed = true;
-          if (this.props.joinSession) {
-            this.props.joinSession();
-          }
-        });
+      this.state.session.publish(publisher).then(() => {
+        this.updateSubscribers();
+        this.localUserAccessAllowed = true;
+        // if (this.props.joinSession) {
+        //   this.props.joinSession();
+        // }
       });
-    } else {
+    }
+    else {
       //내가 시청자라면 방송송출 안하고 다른 사람꺼 받아오기만한다.
       this.updateSubscribers();
     }
@@ -260,7 +270,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     localUser.setStreamManager(publisher);
     this.subscribeToUserChanged();
     this.subscribeToStreamDestroyed();
-    this.afterEndBroadCast();
+    //this.afterEndBroadCast();
     this.sendSignalUserChanged({
       isScreenShareActive: localUser.isScreenShareActive(),
     });
@@ -306,6 +316,17 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
 
     if (mySession) {
       mySession.disconnect();
+      if(this.isPublisher){
+        this.deleteSession(this.state.mySessionId).then(()=>{
+          // 원하는 라우팅 경로로
+          //window.location.replace("http://naver.com");
+        }).catch((e)=>{
+          console.error(e);
+        })
+      }else {
+        // 원하는 라우팅 경로로
+        //window.location.replace("http://naver.com");
+      }
     }
 
     // Empty all properties...
@@ -317,9 +338,10 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       myUserName: this.state.myUserName,
       localUser: undefined,
     });
-    if (this.props.leaveSession) {
-      this.props.leaveSession();
-    }
+
+    // if (this.props.leaveSession) {
+    //   this.props.leaveSession();
+    // }
   }
   camStatusChanged() {
     localUser.setVideoActive(!localUser.isVideoActive());
@@ -358,12 +380,15 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     }
   }
 
+  // 스트리머 방송 입장시
+  // 스트리머를 모든 시청자에게 추가하는 이벤트 핸들러
   subscribeToStreamCreated() {
     this.state.session.on("streamCreated", (event: any) => {
       const subscriber = this.state.session.subscribe(event.stream, undefined);
       // var subscribers = this.state.subscribers;
+      console.log("subscribeToStreamCreated 376 + 누군가가 생성됐다!");
       subscriber.on("streamPlaying", (e: any) => {
-        this.checkSomeoneShareScreen();
+        //this.checkSomeoneShareScreen();
         subscriber.videos[0].video.parentElement.classList.remove(
           "custom-class"
         );
@@ -382,17 +407,22 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   // 스트리머가 방송을 종료하면 streamDestroyed 이벤트 발생
+  // 모든 시청자는 방송을 떠나게 된다.
+  // leaveSession 함수 앞에 원하는 작업 추가 가능
   subscribeToStreamDestroyed() {
     // On every Stream destroyed...
     this.state.session.on("streamDestroyed", (event: any) => {
       // Remove the stream from 'subscribers' array
-      this.deleteSubscriber(event.stream);
-      setTimeout(() => {
-        this.checkSomeoneShareScreen();
-      }, 20);
-      event.preventDefault();
-      this.updateLayout();
-    });
+      console.log("subscribeToStreamCreated 401 + 누군가가 떠났다!");
+      console.log("stream : " , event.stream);
+      this.leaveSession();
+      // this.deleteSubscriber(event.stream);
+      // setTimeout(() => {
+      //   this.checkSomeoneShareScreen();
+      // }, 20);
+      // event.preventDefault();
+      // this.updateLayout();
+    })
   }
 
   subscribeToUserChanged() {
@@ -411,16 +441,16 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
           if (data.nickname !== undefined) {
             user.setNickname(data.nickname);
           }
-          if (data.isScreenShareActive !== undefined) {
-            user.setScreenShareActive(data.isScreenShareActive);
-          }
+          // if (data.isScreenShareActive !== undefined) {
+          //   user.setScreenShareActive(data.isScreenShareActive);
+          // }
         }
       });
       this.setState(
         {
           subscribers: remoteUsers,
         },
-        () => this.checkSomeoneShareScreen()
+        //() => this.checkSomeoneShareScreen()
       );
     });
   }
@@ -511,78 +541,78 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     }
   }
 
-  screenShare() {
-    const videoSource =
-      navigator.userAgent.indexOf("Firefox") !== -1 ? "window" : "screen";
-    const publisher = this.OV.initPublisher(
-      undefined,
-      {
-        videoSource: videoSource,
-        publishAudio: localUser.isAudioActive(),
-        publishVideo: localUser.isVideoActive(),
-        mirror: false,
-      },
-      (error: any) => {
-        if (error && error.name === "SCREEN_EXTENSION_NOT_INSTALLED") {
-          this.setState({ showExtensionDialog: true });
-        } else if (error && error.name === "SCREEN_SHARING_NOT_SUPPORTED") {
-          alert("Your browser does not support screen sharing");
-        } else if (error && error.name === "SCREEN_EXTENSION_DISABLED") {
-          alert("You need to enable screen sharing extension");
-        } else if (error && error.name === "SCREEN_CAPTURE_DENIED") {
-          alert("You need to choose a window or application to share");
-        }
-      }
-    );
+  // screenShare() {
+  //   const videoSource =
+  //     navigator.userAgent.indexOf("Firefox") !== -1 ? "window" : "screen";
+  //   const publisher = this.OV.initPublisher(
+  //     undefined,
+  //     {
+  //       videoSource: videoSource,
+  //       publishAudio: localUser.isAudioActive(),
+  //       publishVideo: localUser.isVideoActive(),
+  //       mirror: false,
+  //     },
+  //     (error: any) => {
+  //       if (error && error.name === "SCREEN_EXTENSION_NOT_INSTALLED") {
+  //         this.setState({ showExtensionDialog: true });
+  //       } else if (error && error.name === "SCREEN_SHARING_NOT_SUPPORTED") {
+  //         alert("Your browser does not support screen sharing");
+  //       } else if (error && error.name === "SCREEN_EXTENSION_DISABLED") {
+  //         alert("You need to enable screen sharing extension");
+  //       } else if (error && error.name === "SCREEN_CAPTURE_DENIED") {
+  //         alert("You need to choose a window or application to share");
+  //       }
+  //     }
+  //   );
 
-    publisher.once("accessAllowed", () => {
-      this.state.session.unpublish(localUser.getStreamManager());
-      localUser.setStreamManager(publisher);
-      this.state.session.publish(localUser.getStreamManager()).then(() => {
-        localUser.setScreenShareActive(true);
-        this.setState({ localUser: localUser }, () => {
-          this.sendSignalUserChanged({
-            isScreenShareActive: localUser.isScreenShareActive(),
-          });
-        });
-      });
-    });
-    publisher.on("streamPlaying", () => {
-      this.updateLayout();
-      publisher.videos[0].video.parentElement.classList.remove("custom-class");
-    });
-  }
+  //   publisher.once("accessAllowed", () => {
+  //     this.state.session.unpublish(localUser.getStreamManager());
+  //     localUser.setStreamManager(publisher);
+  //     this.state.session.publish(localUser.getStreamManager()).then(() => {
+  //       localUser.setScreenShareActive(true);
+  //       this.setState({ localUser: localUser }, () => {
+  //         this.sendSignalUserChanged({
+  //           isScreenShareActive: localUser.isScreenShareActive(),
+  //         });
+  //       });
+  //     });
+  //   });
+  //   publisher.on("streamPlaying", () => {
+  //     this.updateLayout();
+  //     publisher.videos[0].video.parentElement.classList.remove("custom-class");
+  //   });
+  // }
 
   closeDialogExtension() {
     this.setState({ showExtensionDialog: false });
   }
 
-  stopScreenShare() {
-    this.state.session.unpublish(localUser.getStreamManager());
-    this.connectWebCam();
-  }
+  // stopScreenShare() {
+  //   this.state.session.unpublish(localUser.getStreamManager());
+  //   this.connectWebCam();
+  // }
 
-  checkSomeoneShareScreen() {
-    let isScreenShared;
-    // return true if at least one passes the test
-    isScreenShared =
-      this.state.subscribers.some((user: any) => user.isScreenShareActive()) ||
-      localUser.isScreenShareActive();
-    const openviduLayoutOptions = {
-      maxRatio: 3 / 2,
-      minRatio: 9 / 16,
-      fixedRatio: isScreenShared,
-      bigClass: "OV_big",
-      bigPercentage: 0.8,
-      bigFixedRatio: false,
-      bigMaxRatio: 3 / 2,
-      bigMinRatio: 9 / 16,
-      bigFirst: true,
-      animate: true,
-    };
-    this.layout.setLayoutOptions(openviduLayoutOptions);
-    this.updateLayout();
-  }
+  // checkSomeoneShareScreen() {
+  //   let isScreenShared;
+  //   // return true if at least one passes the test
+  //   isScreenShared =
+  //     this.state.subscribers.some((user: any) => user.isScreenShareActive()) ||
+  //     localUser.isScreenShareActive();
+  //   const openviduLayoutOptions = {
+  //     maxRatio: 3 / 2,
+  //     minRatio: 9 / 16,
+  //     fixedRatio: isScreenShared,
+  //     bigClass: "OV_big",
+  //     bigPercentage: 0.8,
+  //     bigFixedRatio: false,
+  //     bigMaxRatio: 3 / 2,
+  //     bigMinRatio: 9 / 16,
+  //     bigFirst: true,
+  //     animate: true,
+  //   };
+  //   this.layout.setLayoutOptions(openviduLayoutOptions);
+  //   this.updateLayout();
+  // }
 
   toggleChat(property: any) {
     let display = property;
@@ -623,28 +653,28 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   // 커스텀 함수
-  sendSignalEndBroadCast() {
-    const signalOptions = {
-      data: "zz",
-      type: "EndBroadCast",
-    };
-    this.state.session.signal(signalOptions);
-  }
+  // sendSignalEndBroadCast() {
+  //   const signalOptions = {
+  //     data: "zz",
+  //     type: "EndBroadCast",
+  //   };
+  //   this.state.session.signal(signalOptions);
+  // }
 
-  afterEndBroadCast() {
-    this.state.session.on("signal:EndBroadCast", (event: any) => {
-      this.leaveSession();
-      window.location.replace("http://naver.com");
-    });
-  }
+  // afterEndBroadCast() {
+  //   this.state.session.on("signal:EndBroadCast", (event: any) => {
+  //     this.leaveSession();
+  //     window.location.replace("http://naver.com");
+  //   });
+  // }
 
-  async exitButton() {
-    if (this.isPublisher) {
-      await this.sendSignalEndBroadCast();
-      await this.deleteSession(this.mySessionId);
-    }
-    this.leaveSession();
-  }
+  // async exitButton() {
+  //   if (this.isPublisher) {
+  //     await this.sendSignalEndBroadCast();
+  //     await this.deleteSession(this.mySessionId);
+  //   }
+  //   this.leaveSession();
+  // }
 
   async captureThumbnail() {
     let streamId = localUser.getStreamManager().stream.streamId;
@@ -692,11 +722,11 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
           showNotification={this.state.messageReceived}
           camStatusChanged={this.camStatusChanged}
           micStatusChanged={this.micStatusChanged}
-          screenShare={this.screenShare}
-          stopScreenShare={this.stopScreenShare}
+          // screenShare={this.screenShare}
+          // stopScreenShare={this.stopScreenShare}
           toggleFullscreen={this.toggleFullscreen}
           switchCamera={this.switchCamera}
-          exitButton={this.exitButton}
+          exitButton={this.leaveSession}
           toggleChat={this.toggleChat}
           isPublisher={this.isPublisher}
         />

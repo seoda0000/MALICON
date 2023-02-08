@@ -27,8 +27,8 @@ const logo = require("../../../assets/img/onair_turnoff.png");
 interface ToolbarProps {
   micStatusChanged: any;
   camStatusChanged: any;
-  screenShare: any;
-  stopScreenShare: any;
+  // screenShare: any;
+  // stopScreenShare: any;
   toggleFullscreen: any;
   switchCamera: any;
   exitButton: any;
@@ -56,8 +56,8 @@ export default class ToolbarComponent extends Component<ToolbarProps, {}> {
     this.state = { fullscreen: false };
     this.camStatusChanged = this.camStatusChanged.bind(this);
     this.micStatusChanged = this.micStatusChanged.bind(this);
-    this.screenShare = this.screenShare.bind(this);
-    this.stopScreenShare = this.stopScreenShare.bind(this);
+    //this.screenShare = this.screenShare.bind(this);
+    //this.stopScreenShare = this.stopScreenShare.bind(this);
     this.toggleFullscreen = this.toggleFullscreen.bind(this);
     this.switchCamera = this.switchCamera.bind(this);
     this.exitButton = this.exitButton.bind(this);
@@ -72,13 +72,13 @@ export default class ToolbarComponent extends Component<ToolbarProps, {}> {
     this.props.camStatusChanged();
   }
 
-  screenShare() {
-    this.props.screenShare();
-  }
+  // screenShare() {
+  //   this.props.screenShare();
+  // }
 
-  stopScreenShare() {
-    this.props.stopScreenShare();
-  }
+  // stopScreenShare() {
+  //   this.props.stopScreenShare();
+  // }
 
   toggleFullscreen() {
     this.setState({ fullscreen: !this.state.fullscreen });
@@ -150,7 +150,7 @@ export default class ToolbarComponent extends Component<ToolbarProps, {}> {
             }
 
             {/* 화면 공유 버튼 */}
-            {this.props.isPublisher && (
+            {/* {this.props.isPublisher && (
               <IconButton
                 color="inherit"
                 className="navButton"
@@ -170,7 +170,7 @@ export default class ToolbarComponent extends Component<ToolbarProps, {}> {
                 <IconButton onClick={this.stopScreenShare} id="navScreenButton">
                   <StopScreenShare color="secondary" />
                 </IconButton>
-              )}
+              )} */}
 
             {/* 카메라 변경 버튼 */}
 
