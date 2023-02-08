@@ -85,16 +85,16 @@ export default function FeedPage() {
           <Grid container rowSpacing={3}>
             <h3>Latest Video</h3>
             <Grid item width={"100%"}>
-              <VideoCard />
+              <VideoCard nth={0} />
             </Grid>
             <Grid item width={"100%"}>
-              <VideoCard />
+              <VideoCard nth={1} />
             </Grid>
             <Grid item width={"100%"}>
-              <VideoCard />
+              <VideoCard nth={2} />
             </Grid>
             <Grid item width={"100%"}>
-              <VideoCard />
+              <VideoCard nth={3} />
             </Grid>
           </Grid>
         </Paper>

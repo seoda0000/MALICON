@@ -13,9 +13,9 @@ import CreateNewFolder from "@mui/icons-material/CreateNewFolder";
 import { autoBatchEnhancer } from "@reduxjs/toolkit";
 import CardComp from "../common/CardComp";
 
-export default function VideoCard() {
+const VideoCard: React.FC<{ nth: number }> = (props) => {
   return (
-    <CardComp nth={3} title="Title" caption={true}>
+    <CardComp nth={props.nth} title="Title" caption={true}>
       <img
         src="https://i.ytimg.com/vi/0gY_z7fqPjs/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0w_6PP55kpL3H-VNAhtDIWuISAA"
         srcSet="https://images.unsplash.com/photo-1515825838458-f2a94b20105a?auto=format&fit=crop&w=300&dpr=2 2x"
@@ -24,4 +24,6 @@ export default function VideoCard() {
       />
     </CardComp>
   );
-}
+};
+
+export default VideoCard;

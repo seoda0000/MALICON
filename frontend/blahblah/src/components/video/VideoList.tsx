@@ -30,7 +30,7 @@ export default function VideoList() {
           justifyContent={"center"}
           alignItems={"center"}
         >
-          <VideoCard />
+          <VideoCard nth={index} />
         </Grid>
       ))}
     </Grid>
