@@ -20,9 +20,11 @@ import { broadcastActions } from "../../redux/modules/broadcast/broadcast-slice"
 import CardComp from "../common/CardComp";
 import CarouselCompBasic from "../common/CarouselCompBasic";
 
-const basicCarousel = require("../../assets/img/carousel_basic.png");
+const basicCarousel_1 = require("../../assets/img/basic_1.jpg");
+const basicCarousel_2 = require("../../assets/img/basic_2.jpg");
+const basicCarousel_3 = require("../../assets/img/basic_3.jpg");
 
-const basicList = [basicCarousel, basicCarousel, basicCarousel];
+const basicList = [basicCarousel_1, basicCarousel_2, basicCarousel_3];
 
 const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -89,7 +91,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
               : basicList.map((item, index) => (
                   <SwiperSlide>
                     <CarouselCompBasic nth={index}>
-                      <img src={basicCarousel} />
+                      <img src={item} />
                     </CarouselCompBasic>
                   </SwiperSlide>
                 ))}
