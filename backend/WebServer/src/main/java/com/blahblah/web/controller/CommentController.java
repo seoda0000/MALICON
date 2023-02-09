@@ -8,6 +8,7 @@ import com.blahblah.web.service.CommentService;
 import com.blahblah.web.util.JWTutil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,25 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.OK).body(new Message("댓글 작성 완료"));
         }
     }
+
+    @GetMapping("articles/{articleId}/{size}/{page}")
+    public ResponseEntity getArticleComments(@PathVariable long articleId, @PathVariable long size, @PathVariable long page){
+        Page<CommentDTO> commentList = commentService.readComments(1, articleId, size, page);
+        if(commentList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("작성된 댓글이 없습니다."));
+        }
+        return ResponseEntity.ok(commentList);
+    }
+
+    @GetMapping("videos/{videoId}/{size}/{page}")
+    public ResponseEntity getVideoComments(@PathVariable long videoId, @PathVariable long size, @PathVariable long page){
+        Page<CommentDTO> commentList = commentService.readComments(2, videoId, size, page);
+        if(commentList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("작성된 댓글이 없습니다."));
+        }
+        return ResponseEntity.ok(commentList);
+    }
+
 
     @DeleteMapping("/{commentId}/{userPK}")
     public ResponseEntity deleteComment(@PathVariable long commentId, @PathVariable long userPK, HttpServletRequest request){

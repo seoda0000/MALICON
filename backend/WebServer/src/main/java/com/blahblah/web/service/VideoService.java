@@ -8,11 +8,11 @@ public interface VideoService {
 
     VideoEntity createVideo(VideoDTO videoDTO);
 
-    Page<VideoDTO> readVideos(long userPK);
+    Page<VideoDTO> readVideos(long userPK, long size, long page);
 
-    Page<VideoDTO> readMyVideos(long userPK);
+    Page<VideoDTO> readMyVideos(long userPK, long size, long page);
 
-    Page<VideoDTO> readAllVideos();
+    Page<VideoDTO> readAllVideos(long size, long page);
 
     VideoDTO getVideo(long videoId, long userPK);
 

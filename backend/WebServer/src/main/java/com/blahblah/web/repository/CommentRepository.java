@@ -9,10 +9,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
 
-//    @Query(value="select * from comments where article_id=?", nativeQuery = true)
-//    Page<CommentEntity> findAllByArticleId(@Param("articleId") long articleId, Pageable pageable);
-//
-//    @Query(value="select * from comments where video_id=?", nativeQuery = true)
-//    Page<CommentEntity> findAllByVideoId(@Param("videoId") long videoId, Pageable pageable);
+    Page<CommentEntity> findAllByArticleId(long articleId, Pageable pageable);
+
+    Page<CommentEntity> findAllByVideoId(long videoId, Pageable pageable);
 
 }
