@@ -10,12 +10,13 @@ import OpenViduLayout from "../layout/openvidu-layout";
 import UserModel from "../../model/openvidu/user-model";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import { getAccessToken } from "../../redux/modules/user/token";
+import html2canvas from "html2canvas";
 
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production"
     ? "https://blahblah.movebxeax.me/stream-service/"
-    : "https://blahblah.movebxeax.me/stream-service/";
+    : "http://localhost:33332/";
 
 // 타입 생성
 interface VideoRoomProps {
@@ -199,7 +200,15 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.state.session
       .connect(token, { clientData: this.state.myUserName })
       .then(() => {
-        this.connectWebCam();
+        this.connectWebCam().then(()=>{
+          
+          if(this.isPublisher) {
+            setTimeout(()=>{
+              this.sendThumbnail();
+              console.log("썸네일 보내냐?")
+            }, 1000)
+          }
+        })
       })
       .catch((error: any) => {
         if (this.props.error) {
@@ -317,6 +326,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     if (mySession) {
       mySession.disconnect();
       if(this.isPublisher){
+        console.log("세션 지우기")
         this.deleteSession(this.state.mySessionId).then(()=>{
           // 원하는 라우팅 경로로
           //window.location.replace("http://naver.com");
@@ -677,31 +687,18 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   // }
 
   async captureThumbnail() {
-    let streamId = localUser.getStreamManager().stream.streamId;
-    let video = document.getElementById("video-" + streamId);
-    if (!video) return;
-    let canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const canvas_2d = (canvas as HTMLCanvasElement).getContext("2d");
-
-    (canvas_2d as CanvasRenderingContext2D).drawImage(
-      video as any,
-      0,
-      0,
-      video.videoWidth,
-      video.videoHeight
-    );
-
-    //let imageData = canvas.toDataURL('image/jpeg', 0.1);
-    let imageData = await encodeURIComponent(
-      canvas.toDataURL("image/jpeg", 0.1).split(",")[1]
-    );
-    return imageData;
+    let id = "video-" + localUser.getStreamManager().stream.streamId;
+    console.log("아이디는 이거에옹 ", id);
+    return await html2canvas(document.getElementById(id) as HTMLElement).then(canvas=>{
+      return encodeURIComponent(canvas.toDataURL('image/jpeg', 0.3).split(',')[1])
+    }).catch(e => {
+      console.error(e);
+    })
   }
 
   async sendThumbnail() {
     let encodedImage = await this.captureThumbnail();
+    console.log("썸네일" , encodedImage);
     this.createThumbnail(this.state.mySessionId, encodedImage);
     // 아래 함수는 이미지화 하는 법
     // const decodedImage = decodeURIComponent(encodedImage);
@@ -856,6 +853,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   async deleteSession(sessionId: any) {
+    console.log("delete 요청 보내")
     const {data} = await axios.delete(
       APPLICATION_SERVER_URL + "api/sessions/" + sessionId,
       {
