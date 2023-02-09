@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.temporal.TemporalField;
 import java.util.List;
 
 @Service
@@ -96,7 +97,7 @@ public class VideoServiceImpl implements VideoService{
                 .like(check)
                 .likeCnt(list.size())
                 .hashtags(v.getHashtags())
-                .createDate(v.getCreateDate().toString())
+                .createDate(v.getCreateDate())
                 .views(v.getViews()+1)
                 .build();
 

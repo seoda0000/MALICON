@@ -4,6 +4,8 @@ import com.blahblah.web.entity.CommentEntity;
 import lombok.*;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @ToString
@@ -27,9 +29,9 @@ public class CommentDTO {
 
     private String avatar;
 
-    private String createDate;
+    private LocalDateTime createDate;
 
-    private String lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     public Page<CommentDTO> toVDtoList(Page<CommentEntity> commentList){
         Page<CommentDTO> dtoList = commentList.map(c -> CommentDTO.builder()
@@ -40,8 +42,8 @@ public class CommentDTO {
                 .content(c.getContent())
                 .nickName(c.getUserEntity().getNickName())
                 .avatar(c.getUserEntity().getAvatar())
-                .createDate(c.getCreateDate().toString())
-                .lastModifiedDate(c.getLastModifiedDate().toString())
+                .createDate(c.getCreateDate())
+                .lastModifiedDate(c.getLastModifiedDate())
                 .build());
 
         return dtoList;
@@ -55,8 +57,8 @@ public class CommentDTO {
                 .nickName(c.getUserEntity().getNickName())
                 .content(c.getContent())
                 .avatar(c.getUserEntity().getAvatar())
-                .createDate(c.getCreateDate().toString())
-                .lastModifiedDate(c.getLastModifiedDate().toString())
+                .createDate(c.getCreateDate())
+                .lastModifiedDate(c.getLastModifiedDate())
                 .build());
 
         return dtoList;

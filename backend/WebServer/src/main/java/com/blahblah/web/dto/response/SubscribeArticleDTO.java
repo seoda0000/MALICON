@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,9 +32,9 @@ public class SubscribeArticleDTO {
 
     private String content;
 
-    private String createDate;
+    private LocalDateTime createDate;
 
-    private String lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     private boolean like;
 
@@ -54,8 +55,8 @@ public class SubscribeArticleDTO {
                         .avatar(a.getUserEntity().getAvatar())
                         .title(a.getTitle())
                         .content(a.getContent())
-                        .createDate(a.getCreateDate().toString())
-                        .lastModifiedDate(a.getLastModifiedDate().toString())
+                        .createDate(a.getCreateDate())
+                        .lastModifiedDate(a.getLastModifiedDate())
                         .like(likes.contains(a.getId()))
                                 .likeCnt(Collections.frequency(articles, a.getId()))
                         .commentList(new CommentDTO().toADtoList(new PageImpl<>(a.getComments().subList(start, Math.min(end, a.getComments().size())), pageRequest, a.getComments().size())))
