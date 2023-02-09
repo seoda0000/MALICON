@@ -177,18 +177,20 @@ public class Controller {
 		return new ResponseEntity<>(title, HttpStatus.OK);
 	}
 
-	//현제 방송중인지 여부 확인
+	//현재 방송중인지 여부 확인
 	@Transactional(readOnly = true)
-	@GetMapping("api/sessions/onAir")
-	public ResponseEntity<?> isOnAir(@RequestBody(required = false) Map<String, Object> params){
+	@GetMapping("api/sessions/onAir/{userId}")
+	public ResponseEntity<?> isOnAir(@PathVariable String userId){
 
 		log.info("\n----------- isOnAir START -----------");
 
 		boolean onAir = true;
 
-		String sessionId = (String)params.get("userId");
+		String sessionId = userId;
 
-		if(!liveRoomRepository.existsById(sessionId)) onAir = false;
+		Session session = openvidu.getActiveSession(sessionId);
+
+		if(!liveRoomRepository.existsById(sessionId) || session == null) onAir = false;
 
 		return new ResponseEntity<>(onAir, HttpStatus.OK);
 	}
