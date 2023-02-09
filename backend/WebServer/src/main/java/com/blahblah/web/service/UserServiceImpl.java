@@ -36,6 +36,9 @@ public class UserServiceImpl implements UserService{
 
     private static final String FROM_ADDRESS = "admin@blahblah.movebxeax.me";
 
+    private final String DEFAULT_AVATAR =
+            "{\"body\":[\"rounded\"],\"clothingColor\":[\"6dbb58\"],\"eyes\":[\"sleep\"],\"facialHair\":[\"\"],\"facialHairProbability\":100,\"hair\":[\"shortCombover\"],\"hairColor\":[\"6c4545\"],\"mouth\":[\"frown\"],\"nose\":[\"wrinkles\"],\"skinColor\":[\"d78774\"]}";
+
     @Override
     @Transactional(readOnly = true)
     public boolean isExistUserId(String userId) {
@@ -94,11 +97,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
+
+        String avatar = userDTO.getAvatar();
+
         UserEntity s = UserEntity.builder()
                 .userId(userDTO.getUserId())
                 .nickName(userDTO.getNickName())
                 .email(userDTO.getEmail())
-                .avatar(userDTO.getAvatar())
+                .avatar(avatar == null?DEFAULT_AVATAR:avatar)
                 .lightStick(userDTO.getLightStick())
                 .phoneNumber(userDTO.getPhoneNumber())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
