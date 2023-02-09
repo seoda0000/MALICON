@@ -13,6 +13,7 @@ import {
 } from "@mui/joy";
 import React from "react";
 import { VideoType } from "../../model/video/VideoType";
+import { useNavigate } from "react-router-dom";
 
 const CardWrapper = styled(Card)<{ nth: number }>`
   width: 100%;
@@ -89,8 +90,12 @@ export default function CardComp({
   caption,
   video,
 }: CardCompPropsType): JSX.Element {
+  const navigate = useNavigate();
+  function onClickHandler() {
+    navigate(`/video/${video?.id}`);
+  }
   return (
-    <CardWrapper nth={nth}>
+    <CardWrapper nth={nth} onClick={onClickHandler}>
       <Box sx={{ position: "relative" }}>
         <AspectRatio ratio="9/5">
           <div className="float-wrapper">

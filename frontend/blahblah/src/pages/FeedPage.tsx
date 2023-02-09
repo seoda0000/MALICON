@@ -12,6 +12,7 @@ import { fetchFeedData } from "../redux/modules/feed/feed-action";
 import { useEffect, useState } from "react";
 import { AppDispatch } from "../redux/configStore";
 import { RootState } from "../redux/configStore";
+import RightVideoSection from "../components/video/rightVideoSection";
 
 const drawerWidth = 300;
 let isInitial = true;
@@ -19,7 +20,6 @@ let isInitial = true;
 export default function FeedPage() {
   const dispatch = useDispatch<AppDispatch>();
   const feed = useSelector((state: RootState) => state.feed);
-  const video = useSelector((state: RootState) => state.video);
 
   useEffect(() => {
     if (isInitial) {
@@ -68,31 +68,7 @@ export default function FeedPage() {
       </Box>
 
       {/* 우측 컴포넌트 */}
-
-      <Box sx={{ width: { md: drawerWidth }, flexShrink: { sm: 0 } }}>
-        <Paper
-          // variant="permanent"
-          sx={{
-            display: { xs: "none", md: "flex" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-            ml: 5,
-            p: 2,
-          }}
-        >
-          {/* 컨텐츠 내용 */}
-          <Grid container rowSpacing={3}>
-            <h3>Latest Video</h3>
-            {video.followingVideoList.map((video, index) => (
-              <Grid item width={"100%"}>
-                <VideoCard nth={3} video={video} />
-              </Grid>
-            ))}
-          </Grid>
-        </Paper>
-      </Box>
+      <RightVideoSection drawerWidth={drawerWidth} />
     </Box>
   );
 }
