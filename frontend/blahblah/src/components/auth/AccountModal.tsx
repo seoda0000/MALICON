@@ -139,7 +139,9 @@ export default function AccountModal({ open, setOpen }: any): JSX.Element {
             email,
             phoneNumber: phone === "" ? null : phone,
           })
-        );
+        ).then(() => {
+          onCloseModal();
+        });
       } else {
         dispatch(
           updateUserAction({
@@ -149,11 +151,13 @@ export default function AccountModal({ open, setOpen }: any): JSX.Element {
             email,
             phoneNumber: phone === "" ? null : phone,
           })
-        );
+        ).then(() => {
+          onCloseModal();
+        });
       }
 
-      onCloseModal();
-      navigate("/", { replace: true });
+      // onCloseModal();
+      // navigate("/main", { replace: true });
     }
   };
 

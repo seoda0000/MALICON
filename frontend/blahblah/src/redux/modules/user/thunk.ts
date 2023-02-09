@@ -75,7 +75,7 @@ export const checkDupNickNameAction = createAsyncThunk(
   async (nickName: string, { rejectWithValue }) => {
     try {
       const axios = axiosInitializer();
-      const { data } = await axios.get(`/api/users/nickname/${nickName}`);
+      const { data } = await axios.get(`/api/users/nickName/${nickName}`);
 
       return data;
     } catch (e) {
