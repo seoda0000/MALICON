@@ -7,6 +7,7 @@ export type FeedType = {
   createDate: string;
   lastModifiedDate: string;
   like: boolean;
+  likeCnt: number;
 
   userPK: number;
   userId: string;

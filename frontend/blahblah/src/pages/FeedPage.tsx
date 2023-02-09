@@ -19,6 +19,7 @@ let isInitial = true;
 export default function FeedPage() {
   const dispatch = useDispatch<AppDispatch>();
   const feed = useSelector((state: RootState) => state.feed);
+  const video = useSelector((state: RootState) => state.video);
 
   useEffect(() => {
     if (isInitial) {
@@ -84,18 +85,11 @@ export default function FeedPage() {
           {/* 컨텐츠 내용 */}
           <Grid container rowSpacing={3}>
             <h3>Latest Video</h3>
-            <Grid item width={"100%"}>
-              <VideoCard nth={0} />
-            </Grid>
-            <Grid item width={"100%"}>
-              <VideoCard nth={1} />
-            </Grid>
-            <Grid item width={"100%"}>
-              <VideoCard nth={2} />
-            </Grid>
-            <Grid item width={"100%"}>
-              <VideoCard nth={3} />
-            </Grid>
+            {video.followingVideoList.map((video, index) => (
+              <Grid item width={"100%"}>
+                <VideoCard nth={3} video={video} />
+              </Grid>
+            ))}
           </Grid>
         </Paper>
       </Box>
