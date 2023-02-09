@@ -128,7 +128,7 @@ public class Controller {
 
 	//방목록 가져오기
 	@Transactional(readOnly = true)
-	@GetMapping("api/rooms")
+	@GetMapping("/api/rooms")
 	public ResponseEntity<?> getRoomList() throws Exception {
 		log.info("방목록 시작-------------------------------------");
 
@@ -149,7 +149,7 @@ public class Controller {
 
 
 	//방송 종료 -> redis에 저장된 방 삭제
-	@DeleteMapping("api/sessions/{sessionId}")
+	@DeleteMapping("/api/sessions/{sessionId}")
 	public ResponseEntity<?> deleteRoom(@PathVariable("sessionId") String sessionId) throws Exception{
 
 		log.info("\n----------- deleteRoom START -----------");
@@ -157,12 +157,17 @@ public class Controller {
 		liveRoomRepository.deleteById(sessionId);
 		String result = sessionId + "is deleted.";
 		log.info(result);
-		openvidu.getActiveSession(sessionId).close();
+		try{
+			openvidu.getActiveSession(sessionId).close();
+		}catch (OpenViduJavaClientException | OpenViduHttpException e){
+			log.info("이미 세션이 종료돼서 없음");
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	//방송 정보 수정(방제 변경)
-	@PutMapping("api/sessions")
+	@PutMapping("/api/sessions")
 	public ResponseEntity<?> updateRoom(@RequestBody(required = false) Map<String, Object> params){
 
 		log.info("\n----------- updateRoom START -----------");
@@ -179,7 +184,7 @@ public class Controller {
 
 	//현재 방송중인지 여부 확인
 	@Transactional(readOnly = true)
-	@GetMapping("api/sessions/onAir/{userId}")
+	@GetMapping("/api/sessions/onAir/{userId}")
 	public ResponseEntity<?> isOnAir(@PathVariable String userId){
 
 		log.info("\n----------- isOnAir START -----------");
@@ -196,7 +201,7 @@ public class Controller {
 	}
 
 	//썸네일 저장하기
-	@PostMapping("api/sessions/thumbnail/{sessionId}")
+	@PostMapping("/api/sessions/thumbnail/{sessionId}")
 	public ResponseEntity<?> saveThumbnail(@PathVariable("sessionId") String sessionId , @RequestBody(required = false) Map<String, Object> params){
 
 		log.info("\n----------- saveThumbnail START -----------");
