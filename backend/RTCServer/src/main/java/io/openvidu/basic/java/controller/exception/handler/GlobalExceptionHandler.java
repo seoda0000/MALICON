@@ -11,12 +11,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-//    @ExceptionHandler(Exception.class)
-//    protected ResponseEntity<?> handleAllException(Exception e) {
-//        e.printStackTrace();
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("전역 에러"));
-//    }
-
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<?> handleCustomException(CustomException e) {
         log.error(e.getMessage());
