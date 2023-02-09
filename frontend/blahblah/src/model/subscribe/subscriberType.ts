@@ -3,5 +3,6 @@ export type SubscriberType = {
   userId: string;
   nickName: string;
   avatar: string;
+  isOnAir?: boolean;
 };
 

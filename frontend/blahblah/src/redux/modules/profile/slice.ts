@@ -9,8 +9,8 @@ import {
   getFeedAction,
   updateAboutMeAction,
   addAboutMeAction,
-  getSubscribersAction,
   getVideoAction,
+  getIsOnAirAction,
 } from "./thunk";
 
 const initialState: ProfileStateType = {
@@ -30,6 +30,7 @@ const initialState: ProfileStateType = {
   getAboutMe: { loading: false, data: null, error: null },
   addAboutMe: { loading: false, data: null, error: null },
   updateAboutMe: { loading: false, data: null, error: null },
+  getIsOnAir: { loading: false, data: null, error: null },
   getIsSub: { loading: false, data: null, error: null },
   getSub: { loading: false, data: null, error: null },
   subscribe: { loading: false, data: null, error: null },
@@ -66,23 +67,40 @@ const profileSlice = createSlice({
         state.getAboutMe.data = null;
         state.getAboutMe.error = payload;
       })
-      .addCase(getSubscribersAction.pending, (state) => {
-        state.getSub.loading = true;
-        state.getSub.data = null;
-        state.getSub.error = null;
+      .addCase(getIsOnAirAction.pending, (state) => {
+        state.getIsOnAir.loading = true;
+        state.getIsOnAir.data = null;
+        state.getIsOnAir.error = null;
       })
-      .addCase(getSubscribersAction.fulfilled, (state, { payload }) => {
-        state.getSub.loading = false;
-        state.getSub.data = payload;
-        state.getSub.error = null;
+      .addCase(getIsOnAirAction.fulfilled, (state, { payload }) => {
+        state.getIsOnAir.loading = false;
+        state.getIsOnAir.data = payload;
+        state.getIsOnAir.error = null;
 
-        state.subscribers = payload;
+        state.userData.isOnAir = payload;
       })
-      .addCase(getSubscribersAction.rejected, (state, { payload }) => {
-        state.getSub.loading = false;
-        state.getSub.data = null;
-        state.getSub.error = payload;
+      .addCase(getIsOnAirAction.rejected, (state, { payload }) => {
+        state.getIsOnAir.loading = false;
+        state.getIsOnAir.data = null;
+        state.getIsOnAir.error = payload;
       })
+      // .addCase(getSubscribersAction.pending, (state) => {
+      //   state.getSub.loading = true;
+      //   state.getSub.data = null;
+      //   state.getSub.error = null;
+      // })
+      // .addCase(getSubscribersAction.fulfilled, (state, { payload }) => {
+      //   state.getSub.loading = false;
+      //   state.getSub.data = payload;
+      //   state.getSub.error = null;
+
+      //   state.subscribers = payload;
+      // })
+      // .addCase(getSubscribersAction.rejected, (state, { payload }) => {
+      //   state.getSub.loading = false;
+      //   state.getSub.data = null;
+      //   state.getSub.error = payload;
+      // })
       .addCase(addAboutMeAction.pending, (state) => {
         state.addAboutMe.loading = true;
         state.addAboutMe.data = null;
@@ -152,12 +170,12 @@ const profileSlice = createSlice({
 
         state.isSubscribing = true;
         state.userData.subscribers += 1;
-        state.subscribers.push({
-          userPK: state.userData.userPK,
-          userId: state.userData.userId,
-          nickName: state.userData.nickName,
-          avatar: state.userData.avatar,
-        });
+        // state.subscribers.push({
+        //   userPK: state.userData.userPK,
+        //   userId: state.userData.userId,
+        //   nickName: state.userData.nickName,
+        //   avatar: state.userData.avatar,
+        // });
       })
       .addCase(subscribeAction.rejected, (state, { payload }) => {
         state.subscribe.loading = false;
@@ -176,11 +194,11 @@ const profileSlice = createSlice({
 
         state.isSubscribing = false;
         state.userData.subscribers -= 1;
-        state.subscribers.forEach((subscriber, idx) => {
-          if (subscriber.userPK === state.userData.userPK) {
-            state.subscribers.splice(idx, 1);
-          }
-        });
+        // state.subscribers.forEach((subscriber, idx) => {
+        //   if (subscriber.userPK === state.userData.userPK) {
+        //     state.subscribers.splice(idx, 1);
+        //   }
+        // });
       })
       .addCase(unSubscribeAction.rejected, (state, { payload }) => {
         state.unSubscribe.loading = false;

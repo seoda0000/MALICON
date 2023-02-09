@@ -12,9 +12,13 @@ import {
   setAccessToken,
   setRefreshToken,
 } from "./token";
-import { axiosInitializer } from "../../utils/axiosInitializer";
+import {
+  axiosInitializer,
+  openviduInitializer,
+} from "../../utils/axiosInitializer";
 import { AboutMeType } from "../../../model/user/aboutMeType";
 import { UserUpdateType } from "../../../model/user/userUpdateType";
+import { SubscriberType } from "../../../model/subscribe/subscriberType";
 
 // 회원가입
 export const signupAction = createAsyncThunk(
@@ -193,6 +197,49 @@ export const deleteUserAction = createAsyncThunk(
           removeToken();
         });
       // return data;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
+// 구독자 가져오기
+export const getSubscribersAction = createAsyncThunk(
+  "GET_SUBSCRIBERS",
+  async (_, { rejectWithValue }) => {
+    try {
+      const axios = axiosInitializer();
+      const { data } = await axios.get<SubscriberType[]>(`/api/subscribes`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + getAccessToken(),
+        },
+      });
+
+      return data;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
+// 방송중인지 확인
+export const getIsOnAirAction = createAsyncThunk(
+  "GET_ISONAIR",
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const axios = openviduInitializer();
+      const { data } = await axios.get<boolean>(
+        `api/sessions/onAir/${userId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + getAccessToken(),
+          },
+        }
+      );
+
+      return data;
     } catch (e) {
       return rejectWithValue(e);
     }

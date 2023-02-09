@@ -12,12 +12,12 @@ export type ProfileStateType = {
   getAboutMe: ReduxStateType;
   addAboutMe: ReduxStateType;
   updateAboutMe: ReduxStateType;
+  getIsOnAir: ReduxStateType;
   getIsSub: ReduxStateType;
   subscribe: ReduxStateType;
   unSubscribe: ReduxStateType;
   getFeed: ReduxStateType;
   getVideo: ReduxStateType;
-  getIsOnAir?: ReduxStateType;
   subscribers: SubscriberType[];
   getSub: ReduxStateType;
 };

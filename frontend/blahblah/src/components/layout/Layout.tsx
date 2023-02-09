@@ -30,7 +30,10 @@ import AvatarShortcutButton from "./AvatarShortcutButton";
 // import ProfileAvatar from "../auth/ProfileAvatar";
 import { getAccessToken, removeToken } from "../../redux/modules/user/token";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
-import { getMeWithTokenAction } from "../../redux/modules/user";
+import {
+  getMeWithTokenAction,
+  getSubscribersAction,
+} from "../../redux/modules/user";
 import SigninModal from "../auth/SigninModal";
 import SignupModal from "../auth/SignupModal";
 import ProfileImage from "../common/ProfileImage";
@@ -48,7 +51,6 @@ import { RootState } from "../../redux/configStore";
 import { useSelector } from "react-redux";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AccountModal from "../auth/AccountModal";
-import { getSubscribersAction } from "../../redux/modules/profile";
 
 interface LayoutProps {
   children: ReactNode;
@@ -130,8 +132,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Layout(props: LayoutProps) {
   const loggedUser = useAppSelector((state) => state.user.userData);
-  // const subscribers = useAppSelector((state) => state.subscribe.subscribers);
-  const subscribers = useAppSelector((state) => state.profile.subscribers);
+  const subscribers = useAppSelector((state) => state.user.subscribers);
   const dispatch = useAppDispatch();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
