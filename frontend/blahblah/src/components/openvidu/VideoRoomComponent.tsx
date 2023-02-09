@@ -13,10 +13,10 @@ import { getAccessToken } from "../../redux/modules/user/token";
 import html2canvas from "html2canvas";
 
 var localUser = new UserModel();
-const APPLICATION_SERVER_URL = //"http://localhost:33332/"
+const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production"
     ? "https://blahblah.movebxeax.me/stream-service/"
-    : "https://blahblah.movebxeax.me/stream-service/";
+    : "http://localhost:33332/";
 
 // 타입 생성
 interface VideoRoomProps {
