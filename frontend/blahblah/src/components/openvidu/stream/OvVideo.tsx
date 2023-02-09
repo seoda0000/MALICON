@@ -1,10 +1,13 @@
 import React, { Component } from "react";
+import user from "../../../redux/modules/user";
+import EmotionExpression from "../../emotion/EmotionExpression";
 import "./StreamComponent.css";
 
 // 타입 생성
 interface OvVideoProps {
   user: any;
   mutedSound: any;
+  isPublisher: boolean | null;
 }
 
 // OvVideoComponent
@@ -55,12 +58,16 @@ export default class OvVideoComponent extends Component<OvVideoProps, {}> {
 
   render() {
     return (
-      <video
-        autoPlay={true}
-        id={"video-" + this.props.user.getStreamManager().stream.streamId}
-        ref={this.videoRef}
-        muted={this.props.mutedSound}
-      />
+      <div>
+        <video
+          autoPlay={true}
+          id={"video-" + this.props.user.getStreamManager().stream.streamId}
+          ref={this.videoRef}
+          muted={this.props.mutedSound}
+        />
+
+        {(this.props.isPublisher == false && this.videoRef) && <EmotionExpression user={this.props.user} videoRef={this.videoRef} />}
+      </div>
     );
   }
 }

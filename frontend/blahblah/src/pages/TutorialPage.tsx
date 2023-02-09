@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import FaceExpressionRecognition from "../components/faceapi/FaceExpressionRecognition";
-import PoseRecognition from "../components/PoseRecognition/PoseRecognition";
+import FaceExpressionRecognition from "../components/emotion/faceapi/FaceExpressionRecognition";
+import PoseRecognition from "../components/emotion/PoseRecognition/PoseRecognition";
 
 function TutorialPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -27,8 +27,8 @@ function TutorialPage() {
       <h1>튜토리얼페이지</h1>
       <video ref={videoRef} autoPlay width={1280} height={720} />
       <button onClick={startVideo}>start video</button>
-      {isMediaDeviceLoaded && <FaceExpressionRecognition videoRef={videoRef}/> }
-      {isMediaDeviceLoaded && <PoseRecognition videoRef={videoRef}/> }
+      {isMediaDeviceLoaded && <FaceExpressionRecognition onStateChange={null} videoRef={videoRef} />}
+      {isMediaDeviceLoaded && <PoseRecognition onPoseChange={null} videoRef={videoRef} />}
     </div>
   );
 }

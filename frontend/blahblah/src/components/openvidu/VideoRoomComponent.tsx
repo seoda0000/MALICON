@@ -751,6 +751,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
                   user={sub}
                   streamId={sub.streamManager.stream.streamId}
                   isStreamer={true}
+                  isPublisher={true}
                 />
               </div>
             ))}
