@@ -1,15 +1,10 @@
 import { SwiperSlide } from "swiper/react";
 
 const BroadcastCarouselItem: React.FC<{ session: any }> = (props) => {
-  return (
-    <SwiperSlide>
-      <img
-        src={props.session.thumbnail}
-        alt={props.session.title}
-        style={{ width: "90%" }}
-      />
-    </SwiperSlide>
-  );
+  const decodedImage = decodeURIComponent(props.session.thumbnail);
+  const imageElement = document.createElement("img");
+  imageElement.src = `data:image/jpeg;base64,${decodedImage}`;
+  return <img src={"data:image/jpeg;base64," + decodedImage} />;
 };
 
 export default BroadcastCarouselItem;

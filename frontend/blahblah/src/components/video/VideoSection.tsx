@@ -64,10 +64,7 @@ const VideoSection: React.FC<{ video: any }> = (props) => {
         alt="Paella dish"
       />
       <CardContent>
-        {/* <CommentSection
-          comments={}
-          articleId={}
-        /> */}
+        <Typography variant="h6">{props.video.title}</Typography>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">

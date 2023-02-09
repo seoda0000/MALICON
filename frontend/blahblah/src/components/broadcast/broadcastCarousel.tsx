@@ -82,11 +82,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
                       hashTag={session.hashTag}
                       startAt={session.startAt}
                     >
-                      <img
-                        src={session.thumbnail}
-                        alt={session.title}
-                        // style={{ width: "90%" }}
-                      />
+                      <BroadcastCarouselItem session={session} />
                     </CarouselComp>
                   </SwiperSlide>
                 ))
