@@ -5,7 +5,8 @@ import { CommentType } from "../../model/feed/commentType";
 
 const CommentSection: React.FC<{
   comments: CommentType[];
-  articleId: number;
+  articleId?: number;
+  videoId?: number;
 }> = (props) => {
   return (
     <Box sx={{ mx: 2 }}>
