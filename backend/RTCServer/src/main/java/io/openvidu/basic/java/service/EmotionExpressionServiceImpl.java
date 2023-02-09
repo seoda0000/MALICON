@@ -1,7 +1,5 @@
 package io.openvidu.basic.java.service;
 
-import com.influxdb.query.dsl.Flux;
-import com.influxdb.query.dsl.functions.restriction.Restrictions;
 import io.openvidu.basic.java.dto.EmotionExpressionDto;
 import lombok.extern.slf4j.Slf4j;
 import org.influxdb.dto.BoundParameterQuery;
@@ -15,7 +13,6 @@ import org.springframework.data.influxdb.InfluxDBTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Slf4j
@@ -30,8 +27,6 @@ public class EmotionExpressionServiceImpl implements EmotionExpressionService {
         this.databaseName = databaseName;
     }
 
-    @PostConstruct
-
     public void write(String sessionId, EmotionExpressionDto emotionExpressionDto) {
         Point point = Point.measurement(sessionId)
                 .addFieldsFromPOJO(emotionExpressionDto)
@@ -39,8 +34,7 @@ public class EmotionExpressionServiceImpl implements EmotionExpressionService {
 
         influxDBTemplate.write(point);
     }
-
-    @Override
+    
     public List<EmotionExpressionDto> select(String sessionId) {
 
         StringBuilder sb = new StringBuilder();
