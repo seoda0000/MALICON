@@ -157,7 +157,12 @@ public class Controller {
 		liveRoomRepository.deleteById(sessionId);
 		String result = sessionId + "is deleted.";
 		log.info(result);
-		openvidu.getActiveSession(sessionId).close();
+		try{
+			openvidu.getActiveSession(sessionId).close();
+		}catch (OpenViduJavaClientException | OpenViduHttpException e){
+			log.info("이미 세션이 종료돼서 없음");
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
