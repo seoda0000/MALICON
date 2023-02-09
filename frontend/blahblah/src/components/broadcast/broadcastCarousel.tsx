@@ -49,10 +49,10 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
       <Grid item>
         <div
           style={{
-            // height: "100",
-            // maxHeight: "40vw",
-            // minHeight: 0,
-            // minWidth: 0,
+            height: "100%",
+            maxHeight: "40vw",
+            minHeight: "40vw",
+            minWidth: "60vw",
             maxWidth: "60vw",
             width: "100%",
             // overflow: "hidden",
