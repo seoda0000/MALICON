@@ -16,7 +16,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 // 타입 생성
 interface StreamProps {
   user: any;
-  isPublisher?: boolean;
+  isPublisher: boolean | null;
   isStreamer?: boolean;
   handleNickname?: any;
   streamId?: any;
@@ -116,11 +116,12 @@ export default class StreamComponent extends Component<StreamProps, {}> {
         </div>
 
         {this.props.user !== undefined &&
-        this.props.user.getStreamManager() !== undefined ? (
+          this.props.user.getStreamManager() !== undefined ? (
           <div className="streamComponent">
             <OvVideoComponent
               user={this.props.user}
               mutedSound={this.state.mutedSound}
+              isPublisher={this.props.isPublisher}
             />
             <div id="statusIcons">
               {!this.props.user.isVideoActive() ? (
