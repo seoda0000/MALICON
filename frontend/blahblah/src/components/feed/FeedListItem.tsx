@@ -104,6 +104,9 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
               <FavoriteIcon onClick={likeFeedHandler} />
             )}
           </IconButton>
+          <Typography variant="subtitle2" color={"grey"}>
+            {props.feed.likeCnt}
+          </Typography>
           <IconButton aria-label="share">
             <ShareIcon />
           </IconButton>

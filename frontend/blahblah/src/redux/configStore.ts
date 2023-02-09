@@ -4,7 +4,7 @@ import feed from "./modules/feed";
 import profile from "./modules/profile";
 import subscribe from "./modules/subscribe";
 import broadcast from "./modules/broadcast";
-
+import video from "./modules/video";
 const store = configureStore({
   reducer: {
     user,
@@ -12,6 +12,7 @@ const store = configureStore({
     profile,
     subscribe,
     broadcast,
+    video,
   },
 });
 

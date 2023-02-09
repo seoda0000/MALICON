@@ -15,6 +15,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentSection from "../feed/CommentSection";
+import video from "../../redux/modules/video";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -31,15 +32,17 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export default function VideoCard() {
+const VideoSection: React.FC<{ video: any }> = (props) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+  // console.log(props.video);
+
   return (
-    <Card sx={{ maxWidth: "80vm" }}>
+    <Card sx={{ width: "100%" }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -51,8 +54,8 @@ export default function VideoCard() {
             <MoreVertIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title={props.video.nickName}
+        subheader={props.video.createDate}
       />
       <CardMedia
         component="img"
@@ -115,4 +118,6 @@ export default function VideoCard() {
       </Collapse>
     </Card>
   );
-}
+};
+
+export default VideoSection;

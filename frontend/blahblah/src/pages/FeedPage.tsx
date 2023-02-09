@@ -12,6 +12,7 @@ import { fetchFeedData } from "../redux/modules/feed/feed-action";
 import { useEffect, useState } from "react";
 import { AppDispatch } from "../redux/configStore";
 import { RootState } from "../redux/configStore";
+import RightVideoSection from "../components/video/rightVideoSection";
 
 const drawerWidth = 300;
 let isInitial = true;
@@ -67,38 +68,7 @@ export default function FeedPage() {
       </Box>
 
       {/* 우측 컴포넌트 */}
-
-      <Box sx={{ width: { md: drawerWidth }, flexShrink: { sm: 0 } }}>
-        <Paper
-          // variant="permanent"
-          sx={{
-            display: { xs: "none", md: "flex" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-            ml: 5,
-            p: 2,
-          }}
-        >
-          {/* 컨텐츠 내용 */}
-          <Grid container rowSpacing={3}>
-            <h3>Latest Video</h3>
-            <Grid item width={"100%"}>
-              <VideoCard nth={0} />
-            </Grid>
-            <Grid item width={"100%"}>
-              <VideoCard nth={1} />
-            </Grid>
-            <Grid item width={"100%"}>
-              <VideoCard nth={2} />
-            </Grid>
-            <Grid item width={"100%"}>
-              <VideoCard nth={3} />
-            </Grid>
-          </Grid>
-        </Paper>
-      </Box>
+      <RightVideoSection drawerWidth={drawerWidth} />
     </Box>
   );
 }

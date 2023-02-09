@@ -12,6 +12,8 @@ import {
   Typography,
 } from "@mui/joy";
 import React from "react";
+import { VideoType } from "../../model/video/VideoType";
+import { useNavigate } from "react-router-dom";
 
 const CardWrapper = styled(Card)<{ nth: number }>`
   width: 100%;
@@ -78,6 +80,7 @@ type CardCompPropsType = {
   nth: number;
   title?: string;
   caption?: boolean;
+  video?: VideoType;
 };
 
 export default function CardComp({
@@ -85,9 +88,14 @@ export default function CardComp({
   nth,
   title,
   caption,
+  video,
 }: CardCompPropsType): JSX.Element {
+  const navigate = useNavigate();
+  function onClickHandler() {
+    navigate(`/video/${video?.id}`);
+  }
   return (
-    <CardWrapper nth={nth}>
+    <CardWrapper nth={nth} onClick={onClickHandler}>
       <Box sx={{ position: "relative" }}>
         <AspectRatio ratio="9/5">
           <div className="float-wrapper">
@@ -156,7 +164,7 @@ export default function CardComp({
           <Box>
             {/* 유저 닉네임 */}
             <Typography sx={{ fontSize: "sm", fontWeight: "lg" }}>
-              UserNickName
+              {video?.nickName}
             </Typography>
 
             {/* 좋아요 표시 */}
@@ -190,7 +198,7 @@ export default function CardComp({
                 "&:hover": { color: "primary.plainColor" },
               }}
             >
-              10.4k
+              {video?.views}
             </Link>
           </Box>
 
@@ -213,4 +221,3 @@ export default function CardComp({
     </CardWrapper>
   );
 }
-

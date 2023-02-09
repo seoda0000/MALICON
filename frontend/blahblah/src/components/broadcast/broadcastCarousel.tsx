@@ -74,7 +74,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
               ? props.sessions.map((session, index) => (
                   <SwiperSlide key={session.sessionId} onClick={onClickHandler}>
                     <CarouselComp
-                      nth={index}
+                      nth={index + 1}
                       title={session.title}
                       nickname={session.streamer.nickName}
                       caption={true}
