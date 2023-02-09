@@ -10,9 +10,6 @@ const drawerWidth = 300;
 export default function VideoPage() {
   const { videoId } = useParams();
   const video = useSelector((state: RootState) => state.video);
-  const selectedvideo = video.allVideoList.filter(function (video) {
-    return video.id === Number(videoId);
-  })[0];
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -23,7 +20,7 @@ export default function VideoPage() {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <VideoSection video={selectedvideo} />
+        <VideoSection videoId={Number(videoId)} />
       </Box>
       <RightVideoSection drawerWidth={drawerWidth} />
     </Box>

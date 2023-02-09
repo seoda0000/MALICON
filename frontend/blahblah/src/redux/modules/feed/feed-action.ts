@@ -10,7 +10,6 @@ import { getAccessToken } from "../user/token";
 import { axiosInitializer } from "../../utils/axiosInitializer";
 import { CommentPostType } from "../../../model/feed/commentPostType copy";
 
-import feed from ".";
 // 피드 목록 가져오기
 export const fetchFeedData = createAsyncThunk(
   "feed/fetchFeedData",
@@ -19,7 +18,7 @@ export const fetchFeedData = createAsyncThunk(
       // const dispatch = useDispatch<AppDispatch>();
       const axios = axiosInitializer();
 
-      const response = await axios.get("/api/articles", {
+      const response = await axios.get("/api/articles/100/0", {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Baerer " + getAccessToken(),

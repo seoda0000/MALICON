@@ -50,8 +50,8 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
         <div
           style={{
             height: "100%",
-            maxHeight: "40vw",
-            minHeight: "40vw",
+            maxHeight: "35vw",
+            minHeight: "35vw",
             minWidth: "60vw",
             maxWidth: "60vw",
             width: "100%",

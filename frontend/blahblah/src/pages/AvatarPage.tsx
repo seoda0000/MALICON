@@ -281,7 +281,7 @@ function AvatarPage() {
       })
     );
 
-    console.log("아바타 저장 : " + res);
+    console.log("아바타 저장 : " + JSON.stringify(selectedAvatar));
 
     alert("아바타 저장 완료");
   };
@@ -332,4 +332,3 @@ function AvatarPage() {
   );
 }
 export default AvatarPage;
-

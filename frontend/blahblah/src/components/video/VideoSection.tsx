@@ -19,8 +19,13 @@ import video from "../../redux/modules/video";
 import ProfileImage from "../common/ProfileImage";
 import FeedProfileImage from "../feed/FeedProfileImage";
 import { Box } from "@mui/system";
-import { Link } from "@mui/joy";
-import { Favorite, Visibility } from "@mui/icons-material";
+
+import { Button } from "@mui/material";
+import { VideoDetailType } from "../../model/video/VideoDetailType";
+import { RootState } from "../../redux/configStore";
+import { useSelector } from "react-redux";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -36,8 +41,10 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const VideoSection: React.FC<{ video: any }> = (props) => {
+const VideoSection: React.FC<{ videoId: number }> = (props) => {
   const [expanded, setExpanded] = React.useState(false);
+  const video = useSelector((state: RootState) => state.video);
+  const currentVideo = video.currentVideo;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -55,13 +62,13 @@ const VideoSection: React.FC<{ video: any }> = (props) => {
       />
 
       <CardContent>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="h6" sx={{ mr: 1 }}>
-            {props.video.title}
+            {currentVideo.title}
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {/* 해시태그 표시 */}
-            {JSON.parse(props.video!.hashtags).map((data: any, index: any) => {
+            {JSON.parse(currentVideo!.hashtags).map((data: any, index: any) => {
               return (
                 <Box
                   sx={{
@@ -79,65 +86,61 @@ const VideoSection: React.FC<{ video: any }> = (props) => {
               );
             })}
           </Box>
+          <Typography
+            variant="caption"
+            sx={{ fontSize: "sm", fontWeight: "sm", ml: 1 }}
+          >
+            {currentVideo?.createDate}
+          </Typography>
+
+          {/* 좋아요 표시 */}
+          <IconButton aria-label="add to favorites" sx={{ ml: "auto" }}>
+            <FavoriteIcon />
+          </IconButton>
+          <Typography variant="body2">{currentVideo.likeCnt}</Typography>
+
+          {/* 조회수 표시 */}
+          <IconButton aria-label="add to favorites" sx={{ ml: 1 }}>
+            <VisibilityIcon />
+          </IconButton>
+          <Typography variant="body2">{currentVideo.views}</Typography>
         </Box>
 
         {/* =================== */}
 
-        <Box
-          sx={{ display: "flex", gap: 1, mt: 1.5, alignItems: "flex-start" }}
-        >
+        <Box sx={{ display: "flex", gap: 1, mt: 1.5, alignItems: "center" }}>
           {/* 아바타 */}
 
-          <FeedProfileImage avatar={props.video.avatar} />
+          <FeedProfileImage avatar={currentVideo?.avatar} />
 
-          <Box sx={{ display: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              // justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
             {/* 유저 닉네임 */}
-            <Typography sx={{ fontSize: "sm", fontWeight: "lg" }}>
-              {props.video?.nickName}
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "sm", fontWeight: "lg" }}
+            >
+              {currentVideo?.nickName}
             </Typography>
 
-            {/* 좋아요 표시 */}
-            <Link
-              level="body3"
-              underline="none"
-              startDecorator={<Favorite sx={{ width: 20 }} />}
-              color="neutral"
-              sx={{
-                fontSize: "sm",
-                fontWeight: "md",
-                ml: "auto",
-                "&:hover": { color: "danger.plainColor" },
-              }}
-            >
-              117
-            </Link>
-
-            {/* 조회수 표시 */}
-            <Link
-              level="body3"
-              underline="none"
-              startDecorator={<Visibility sx={{ width: 20 }} />}
-              color="neutral"
-              sx={{
-                fontSize: "sm",
-                fontWeight: "md",
-                ml: 2,
-                "&:hover": { color: "primary.plainColor" },
-              }}
-            >
-              {props.video?.views}
-            </Link>
+            {/* 팔로우 버튼 */}
+            <Button sx={{ ml: 2 }} variant="outlined" size="small">
+              Follow
+            </Button>
+            <IconButton aria-label="share" sx={{ ml: "auto" }}>
+              <ShareIcon />
+            </IconButton>
           </Box>
         </Box>
         {/* ============= */}
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

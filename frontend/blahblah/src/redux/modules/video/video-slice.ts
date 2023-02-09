@@ -107,6 +107,38 @@ const initialState: VideoStateType = {
       // },
     },
   ],
+  currentVideo: {
+    id: 2,
+    userPK: 3,
+    userId: "ssafy",
+    nickName: "ssafy",
+    avatar:
+      '{"body":["rounded"],"clothingColor":["54d7c7"],"eyes":["happy"],"facialHair":[""],"facialHairProbability":100,"hair":["curlyHighTop"],"hairColor":["6c4545"],"mouth":["bigSmile"],"nose":["smallRound"],"skinColor":["d78774"]}',
+
+    title: "동영상제목",
+    views: 3,
+    pathUrl: "동영상경로여",
+    createDate: "2023-02-06T16:58:35.329186",
+    hashtags:
+      '[{"key":18,"label":"팬미팅","selected":true},{"key":17,"label":"리코더","selected":true}]',
+    like: true,
+    likeCnt: 1,
+    comments: [
+      {
+        id: 13,
+        content: "정말 멋진 동영상입니다",
+        createDate: "2023-02-07T16:58:35.329186",
+        lastModifiedDate: "2023-02-07T16:58:35.329186",
+        videoId: 2,
+        userPK: 3,
+        userId: "commentor",
+        avatar:
+          '{"body":["rounded"],"clothingColor":["54d7c7"],"eyes":["happy"],"facialHair":[""],"facialHairProbability":100,"hair":["curlyHighTop"],"hairColor":["6c4545"],"mouth":["bigSmile"],"nose":["smallRound"],"skinColor":["d78774"]}',
+
+        nickName: "덧글단사람",
+      },
+    ],
+  },
 };
 
 const videoSlice = createSlice({
