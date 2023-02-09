@@ -193,9 +193,9 @@ export default function Carousel({ items }: CarouselPorpsType): JSX.Element {
   return (
     <CarouselContainer>
       <Slider {...settings}>
-        {mockupData.map((item) => (
+        {mockupData.map((item, idx) => (
           <CarouselItemBox key={item.id}>
-            <VideoCard />
+            {/* <VideoCard nth={idx} video={item} /> */}
             {/* <div className="img-box">
               <img src={item.thumbNail} alt="" />
               <ItemDetailBox>
