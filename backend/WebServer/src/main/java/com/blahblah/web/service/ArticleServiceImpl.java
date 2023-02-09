@@ -63,9 +63,9 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public Page<SubscribeArticleDTO> readArticle(long id) {
+    public Page<SubscribeArticleDTO> readArticle(long id, long size, long page) {
 
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "create_date"));
+        PageRequest pageRequest = PageRequest.of((int)page, (int)size, Sort.by(Sort.Direction.DESC, "create_date"));
         Page<ArticleEntity> result = articleRepository.findAllBy(id, pageRequest);
 
         List<LikeArticleEntity> likeEntities =  likeArticleRepository.findAllByUserId(id);
@@ -84,8 +84,8 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public Page<SubscribeArticleDTO> readMyArticle(long userPK, long id) {
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
+    public Page<SubscribeArticleDTO> readMyArticle(long userPK, long id, long size, long page) {
+        PageRequest pageRequest = PageRequest.of((int)page, (int)size, Sort.by(Sort.Direction.DESC, "createDate"));
 
         Page<ArticleEntity> result = articleRepository.findAllByUserId(userPK, pageRequest);
         List<LikeArticleEntity> likeEntities =  likeArticleRepository.findAllByUserId(id);

@@ -59,19 +59,19 @@ public class ArticleController {
         return ResponseEntity.status(HttpStatus.OK).body(new Message("피드 삭제 완료"));
     }
 
-    @GetMapping
-    public ResponseEntity readArticle(HttpServletRequest request){
+    @GetMapping("/{size}/{page}")
+    public ResponseEntity readArticle(@PathVariable long size, @PathVariable long page, HttpServletRequest request){
         long id = JWTutil.getLongIdByAccessToken(request);
 
-        Page<SubscribeArticleDTO> articleList = articleService.readArticle(id);
+        Page<SubscribeArticleDTO> articleList = articleService.readArticle(id, size, page);
         return ResponseEntity.ok(articleList);
 
     }
 
-    @GetMapping("/{userPK}")
-    public ResponseEntity readMyArticle(@PathVariable long userPK, HttpServletRequest request){
+    @GetMapping("/{userPK}/{size}/{page}")
+    public ResponseEntity readMyArticle(@PathVariable long userPK, @PathVariable long size, @PathVariable long page, HttpServletRequest request){
         long id = JWTutil.getLongIdByAccessToken(request);
-        Page<SubscribeArticleDTO> articleList = articleService.readMyArticle(userPK, id);
+        Page<SubscribeArticleDTO> articleList = articleService.readMyArticle(userPK, id, size, page);
         if(articleList.isEmpty()){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("피트 목록이 없습니다"));
         }

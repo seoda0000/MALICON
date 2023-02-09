@@ -9,9 +9,15 @@ import com.blahblah.web.repository.UserRepository;
 import com.blahblah.web.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.xml.stream.events.Comment;
 
 @Transactional
 @Service
@@ -36,6 +42,20 @@ public class CommentServiceImpl implements CommentService{
                 .content(commentDTO.getContent())
                 .build();
         return commentRepository.save(comment);
+    }
+
+    @Override
+    public Page<CommentDTO> readComments(long check, long articleId, long size, long page) {
+        PageRequest pageRequest = PageRequest.of((int)page, (int)size, Sort.by(Sort.Direction.DESC, "createDate"));
+        if(check==1) {
+            Page<CommentEntity> commentEntities = commentRepository.findAllByArticleId(articleId, pageRequest);
+            Page<CommentDTO> result = new CommentDTO().toADtoList(commentEntities);
+            return result;
+        }else{
+            Page<CommentEntity> commentEntities = commentRepository.findAllByVideoId(articleId, pageRequest);
+            Page<CommentDTO> result = new CommentDTO().toVDtoList(commentEntities);
+            return result;
+        }
     }
 
     @Override
