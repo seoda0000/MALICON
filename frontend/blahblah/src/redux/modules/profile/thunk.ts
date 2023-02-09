@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { ProfileFeedType } from "../../../model/profile/profileFeedType";
-import { ProfileFeedWrapType } from "../../../model/profile/ProfileFeedWrapType";
+// import { ProfileFeedWrapType } from "../../../model/profile/ProfileFeedWrapType";
 import { SubscriberType } from "../../../model/subscribe/subscriberType";
 import { AboutMeType } from "../../../model/user/aboutMeType";
 import {
@@ -193,17 +193,17 @@ export const getFeedAction = createAsyncThunk(
   async (userPK: string, { rejectWithValue }) => {
     try {
       const axios = axiosInitializer();
-      const { data } = await axios.get<ProfileFeedWrapType>(
-        `/api/articles/${parseInt(userPK)}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + getAccessToken(),
-          },
-        }
-      );
+      // const { data } = await axios.get<ProfileFeedWrapType>(
+      //   `/api/articles/${parseInt(userPK)}`,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: "Bearer " + getAccessToken(),
+      //     },
+      //   }
+      // );
 
-      return data;
+      // return data;
     } catch (e) {
       return rejectWithValue(e);
     }
