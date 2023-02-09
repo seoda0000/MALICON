@@ -11,6 +11,7 @@ import UserModel from "../../model/openvidu/user-model";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import { getAccessToken } from "../../redux/modules/user/token";
 import html2canvas from "html2canvas";
+import AvatarSection from "./avatar/AvatarSection";
 
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
@@ -792,6 +793,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
               </div>
             )}
         </div>
+        <AvatarSection />
       </div>
     );
   }
@@ -884,3 +886,4 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 }
 export default VideoRoomComponent;
+

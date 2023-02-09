@@ -34,8 +34,47 @@ const broadcastSlice = createSlice({
       state.currentSession.sessionId = action.payload.sessionId;
     },
   },
+  extraReducers: (builder) => {
+    // builder
+    //   .addCase(getIsOnAirAction.pending, (state) => {
+    //     state.getIsOnAir.loading = true;
+    //     state.getIsOnAir.data = null;
+    //     state.getIsOnAir.error = null;
+    //   })
+    //   .addCase(getIsOnAirAction.fulfilled, (state, { payload }) => {
+    //     state.getIsOnAir.loading = false;
+    //     state.getIsOnAir.data = payload;
+    //     state.getIsOnAir.error = null;
+    //     state.isOnAir = payload;
+    //   })
+    //   .addCase(getIsOnAirAction.rejected, (state, { payload }) => {
+    //     state.getIsOnAir.loading = false;
+    //     state.getIsOnAir.data = null;
+    //     state.getIsOnAir.error = payload;
+    //   });
+  },
+  extraReducers: (builder) => {
+    // builder
+    //   .addCase(getIsOnAirAction.pending, (state) => {
+    //     state.getIsOnAir.loading = true;
+    //     state.getIsOnAir.data = null;
+    //     state.getIsOnAir.error = null;
+    //   })
+    //   .addCase(getIsOnAirAction.fulfilled, (state, { payload }) => {
+    //     state.getIsOnAir.loading = false;
+    //     state.getIsOnAir.data = payload;
+    //     state.getIsOnAir.error = null;
+    //     state.isOnAir = payload;
+    //   })
+    //   .addCase(getIsOnAirAction.rejected, (state, { payload }) => {
+    //     state.getIsOnAir.loading = false;
+    //     state.getIsOnAir.data = null;
+    //     state.getIsOnAir.error = payload;
+    //   });
+  },
 });
 
 export const broadcastActions = broadcastSlice.actions;
 
 export default broadcastSlice.reducer;
+

@@ -4,7 +4,9 @@ import {
   checkDuplicateAction,
   checkDupNickNameAction,
   deleteUserAction,
+  getIsOnAirAction,
   getMeWithTokenAction,
+  getSubscribersAction,
   refreshTokenAction,
   signinAction,
   signupAction,
@@ -23,6 +25,7 @@ const initialState: UserStateType = {
     aboutMe: "",
     isLoggedIn: false,
   },
+  subscribers: [],
   signup: { loading: false, data: null, error: null },
   checkDuplicate: { loading: false, data: null, error: null },
   checkDupNickName: { loading: false, data: null, error: null },
@@ -31,6 +34,8 @@ const initialState: UserStateType = {
   refreshToken: { loading: false, data: null, error: null },
   updateUser: { loading: false, data: null, error: null },
   deleteUser: { loading: false, data: null, error: null },
+  getSubscribers: { loading: false, data: null, error: null },
+  getIsOnAir: { loading: false, data: null, error: null },
 };
 
 const userSlice = createSlice({
@@ -169,6 +174,38 @@ const userSlice = createSlice({
         state.deleteUser.loading = false;
         state.deleteUser.data = null;
         state.deleteUser.error = payload;
+      })
+      .addCase(getSubscribersAction.pending, (state) => {
+        state.getSubscribers.loading = true;
+        state.getSubscribers.data = null;
+        state.getSubscribers.error = null;
+      })
+      .addCase(getSubscribersAction.fulfilled, (state, { payload }) => {
+        state.getSubscribers.loading = false;
+        state.getSubscribers.data = payload;
+        state.getSubscribers.error = null;
+
+        state.subscribers = payload;
+      })
+      .addCase(getSubscribersAction.rejected, (state, { payload }) => {
+        state.getSubscribers.loading = false;
+        state.getSubscribers.data = null;
+        state.getSubscribers.error = payload;
+      })
+      .addCase(getIsOnAirAction.pending, (state) => {
+        state.getIsOnAir.loading = true;
+        state.getIsOnAir.data = null;
+        state.getIsOnAir.error = null;
+      })
+      .addCase(getIsOnAirAction.fulfilled, (state, { payload }) => {
+        state.getIsOnAir.loading = false;
+        state.getIsOnAir.data = payload;
+        state.getIsOnAir.error = null;
+      })
+      .addCase(getIsOnAirAction.rejected, (state, { payload }) => {
+        state.getIsOnAir.loading = false;
+        state.getIsOnAir.data = null;
+        state.getIsOnAir.error = payload;
       });
   },
 });

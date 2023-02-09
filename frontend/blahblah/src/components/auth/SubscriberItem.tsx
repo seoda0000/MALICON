@@ -1,20 +1,43 @@
 import { Avatar } from "@mui/material";
 import { createAvatar } from "@dicebear/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { personas } from "@dicebear/collection";
-import { useAppSelector } from "../../redux/configStore.hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
 import styled from "@emotion/styled";
 import { SubscriberType } from "../../model/subscribe/subscriberType";
 import { useNavigate } from "react-router-dom";
+import { PlayArrowRounded } from "@mui/icons-material";
+import OnAirBadge from "../common/OnAirBadge";
+import { getIsOnAirAction } from "../../redux/modules/user";
 
 const ItemContainer = styled.li`
+  margin-bottom: 18px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-  margin-bottom: 18px;
+  justify-content: space-between;
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    & > span {
+      font-size: 17px;
+    }
+  }
   & > span {
-    font-size: 17px;
+    padding: 1px 4px 1px 0px;
+    border: 1.5px solid #e24553;
+    border-radius: 5px;
+    color: #e24553;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    & > svg {
+      font-size: 1rem;
+    }
+    & > span {
+      font-size: 11px;
+    }
   }
   &:hover {
     cursor: pointer;
@@ -26,7 +49,9 @@ export default function SubscriberItem({
 }: {
   item: SubscriberType;
 }): JSX.Element {
+  const dispatch = useAppDispatch();
   const navigator = useNavigate();
+  const [isOnAir, setIsOnAir] = useState(false);
 
   const dataUri = createAvatar(personas, {
     ...JSON.parse(item.avatar),
@@ -37,14 +62,28 @@ export default function SubscriberItem({
     navigator(`/profile/${item.userPK}`);
   };
 
+  useEffect(() => {
+    // 방송중인 사용자면
+    setIsOnAir(true);
+    dispatch(getIsOnAirAction(item.userId)).then((data) => {
+      console.log("으아아아ㅏ아아ㅏ ", data);
+    });
+  }, []);
   return (
     <ItemContainer onClick={onClickItem}>
-      <Avatar
-        src={dataUri}
-        alt="profile_img"
-        sx={{ width: "45px", height: "45px" }}
-      />
-      <span>{item.nickName}</span>
+      <div>
+        <Avatar
+          src={dataUri}
+          alt="profile_img"
+          sx={{
+            width: "45px",
+            height: "45px",
+            border: `1.5px solid ${isOnAir ? "#e24553" : "black"}`,
+          }}
+        />
+        <span>{item.nickName}</span>
+      </div>
+      {isOnAir && <OnAirBadge />}
     </ItemContainer>
   );
 }

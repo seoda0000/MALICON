@@ -30,7 +30,10 @@ import AvatarShortcutButton from "./AvatarShortcutButton";
 // import ProfileAvatar from "../auth/ProfileAvatar";
 import { getAccessToken, removeToken } from "../../redux/modules/user/token";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
-import { getMeWithTokenAction } from "../../redux/modules/user";
+import {
+  getMeWithTokenAction,
+  getSubscribersAction,
+} from "../../redux/modules/user";
 import SigninModal from "../auth/SigninModal";
 import SignupModal from "../auth/SignupModal";
 import ProfileImage from "../common/ProfileImage";
@@ -39,7 +42,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { BoldKoreanFont } from "../../theme/font";
 import { ThemeProvider } from "@mui/material/styles";
 import SubscriberItem from "../auth/SubscriberItem";
-import { getSubscribersAction } from "../../redux/modules/subscribe";
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import FaceIcon from "@mui/icons-material/Face";
 import BroadcastModal from "../broadcast/BroadcastModal";
@@ -130,7 +132,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Layout(props: LayoutProps) {
   const loggedUser = useAppSelector((state) => state.user.userData);
-  const subscribers = useAppSelector((state) => state.subscribe.subscribers);
+  const subscribers = useAppSelector((state) => state.user.subscribers);
   const dispatch = useAppDispatch();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -569,3 +571,4 @@ export default function Layout(props: LayoutProps) {
     </Box>
   );
 }
+

@@ -1,9 +1,11 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import React from "react";
 
 const ButtonWrapper = styled.div<{
   width: number | undefined;
   height: number | undefined;
+  active: boolean;
 }>`
   position: relative;
   width: ${({ width }) => (width ? `${width}px` : "90px")};
@@ -24,15 +26,38 @@ const ButtonWrapper = styled.div<{
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 8px;
     cursor: pointer;
+    & > span {
+    }
+    & > svg {
+      font-size: 18px;
+    }
     &:hover {
       background: #59d7c8;
     }
+    ${({ active }) =>
+      active &&
+      css`
+        color: #ffffffcc;
+        background: #55cdbe;
+        box-shadow: inset -2px -2px 5px 2px #99ede4,
+          inset 3px 2px 6px 2px #298c80;
+        & > span {
+          margin-top: 3px;
+        }
+        & > svg {
+          margin-top: 3px;
+        }
+      `}
     &:active {
       color: #ffffffcc;
       background: #55cdbe;
       box-shadow: inset -2px -2px 5px 2px #99ede4, inset 3px 2px 6px 2px #298c80;
       & > span {
+        margin-top: 3px;
+      }
+      & > svg {
         margin-top: 3px;
       }
     }
@@ -51,6 +76,8 @@ type ButtonCompPropsType = {
   onClick: () => void;
   width?: number;
   height?: number;
+  children?: React.ReactNode;
+  active?: boolean;
 };
 
 export default function ButtonComp({
@@ -58,11 +85,14 @@ export default function ButtonComp({
   onClick,
   width,
   height,
+  children,
+  active = false,
 }: ButtonCompPropsType): JSX.Element {
   return (
-    <ButtonWrapper width={width} height={height}>
+    <ButtonWrapper width={width} height={height} active={active}>
       <button onClick={onClick}>
         <span>{text}</span>
+        {children}
       </button>
       <div></div>
     </ButtonWrapper>

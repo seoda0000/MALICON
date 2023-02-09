@@ -40,7 +40,6 @@ export const fetchSessionData = createAsyncThunk(
 );
 
 // 방송 시작하기
-
 export const startSession = createAsyncThunk(
   "broadcast/startSession",
   async (sessionData: BroadcastStartType, thunkAPI) => {
