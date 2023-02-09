@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import VideoSection from "../components/video/VideoSection";
-import RightVideoSection from "../components/video/rightVideoSection";
+import RightVideoSection from "../components/video/RightVideoSection";
 import { Box } from "@mui/system";
 import { RootState } from "../redux/configStore";
 import { useSelector } from "react-redux";

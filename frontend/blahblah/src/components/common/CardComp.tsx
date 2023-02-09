@@ -14,6 +14,7 @@ import {
 import React from "react";
 import { VideoType } from "../../model/video/VideoType";
 import { useNavigate } from "react-router-dom";
+import FeedProfileImage from "../feed/FeedProfileImage";
 
 const CardWrapper = styled(Card)<{ nth: number }>`
   width: 100%;
@@ -154,13 +155,21 @@ export default function CardComp({
         </CardCover>
       </Box>
       {caption && (
-        <Box sx={{ display: "flex", gap: 1, mt: 1.5, alignItems: "center" }}>
+        <Box
+          sx={{ display: "flex", gap: 1, mt: 1.5, alignItems: "flex-start" }}
+        >
           {/* 아바타 */}
-          <Avatar
+          {video?.avatar ? (
+            <FeedProfileImage avatar={video.avatar} />
+          ) : (
+            <div>아바타 없다</div>
+          )}
+
+          {/* <Avatar
             src="https://image.news1.kr/system/photos/2022/8/2/5508700/article.jpg/dims/optimize"
             size="sm"
             sx={{ "--Avatar-size": "2rem" }}
-          />
+          /> */}
           <Box>
             {/* 유저 닉네임 */}
             <Typography sx={{ fontSize: "sm", fontWeight: "lg" }}>
@@ -200,22 +209,26 @@ export default function CardComp({
             >
               {video?.views}
             </Link>
+            <Box sx={{ display: "flex" }}>
+              {/* 해시태그 표시 */}
+              {JSON.parse(video!.hashtags).map((data: any, index: any) => {
+                return (
+                  <Box
+                    sx={{
+                      backgroundColor: "#dddddd",
+                      // color: "white",
+                      fontSize: 9,
+                      borderRadius: 13,
+                      px: 0.5,
+                      mr: 1,
+                    }}
+                  >
+                    {data.label}
+                  </Box>
+                );
+              })}
+            </Box>
           </Box>
-
-          {/* 라이브 표시 */}
-          <Chip
-            variant="outlined"
-            color="neutral"
-            size="sm"
-            sx={{
-              borderRadius: "sm",
-              py: 0.25,
-              px: 0.5,
-              ml: "auto",
-            }}
-          >
-            Live
-          </Chip>
         </Box>
       )}
     </CardWrapper>

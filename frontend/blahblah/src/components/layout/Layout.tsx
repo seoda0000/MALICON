@@ -282,6 +282,19 @@ export default function Layout(props: LayoutProps) {
               </MenuItem>
             )}
 
+            {open && loggedUser.isLoggedIn && (
+              <MenuItem>
+                <ListItemText
+                  primary={"id: " + loggedUser.userId}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+                <ListItemText
+                  primary={"닉네임: " + loggedUser.nickName}
+                  sx={{ opacity: open ? 1 : 0, ml: 2 }}
+                />
+              </MenuItem>
+            )}
+
             {/* Drawer 열렸을 때 큰 아바타 */}
             {open && (
               <Box

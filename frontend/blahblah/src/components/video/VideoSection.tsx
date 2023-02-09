@@ -16,7 +16,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentSection from "../feed/CommentSection";
 import video from "../../redux/modules/video";
-
+import ProfileImage from "../common/ProfileImage";
+import FeedProfileImage from "../feed/FeedProfileImage";
+import { Box } from "@mui/system";
+import { Link } from "@mui/joy";
+import { Favorite, Visibility } from "@mui/icons-material";
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -43,31 +47,89 @@ const VideoSection: React.FC<{ video: any }> = (props) => {
 
   return (
     <Card sx={{ width: "100%" }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title={props.video.nickName}
-        subheader={props.video.createDate}
-      />
       <CardMedia
         component="img"
         // height=""
         image="https://i.ytimg.com/vi/JtFI8dtPvxI/maxresdefault.jpg"
         alt="Paella dish"
       />
+
       <CardContent>
-        {/* <CommentSection
-          comments={}
-          articleId={}
-        /> */}
+        <Box sx={{ display: "flex" }}>
+          <Typography variant="h6" sx={{ mr: 1 }}>
+            {props.video.title}
+          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            {/* 해시태그 표시 */}
+            {JSON.parse(props.video!.hashtags).map((data: any, index: any) => {
+              return (
+                <Box
+                  sx={{
+                    backgroundColor: "#dddddd",
+                    // color: "white",
+                    fontSize: 9,
+                    borderRadius: 13,
+                    px: 0.5,
+                    mr: 1,
+                    height: 15,
+                  }}
+                >
+                  {data.label}
+                </Box>
+              );
+            })}
+          </Box>
+        </Box>
+
+        {/* =================== */}
+
+        <Box
+          sx={{ display: "flex", gap: 1, mt: 1.5, alignItems: "flex-start" }}
+        >
+          {/* 아바타 */}
+
+          <FeedProfileImage avatar={props.video.avatar} />
+
+          <Box sx={{ display: "center" }}>
+            {/* 유저 닉네임 */}
+            <Typography sx={{ fontSize: "sm", fontWeight: "lg" }}>
+              {props.video?.nickName}
+            </Typography>
+
+            {/* 좋아요 표시 */}
+            <Link
+              level="body3"
+              underline="none"
+              startDecorator={<Favorite sx={{ width: 20 }} />}
+              color="neutral"
+              sx={{
+                fontSize: "sm",
+                fontWeight: "md",
+                ml: "auto",
+                "&:hover": { color: "danger.plainColor" },
+              }}
+            >
+              117
+            </Link>
+
+            {/* 조회수 표시 */}
+            <Link
+              level="body3"
+              underline="none"
+              startDecorator={<Visibility sx={{ width: 20 }} />}
+              color="neutral"
+              sx={{
+                fontSize: "sm",
+                fontWeight: "md",
+                ml: 2,
+                "&:hover": { color: "primary.plainColor" },
+              }}
+            >
+              {props.video?.views}
+            </Link>
+          </Box>
+        </Box>
+        {/* ============= */}
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">

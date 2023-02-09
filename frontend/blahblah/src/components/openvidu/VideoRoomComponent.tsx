@@ -16,7 +16,7 @@ var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production"
     ? "https://blahblah.movebxeax.me/stream-service/"
-    : "http://localhost:33332/";
+    : "https://blahblah.movebxeax.me/stream-service/";
 
 // 타입 생성
 interface VideoRoomProps {
@@ -83,7 +83,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       ? this.props.sessionName
       : "sessionA";
 
-      console.log("session 이름그 : ",sessionName);
+    console.log("session 이름그 : ", sessionName);
     this.remotes = [];
     this.localUserAccessAllowed = false;
     this.isPublisher = false;
@@ -200,15 +200,14 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.state.session
       .connect(token, { clientData: this.state.myUserName })
       .then(() => {
-        this.connectWebCam().then(()=>{
-          
-          if(this.isPublisher) {
-            setTimeout(()=>{
+        this.connectWebCam().then(() => {
+          if (this.isPublisher) {
+            setTimeout(() => {
               this.sendThumbnail();
-              console.log("썸네일 보내냐?")
-            }, 1000)
+              console.log("썸네일 보내냐?");
+            }, 1000);
           }
-        })
+        });
       })
       .catch((error: any) => {
         if (this.props.error) {
@@ -268,8 +267,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         //   this.props.joinSession();
         // }
       });
-    }
-    else {
+    } else {
       //내가 시청자라면 방송송출 안하고 다른 사람꺼 받아오기만한다.
       this.updateSubscribers();
     }
@@ -325,15 +323,17 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
 
     if (mySession) {
       mySession.disconnect();
-      if(this.isPublisher){
-        console.log("세션 지우기")
-        this.deleteSession(this.state.mySessionId).then(()=>{
-          // 원하는 라우팅 경로로
-          //window.location.replace("http://naver.com");
-        }).catch((e)=>{
-          console.error(e);
-        })
-      }else {
+      if (this.isPublisher) {
+        console.log("세션 지우기");
+        this.deleteSession(this.state.mySessionId)
+          .then(() => {
+            // 원하는 라우팅 경로로
+            //window.location.replace("http://naver.com");
+          })
+          .catch((e) => {
+            console.error(e);
+          });
+      } else {
         // 원하는 라우팅 경로로
         //window.location.replace("http://naver.com");
       }
@@ -424,7 +424,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.state.session.on("streamDestroyed", (event: any) => {
       // Remove the stream from 'subscribers' array
       console.log("subscribeToStreamCreated 401 + 누군가가 떠났다!");
-      console.log("stream : " , event.stream);
+      console.log("stream : ", event.stream);
       this.leaveSession();
       // this.deleteSubscriber(event.stream);
       // setTimeout(() => {
@@ -432,7 +432,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       // }, 20);
       // event.preventDefault();
       // this.updateLayout();
-    })
+    });
   }
 
   subscribeToUserChanged() {
@@ -459,7 +459,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       this.setState(
         {
           subscribers: remoteUsers,
-        },
+        }
         //() => this.checkSomeoneShareScreen()
       );
     });
@@ -689,16 +689,20 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   async captureThumbnail() {
     let id = "video-" + localUser.getStreamManager().stream.streamId;
     console.log("아이디는 이거에옹 ", id);
-    return await html2canvas(document.getElementById(id) as HTMLElement).then(canvas=>{
-      return encodeURIComponent(canvas.toDataURL('image/jpeg', 0.3).split(',')[1])
-    }).catch(e => {
-      console.error(e);
-    })
+    return await html2canvas(document.getElementById(id) as HTMLElement)
+      .then((canvas) => {
+        return encodeURIComponent(
+          canvas.toDataURL("image/jpeg", 0.3).split(",")[1]
+        );
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   }
 
   async sendThumbnail() {
     let encodedImage = await this.captureThumbnail();
-    console.log("썸네일" , encodedImage);
+    console.log("썸네일", encodedImage);
     this.createThumbnail(this.state.mySessionId, encodedImage);
     // 아래 함수는 이미지화 하는 법
     // const decodedImage = decodeURIComponent(encodedImage);
@@ -834,11 +838,8 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   // }
 
   async createToken(sessionId: any) {
-    const {data} = await axios.post(
-      APPLICATION_SERVER_URL +
-        "api/sessions/" +
-        sessionId +
-        "/connections",
+    const { data } = await axios.post(
+      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
       {},
       {
         headers: {
@@ -847,14 +848,14 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         },
       }
     );
-    this.isPublisher = (data.role === "PUBLISHER");
-    console.log("커넥션 : ", data, " isPulisher : " , this.isPublisher);
+    this.isPublisher = data.role === "PUBLISHER";
+    console.log("커넥션 : ", data, " isPulisher : ", this.isPublisher);
     return data.token; // The token
   }
 
   async deleteSession(sessionId: any) {
-    console.log("delete 요청 보내")
-    const {data} = await axios.delete(
+    console.log("delete 요청 보내");
+    const { data } = await axios.delete(
       APPLICATION_SERVER_URL + "api/sessions/" + sessionId,
       {
         headers: {
@@ -867,7 +868,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   async createThumbnail(sessionId: any, thumbnailImage: any) {
-    const {data} = await axios.post(
+    const { data } = await axios.post(
       APPLICATION_SERVER_URL + "api/sessions/thumbnail/" + sessionId,
       {
         thumbnail: thumbnailImage,

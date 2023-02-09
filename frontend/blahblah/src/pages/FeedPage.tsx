@@ -12,7 +12,7 @@ import { fetchFeedData } from "../redux/modules/feed/feed-action";
 import { useEffect, useState } from "react";
 import { AppDispatch } from "../redux/configStore";
 import { RootState } from "../redux/configStore";
-import RightVideoSection from "../components/video/rightVideoSection";
+import RightVideoSection from "../components/video/RightVideoSection";
 
 const drawerWidth = 300;
 let isInitial = true;
