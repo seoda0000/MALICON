@@ -34,6 +34,7 @@ export default function CommentRemoveDialog({
     // console.log(commentData);
 
     dispatch(removeCommentData(commentData));
+    handleClose();
   };
 
   return (

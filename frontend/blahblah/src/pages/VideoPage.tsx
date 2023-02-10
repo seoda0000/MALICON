@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { AppDispatch } from "../redux/configStore";
 import { getVideoById } from "../redux/modules/video";
+import { useAppSelector } from "../redux/configStore.hooks";
 
 const drawerWidth = 300;
 let isInitial = true;
@@ -15,6 +16,7 @@ export default function VideoPage() {
   const { videoId } = useParams();
   const video = useSelector((state: RootState) => state.video);
   const dispatch = useDispatch<AppDispatch>();
+
   let currentVideo = video.currentVideo;
   useEffect(() => {
     if (isInitial) {

@@ -27,6 +27,15 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useSelector, useDispatch } from "react-redux";
 import { getVideoById } from "../../redux/modules/video";
 import { VideoDetailType } from "../../model/video/VideoDetailType";
+import { likeVideoAction } from "../../redux/modules/video";
+import { likeVideoCancelAction } from "../../redux/modules/video";
+import { useAppSelector } from "../../redux/configStore.hooks";
+import ButtonComp from "../common/ButtonComp";
+import { PersonAddRounded } from "@mui/icons-material";
+import { HowToRegRounded } from "@mui/icons-material";
+import { subscribeAction } from "../../redux/modules/profile";
+import { unSubscribeAction } from "../../redux/modules/profile";
+
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -47,6 +56,38 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  // 비디오 좋아요
+  const dispatch = useDispatch<AppDispatch>();
+  const likeFeedHandler = () => {
+    const videoId = props.video.id;
+    dispatch(likeVideoAction(videoId));
+  };
+  const likeCancelHandler = () => {
+    const videoId = props.video.id;
+    dispatch(likeVideoCancelAction(videoId));
+  };
+
+  // 구독
+  const isSubscribing = useAppSelector((state) => state.profile.isSubscribing);
+  const userPK = useAppSelector((state) => state.user.userData.id);
+
+  let isMine;
+  if (props.video.userPK === userPK) {
+    isMine = true;
+  } else {
+    isMine = false;
+  }
+
+  const onClickSubscribe = () => {
+    if (!isSubscribing) {
+      dispatch(subscribeAction(String(props.video.userPK))); // 확인필요
+      console.log("구독!!");
+    } else {
+      dispatch(unSubscribeAction(String(props.video.userPK)));
+      console.log("구독 취소!");
+    }
   };
 
   return (
@@ -93,8 +134,12 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
           </Typography>
 
           {/* 좋아요 표시 */}
-          <IconButton aria-label="add to favorites" sx={{ ml: "auto" }}>
-            <FavoriteIcon />
+          <IconButton aria-label="add to favorites">
+            {props.video.like ? (
+              <FavoriteIcon color="error" onClick={likeCancelHandler} />
+            ) : (
+              <FavoriteIcon onClick={likeFeedHandler} />
+            )}
           </IconButton>
           <Typography variant="body2">{props.video?.likeCnt}</Typography>
 
@@ -123,15 +168,36 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
             {/* 유저 닉네임 */}
             <Typography
               variant="body1"
-              sx={{ fontSize: "sm", fontWeight: "lg" }}
+              sx={{ fontSize: "sm", fontWeight: "lg", mr: 2 }}
             >
               {props.video?.nickName}
             </Typography>
 
             {/* 팔로우 버튼 */}
-            <Button sx={{ ml: 2 }} variant="outlined" size="small">
-              Follow
-            </Button>
+
+            {isMine ? (
+              <></>
+            ) : isSubscribing ? (
+              <ButtonComp
+                onClick={onClickSubscribe}
+                text="FOLLOW"
+                width={115}
+                height={39}
+                active={true}
+              >
+                <HowToRegRounded />
+              </ButtonComp>
+            ) : (
+              <ButtonComp
+                onClick={onClickSubscribe}
+                text="FOLLOW"
+                width={115}
+                height={39}
+              >
+                <PersonAddRounded />
+              </ButtonComp>
+            )}
+            {/* ============ */}
             <IconButton aria-label="share" sx={{ ml: "auto" }}>
               <ShareIcon />
             </IconButton>
