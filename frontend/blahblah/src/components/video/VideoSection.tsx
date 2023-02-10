@@ -27,6 +27,9 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useSelector, useDispatch } from "react-redux";
 import { getVideoById } from "../../redux/modules/video";
 import { VideoDetailType } from "../../model/video/VideoDetailType";
+import { likeVideoAction } from "../../redux/modules/video";
+import { likeVideoCancelAction } from "../../redux/modules/video";
+
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -47,6 +50,17 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  // 비디오 좋아요
+  const dispatch = useDispatch<AppDispatch>();
+  const likeFeedHandler = () => {
+    const videoId = props.video.id;
+    dispatch(likeVideoAction(videoId));
+  };
+  const likeCancelHandler = () => {
+    const videoId = props.video.id;
+    dispatch(likeVideoCancelAction(videoId));
   };
 
   return (
@@ -93,8 +107,12 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
           </Typography>
 
           {/* 좋아요 표시 */}
-          <IconButton aria-label="add to favorites" sx={{ ml: "auto" }}>
-            <FavoriteIcon />
+          <IconButton aria-label="add to favorites">
+            {props.video.like ? (
+              <FavoriteIcon color="error" onClick={likeCancelHandler} />
+            ) : (
+              <FavoriteIcon onClick={likeFeedHandler} />
+            )}
           </IconButton>
           <Typography variant="body2">{props.video?.likeCnt}</Typography>
 

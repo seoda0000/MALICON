@@ -97,6 +97,8 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
           <div>{parse(props.feed.content)}</div>
         </CardContent>
         <CardActions disableSpacing>
+          {/* 좋아요  */}
+
           <IconButton aria-label="add to favorites">
             {props.feed.like ? (
               <FavoriteIcon color="error" onClick={likeCancelHandler} />
