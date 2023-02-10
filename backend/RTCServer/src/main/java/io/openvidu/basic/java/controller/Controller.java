@@ -1,19 +1,17 @@
 package io.openvidu.basic.java.controller;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import io.openvidu.basic.java.controller.exception.CustomException;
 import io.openvidu.basic.java.dto.LiveRoomDto;
 import io.openvidu.basic.java.dto.UserDto;
 import io.openvidu.basic.java.dto.request.CreateRoomDto;
-import io.openvidu.basic.java.dto.request.StopRecordDto;
 import io.openvidu.basic.java.redis.entity.LiveRoomEntity;
-import io.openvidu.basic.java.redis.entity.PreviousVideoEntity;
 import io.openvidu.basic.java.redis.entity.UserEntity;
 import io.openvidu.basic.java.redis.repository.LiveRoomRepository;
-import io.openvidu.basic.java.redis.repository.PreviousVideoRepository;
 import io.openvidu.basic.java.redis.repository.UserEntityRepository;
 import io.openvidu.basic.java.util.JwtUtil;
 
@@ -60,7 +58,7 @@ public class Controller {
 		//session 생성
 		//customSessionId => userId 가 들어있어야 한다.
 		SessionProperties properties = new SessionProperties.Builder()
-				.customSessionId(userInfo.getUserId())
+				.customSessionId(UUID.randomUUID().toString())
 				.build();
 
 		Session session = openvidu.createSession(properties);
@@ -71,7 +69,7 @@ public class Controller {
 		String sessionId = session.getSessionId();
 		String title = roomDto.getTitle();
 		String hashTag = roomDto.getHashTag();
-		LocalDateTime date = LocalDateTime.now();
+		Instant date = LocalDateTime.now().toInstant(ZoneOffset.of("+9"));
 
 		//LiveRoomEntity 생성
 		LiveRoomEntity liveRoomEntity = LiveRoomEntity.builder()
@@ -80,7 +78,7 @@ public class Controller {
 						.avatar(userInfo.getAvatar())
 						.nickName(userInfo.getNickName())
 						.userId(userInfo.getUserId()).build())
-				.startAt(date.toString())
+				.startAt(date.toEpochMilli())
 				.sessionId(sessionId)
 				.hashTag(hashTag)
 				.build();
@@ -244,7 +242,7 @@ public class Controller {
 	public LiveRoomDto entityToDto (LiveRoomEntity liveRoomEntity) throws OpenViduJavaClientException, OpenViduHttpException {
 
 		String title = liveRoomEntity.getTitle();
-		String startAt = liveRoomEntity.getStartAt();
+		Long startAt = liveRoomEntity.getStartAt();
 		String thumbnail = liveRoomEntity.getThumbnail();
 		String sessionId = liveRoomEntity.getSessionId();
 		UserDto streamer = liveRoomEntity.getStreamer();

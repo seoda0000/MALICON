@@ -29,7 +29,7 @@ public class LiveRoomEntity {
     private String title;
 
     //방송 시작시간
-    private String startAt;
+    private Long startAt;
 
     //썸네일
     private String thumbnail;

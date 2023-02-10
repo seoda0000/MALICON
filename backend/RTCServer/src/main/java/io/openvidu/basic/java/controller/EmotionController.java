@@ -25,8 +25,12 @@ public class EmotionController {
     }
 
     @GetMapping
-    public ResponseEntity selectEmotionLog(@PathVariable String sessionId) {
-        List<EmotionExpressionDto> result = emotionExpressionService.select(sessionId);
+    public ResponseEntity selectEmotionLog(@PathVariable String sessionId, @RequestParam(required = false) Integer from, @RequestParam(required = false) Integer count) {
+        List<EmotionExpressionDto> result;
+        if(from !=null && count != null)
+            result = emotionExpressionService.select(sessionId, from, count);
+        else
+            result = emotionExpressionService.select(sessionId);
 
         return ResponseEntity.ok().body(result);
     }

@@ -20,7 +20,7 @@ public class LiveRoomDto {
 
     private int viewerNumber; //시청자수 (스트리머 포함)
 
-    private String startAt;  //방송시작시간
+    private Long startAt;  //방송시작시간
 
     private String thumbnail;
 
