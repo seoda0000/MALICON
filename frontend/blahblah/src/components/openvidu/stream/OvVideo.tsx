@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import user from "../../../redux/modules/user";
 import EmotionExpression from "../../emotion/EmotionExpression";
 import "./StreamComponent.css";
@@ -16,12 +16,14 @@ export default class OvVideoComponent extends Component<OvVideoProps, {}> {
   // =======================================================
 
   videoRef: any;
+  canPlay: boolean;
 
   // =======================================================
 
   constructor(props: OvVideoProps) {
     super(props);
     this.videoRef = React.createRef();
+    this.canPlay = false;
   }
 
   componentDidMount() {
@@ -64,9 +66,12 @@ export default class OvVideoComponent extends Component<OvVideoProps, {}> {
           id={"video-" + this.props.user.getStreamManager().stream.streamId}
           ref={this.videoRef}
           muted={this.props.mutedSound}
+
+          width={320}
+          height={240}
         />
 
-        {(this.props.isPublisher == false && this.videoRef) && <EmotionExpression user={this.props.user} videoRef={this.videoRef} />}
+        {(!this.props.isPublisher && this.videoRef.current) && <EmotionExpression user={this.props.user} videoRef={this.videoRef} />}
       </div>
     );
   }

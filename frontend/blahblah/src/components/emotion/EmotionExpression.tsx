@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import FaceExpressionRecognition from "./faceapi/FaceExpressionRecognition";
 import PoseRecognition from "./PoseRecognition/PoseRecognition";
 
@@ -13,28 +13,39 @@ export default function EmotionExpression(props: iEmotionExpressionProps) {
 
   const saveCurrentPose = (pose: string) => {
     setCurrentPose(pose);
-  }
+  };
 
   const saveCurrentState = (state: string) => {
     setCurrentState(state);
+  };
+
+  async function signalEmotion(type: string) {
+    if (props.user) {
+      const data = {
+        message: type,
+        nickname: props.user.getNickname(),
+        streamId: props.user.getStreamManager().stream.streamId,
+        isPublisher: false,
+      };
+      props.user.getStreamManager().stream.session.signal({
+        data: JSON.stringify(data),
+        type: "emotion",
+      });
+    }
   }
 
   useEffect(() => {
-    // todo: signal here
+    signalEmotion(currentPose);
   }, [currentPose]);
 
   useEffect(() => {
-    // todo: signal here
+    signalEmotion(currentState);
   }, [currentState]);
 
   return (
     <div>
-      <div>
-        Your Current State is {currentState} <br />
-        현재 자세는 {currentPose}
-      </div>
       <PoseRecognition onPoseChange={saveCurrentPose} videoRef={props.videoRef} />
       <FaceExpressionRecognition onStateChange={saveCurrentState} videoRef={props.videoRef} />
     </div>
-  )
+  );
 }

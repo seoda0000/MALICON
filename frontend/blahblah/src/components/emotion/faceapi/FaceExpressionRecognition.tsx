@@ -14,7 +14,7 @@ export default function FaceExpressionRecognition(props: iFaceExpressionRecognit
   const [currentScore, setCurrentScore] = useState<number>(0);
 
   const startPredict = async () => {
-    if (videoRef.current === null) { console.log("fuck"); return };
+    if (videoRef.current === null) { return };
 
     const displaySize = {
       width: videoRef.current.videoWidth,
