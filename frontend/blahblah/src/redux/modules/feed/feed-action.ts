@@ -169,10 +169,8 @@ export const postCommentData = createAsyncThunk(
 
           if (postData.articleId) {
             thunkAPI.dispatch(fetchFeedData());
-            console.log("피드 리스트 갱신 완료");
           } else {
             thunkAPI.dispatch(getVideoById(postData.videoId!));
-            console.log("비디오 리스트 갱신 완료");
           }
         });
     } catch (e: any) {
@@ -201,7 +199,11 @@ export const removeCommentData = createAsyncThunk(
         })
         .then((data) => {
           console.log("덧글 삭제: ", data);
-          thunkAPI.dispatch(fetchFeedData());
+          if (removeData.isVideo) {
+            thunkAPI.dispatch(getVideoById(removeData.videoId));
+          } else {
+            thunkAPI.dispatch(fetchFeedData());
+          }
         });
     } catch (e) {
       console.error(e);

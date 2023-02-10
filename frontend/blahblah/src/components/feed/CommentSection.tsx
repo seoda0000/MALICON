@@ -20,7 +20,7 @@ const CommentSection: React.FC<{
   return (
     <Box sx={{ mx: 2 }}>
       <CommentInput articleId={id} isVideo={isVideo} />
-      <CommentList comments={props.comments} />
+      <CommentList comments={props.comments} isVideo={isVideo} id={id} />
     </Box>
   );
 };

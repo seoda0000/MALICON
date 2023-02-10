@@ -14,6 +14,8 @@ export default function CommentRemoveDialog({
   open,
   handleClose,
   comment,
+  isVideo,
+  id,
 }: any): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const userPK = useSelector((state: RootState) => state.user.userData.id);
@@ -25,6 +27,8 @@ export default function CommentRemoveDialog({
     const commentData = {
       id: comment.id,
       userPK,
+      isVideo: isVideo,
+      videoId: id,
     };
 
     // console.log(commentData);
