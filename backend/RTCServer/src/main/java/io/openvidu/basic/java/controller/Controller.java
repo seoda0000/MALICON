@@ -59,7 +59,10 @@ public class Controller {
 
 		//session 생성
 		//customSessionId => userId 가 들어있어야 한다.
-		SessionProperties properties = SessionProperties.fromJson(Map.of("customSessionId", userInfo.getUserId())).build();
+		SessionProperties properties = new SessionProperties.Builder()
+				.customSessionId(userInfo.getUserId())
+				.build();
+
 		Session session = openvidu.createSession(properties);
 
 		//파라미터 정보 출력
