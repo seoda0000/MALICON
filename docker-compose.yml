@@ -73,9 +73,7 @@ services:
 
   redis:
     image: redis
-    command: ["redis-server", "--appendonly", "yes",  "--replica-read-only", "no"]
-    environment:
-      - REDIS_PASSWORD=qhBb3Ht7Psvz54PCjlAw
+    command: ["redis-server", "--appendonly", "yes",  "--replica-read-only", "no",  "--requirepass", "qhBb3Ht7Psvz54PCjlAw"]
     ports:
       - "6379:6379"
     networks:

@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.temporal.TemporalField;
 import java.util.List;
 
 @Service
@@ -43,8 +44,8 @@ public class VideoServiceImpl implements VideoService{
     }
 
     @Override
-    public Page<VideoDTO> readVideos(long userPK) {
-        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "create_date"));
+    public Page<VideoDTO> readVideos(long userPK, long size, long page) {
+        PageRequest pageRequest = PageRequest.of((int)page, (int)size, Sort.by(Sort.Direction.DESC, "create_date"));
 
         Page<VideoEntity> result = videoRepository.findAllBy(userPK, pageRequest);
         Page<VideoDTO> videos = new VideoDTO().toDtoList(result);
@@ -53,8 +54,8 @@ public class VideoServiceImpl implements VideoService{
     }
 
     @Override
-    public Page<VideoDTO> readMyVideos(long userPK) {
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
+    public Page<VideoDTO> readMyVideos(long userPK, long size, long page) {
+        PageRequest pageRequest = PageRequest.of((int) page, (int)size, Sort.by(Sort.Direction.DESC, "createDate"));
 
         Page<VideoEntity> result = videoRepository.findAllByUserId(userPK, pageRequest);
         Page<VideoDTO> videos = new VideoDTO().toDtoList(result);
@@ -63,8 +64,8 @@ public class VideoServiceImpl implements VideoService{
     }
 
     @Override
-    public Page<VideoDTO> readAllVideos() {
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "views"));
+    public Page<VideoDTO> readAllVideos(long size,long page) {
+        PageRequest pageRequest = PageRequest.of((int)page, (int)size, Sort.by(Sort.Direction.DESC, "views"));
         Page<VideoEntity> result = videoRepository.findAll(pageRequest);
         Page<VideoDTO> videos = new VideoDTO().toDtoList(result);
         return videos;
@@ -96,7 +97,7 @@ public class VideoServiceImpl implements VideoService{
                 .like(check)
                 .likeCnt(list.size())
                 .hashtags(v.getHashtags())
-                .createDate(v.getCreateDate().toString())
+                .createDate(v.getCreateDate())
                 .views(v.getViews()+1)
                 .build();
 

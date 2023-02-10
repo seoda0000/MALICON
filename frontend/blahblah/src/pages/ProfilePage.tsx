@@ -9,7 +9,10 @@ import {
   CheckRounded,
   CloseRounded,
   EditOutlined,
+  HowToRegRounded,
   PersonAdd,
+  PersonAddRounded,
+  PlayArrowRounded,
 } from "@mui/icons-material";
 import onAirOn from "../assets/img/onair_turnon.png";
 import onAirOff from "../assets/img/onair_turnoff.png";
@@ -23,16 +26,23 @@ import {
   getFeedAction,
   updateAboutMeAction,
   addAboutMeAction,
+  getVideoAction,
+  getIsOnAirAction,
 } from "../redux/modules/profile/thunk";
 import { updateUserAction } from "../redux/modules/user";
 import ButtonComp from "../components/common/ButtonComp";
+import OnAirBadge from "../components/common/OnAirBadge";
 
-const ProfilePageLayout = styled.div`
-  max-width: 70vw;
-  margin: 75px auto 0px;
-  div {
-    /* border: 1px solid salmon; */
-  }
+const MoreVideoContainer = styled.div`
+  margin-top: 60px;
+`;
+
+const FeedContainer = styled.div`
+  margin-top: 85px;
+`;
+
+const VideoContainer = styled.div`
+  margin-top: 60px;
 `;
 
 const InfoContainer = styled.div`
@@ -52,6 +62,7 @@ const InfoContainer = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
+        gap: 150px;
         padding: 9px 0px;
         .info {
           display: flex;
@@ -59,7 +70,7 @@ const InfoContainer = styled.div`
           & > div {
             display: flex;
             justify-content: flex-start;
-            align-items: flex-end;
+            align-items: center;
             gap: 10px;
             & > h1 {
               margin: 0;
@@ -91,32 +102,42 @@ const InfoContainer = styled.div`
       }
     }
   }
-  .ticket-box {
-    margin-left: 50px;
-    width: 150px;
-    height: 150px;
-    & > img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+`;
+
+const ProfilePageLayout = styled.div`
+  max-width: 70vw;
+  margin: 75px auto 0px;
+  div {
+    /* border: 1px solid salmon; */
+  }
+  div.title {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    & > h2 {
+      font-family: "Tenada";
+      font-size: 23px;
+    }
+    & > span {
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+      font-size: 18px;
+      color: #808080;
+      cursor: pointer;
+      &:hover {
+        color: #979797;
+      }
     }
   }
-`;
-
-const VideoContainer = styled.div`
-  margin-top: 60px;
-`;
-
-const FeedContainer = styled.div`
-  margin-top: 85px;
 `;
 
 export default function ProfilePage(): JSX.Element {
   const { userpk } = useParams() as { userpk: string };
   const loggedUser = useAppSelector((state) => state.user.userData);
   const user = useAppSelector((state) => state.profile.userData);
+  const videos = useAppSelector((state) => state.profile.videoData);
   const feeds = useAppSelector((state) => state.profile.feedData);
   const isSubscribing = useAppSelector((state) => state.profile.isSubscribing);
+  const isOnAir = useAppSelector((state) => state.profile.userData.isOnAir);
   const dispatch = useAppDispatch();
 
   const [isMine, setIsMine] = useState<boolean>(false);
@@ -131,10 +152,11 @@ export default function ProfilePage(): JSX.Element {
   // const [getFeed, setGetFeed] = useState<boolean>(false);
 
   // const [isSubscribing, setIsSubscribing] = useState<boolean>(isSub);
+  const [moreVideo, setMoreVideo] = useState<boolean>(false);
 
   const onClickSubscribe = () => {
     if (!isSubscribing) {
-      // dispatch(subscribeAction(userpk)); // 확인필요
+      dispatch(subscribeAction(userpk)); // 확인필요
       console.log("구독!!");
     } else {
       dispatch(unSubscribeAction(userpk));
@@ -185,6 +207,14 @@ export default function ProfilePage(): JSX.Element {
     }
   };
 
+  const onClickOnAir = () => {
+    // 생방송 시청하러가기
+  };
+
+  const onClickMoreVideo = () => {
+    setMoreVideo((prev) => !prev);
+  };
+
   useEffect(() => {
     if (user.aboutMe === "") {
       setIsAboutMeExist(false);
@@ -205,12 +235,14 @@ export default function ProfilePage(): JSX.Element {
     // 프로필 가져오기
     dispatch(getAboutMeAction(userpk));
 
-    // 팔로잉 목록 가져오기
+    // 팔로잉 목록 가져오기 (구독중인지확인)
     dispatch(getIsSubscribeAction());
 
     // 생방송 중 여부 가져오기
+    dispatch(getIsOnAirAction(user.userId));
 
     // 지난 동영상 목록 가져오기
+    dispatch(getVideoAction({ userPK: userpk, size: 5, page: 0 }));
 
     // 피드 목록 가져오기
     // dispatch(getFeedAction(userpk)); // 확인필요
@@ -225,7 +257,11 @@ export default function ProfilePage(): JSX.Element {
       <InfoContainer>
         <div className="info-box">
           <div className="profile-image">
-            <ProfileImage big={true} border={true} />
+            <ProfileImage
+              big={true}
+              border={true}
+              borderColor={isOnAir ? "#e24553" : "black"}
+            />
             {isMine && (
               <Link to="/avatar">
                 <IconButton area-label="edit">
@@ -239,17 +275,17 @@ export default function ProfilePage(): JSX.Element {
               <div className="info">
                 <div>
                   {!isEditNickName && <h1>{user.nickName}</h1>}
+                  {isMine && !isEditNickName && (
+                    <IconButton area-label="edit" onClick={onClickEditNickName}>
+                      <EditOutlined />
+                    </IconButton>
+                  )}
                   {isEditNickName && (
                     <Input
                       value={newNickName}
                       onChange={onChangeNickName}
                       required
                     />
-                  )}
-                  {isMine && !isEditNickName && (
-                    <IconButton area-label="edit" onClick={onClickEditNickName}>
-                      <EditOutlined />
-                    </IconButton>
                   )}
                   {isEditNickName && (
                     <div>
@@ -267,6 +303,11 @@ export default function ProfilePage(): JSX.Element {
                       </IconButton>
                     </div>
                   )}
+                  <OnAirBadge
+                    inactiveVisible={true}
+                    isOnAir={isOnAir}
+                    onClick={onClickOnAir}
+                  />
                 </div>
                 <span className="id">@{user.userId}</span>
                 <span className="subscriber">구독자 {user.subscribers}명</span>
@@ -274,34 +315,30 @@ export default function ProfilePage(): JSX.Element {
               {isMine ? (
                 <></>
               ) : isSubscribing ? (
-                <ButtonComp onClick={onClickSubscribe} text="FOLLOW" />
+                <ButtonComp
+                  onClick={onClickSubscribe}
+                  text="FOLLOW"
+                  width={115}
+                  height={39}
+                  active={true}
+                >
+                  <HowToRegRounded />
+                </ButtonComp>
               ) : (
-                <ButtonComp onClick={onClickSubscribe} text="FOLLOW" />
+                <ButtonComp
+                  onClick={onClickSubscribe}
+                  text="FOLLOW"
+                  width={115}
+                  height={39}
+                >
+                  <PersonAddRounded />
+                </ButtonComp>
               )}
-              {/* {isMine ? (
-                <></>
-              ) : isSubscribing ? (
-                <Button
-                  variant="outlined"
-                  size="small"
-                  endIcon={<CheckRounded />}
-                  onClick={onClickSubscribe}
-                >
-                  follow
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  size="small"
-                  endIcon={<PersonAdd />}
-                  onClick={onClickSubscribe}
-                >
-                  follow
-                </Button>
-              )} */}
             </div>
             <div className="aboutme-wrapper">
-              {!isEditAboutMe && <p>{user.aboutMe}</p>}
+              {!isEditAboutMe && user.aboutMe.length !== 0 && (
+                <p>{user.aboutMe}</p>
+              )}
               {isMine && isAboutMeExist && !isEditAboutMe && (
                 <IconButton area-label="edit" onClick={onClickEditAboutMe}>
                   <EditOutlined />
@@ -333,24 +370,33 @@ export default function ProfilePage(): JSX.Element {
             </div>
           </div>
         </div>
-        {/* 티켓박스 */}
-        <div className="ticket-box">
-          {user.isOnAir ? (
-            <img src={onAirOn} alt="onair_on" />
-          ) : (
-            <img src={onAirOff} alt="onair_off" />
-          )}
-        </div>
       </InfoContainer>
-      <VideoContainer>
-        <h2>Videos</h2>
-        <Carousel />
-      </VideoContainer>
-      <FeedContainer>
-        <h2>Feed</h2>
-        {/* <InfiniteScroll /> */}
-        {/* <FeedList feeds={feeds} /> */}
-      </FeedContainer>
+      {!moreVideo ? (
+        <>
+          <VideoContainer>
+            <div className="title">
+              <h2>Videos</h2>
+              <span onClick={onClickMoreVideo}>more &gt;</span>
+            </div>
+            <Carousel items={videos} />
+          </VideoContainer>
+          <FeedContainer>
+            <div className="title">
+              <h2>Feed</h2>
+            </div>
+            {/* <InfiniteScroll /> */}
+            {/* <FeedList feeds={feeds} /> */}
+          </FeedContainer>
+        </>
+      ) : (
+        <MoreVideoContainer>
+          <div className="title">
+            <h2>Videos</h2>
+            <span onClick={onClickMoreVideo}>&lt; back</span>
+          </div>
+          {/* <InfiniteScroll /> */}
+        </MoreVideoContainer>
+      )}
     </ProfilePageLayout>
   );
 }

@@ -9,28 +9,34 @@ import {
   getFeedAction,
   updateAboutMeAction,
   addAboutMeAction,
+  getVideoAction,
+  getIsOnAirAction,
 } from "./thunk";
 
 const initialState: ProfileStateType = {
   userData: {
-    userPK: null,
+    userPK: -1,
     userId: "",
     nickName: "",
-    avatar: null,
+    avatar: "",
     aboutMe: "",
     subscribers: 0,
     isOnAir: false,
   },
   isSubscribing: false,
+  subscribers: [],
   feedData: null,
-  videoData: null,
+  videoData: [],
   getAboutMe: { loading: false, data: null, error: null },
   addAboutMe: { loading: false, data: null, error: null },
   updateAboutMe: { loading: false, data: null, error: null },
+  getIsOnAir: { loading: false, data: null, error: null },
   getIsSub: { loading: false, data: null, error: null },
+  getSub: { loading: false, data: null, error: null },
   subscribe: { loading: false, data: null, error: null },
   unSubscribe: { loading: false, data: null, error: null },
   getFeed: { loading: false, data: null, error: null },
+  getVideo: { loading: false, data: null, error: null },
 };
 
 const profileSlice = createSlice({
@@ -61,6 +67,40 @@ const profileSlice = createSlice({
         state.getAboutMe.data = null;
         state.getAboutMe.error = payload;
       })
+      .addCase(getIsOnAirAction.pending, (state) => {
+        state.getIsOnAir.loading = true;
+        state.getIsOnAir.data = null;
+        state.getIsOnAir.error = null;
+      })
+      .addCase(getIsOnAirAction.fulfilled, (state, { payload }) => {
+        state.getIsOnAir.loading = false;
+        state.getIsOnAir.data = payload;
+        state.getIsOnAir.error = null;
+
+        state.userData.isOnAir = payload;
+      })
+      .addCase(getIsOnAirAction.rejected, (state, { payload }) => {
+        state.getIsOnAir.loading = false;
+        state.getIsOnAir.data = null;
+        state.getIsOnAir.error = payload;
+      })
+      // .addCase(getSubscribersAction.pending, (state) => {
+      //   state.getSub.loading = true;
+      //   state.getSub.data = null;
+      //   state.getSub.error = null;
+      // })
+      // .addCase(getSubscribersAction.fulfilled, (state, { payload }) => {
+      //   state.getSub.loading = false;
+      //   state.getSub.data = payload;
+      //   state.getSub.error = null;
+
+      //   state.subscribers = payload;
+      // })
+      // .addCase(getSubscribersAction.rejected, (state, { payload }) => {
+      //   state.getSub.loading = false;
+      //   state.getSub.data = null;
+      //   state.getSub.error = payload;
+      // })
       .addCase(addAboutMeAction.pending, (state) => {
         state.addAboutMe.loading = true;
         state.addAboutMe.data = null;
@@ -101,10 +141,12 @@ const profileSlice = createSlice({
         state.getIsSub.data = payload;
         state.getIsSub.error = null;
 
-        const sub = payload.filter(
+        const sub = state.getIsSub.data.filter(
           (subscriber: SubscriberType) =>
             subscriber.userPK === state.userData.userPK
         );
+        console.log(state.getIsSub.data);
+        console.log(sub);
         if (sub.length === 0) {
           state.isSubscribing = false;
         } else {
@@ -127,6 +169,13 @@ const profileSlice = createSlice({
         state.subscribe.error = null;
 
         state.isSubscribing = true;
+        state.userData.subscribers += 1;
+        // state.subscribers.push({
+        //   userPK: state.userData.userPK,
+        //   userId: state.userData.userId,
+        //   nickName: state.userData.nickName,
+        //   avatar: state.userData.avatar,
+        // });
       })
       .addCase(subscribeAction.rejected, (state, { payload }) => {
         state.subscribe.loading = false;
@@ -144,6 +193,12 @@ const profileSlice = createSlice({
         state.unSubscribe.error = null;
 
         state.isSubscribing = false;
+        state.userData.subscribers -= 1;
+        // state.subscribers.forEach((subscriber, idx) => {
+        //   if (subscriber.userPK === state.userData.userPK) {
+        //     state.subscribers.splice(idx, 1);
+        //   }
+        // });
       })
       .addCase(unSubscribeAction.rejected, (state, { payload }) => {
         state.unSubscribe.loading = false;
@@ -160,12 +215,29 @@ const profileSlice = createSlice({
         state.getFeed.data = payload;
         state.getFeed.error = null;
 
-        state.feedData = payload;
+        // state.feedData = payload; ///////////
       })
       .addCase(getFeedAction.rejected, (state, { payload }) => {
         state.getFeed.loading = false;
         state.getFeed.data = null;
         state.getFeed.error = payload;
+      })
+      .addCase(getVideoAction.pending, (state) => {
+        state.getVideo.loading = true;
+        state.getVideo.data = null;
+        state.getVideo.error = null;
+      })
+      .addCase(getVideoAction.fulfilled, (state, { payload }) => {
+        state.getVideo.loading = false;
+        state.getVideo.data = payload;
+        state.getVideo.error = null;
+
+        state.videoData = payload;
+      })
+      .addCase(getVideoAction.rejected, (state, { payload }) => {
+        state.getVideo.loading = false;
+        state.getVideo.data = null;
+        state.getVideo.error = payload;
       });
   },
 });

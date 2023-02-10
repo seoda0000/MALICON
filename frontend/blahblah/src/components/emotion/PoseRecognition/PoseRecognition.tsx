@@ -9,7 +9,7 @@ interface iPosition {
 }
 
 interface iPartScore {
-  position : iPosition;
+  position: iPosition;
   score: number;
 }
 
@@ -25,16 +25,21 @@ interface iPartPosition {
   rightHip: iPartScore;
 }
 
-export default function PoseRecognition(props: { videoRef: React.RefObject<HTMLVideoElement> }) {
+interface iPositionRecognitionProps {
+  videoRef: React.RefObject<HTMLVideoElement>
+  onPoseChange: any
+}
+
+export default function PoseRecognition(props: iPositionRecognitionProps) {
   const videoRef = props.videoRef;
 
   const [currentPose, setCurrentPose] = useState<string>("");
   const init = () => {
-    posenet.load().then((model) => {
+    posenet.load().then(async (model) => {
       // 이곳의 model과 아래 predict의 model은 같아야 한다.
       if (videoRef.current) {
         console.log("videoRef found");
-        predict();
+        await predict();
         console.log("videoRef found2");
       } else console.log("no!");
 
@@ -60,7 +65,7 @@ export default function PoseRecognition(props: { videoRef: React.RefObject<HTMLV
 
           setTimeout(() => {
             requestAnimationFrame(predict);
-          }, 100);
+          }, 500);
         } else {
           console.log("no ref?");
         }
@@ -74,26 +79,26 @@ export default function PoseRecognition(props: { videoRef: React.RefObject<HTMLV
       && isRightWristBetweenShoulders(pose)
       && isLeftElbowHighterThanLeftShoulder(pose)
       && isRightElblowHigherThanRightShoulder(pose))
-        setCurrentPose("heart");
+      setCurrentPose("heart");
     // // 2. 왼손들기
     else if (isLeftWristHigherThanLeftShoulder(pose)
       && isLeftWristHigherThanLeftElbow(pose)
       && isLeftElbowHighterThanLeftShoulder(pose))
-        setCurrentPose("left");
+      setCurrentPose("left");
     // // 3. 오른손들기
     else if (isRightWristHigherThanRightShoulder(pose)
       && isRightWristHigherThanRightElbow(pose)
       && isRightElblowHigherThanRightShoulder(pose))
-        setCurrentPose("right");
+      setCurrentPose("right");
     // // 4. 박수치기
     else if (isLeftWristBetweenShoulders(pose)
       && isRightWristBetweenShoulders(pose)
       && !isLeftElbowHighterThanLeftShoulder(pose)
       && !isRightElblowHigherThanRightShoulder(pose))
-        setCurrentPose("clap");
+      setCurrentPose("clap");
     // 5. 기타
     else
-        setCurrentPose("neutral");
+      setCurrentPose("neutral");
   }
 
   function isScoreHigherThanPredictionThreshold(score: iPartScore) {
@@ -102,14 +107,14 @@ export default function PoseRecognition(props: { videoRef: React.RefObject<HTMLV
 
   function isLeftWristHigherThanLeftShoulder(pose: iPartPosition) {
     return isScoreHigherThanPredictionThreshold(pose.leftWrist)
-    && isScoreHigherThanPredictionThreshold(pose.leftShoulder)
-    && pose.leftWrist.position.y < pose.leftShoulder.position.y;
+      && isScoreHigherThanPredictionThreshold(pose.leftShoulder)
+      && pose.leftWrist.position.y < pose.leftShoulder.position.y;
   }
 
   function isRightWristHigherThanRightShoulder(pose: iPartPosition) {
     return isScoreHigherThanPredictionThreshold(pose.rightWrist)
-    && isScoreHigherThanPredictionThreshold(pose.rightShoulder)
-    && pose.rightWrist.position.y < pose.rightShoulder.position.y;
+      && isScoreHigherThanPredictionThreshold(pose.rightShoulder)
+      && pose.rightWrist.position.y < pose.rightShoulder.position.y;
   }
 
   function isLeftWristBetweenShoulders(pose: iPartPosition) {
@@ -134,35 +139,39 @@ export default function PoseRecognition(props: { videoRef: React.RefObject<HTMLV
 
   function isLeftWristHigherThanLeftElbow(pose: iPartPosition) {
     return isScoreHigherThanPredictionThreshold(pose.leftWrist)
-    && isScoreHigherThanPredictionThreshold(pose.leftShoulder)
-    && pose.leftWrist.position.y < pose.leftShoulder.position.y;
+      && isScoreHigherThanPredictionThreshold(pose.leftShoulder)
+      && pose.leftWrist.position.y < pose.leftShoulder.position.y;
   }
 
   function isRightWristHigherThanRightElbow(pose: iPartPosition) {
     return isScoreHigherThanPredictionThreshold(pose.rightWrist)
-    && isScoreHigherThanPredictionThreshold(pose.rightElbow)
-    && pose.rightWrist.position.y < pose.rightElbow.position.y;
+      && isScoreHigherThanPredictionThreshold(pose.rightElbow)
+      && pose.rightWrist.position.y < pose.rightElbow.position.y;
   }
 
   function isLeftElbowHighterThanLeftShoulder(pose: iPartPosition) {
     return isScoreHigherThanPredictionThreshold(pose.leftElbow)
-    && isScoreHigherThanPredictionThreshold(pose.leftShoulder)
-    && pose.leftElbow.position.y < pose.leftShoulder.position.y;
+      && isScoreHigherThanPredictionThreshold(pose.leftShoulder)
+      && pose.leftElbow.position.y < pose.leftShoulder.position.y;
   }
 
   function isRightElblowHigherThanRightShoulder(pose: iPartPosition) {
     return isScoreHigherThanPredictionThreshold(pose.rightElbow)
-    && isScoreHigherThanPredictionThreshold(pose.rightShoulder)
-    && pose.rightElbow.position.y < pose.rightShoulder.position.y;
+      && isScoreHigherThanPredictionThreshold(pose.rightShoulder)
+      && pose.rightElbow.position.y < pose.rightShoulder.position.y;
   }
 
   useEffect(() => {
     init();
   }, []);
 
+  useEffect(() => {
+    props.onPoseChange(currentPose);
+  }, [currentPose])
+
   return (
-    <div className="App">
-      <div>현재 자세는 {currentPose}</div>
+    <div>
+      {/* <div>현재 자세는 {currentPose}</div> */}
     </div>
   );
 }

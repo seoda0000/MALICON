@@ -116,16 +116,19 @@ const BubbleBox = styled.div<{ color?: string }>`
 type AvatarBubblePropsType = {
   state: string;
   color: string;
+  seed: string;
 };
 
 export default function AvatarBubble({
   state,
   color,
+  seed,
 }: AvatarBubblePropsType): JSX.Element {
   const emotionEl = useRef<HTMLSpanElement>(null);
-  const avatar = useAppSelector((state) => state.user.userData.avatar!);
+  //   const avatar = useAppSelector((state) => state.user.userData.avatar!);
   const dataUri = createAvatar(personas, {
-    ...JSON.parse(avatar),
+    // ...JSON.parse(avatar),
+    seed: seed,
   }).toDataUriSync();
 
   const startEmotion = () => {

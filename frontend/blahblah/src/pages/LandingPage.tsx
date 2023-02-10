@@ -480,19 +480,19 @@ function LandingPage(): JSX.Element {
       </PopWrapper1> */}
 
       <Bubble1 ref={bubbleEl1}>
-        <AvatarBubble state="happy" color="#54d7c7" />
+        <AvatarBubble state="happy" color="#54d7c7" seed="Callie" />
       </Bubble1>
 
       <Bubble2 ref={bubbleEl2}>
-        <AvatarBubble state="clap" color="#f55d81" />
+        <AvatarBubble state="clap" color="#f55d81" seed="Harley" />
       </Bubble2>
 
       <Bubble3 ref={bubbleEl3}>
-        <AvatarBubble state="surprised" color="#f3b63a" />
+        <AvatarBubble state="surprised" color="#f3b63a" seed="Sasha" />
       </Bubble3>
 
       <Bubble4 ref={bubbleEl4}>
-        <AvatarBubble state="light" color="#6dbb58" />
+        <AvatarBubble state="light" color="#6dbb58" seed="Sugar" />
       </Bubble4>
 
       {/* <NavBarLanding /> */}

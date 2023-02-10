@@ -1,11 +1,25 @@
+import { CommentType } from "../feed/commentType";
+
 export type VideoType = {
-  id: number | null;
-  createDate: Date;
-  lastModifiedDate: Date;
-  pathURL: string;
+  id: number;
+  userPK: number;
+  userId: string;
+  nickName: string;
+  avatar: string | null;
   title: string;
-  userId: number;
-  // avatar
-  // nickName
+  views: number;
+  pathUrl: string;
+  createDate: Date;
+  hashtags: string;
+  comments: {
+    content: CommentType[];
+    pageable: {
+      sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+      };
+    };
+  };
 };
 

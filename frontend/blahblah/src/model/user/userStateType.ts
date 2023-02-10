@@ -1,8 +1,10 @@
 import { ReduxStateType } from "../reduxStateType";
+import { SubscriberType } from "../subscribe/subscriberType";
 import { UserType } from "./userType";
 
 export type UserStateType = {
   userData: UserType;
+  subscribers: SubscriberType[];
   signup: ReduxStateType;
   checkDuplicate: ReduxStateType;
   checkDupNickName: ReduxStateType;
@@ -11,5 +13,7 @@ export type UserStateType = {
   refreshToken: ReduxStateType;
   updateUser: ReduxStateType;
   deleteUser: ReduxStateType;
+  getSubscribers: ReduxStateType;
+  getIsOnAir: ReduxStateType;
 };
 

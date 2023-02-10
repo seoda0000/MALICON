@@ -8,12 +8,14 @@ type ProfileImagePropsType = {
   big?: boolean;
   border?: boolean;
   userAvatar?: string;
+  borderColor?: string;
 };
 
 export default function ProfileImage({
   big,
   border,
   userAvatar,
+  borderColor,
 }: ProfileImagePropsType): JSX.Element {
   const avatar = useSelector((state: RootState) => state.user.userData.avatar!);
 
@@ -38,8 +40,9 @@ export default function ProfileImage({
         width: big ? 120 : 24,
         height: big ? 120 : 24,
         border: border ? 2 : "none",
-        borderColor: "black",
+        borderColor: borderColor ? borderColor : "black",
       }}
     />
   );
 }
+

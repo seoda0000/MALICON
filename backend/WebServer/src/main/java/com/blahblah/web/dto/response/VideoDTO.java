@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Builder
@@ -25,14 +27,14 @@ public class VideoDTO {
     private String title;
     private long views;
     private String pathUrl;
-    private String createDate;
+    private LocalDateTime createDate;
     private String hashtags;
     private boolean like;
     private long likeCnt;
     private Page<CommentDTO> comments;
 
     public Page<VideoDTO> toDtoList(Page<VideoEntity> videoList){
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createDate"));
         int start = (int) pageRequest.getOffset();
         int end = start+pageRequest.getPageSize();
         Page<VideoDTO> videos = videoList.map(v -> VideoDTO.builder()
@@ -43,7 +45,7 @@ public class VideoDTO {
                 .avatar(v.getUserEntity().getAvatar())
                 .userPK(v.getUserEntity().getId())
                 .pathUrl(v.getPathUrl())
-                .createDate(v.getCreateDate().toString())
+                .createDate(v.getCreateDate())
                 .userId(v.getUserEntity().getUserId())
                 .hashtags(v.getHashtags())
                 .comments(new CommentDTO().toVDtoList(new PageImpl<>(v.getComments().subList(start, Math.min(end, v.getComments().size())), pageRequest, v.getComments().size())))

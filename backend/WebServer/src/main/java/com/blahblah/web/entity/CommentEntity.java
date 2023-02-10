@@ -18,12 +18,15 @@ public class CommentEntity extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "article_id", insertable = false, updatable = false, nullable = true)
+    private Long articleId;
     @ManyToOne(
             targetEntity = ArticleEntity.class,
             fetch = FetchType.LAZY
     )
     @JoinColumn(name = "article_id", nullable = true)
     private ArticleEntity articleEntity;
+
 
     @ManyToOne(
             targetEntity = UserEntity.class,
@@ -32,6 +35,8 @@ public class CommentEntity extends BaseEntity{
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
+    @Column(name = "video_id", insertable = false, updatable = false, nullable = true)
+    private Long videoId;
     @ManyToOne(
             targetEntity = VideoEntity.class,
             fetch = FetchType.LAZY

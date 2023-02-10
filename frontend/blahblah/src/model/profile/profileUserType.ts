@@ -1,8 +1,8 @@
 export type ProfileUserType = {
-  userPK: number | null;
+  userPK: number;
   userId: string;
   nickName: string;
-  avatar: string | null;
+  avatar: string;
   subscribers: number;
   aboutMe: string;
   isOnAir: boolean;

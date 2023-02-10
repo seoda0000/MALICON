@@ -1,19 +1,24 @@
 import React, { RefObject, useEffect, useState } from "react";
 import * as faceapi from "@vladmandic/face-api";
-import AvatarComp from "../common/AvatarComp";
+import AvatarComp from "../../common/AvatarComp";
 
-export default function FaceExpressionRecognition(props: { videoRef: React.RefObject<HTMLVideoElement>; }) {
+interface iFaceExpressionRecognitionProps {
+  videoRef: React.RefObject<HTMLVideoElement>;
+  onStateChange: any;
+}
+
+export default function FaceExpressionRecognition(props: iFaceExpressionRecognitionProps) {
   const videoRef = props.videoRef as RefObject<HTMLVideoElement>;
 
   const [currentState, setCurrentState] = useState<string>("");
   const [currentScore, setCurrentScore] = useState<number>(0);
 
   const startPredict = async () => {
-    if (videoRef.current === null) { console.log("fuck"); return };
+    if (videoRef.current === null) { return };
 
     const displaySize = {
-      width: videoRef.current.width,
-      height: videoRef.current.height,
+      width: videoRef.current.videoWidth,
+      height: videoRef.current.videoHeight,
     };
 
     // FaceRecognitionStart
@@ -51,6 +56,7 @@ export default function FaceExpressionRecognition(props: { videoRef: React.RefOb
         faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
         faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
       ]).then(() => {
+        console.log(videoRef);
         startPredict();
       });
     };
@@ -62,12 +68,16 @@ export default function FaceExpressionRecognition(props: { videoRef: React.RefOb
     init();
   }, []);
 
+  useEffect(() => {
+    props.onStateChange(currentState);
+  }, [currentState])
+
   return (
     <div>
-      <div>
+      {/* <div>
         Your Current State is {currentState} {currentScore * 100} %
-      </div>
-      <AvatarComp currentState={currentState} currentScore={currentScore} />
+      </div> */}
+      {/* <AvatarComp currentState={currentState} currentScore={currentScore} /> */}
     </div>
   );
 }

@@ -39,28 +39,28 @@ public class VideoController {
             return ResponseEntity.status(HttpStatus.CREATED).body(new Message("비디오 저장 완료"));
         }
     }
-    @GetMapping
-    public ResponseEntity readVideo(HttpServletRequest request){
+    @GetMapping("/{size}/{page}")
+    public ResponseEntity readVideo(@PathVariable long size, @PathVariable long page, HttpServletRequest request){
         long userPK = JWTutil.getLongIdByAccessToken(request);
-        Page<VideoDTO> videoList = videoService.readVideos(userPK);
+        Page<VideoDTO> videoList = videoService.readVideos(userPK, size, page);
         if(videoList.isEmpty()){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("지난 동영상이 없습니다."));
         }
         return ResponseEntity.ok(videoList);
     }
 
-    @GetMapping("/{userPK}")
-    public ResponseEntity readMyVideo(@PathVariable long userPK){
-        Page<VideoDTO> videoList = videoService.readMyVideos(userPK);
+    @GetMapping("/{userPK}/{size}/{page}")
+    public ResponseEntity readMyVideo(@PathVariable long userPK, @PathVariable long size, @PathVariable long page){
+        Page<VideoDTO> videoList = videoService.readMyVideos(userPK, size, page);
         if(videoList.isEmpty()){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("지난 동영상이 없습니다."));
         }
         return ResponseEntity.ok(videoList);
     }
 
-    @GetMapping("/main")
-    public ResponseEntity readAllVideo(){
-        Page<VideoDTO> videoList = videoService.readAllVideos();
+    @GetMapping("/main/{size}/{page}")
+    public ResponseEntity readAllVideo(@PathVariable long size, @PathVariable long page){
+        Page<VideoDTO> videoList = videoService.readAllVideos( size, page);
         if(videoList.isEmpty()){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("지난 동영상이 없습니다."));
         }

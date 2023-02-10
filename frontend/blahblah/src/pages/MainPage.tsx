@@ -7,13 +7,16 @@ import BroadcastList from "../components/broadcast/BroadcastList";
 import { RootState } from "../redux/configStore";
 import { AppDispatch } from "../redux/configStore";
 import { fetchSessionData } from "../redux/modules/broadcast";
+import LoadingPage from "./LoadingPage";
 import BroadcastCarousel from "../components/broadcast/broadcastCarousel";
 import { fetchAllVideoData } from "../redux/modules/video";
 let isInitial = true;
-
-function MainPage() {
+function MainPage(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const broadcast = useSelector((state: RootState) => state.broadcast);
+
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (isInitial) {
@@ -25,6 +28,14 @@ function MainPage() {
     }
   }, [broadcast, dispatch]);
 
+  useEffect(() => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2700);
+  }, []);
+
+  if (isLoading) return <LoadingPage />;
   return (
     <Box
       sx={{
@@ -46,3 +57,4 @@ function MainPage() {
   );
 }
 export default MainPage;
+

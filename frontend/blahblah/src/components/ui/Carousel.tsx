@@ -8,6 +8,8 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ProfileImage from "../common/ProfileImage";
+import { VideoType } from "../../model/profile/VideoType";
+import VideoCard from "../video/VideoCard";
 
 const CarouselContainer = styled.div`
   .slick-slider {
@@ -100,6 +102,10 @@ const settings = {
   accessibility: true,
 };
 
+type CarouselPorpsType = {
+  items: VideoType[];
+};
+
 const mockupData = [
   {
     id: 1,
@@ -175,7 +181,7 @@ const mockupData = [
   },
 ];
 
-export default function Carousel(): JSX.Element {
+export default function Carousel({ items }: CarouselPorpsType): JSX.Element {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const onClickVideoMore = (event: React.MouseEvent<HTMLElement>) => {
@@ -187,9 +193,10 @@ export default function Carousel(): JSX.Element {
   return (
     <CarouselContainer>
       <Slider {...settings}>
-        {mockupData.map((item) => (
+        {mockupData.map((item, idx) => (
           <CarouselItemBox key={item.id}>
-            <div className="img-box">
+            {/* <VideoCard nth={idx} video={item} /> */}
+            {/* <div className="img-box">
               <img src={item.thumbNail} alt="" />
               <ItemDetailBox>
                 <p> 간단한 소개글 블라블라 is a perfect party dish</p>
@@ -213,7 +220,7 @@ export default function Carousel(): JSX.Element {
               }
               title={item.title}
               subheader="2023. 01. 28"
-            />
+            /> */}
 
             <Menu
               anchorEl={anchorEl}

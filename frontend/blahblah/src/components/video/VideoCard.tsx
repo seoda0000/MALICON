@@ -14,14 +14,17 @@ import { autoBatchEnhancer } from "@reduxjs/toolkit";
 import CardComp from "../common/CardComp";
 import { VideoType } from "../../model/video/VideoType";
 
-const VideoCard: React.FC<{ nth: number; video: VideoType }> = (props) => {
+type VideoCardPropsType = {
+  nth: number;
+  video: VideoType;
+};
+
+export default function VideoCard({
+  nth,
+  video,
+}: VideoCardPropsType): JSX.Element {
   return (
-    <CardComp
-      nth={props.nth}
-      title={props.video.title}
-      caption={true}
-      video={props.video}
-    >
+    <CardComp nth={nth} title={video.title} caption={true} video={video}>
       <img
         src="https://i.ytimg.com/vi/0gY_z7fqPjs/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0w_6PP55kpL3H-VNAhtDIWuISAA"
         srcSet="https://images.unsplash.com/photo-1515825838458-f2a94b20105a?auto=format&fit=crop&w=300&dpr=2 2x"
@@ -30,6 +33,5 @@ const VideoCard: React.FC<{ nth: number; video: VideoType }> = (props) => {
       />
     </CardComp>
   );
-};
+}
 
-export default VideoCard;
