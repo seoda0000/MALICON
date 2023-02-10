@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import FaceExpressionRecognition from "./faceapi/FaceExpressionRecognition";
 import PoseRecognition from "./PoseRecognition/PoseRecognition";
+import { openviduInitializer } from "../../redux/utils/axiosInitializer";
+import user from "../../redux/modules/user";
+import { getAccessToken } from "../../redux/modules/user/token";
+import { useAppSelector } from "../../redux/configStore.hooks";
 
 interface iEmotionExpressionProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -10,6 +14,7 @@ interface iEmotionExpressionProps {
 export default function EmotionExpression(props: iEmotionExpressionProps) {
   const [currentPose, setCurrentPose] = useState<string>("");
   const [currentState, setCurrentState] = useState<string>("");
+  const avatar = useAppSelector((state) => state.user.userData.avatar!)
 
   const saveCurrentPose = (pose: string) => {
     setCurrentPose(pose);
@@ -32,6 +37,19 @@ export default function EmotionExpression(props: iEmotionExpressionProps) {
         type: "emotion",
       });
     }
+
+    const axios = openviduInitializer();
+    await axios.post("/api/emotion/" + props.user.getStreamManager().stream.session.sessionId, {
+      avatar,
+      type,
+      timestamp: Date.now()
+    }, {
+
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Baerer " + getAccessToken(),
+      },
+    });
   }
 
   useEffect(() => {
