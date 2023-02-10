@@ -238,7 +238,7 @@ public class Controller {
 	}
 
 
-	public LiveRoomDto entityToDto (LiveRoomEntity liveRoomEntity){
+	public LiveRoomDto entityToDto (LiveRoomEntity liveRoomEntity) throws OpenViduJavaClientException, OpenViduHttpException {
 
 		String title = liveRoomEntity.getTitle();
 		String startAt = liveRoomEntity.getStartAt();
@@ -247,8 +247,11 @@ public class Controller {
 		UserDto streamer = liveRoomEntity.getStreamer();
 		String hashTag = liveRoomEntity.getHashTag();
 		Session ActiveSession = openvidu.getActiveSession(sessionId);
-		int viewerNumber = ActiveSession == null? -31:ActiveSession.getActiveConnections().size();
-
+		int viewerNumber = -31;
+		if(ActiveSession != null){
+			ActiveSession.fetch();
+			viewerNumber = ActiveSession.getConnections().size();
+		}
 
 		LiveRoomDto liveRoomDto = LiveRoomDto.builder()
 				.title(title)
