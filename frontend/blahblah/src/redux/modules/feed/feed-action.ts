@@ -109,6 +109,7 @@ export const removeFeedData = createAsyncThunk(
 
       return data;
     } catch (e) {
+      console.log("피드 삭제 실패", removeData);
       console.error(e);
       return thunkAPI.rejectWithValue(e);
     }
@@ -185,16 +186,13 @@ export const removeCommentData = createAsyncThunk(
       const axios = axiosInitializer();
 
       await axios
-        .delete<FeedRemoveType>(
-          `/api/comments/${removeData.id}/${removeData.userPK}`,
-          {
-            // data: removeData,
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Baerer " + getAccessToken(),
-            },
-          }
-        )
+        .delete(`/api/comments/${removeData.id}/${removeData.userPK}`, {
+          // data: removeData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        })
         .then((data) => {
           console.log("덧글 삭제: ", data);
           thunkAPI.dispatch(fetchFeedData());

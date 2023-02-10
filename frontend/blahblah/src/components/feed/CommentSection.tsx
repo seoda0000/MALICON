@@ -8,9 +8,18 @@ const CommentSection: React.FC<{
   articleId?: number;
   videoId?: number;
 }> = (props) => {
+  let isVideo;
+  let id;
+  if (props.articleId) {
+    id = props.articleId;
+    isVideo = false;
+  } else {
+    id = props.videoId;
+    isVideo = true;
+  }
   return (
     <Box sx={{ mx: 2 }}>
-      <CommentInput articleId={props.articleId} />
+      <CommentInput articleId={id} isVideo={isVideo} />
       <CommentList comments={props.comments} />
     </Box>
   );

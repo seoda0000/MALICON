@@ -10,6 +10,8 @@ export type VideoType = {
   pathUrl: string;
   createDate: string;
   hashtags: string;
+  like: boolean;
+  likeCnt: number;
 
   // comments: CommentType[];
 };

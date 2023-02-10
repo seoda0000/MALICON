@@ -27,7 +27,7 @@ export default function CommentRemoveDialog({
       userPK,
     };
 
-    console.log(commentData);
+    // console.log(commentData);
 
     dispatch(removeCommentData(commentData));
   };

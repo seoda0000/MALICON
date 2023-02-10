@@ -19,13 +19,15 @@ import video from "../../redux/modules/video";
 import ProfileImage from "../common/ProfileImage";
 import FeedProfileImage from "../feed/FeedProfileImage";
 import { Box } from "@mui/system";
-
+import { AppDispatch } from "../../redux/configStore";
 import { Button } from "@mui/material";
 import { VideoDetailType } from "../../model/video/VideoDetailType";
 import { RootState } from "../../redux/configStore";
-import { useSelector } from "react-redux";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { getVideoById } from "../../redux/modules/video";
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -42,15 +44,15 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 const VideoSection: React.FC<{ videoId: number }> = (props) => {
-  const [expanded, setExpanded] = React.useState(false);
   const video = useSelector((state: RootState) => state.video);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [expanded, setExpanded] = React.useState(false);
   const currentVideo = video.currentVideo;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  // console.log(props.video);
 
   return (
     <Card sx={{ width: "100%" }}>
@@ -68,7 +70,7 @@ const VideoSection: React.FC<{ videoId: number }> = (props) => {
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {/* 해시태그 표시 */}
-            {JSON.parse(currentVideo!.hashtags).map((data: any, index: any) => {
+            {JSON.parse(currentVideo.hashtags).map((data: any, index: any) => {
               return (
                 <Box
                   sx={{
@@ -80,6 +82,7 @@ const VideoSection: React.FC<{ videoId: number }> = (props) => {
                     mr: 1,
                     height: 15,
                   }}
+                  key={index}
                 >
                   {data.label}
                 </Box>
@@ -126,7 +129,7 @@ const VideoSection: React.FC<{ videoId: number }> = (props) => {
               variant="body1"
               sx={{ fontSize: "sm", fontWeight: "lg" }}
             >
-              {currentVideo?.nickName}
+              {currentVideo.nickName}
             </Typography>
 
             {/* 팔로우 버튼 */}

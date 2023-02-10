@@ -69,7 +69,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
             loop={true}
             slidesPerView={1}
             onSlideChange={(swiper) => setIndex(swiper.realIndex)}
-            onSwiper={(swiper) => console.log(swiper)}
+            // onSwiper={(swiper) => console.log(swiper)}
             className="mySwiper"
           >
             {props.sessions.length !== 0

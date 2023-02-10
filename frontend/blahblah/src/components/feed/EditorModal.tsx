@@ -56,7 +56,7 @@ export default function EditorModal({
       userPK,
     };
 
-    console.log(postData);
+    // console.log(postData);
     if (postData && postData.title && postData.content) {
       if (isEdit) {
         dispatch(editFeedData(editData));

@@ -272,7 +272,7 @@ function AvatarPage() {
   const userId = useSelector((state: RootState) => state.user.userData.userId);
   const userpk = useSelector((state: RootState) => state.user.userData.id);
   const saveAvatarHandler = () => {
-    console.log("아바타 저장 시도");
+    // console.log("아바타 저장 시도");
     const res = dispatch(
       updateUserAction({
         id: userpk,
@@ -281,7 +281,7 @@ function AvatarPage() {
       })
     );
 
-    console.log("아바타 저장 : " + JSON.stringify(selectedAvatar));
+    // console.log("아바타 저장 : " + JSON.stringify(selectedAvatar));
 
     alert("아바타 저장 완료");
   };

@@ -168,7 +168,6 @@ CardCompPropsType): JSX.Element {
               >
                 <Typography level="h1" noWrap sx={{ fontSize: "lg", mr: 1 }}>
                   <Link
-                    href="#dribbble-shot"
                     overlay
                     underline="none"
                     sx={{

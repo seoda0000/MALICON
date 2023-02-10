@@ -10,11 +10,12 @@ import { CommentType } from "../../model/feed/commentType";
 import CommentListItem from "./CommentListItem";
 
 const CommentList: React.FC<{ comments: CommentType[] }> = (props) => {
+  console.log("댓글 목록", props.comments);
   return (
     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
       {props.comments.length !== 0 ? (
-        props.comments.map((comment) => (
-          <CommentListItem comment={comment} key={comment.id} />
+        props.comments.map((comment, index) => (
+          <CommentListItem comment={comment} key={index} />
         ))
       ) : (
         <div>덧글이 없습니다.</div>

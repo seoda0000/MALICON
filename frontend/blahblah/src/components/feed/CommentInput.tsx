@@ -14,7 +14,7 @@ import ProfileImage from "../common/ProfileImage";
 
 const CommentInput: React.FC<{
   articleId?: number;
-  videoId?: number;
+  isVideo?: boolean;
 }> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
   const commentRef = useRef<HTMLInputElement>(null);
@@ -23,10 +23,10 @@ const CommentInput: React.FC<{
     e.preventDefault();
     const content = commentRef.current?.value || "";
 
-    if (props.articleId) {
+    if (!props.isVideo) {
       const res = dispatch(
         postCommentData({
-          articleId: props.articleId,
+          articleId: props.articleId!,
           content,
         })
       );

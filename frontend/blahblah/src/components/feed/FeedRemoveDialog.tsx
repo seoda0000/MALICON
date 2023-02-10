@@ -28,7 +28,7 @@ export default function FeedRemoveDialog({
       userPK,
     };
 
-    console.log(feedData);
+    // console.log(feedData);
 
     dispatch(removeFeedData(feedData));
   };

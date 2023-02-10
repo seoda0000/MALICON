@@ -96,6 +96,7 @@ export default function CarouselComp({
   hashTag,
   startAt,
 }: CardCompPropsType): JSX.Element {
+  // console.log(hashTag);
   return (
     <CardWrapper nth={nth}>
       <Box sx={{ position: "relative" }}>
@@ -168,7 +169,6 @@ export default function CarouselComp({
               >
                 <Typography level="h1" noWrap sx={{ fontSize: "lg", mr: 1 }}>
                   <Link
-                    href="#dribbble-shot"
                     overlay
                     underline="none"
                     sx={{
