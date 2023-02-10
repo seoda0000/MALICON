@@ -9,4 +9,5 @@ import java.util.List;
 public interface PreviousVideoRepository extends JpaRepository<PreviousVideoEntity, Long> {
 
     List<PreviousVideoEntity> findAllBySessionId(String sessionId);
+    void deleteByRecordingId(String recordingId);
 }

@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name ="previous_videos")
+@Table(name ="videos")
 @Data
 @Builder
 @NoArgsConstructor

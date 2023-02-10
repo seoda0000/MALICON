@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -117,57 +115,20 @@ public class RecordingController {
 
 
 
-//    @DeleteMapping(value = "/api/recording/delete/{recordingId}")
-//    public ResponseEntity<?> deleteRecording(@PathVariable("recordingId")String recordingId) {
-//        log.info("\n----------- DELETE RECORDING START -----------");
-//
-//        System.out.println("Deleting recording | {recordingId}=" + recordingId);
-//
-//        try {
-//            this.openvidu.deleteRecording(recordingId);
-//            previousVideoRepository.deleteById(recordingId);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    @DeleteMapping(value = "/api/recording/delete/{recordingId}")
+    public ResponseEntity<?> deleteRecording(@PathVariable("recordingId")String recordingId) {
+        log.info("\n----------- DELETE RECORDING START -----------");
 
-
-//    @GetMapping(value = "/api/recording/get/{recordingId}")
-//    public ResponseEntity<?> getRecording(@PathVariable(value = "recordingId") String recordingId) {
-//        log.info("\n----------- GET PREVIDOUS VIDEO START -----------");
-//        log.info("recordingId : "+recordingId);
-//
-//        try {
-//            Recording recording = this.openvidu.getRecording(recordingId);
-//            PreviousVideoEntity pre = previousVideoRepository.findById(recordingId).get();
-//            // url 확인 출력
-//            System.out.println("get recording: " + recording.getUrl());
-//            return new ResponseEntity<>(pre, HttpStatus.OK);
-//        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//    }
-
-
-
-
-    //특정 유저의 지난영상 목록 가져오기
-    @GetMapping(value = "/api/recording/list/{sessionId}")
-    public ResponseEntity<?> listRecordings(@PathVariable("sessionId") String sessionId) {
-        log.info("\n----------- GET PREVIDOUS VIDEO LIST START -----------");
-        log.info("sessionId : "+sessionId);
+        System.out.println("Deleting recording | {recordingId}=" + recordingId);
 
         try {
-
-            List<Recording> recordings = this.openvidu.listRecordings(); // 잘동작함
-            List<PreviousVideoEntity> preVideoList = previousVideoRepository.findAllBySessionId(sessionId);
-            return new ResponseEntity<>(preVideoList, HttpStatus.OK);
+            this.openvidu.deleteRecording(recordingId);
+            previousVideoRepository.deleteByRecordingId(recordingId);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
 
 
 
