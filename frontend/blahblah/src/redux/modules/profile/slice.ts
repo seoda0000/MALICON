@@ -26,7 +26,7 @@ const initialState: ProfileStateType = {
   isSubscribing: false,
   subscribers: [],
   videoData: null,
-  feedData: [],
+  feedData: null,
   getAboutMe: { loading: false, data: null, error: null },
   addAboutMe: { loading: false, data: null, error: null },
   updateAboutMe: { loading: false, data: null, error: null },
@@ -213,7 +213,7 @@ const profileSlice = createSlice({
         state.getFeed.data = payload;
         state.getFeed.error = null;
 
-        // state.feedData = payload; ///////////
+        state.feedData = payload;
       })
       .addCase(getFeedAction.rejected, (state, { payload }) => {
         state.getFeed.loading = false;

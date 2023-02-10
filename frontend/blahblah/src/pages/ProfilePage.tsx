@@ -136,9 +136,7 @@ export default function ProfilePage(): JSX.Element {
   const loggedUser = useAppSelector((state) => state.user.userData);
   const user = useAppSelector((state) => state.profile.userData);
   const videos = useAppSelector((state) => state.profile.videoData);
-  // const videos = useAppSelector((state) => state.video.allVideoList);
-  // const feeds = useAppSelector((state) => state.profile.feedData);
-  const feeds = useAppSelector((state) => state.feed.feeds);
+  const feeds = useAppSelector((state) => state.profile.feedData);
   const isSubscribing = useAppSelector((state) => state.profile.isSubscribing);
   const isOnAir = useAppSelector((state) => state.profile.userData.isOnAir);
   const dispatch = useAppDispatch();
@@ -246,8 +244,7 @@ export default function ProfilePage(): JSX.Element {
     dispatch(getVideoAction({ userPK: userpk, size: 5, page: 0 }));
 
     // 피드 목록 가져오기
-    // dispatch(getFeedAction(userpk)); // 확인필요
-    // dispatch(fetchFeedData());
+    dispatch(getFeedAction({ userPK: userpk, size: 5, page: 0 })); // 확인필요
   }, []);
 
   // if (!(getProfile && getisOnAir && getVideos && getFeed))
@@ -373,8 +370,7 @@ export default function ProfilePage(): JSX.Element {
           </div>
         </div>
       </InfoContainer>
-      {/* {!moreVideo ? ( */}
-      {moreVideo ? (
+      {!moreVideo ? (
         <>
           <VideoContainer>
             <div className="title">
@@ -387,8 +383,13 @@ export default function ProfilePage(): JSX.Element {
             <div className="title">
               <h2>Feed</h2>
             </div>
-            <InfiniteScroll feed={true} totalPage={0} items={videos!.content} />
-            {/* <FeedList feeds={feeds} /> */}
+            {/* {feeds && (
+              <InfiniteScroll
+                feed={true}
+                itemsWrap={feeds}
+                totalPage={feeds.totalPages}
+              />
+            )} */}
           </FeedContainer>
         </>
       ) : (
@@ -400,9 +401,8 @@ export default function ProfilePage(): JSX.Element {
           {videos && (
             <InfiniteScroll
               video={true}
-              videosWrap={videos}
+              itemsWrap={videos}
               totalPage={videos.totalPages}
-              items={videos.content}
             />
           )}
         </MoreVideoContainer>

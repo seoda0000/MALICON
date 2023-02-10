@@ -1,5 +1,6 @@
 import { ReduxStateType } from "../reduxStateType";
 import { SubscriberType } from "../subscribe/subscriberType";
+import { FeedWrapType } from "./feedWrapType";
 import { ProfileFeedType } from "./profileFeedType";
 import { ProfileUserType } from "./profileUserType";
 import { ProfileVideoType } from "./profileVideoType";
@@ -9,7 +10,7 @@ export type ProfileStateType = {
   userData: ProfileUserType;
   isSubscribing: boolean;
   videoData: VideoWrapType | null;
-  feedData: ProfileFeedType[] | null;
+  feedData: FeedWrapType | null;
   getAboutMe: ReduxStateType;
   addAboutMe: ReduxStateType;
   updateAboutMe: ReduxStateType;

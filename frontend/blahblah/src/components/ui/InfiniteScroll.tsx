@@ -9,22 +9,9 @@ import { ProfileFeedType } from "../../model/profile/profileFeedType";
 import FeedListItem from "../feed/FeedListItem";
 import { VideoWrapType } from "../../model/profile/videoWrapType";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
-import { getVideoAction } from "../../redux/modules/profile";
+import { getFeedAction, getVideoAction } from "../../redux/modules/profile";
 import { useParams } from "react-router-dom";
-
-type UserType = {
-  avatar: string;
-  email: string;
-  first_name: string;
-  id: number;
-  last_name: number;
-};
-
-type UsersType = {
-  data: UserType[];
-  page: number;
-  total_pages: number;
-};
+import { FeedWrapType } from "../../model/profile/feedWrapType";
 
 const InfiniteScrollContainer = styled.div`
   & > ul {
@@ -42,20 +29,19 @@ const InfiniteScrollContainer = styled.div`
 type InfiniteScrollPropsType = {
   video?: boolean;
   feed?: boolean;
-  videosWrap?: VideoWrapType;
+  itemsWrap?: VideoWrapType | FeedWrapType;
   totalPage: number;
-  items: ProfileVideoType[];
 };
 
 export default function InfiniteScroll({
   video = false,
   feed = false,
-  videosWrap,
+  itemsWrap,
   totalPage,
-  items,
 }: InfiniteScrollPropsType): JSX.Element {
   const { userpk } = useParams() as { userpk: string };
   const videos = useAppSelector((state) => state.profile.videoData);
+  const feeds = useAppSelector((state) => state.profile.feedData);
   const [pageInfo, setPageInfo] = useState({
     page: 1,
     totalPage: totalPage,
@@ -68,18 +54,21 @@ export default function InfiniteScroll({
   const dispatch = useAppDispatch();
 
   const updateItemsFunc = () => {
-    if (videos) {
+    if (video && videos) {
       let temp: ProfileVideoType[] = [...(itemArr as ProfileVideoType[])];
-
-      console.log(1, temp);
 
       videos.content.map((video) => {
         temp = [...temp, video];
         return temp;
       });
+      setItemArr(temp);
+    } else if (feed && feeds) {
+      let temp: ProfileFeedType[] = [...(itemArr as ProfileFeedType[])];
 
-      console.log(2, temp);
-
+      feeds.content.map((video) => {
+        temp = [...temp, video];
+        return temp;
+      });
       setItemArr(temp);
     }
   };
@@ -125,12 +114,17 @@ export default function InfiniteScroll({
       ).then(() => {
         updateItemsFunc();
       });
+    } else if (feed) {
+      dispatch(
+        getFeedAction({ userPK: userpk, size: 5, page: pageInfo.page })
+      ).then(() => {
+        updateItemsFunc();
+      });
     }
   }, [pageInfo.page]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    console.log("처음", videosWrap?.content, itemArr, pageInfo);
   }, []);
   return (
     <InfiniteScrollContainer>

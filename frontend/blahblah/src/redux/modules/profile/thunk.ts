@@ -1,6 +1,7 @@
 import { ConstructionOutlined } from "@mui/icons-material";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { FeedWrapType } from "../../../model/profile/feedWrapType";
 import { ProfileFeedType } from "../../../model/profile/profileFeedType";
 import { VideoWrapType } from "../../../model/profile/videoWrapType";
 // import { ProfileFeedWrapType } from "../../../model/profile/ProfileFeedWrapType";
@@ -195,20 +196,23 @@ export const getVideoAction = createAsyncThunk(
 // 피드 가져오기
 export const getFeedAction = createAsyncThunk(
   "GET_FEED",
-  async (userPK: string, { rejectWithValue }) => {
+  async (
+    { userPK, size, page }: GetVideoActionPropsType,
+    { rejectWithValue }
+  ) => {
     try {
       const axios = axiosInitializer();
-      // const { data } = await axios.get<ProfileFeedWrapType>(
-      //   `/api/articles/${parseInt(userPK)}`,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Authorization: "Bearer " + getAccessToken(),
-      //     },
-      //   }
-      // );
+      const { data } = await axios.get<FeedWrapType>(
+        `/api/articles/${parseInt(userPK)}/${size}/${page}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + getAccessToken(),
+          },
+        }
+      );
 
-      // return data;
+      return data;
     } catch (e) {
       return rejectWithValue(e);
     }
