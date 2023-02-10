@@ -35,11 +35,11 @@ export default function PoseRecognition(props: iPositionRecognitionProps) {
 
   const [currentPose, setCurrentPose] = useState<string>("");
   const init = () => {
-    posenet.load().then((model) => {
+    posenet.load().then(async (model) => {
       // 이곳의 model과 아래 predict의 model은 같아야 한다.
       if (videoRef.current) {
         console.log("videoRef found");
-        predict();
+        await predict();
         console.log("videoRef found2");
       } else console.log("no!");
 
@@ -65,7 +65,7 @@ export default function PoseRecognition(props: iPositionRecognitionProps) {
 
           setTimeout(() => {
             requestAnimationFrame(predict);
-          }, 100);
+          }, 500);
         } else {
           console.log("no ref?");
         }

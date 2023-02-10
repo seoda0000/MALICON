@@ -794,7 +794,8 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
               </div>
             )}
         </div>
-        <AvatarSection />
+        {localUser !== undefined &&
+            localUser.getStreamManager() !== undefined && (<AvatarSection user={localUser}/>)}
       </div>
     );
   }
