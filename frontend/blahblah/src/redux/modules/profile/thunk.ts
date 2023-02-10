@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { ProfileFeedType } from "../../../model/profile/profileFeedType";
+import { VideoWrapType } from "../../../model/profile/videoWrapType";
 // import { ProfileFeedWrapType } from "../../../model/profile/ProfileFeedWrapType";
 import { SubscriberType } from "../../../model/subscribe/subscriberType";
 import { AboutMeType } from "../../../model/user/aboutMeType";
@@ -157,6 +158,7 @@ export const unSubscribeAction = createAsyncThunk(
   }
 );
 
+// 지난영상목록 가져오기
 type GetVideoActionPropsType = {
   userPK: string;
   size: number;
@@ -170,7 +172,7 @@ export const getVideoAction = createAsyncThunk(
   ) => {
     try {
       const axios = axiosInitializer();
-      const { data } = await axios.get(
+      const { data } = await axios.get<VideoWrapType>(
         `/api/videos/${parseInt(userPK)}/${size}/${page}`,
         {
           headers: {

@@ -12,11 +12,12 @@ import Visibility from "@mui/icons-material/Visibility";
 import CreateNewFolder from "@mui/icons-material/CreateNewFolder";
 import { autoBatchEnhancer } from "@reduxjs/toolkit";
 import CardComp from "../common/CardComp";
+import { ProfileVideoType } from "../../model/profile/profileVideoType";
 import { VideoType } from "../../model/video/VideoType";
 
 type VideoCardPropsType = {
   nth: number;
-  video: VideoType;
+  video: ProfileVideoType | VideoType;
 };
 
 export default function VideoCard({
@@ -33,7 +34,7 @@ export default function VideoCard({
         }
         srcSet="https://images.unsplash.com/photo-1515825838458-f2a94b20105a?auto=format&fit=crop&w=300&dpr=2 2x"
         loading="lazy"
-        alt="Yosemite by Casey Horner"
+        alt={video.title}
       />
     </CardComp>
   );

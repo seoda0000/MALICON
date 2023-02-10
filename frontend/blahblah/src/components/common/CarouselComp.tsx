@@ -43,6 +43,9 @@ const CardWrapper = styled(Card)<{ nth: number }>`
       border-radius: 13px;
       border: 1.5px solid black;
       position: absolute;
+      z-index: -1;
+      right: 0;
+      bottom: 0;
       ${({ nth }) =>
         nth
           ? nth % 4 === 0
@@ -62,10 +65,7 @@ const CardWrapper = styled(Card)<{ nth: number }>`
               `
           : css`
               background: #54d7c7;
-            `}
-      z-index: -1;
-      right: 0;
-      bottom: 0;
+            `};
     }
   }
   &:hover {

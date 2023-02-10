@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import VideoCard from "./VideoCard";
-import { VideoType } from "../../model/profile/VideoType";
+import { ProfileVideoType } from "../../model/profile/profileVideoType";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/configStore";
 
@@ -41,3 +41,4 @@ export default function VideoList() {
     </Grid>
   );
 }
+

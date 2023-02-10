@@ -1,6 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
+import { VideoType } from "../../model/video/VideoType";
+import { ProfileVideoType } from "../../model/profile/profileVideoType";
+import VideoCard from "../video/VideoCard";
+import { FeedType } from "../../model/feed/feedType";
+import { ProfileFeedType } from "../../model/profile/profileFeedType";
+import FeedListItem from "../feed/FeedListItem";
 
 type UserType = {
   avatar: string;
@@ -21,15 +27,30 @@ const InfiniteScrollContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 90%;
+    gap: 50px;
     & > li {
-      border: 2px solid salmon;
+      list-style: none;
       width: 100%;
-      height: 100px;
     }
   }
 `;
 
-export default function InfiniteScroll(): JSX.Element {
+type InfiniteScrollPropsType = {
+  video?: boolean;
+  feed?: boolean;
+  items?:
+    | VideoType[]
+    | ProfileVideoType[]
+    | FeedType[]
+    | ProfileFeedType[]
+    | null;
+};
+
+export default function InfiniteScroll({
+  video = false,
+  feed = false,
+  items,
+}: InfiniteScrollPropsType): JSX.Element {
   const [pageInfo, setPageInfo] = useState({
     page: 1,
     totalPage: 1,
@@ -97,12 +118,15 @@ export default function InfiniteScroll(): JSX.Element {
   return (
     <InfiniteScrollContainer>
       <ul>
-        {users?.data?.map((user, i) => (
-          <li
-            key={user.id}
-            ref={users.data.length - 1 === i ? setTarget : null}
-          >
-            {user.first_name}
+        {items?.map((item, idx) => (
+          <li key={item.id} ref={items?.length - 1 === idx ? setTarget : null}>
+            {video && (
+              <VideoCard
+                nth={idx}
+                video={item as VideoType | ProfileVideoType}
+              />
+            )}
+            {feed && <FeedListItem feed={item as FeedType | ProfileFeedType} />}
           </li>
         ))}
       </ul>
