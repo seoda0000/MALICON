@@ -7,6 +7,10 @@ import VideoCard from "../video/VideoCard";
 import { FeedType } from "../../model/feed/feedType";
 import { ProfileFeedType } from "../../model/profile/profileFeedType";
 import FeedListItem from "../feed/FeedListItem";
+import { VideoWrapType } from "../../model/profile/videoWrapType";
+import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
+import { getVideoAction } from "../../redux/modules/profile";
+import { useParams } from "react-router-dom";
 
 type UserType = {
   avatar: string;
@@ -38,32 +42,54 @@ const InfiniteScrollContainer = styled.div`
 type InfiniteScrollPropsType = {
   video?: boolean;
   feed?: boolean;
-  items?:
-    | VideoType[]
-    | ProfileVideoType[]
-    | FeedType[]
-    | ProfileFeedType[]
-    | null;
+  videosWrap?: VideoWrapType;
+  totalPage: number;
+  items: ProfileVideoType[];
 };
 
 export default function InfiniteScroll({
   video = false,
   feed = false,
+  videosWrap,
+  totalPage,
   items,
 }: InfiniteScrollPropsType): JSX.Element {
+  const { userpk } = useParams() as { userpk: string };
+  const videos = useAppSelector((state) => state.profile.videoData);
   const [pageInfo, setPageInfo] = useState({
     page: 1,
-    totalPage: 1,
+    totalPage: totalPage,
   });
-  const [users, setUsers] = useState<UsersType>();
+  const [itemArr, setItemArr] = useState<
+    VideoType[] | ProfileVideoType[] | FeedType[] | ProfileFeedType[]
+  >([]);
   // (1)
   const [target, setTarget] = useState<Element | null>(null);
+  const dispatch = useAppDispatch();
+
+  const updateItemsFunc = () => {
+    if (videos) {
+      let temp: ProfileVideoType[] = [...(itemArr as ProfileVideoType[])];
+
+      console.log(1, temp);
+
+      videos.content.map((video) => {
+        temp = [...temp, video];
+        return temp;
+      });
+
+      console.log(2, temp);
+
+      setItemArr(temp);
+    }
+  };
 
   // (2)
   const handleIntersect = useCallback(
     ([entry]: IntersectionObserverEntry[]) => {
       if (entry.isIntersecting) {
         setPageInfo((prev) => {
+          console.log("츄츄!", prev.page);
           if (prev.totalPage > prev.page) {
             return {
               ...prev,
@@ -76,30 +102,6 @@ export default function InfiniteScroll({
     },
     []
   );
-
-  useEffect(() => {
-    const instance = axios.get<UsersType>(
-      `https://reqres.in/api/users?page=${pageInfo.page}`
-    );
-    instance.then((response) => {
-      if (response.status === 200) {
-        setUsers((prev) => {
-          if (prev && prev.data?.length > 0) {
-            return {
-              ...response.data,
-              data: [...prev.data, ...response.data.data],
-            };
-          }
-          return response.data;
-        });
-
-        setPageInfo((prev) => ({
-          ...prev,
-          totalPage: response.data.total_pages,
-        }));
-      }
-    });
-  }, [pageInfo.page]);
 
   // (3)
   useEffect(() => {
@@ -115,11 +117,26 @@ export default function InfiniteScroll({
     };
   }, [handleIntersect, target]);
 
+  useEffect(() => {
+    if (video) {
+      console.log(pageInfo.page + " 페이지 부름");
+      dispatch(
+        getVideoAction({ userPK: userpk, size: 5, page: pageInfo.page })
+      ).then(() => {
+        updateItemsFunc();
+      });
+    }
+  }, [pageInfo.page]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    console.log("처음", videosWrap?.content, itemArr, pageInfo);
+  }, []);
   return (
     <InfiniteScrollContainer>
       <ul>
-        {items?.map((item, idx) => (
-          <li key={item.id} ref={items?.length - 1 === idx ? setTarget : null}>
+        {itemArr.map((item, idx) => (
+          <li key={idx} ref={itemArr.length - 1 === idx ? setTarget : null}>
             {video && (
               <VideoCard
                 nth={idx}

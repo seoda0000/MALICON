@@ -25,7 +25,7 @@ const initialState: ProfileStateType = {
   },
   isSubscribing: false,
   subscribers: [],
-  videoData: [],
+  videoData: null,
   feedData: [],
   getAboutMe: { loading: false, data: null, error: null },
   addAboutMe: { loading: false, data: null, error: null },
@@ -230,7 +230,7 @@ const profileSlice = createSlice({
         state.getVideo.data = payload;
         state.getVideo.error = null;
 
-        state.videoData = payload.content;
+        state.videoData = payload;
       })
       .addCase(getVideoAction.rejected, (state, { payload }) => {
         state.getVideo.loading = false;

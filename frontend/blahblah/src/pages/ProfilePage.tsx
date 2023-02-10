@@ -135,8 +135,8 @@ export default function ProfilePage(): JSX.Element {
   const { userpk } = useParams() as { userpk: string };
   const loggedUser = useAppSelector((state) => state.user.userData);
   const user = useAppSelector((state) => state.profile.userData);
-  // const videos = useAppSelector((state) => state.profile.videoData);
-  const videos = useAppSelector((state) => state.video.allVideoList);
+  const videos = useAppSelector((state) => state.profile.videoData);
+  // const videos = useAppSelector((state) => state.video.allVideoList);
   // const feeds = useAppSelector((state) => state.profile.feedData);
   const feeds = useAppSelector((state) => state.feed.feeds);
   const isSubscribing = useAppSelector((state) => state.profile.isSubscribing);
@@ -236,18 +236,18 @@ export default function ProfilePage(): JSX.Element {
     // 프로필 가져오기
     dispatch(getAboutMeAction(userpk)).then(() => {
       // 생방송 중 여부 가져오기
-      dispatch(getIsOnAirAction(user.userId));
+      // dispatch(getIsOnAirAction(user.userId));
 
       // 팔로잉 목록 가져오기 (구독중인지확인)
       dispatch(getIsSubscribeAction());
     });
 
     // 지난 동영상 목록 가져오기
-    // dispatch(getVideoAction({ userPK: userpk, size: 5, page: 0 }));
+    dispatch(getVideoAction({ userPK: userpk, size: 5, page: 0 }));
 
     // 피드 목록 가져오기
     // dispatch(getFeedAction(userpk)); // 확인필요
-    dispatch(fetchFeedData());
+    // dispatch(fetchFeedData());
   }, []);
 
   // if (!(getProfile && getisOnAir && getVideos && getFeed))
@@ -373,20 +373,21 @@ export default function ProfilePage(): JSX.Element {
           </div>
         </div>
       </InfoContainer>
-      {!moreVideo ? (
+      {/* {!moreVideo ? ( */}
+      {moreVideo ? (
         <>
           <VideoContainer>
             <div className="title">
               <h2>Videos</h2>
               <span onClick={onClickMoreVideo}>more &gt;</span>
             </div>
-            <Carousel items={videos} />
+            {videos && <Carousel items={videos} />}
           </VideoContainer>
           <FeedContainer>
             <div className="title">
               <h2>Feed</h2>
             </div>
-            <InfiniteScroll feed={true} items={feeds} />
+            <InfiniteScroll feed={true} totalPage={0} items={videos!.content} />
             {/* <FeedList feeds={feeds} /> */}
           </FeedContainer>
         </>
@@ -396,7 +397,14 @@ export default function ProfilePage(): JSX.Element {
             <h2>Videos</h2>
             <span onClick={onClickMoreVideo}>&lt; back</span>
           </div>
-          <InfiniteScroll video={true} items={videos} />
+          {videos && (
+            <InfiniteScroll
+              video={true}
+              videosWrap={videos}
+              totalPage={videos.totalPages}
+              items={videos.content}
+            />
+          )}
         </MoreVideoContainer>
       )}
     </ProfilePageLayout>

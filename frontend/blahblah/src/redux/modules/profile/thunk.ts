@@ -1,3 +1,4 @@
+import { ConstructionOutlined } from "@mui/icons-material";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { ProfileFeedType } from "../../../model/profile/profileFeedType";
@@ -36,6 +37,7 @@ export const getIsOnAirAction = createAsyncThunk(
   async (userId: string, { rejectWithValue }) => {
     try {
       const axios = openviduInitializer();
+      console.log("!!!!", userId);
       const { data } = await axios.get<boolean>(
         `api/sessions/onAir/${userId}`,
         {
@@ -172,6 +174,7 @@ export const getVideoAction = createAsyncThunk(
   ) => {
     try {
       const axios = axiosInitializer();
+      console.log(userPK, size, page);
       const { data } = await axios.get<VideoWrapType>(
         `/api/videos/${parseInt(userPK)}/${size}/${page}`,
         {

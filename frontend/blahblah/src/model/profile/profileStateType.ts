@@ -3,12 +3,13 @@ import { SubscriberType } from "../subscribe/subscriberType";
 import { ProfileFeedType } from "./profileFeedType";
 import { ProfileUserType } from "./profileUserType";
 import { ProfileVideoType } from "./profileVideoType";
+import { VideoWrapType } from "./videoWrapType";
 
 export type ProfileStateType = {
   userData: ProfileUserType;
   isSubscribing: boolean;
+  videoData: VideoWrapType | null;
   feedData: ProfileFeedType[] | null;
-  videoData: ProfileVideoType[];
   getAboutMe: ReduxStateType;
   addAboutMe: ReduxStateType;
   updateAboutMe: ReduxStateType;

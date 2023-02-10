@@ -11,6 +11,7 @@ import ProfileImage from "../common/ProfileImage";
 import { ProfileVideoType } from "../../model/profile/profileVideoType";
 import VideoCard from "../video/VideoCard";
 import { VideoType } from "../../model/video/VideoType";
+import { VideoWrapType } from "../../model/profile/videoWrapType";
 
 const CarouselContainer = styled.div`
   .slick-slider {
@@ -102,7 +103,7 @@ const settings = {
 };
 
 type CarouselPorpsType = {
-  items: ProfileVideoType[] | VideoType[];
+  items: VideoWrapType | VideoType[];
 };
 
 const mockupData = [
@@ -192,7 +193,7 @@ export default function Carousel({ items }: CarouselPorpsType): JSX.Element {
   return (
     <CarouselContainer>
       <Slider {...settings}>
-        {items.map((item, idx) => (
+        {(items as VideoWrapType).content.map((item, idx) => (
           <CarouselItemBox key={item.id}>
             <VideoCard nth={idx} video={item} />
             <Menu

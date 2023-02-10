@@ -8,12 +8,13 @@ export type VideoWrapType = {
   totalElement: number;
   totalPages: number;
   size: number;
-  first: boolean;
+  number: number;
   sort: {
     empty: boolean;
     sorted: boolean;
     unsorted: boolean;
   };
+  first: boolean;
   numberOfElements: number;
   empty: boolean;
 };

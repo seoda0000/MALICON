@@ -11,7 +11,7 @@ import {
   Link,
   Typography,
 } from "@mui/joy";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProfileVideoType } from "../../model/profile/profileVideoType";
 import { VideoType } from "../../model/video/VideoType";
@@ -82,6 +82,12 @@ const CardWrapper = styled(Card)<{ nth: number }>`
   }
 `;
 
+type HashTagJSONType = {
+  key: number;
+  label: string;
+  selected: boolean;
+};
+
 type CardCompPropsType = {
   children: React.ReactNode;
   nth: number;
@@ -99,11 +105,19 @@ export default function CardComp({
 }: CardCompPropsType): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [hashtags, setHashtags] = useState<HashTagJSONType[]>();
+
   function onClickHandler() {
     dispatch(getVideoById(video!.id)).then(() => {
       navigate(`/video/${video?.id}`);
     });
   }
+
+  useEffect(() => {
+    if (video) {
+      setHashtags(JSON.parse(video.hashtags));
+    }
+  }, [video]);
   return (
     <CardWrapper nth={nth} onClick={onClickHandler}>
       <Box sx={{ position: "relative" }}>
@@ -218,23 +232,24 @@ export default function CardComp({
             </Link>
             <Box sx={{ display: "flex" }}>
               {/* 해시태그 표시 */}
-              {JSON.parse(video!.hashtags).map((data: any, index: any) => {
-                return (
-                  <Box
-                    sx={{
-                      backgroundColor: "#dddddd",
-                      // color: "white",
-                      fontSize: 9,
-                      borderRadius: 13,
-                      px: 0.5,
-                      mr: 1,
-                    }}
-                    key={index}
-                  >
-                    {data.label}
-                  </Box>
-                );
-              })}
+              {video &&
+                hashtags &&
+                hashtags.map((hashtag: HashTagJSONType, index: number) => {
+                  return (
+                    <Box
+                      sx={{
+                        backgroundColor: "#dddddd",
+                        // color: "white",
+                        fontSize: 9,
+                        borderRadius: 13,
+                        px: 0.5,
+                        mr: 1,
+                      }}
+                    >
+                      {hashtag.label}
+                    </Box>
+                  );
+                })}
             </Box>
           </Box>
         </Box>
