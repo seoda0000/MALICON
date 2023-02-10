@@ -32,8 +32,8 @@ const emotionKeyFrame = keyframes`
 
 const AvatarCompContainer = styled.div`
   position: relative;
-  width: 120px;
-  height: 120px;
+  min-width: 40px;
+  min-height: 40px;
   & > img.avatar-comp-avatar {
     width: 100%;
     height: 100%;
@@ -156,4 +156,3 @@ export default function AvatarComp({
     </AvatarCompContainer>
   );
 }
-
