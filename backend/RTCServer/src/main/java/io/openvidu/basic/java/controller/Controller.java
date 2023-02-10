@@ -2,14 +2,18 @@ package io.openvidu.basic.java.controller;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.openvidu.basic.java.controller.exception.CustomException;
 import io.openvidu.basic.java.dto.LiveRoomDto;
 import io.openvidu.basic.java.dto.UserDto;
 import io.openvidu.basic.java.dto.request.CreateRoomDto;
+import io.openvidu.basic.java.dto.request.StopRecordDto;
 import io.openvidu.basic.java.redis.entity.LiveRoomEntity;
+import io.openvidu.basic.java.redis.entity.PreviousVideoEntity;
 import io.openvidu.basic.java.redis.entity.UserEntity;
 import io.openvidu.basic.java.redis.repository.LiveRoomRepository;
+import io.openvidu.basic.java.redis.repository.PreviousVideoRepository;
 import io.openvidu.basic.java.redis.repository.UserEntityRepository;
 import io.openvidu.basic.java.util.JwtUtil;
 
@@ -34,6 +38,7 @@ public class Controller {
 	private final LiveRoomRepository liveRoomRepository;
 
 	private final UserEntityRepository userEntityRepository;
+
 
 	//방 생성
 	@PostMapping("/api/sessions") //
@@ -257,4 +262,8 @@ public class Controller {
 
 		return liveRoomDto;
 	}
+
+
+
+
 }
