@@ -31,8 +31,6 @@ interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
 
-let isInitial = true;
-
 const ExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -45,26 +43,11 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
-  const video = useSelector((state: RootState) => state.video);
-  const dispatch = useDispatch<AppDispatch>();
-
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  // let currentVideo = video.currentVideo;
-
-  // useEffect(() => {
-  //   if (isInitial) {
-  //     dispatch(getVideoById(Number(props.videoId))).then(() => {
-  //       currentVideo = video.currentVideo;
-  //     });
-  //     isInitial = false;
-
-  //     return;
-  //   }
-  // }, [video, dispatch]);
 
   return (
     <Card sx={{ width: "100%" }}>
@@ -157,6 +140,9 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
         {/* ============= */}
       </CardContent>
       <CardActions disableSpacing>
+        <Typography sx={{ ml: 1 }}>
+          덧글 {props.video.comments.length}개
+        </Typography>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
