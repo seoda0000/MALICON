@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -39,6 +40,7 @@ public class VideoEntity extends BaseEntity{
     private String title;
 
     @Column(name = "views")
+    @ColumnDefault("0")
     private long views;
 
     @Column(name = "path_url")
