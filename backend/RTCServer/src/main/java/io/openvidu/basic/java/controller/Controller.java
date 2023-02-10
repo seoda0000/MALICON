@@ -58,7 +58,7 @@ public class Controller {
 		//session 생성
 		//customSessionId => userId 가 들어있어야 한다.
 		SessionProperties properties = new SessionProperties.Builder()
-				.customSessionId(UUID.randomUUID().toString())
+				.customSessionId(userInfo.getUserId())
 				.build();
 
 		Session session = openvidu.createSession(properties);
