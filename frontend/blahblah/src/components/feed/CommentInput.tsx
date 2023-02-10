@@ -13,7 +13,8 @@ import { useRef } from "react";
 import ProfileImage from "../common/ProfileImage";
 
 const CommentInput: React.FC<{
-  articleId: number;
+  articleId?: number;
+  isVideo?: boolean;
 }> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
   const commentRef = useRef<HTMLInputElement>(null);
@@ -22,14 +23,24 @@ const CommentInput: React.FC<{
     e.preventDefault();
     const content = commentRef.current?.value || "";
 
-    const res = dispatch(
-      postCommentData({
-        articleId: props.articleId,
-        content,
-      })
-    );
+    if (!props.isVideo) {
+      const res = dispatch(
+        postCommentData({
+          articleId: props.articleId!,
+          content,
+        })
+      );
+    } else {
+      // 비디오 덧글 쓰기 기능 구현
+      const res = dispatch(
+        postCommentData({
+          videoId: props.articleId,
+          content,
+        })
+      );
+    }
 
-    console.log("덧글 작성 : " + res);
+    // console.log("덧글 작성 : " + res);
 
     if (commentRef.current != null) {
       commentRef.current.value = "";

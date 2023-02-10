@@ -9,8 +9,9 @@ import { FeedRemoveType } from "../../../model/feed/feedRemoveType";
 import { getAccessToken } from "../user/token";
 import { axiosInitializer } from "../../utils/axiosInitializer";
 import { CommentPostType } from "../../../model/feed/commentPostType copy";
-
-import feed from ".";
+import { videoActions } from "../video/video-slice";
+import video from "../video";
+import { getVideoById } from "../video";
 // 피드 목록 가져오기
 export const fetchFeedData = createAsyncThunk(
   "feed/fetchFeedData",
@@ -19,7 +20,7 @@ export const fetchFeedData = createAsyncThunk(
       // const dispatch = useDispatch<AppDispatch>();
       const axios = axiosInitializer();
 
-      const response = await axios.get("/api/articles", {
+      const response = await axios.get("/api/articles/100/0", {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Baerer " + getAccessToken(),
@@ -110,6 +111,7 @@ export const removeFeedData = createAsyncThunk(
 
       return data;
     } catch (e) {
+      console.log("피드 삭제 실패", removeData);
       console.error(e);
       return thunkAPI.rejectWithValue(e);
     }
@@ -165,9 +167,11 @@ export const postCommentData = createAsyncThunk(
         .then(({ data }: any) => {
           console.log("덧글 작성: ", data);
 
-          thunkAPI.dispatch(fetchFeedData());
-
-          console.log("피드 리스트 갱신 완료");
+          if (postData.articleId) {
+            thunkAPI.dispatch(fetchFeedData());
+          } else {
+            thunkAPI.dispatch(getVideoById(postData.videoId!));
+          }
         });
     } catch (e: any) {
       console.log("덧글 작성 실패");
@@ -186,19 +190,20 @@ export const removeCommentData = createAsyncThunk(
       const axios = axiosInitializer();
 
       await axios
-        .delete<FeedRemoveType>(
-          `/api/comments/${removeData.id}/${removeData.userPK}`,
-          {
-            // data: removeData,
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Baerer " + getAccessToken(),
-            },
-          }
-        )
+        .delete(`/api/comments/${removeData.id}/${removeData.userPK}`, {
+          // data: removeData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        })
         .then((data) => {
           console.log("덧글 삭제: ", data);
-          thunkAPI.dispatch(fetchFeedData());
+          if (removeData.isVideo) {
+            thunkAPI.dispatch(getVideoById(removeData.videoId));
+          } else {
+            thunkAPI.dispatch(fetchFeedData());
+          }
         });
     } catch (e) {
       console.error(e);

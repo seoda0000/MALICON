@@ -9,47 +9,7 @@ import { AppDispatch } from "../redux/configStore";
 import { fetchSessionData } from "../redux/modules/broadcast";
 import LoadingPage from "./LoadingPage";
 import BroadcastCarousel from "../components/broadcast/broadcastCarousel";
-
-// 더미 데이터
-const SAMPLE_SESSIONS = [
-  {
-    sessionId: "maria",
-    title: "윈터 곱슬머리 무대",
-    viewerNumber: 4352,
-    startAt: "2023-02-04T18:54:10.175306",
-    thumbnail: "https://i.ytimg.com/vi/qe0gepQh8N0/maxresdefault.jpg",
-    streamer: {
-      userId: "maria",
-      nickName: "Guitar Master",
-      avatar: "my avatar option made my json",
-    },
-  },
-  {
-    sessionId: "jackson",
-    title: "윈터 하트",
-    viewerNumber: 8762,
-    startAt: "2023-02-04T18:54:19.678193",
-    thumbnail: "https://i.ytimg.com/vi/UzbBohF8Ba0/maxresdefault.jpg",
-    streamer: {
-      userId: "jackson",
-      nickName: "Guitar Master",
-      avatar: "my avatar option made my json",
-    },
-  },
-  {
-    sessionId: "jackson1",
-    title: "똑단발",
-    viewerNumber: 12342,
-    startAt: "2023-02-05T18:54:19.678193",
-    thumbnail: "https://i.ytimg.com/vi/7qIuReWbE28/maxresdefault.jpg",
-    streamer: {
-      userId: "jackson1",
-      nickName: "Guitar Master",
-      avatar: "my avatar option made my json",
-    },
-  },
-];
-
+import { fetchAllVideoData } from "../redux/modules/video";
 let isInitial = true;
 function MainPage(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
@@ -62,6 +22,8 @@ function MainPage(): JSX.Element {
     if (isInitial) {
       isInitial = false;
       dispatch(fetchSessionData());
+      dispatch(fetchAllVideoData());
+
       return;
     }
   }, [broadcast, dispatch]);

@@ -110,11 +110,15 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
           <IconButton aria-label="share">
             <ShareIcon />
           </IconButton>
+          <Typography sx={{ ml: "auto" }}>
+            덧글 {props.feed.commentList.length}개
+          </Typography>
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}
             aria-expanded={expanded}
             aria-label="show more"
+            sx={{ ml: 0 }}
           >
             <ExpandMoreIcon />
           </ExpandMore>

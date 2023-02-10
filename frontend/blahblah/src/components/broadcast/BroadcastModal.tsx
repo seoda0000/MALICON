@@ -84,7 +84,7 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
       hashTag: JSON.stringify(chipList),
     };
 
-    console.log(JSON.stringify(chipList));
+    // console.log(JSON.stringify(chipList));
     if (title === "") {
       alert("방송 제목을 입력하세요.");
     } else {

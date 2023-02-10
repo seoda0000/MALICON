@@ -3,16 +3,29 @@ import VideoSection from "../components/video/VideoSection";
 import RightVideoSection from "../components/video/RightVideoSection";
 import { Box } from "@mui/system";
 import { RootState } from "../redux/configStore";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { AppDispatch } from "../redux/configStore";
+import { getVideoById } from "../redux/modules/video";
 
 const drawerWidth = 300;
+let isInitial = true;
 
 export default function VideoPage() {
   const { videoId } = useParams();
   const video = useSelector((state: RootState) => state.video);
-  const selectedvideo = video.allVideoList.filter(function (video) {
-    return video.id === Number(videoId);
-  })[0];
+  const dispatch = useDispatch<AppDispatch>();
+  let currentVideo = video.currentVideo;
+  useEffect(() => {
+    if (isInitial) {
+      dispatch(getVideoById(Number(videoId))).then(() => {
+        currentVideo = video.currentVideo;
+      });
+      isInitial = false;
+
+      return;
+    }
+  }, [video, dispatch]);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -23,7 +36,7 @@ export default function VideoPage() {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <VideoSection video={selectedvideo} />
+        <VideoSection video={currentVideo} />
       </Box>
       <RightVideoSection drawerWidth={drawerWidth} />
     </Box>

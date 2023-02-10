@@ -19,8 +19,14 @@ import video from "../../redux/modules/video";
 import ProfileImage from "../common/ProfileImage";
 import FeedProfileImage from "../feed/FeedProfileImage";
 import { Box } from "@mui/system";
-import { Link } from "@mui/joy";
-import { Favorite, Visibility } from "@mui/icons-material";
+import { AppDispatch } from "../../redux/configStore";
+import { Button } from "@mui/material";
+import { RootState } from "../../redux/configStore";
+import { useState, useEffect } from "react";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useSelector, useDispatch } from "react-redux";
+import { getVideoById } from "../../redux/modules/video";
+import { VideoDetailType } from "../../model/video/VideoDetailType";
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -36,14 +42,12 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const VideoSection: React.FC<{ video: any }> = (props) => {
+const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  // console.log(props.video);
 
   return (
     <Card sx={{ width: "100%" }}>
@@ -55,89 +59,90 @@ const VideoSection: React.FC<{ video: any }> = (props) => {
       />
 
       <CardContent>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="h6" sx={{ mr: 1 }}>
-            {props.video.title}
+            {props.video?.title}
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {/* 해시태그 표시 */}
-            {JSON.parse(props.video!.hashtags).map((data: any, index: any) => {
-              return (
-                <Box
-                  sx={{
-                    backgroundColor: "#dddddd",
-                    // color: "white",
-                    fontSize: 9,
-                    borderRadius: 13,
-                    px: 0.5,
-                    mr: 1,
-                    height: 15,
-                  }}
-                >
-                  {data.label}
-                </Box>
-              );
-            })}
+            {props.video?.hashtags &&
+              JSON.parse(props.video.hashtags).map((data: any, index: any) => {
+                return (
+                  <Box
+                    sx={{
+                      backgroundColor: "#dddddd",
+                      // color: "white",
+                      fontSize: 9,
+                      borderRadius: 13,
+                      px: 0.5,
+                      mr: 1,
+                      height: 15,
+                    }}
+                    key={index}
+                  >
+                    {data.label}
+                  </Box>
+                );
+              })}
           </Box>
+          <Typography
+            variant="caption"
+            sx={{ fontSize: "sm", fontWeight: "sm", ml: 1 }}
+          >
+            {props.video?.createDate}
+          </Typography>
+
+          {/* 좋아요 표시 */}
+          <IconButton aria-label="add to favorites" sx={{ ml: "auto" }}>
+            <FavoriteIcon />
+          </IconButton>
+          <Typography variant="body2">{props.video?.likeCnt}</Typography>
+
+          {/* 조회수 표시 */}
+          <IconButton aria-label="add to favorites" sx={{ ml: 1 }}>
+            <VisibilityIcon />
+          </IconButton>
+          <Typography variant="body2">{props.video?.views}</Typography>
         </Box>
 
         {/* =================== */}
 
-        <Box
-          sx={{ display: "flex", gap: 1, mt: 1.5, alignItems: "flex-start" }}
-        >
+        <Box sx={{ display: "flex", gap: 1, mt: 1.5, alignItems: "center" }}>
           {/* 아바타 */}
 
-          <FeedProfileImage avatar={props.video.avatar} />
+          <FeedProfileImage avatar={props.video?.avatar} />
 
-          <Box sx={{ display: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              // justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
             {/* 유저 닉네임 */}
-            <Typography sx={{ fontSize: "sm", fontWeight: "lg" }}>
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "sm", fontWeight: "lg" }}
+            >
               {props.video?.nickName}
             </Typography>
 
-            {/* 좋아요 표시 */}
-            <Link
-              level="body3"
-              underline="none"
-              startDecorator={<Favorite sx={{ width: 20 }} />}
-              color="neutral"
-              sx={{
-                fontSize: "sm",
-                fontWeight: "md",
-                ml: "auto",
-                "&:hover": { color: "danger.plainColor" },
-              }}
-            >
-              117
-            </Link>
-
-            {/* 조회수 표시 */}
-            <Link
-              level="body3"
-              underline="none"
-              startDecorator={<Visibility sx={{ width: 20 }} />}
-              color="neutral"
-              sx={{
-                fontSize: "sm",
-                fontWeight: "md",
-                ml: 2,
-                "&:hover": { color: "primary.plainColor" },
-              }}
-            >
-              {props.video?.views}
-            </Link>
+            {/* 팔로우 버튼 */}
+            <Button sx={{ ml: 2 }} variant="outlined" size="small">
+              Follow
+            </Button>
+            <IconButton aria-label="share" sx={{ ml: "auto" }}>
+              <ShareIcon />
+            </IconButton>
           </Box>
         </Box>
         {/* ============= */}
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
+        <Typography sx={{ ml: 1 }}>
+          덧글 {props.video.comments.length}개
+        </Typography>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
@@ -149,33 +154,10 @@ const VideoSection: React.FC<{ video: any }> = (props) => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>Method:</Typography>
-          <Typography paragraph>
-            Heat 1/2 cup of the broth in a pot until simmering, add saffron and
-            set aside for 10 minutes.
-          </Typography>
-          <Typography paragraph>
-            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet
-            over medium-high heat. Add chicken, shrimp and chorizo, and cook,
-            stirring occasionally until lightly browned, 6 to 8 minutes.
-            Transfer shrimp to a large plate and set aside, leaving chicken and
-            chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes,
-            onion, salt and pepper, and cook, stirring often until thickened and
-            fragrant, about 10 minutes. Add saffron broth and remaining 4 1/2
-            cups chicken broth; bring to a boil.
-          </Typography>
-          <Typography paragraph>
-            Add rice and stir very gently to distribute. Top with artichokes and
-            peppers, and cook without stirring, until most of the liquid is
-            absorbed, 15 to 18 minutes. Reduce heat to medium-low, add reserved
-            shrimp and mussels, tucking them down into the rice, and cook again
-            without stirring, until mussels have opened and rice is just tender,
-            5 to 7 minutes more. (Discard any mussels that don&apos;t open.)
-          </Typography>
-          <Typography>
-            Set aside off of the heat to let rest for 10 minutes, and then
-            serve.
-          </Typography>
+          <CommentSection
+            comments={props.video?.comments}
+            videoId={props.video?.id}
+          />
         </CardContent>
       </Collapse>
     </Card>

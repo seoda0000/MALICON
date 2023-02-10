@@ -15,7 +15,9 @@ import React from "react";
 import { VideoType } from "../../model/video/VideoType";
 import { useNavigate } from "react-router-dom";
 import FeedProfileImage from "../feed/FeedProfileImage";
-
+import { AppDispatch } from "../../redux/configStore";
+import { useDispatch } from "react-redux";
+import { getVideoById } from "../../redux/modules/video";
 const CardWrapper = styled(Card)<{ nth: number }>`
   width: 100%;
   padding: 0;
@@ -92,8 +94,11 @@ export default function CardComp({
   video,
 }: CardCompPropsType): JSX.Element {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   function onClickHandler() {
-    navigate(`/video/${video?.id}`);
+    dispatch(getVideoById(video!.id)).then(() => {
+      navigate(`/video/${video?.id}`);
+    });
   }
   return (
     <CardWrapper nth={nth} onClick={onClickHandler}>
@@ -137,7 +142,6 @@ export default function CardComp({
             >
               <Typography level="h2" noWrap sx={{ fontSize: "lg" }}>
                 <Link
-                  href="#dribbble-shot"
                   overlay
                   underline="none"
                   sx={{
@@ -178,7 +182,6 @@ export default function CardComp({
 
             {/* 좋아요 표시 */}
             <Link
-              href="#dribbble-shot"
               level="body3"
               underline="none"
               startDecorator={<Favorite sx={{ width: 20 }} />}
@@ -195,7 +198,6 @@ export default function CardComp({
 
             {/* 조회수 표시 */}
             <Link
-              href="#dribbble-shot"
               level="body3"
               underline="none"
               startDecorator={<Visibility sx={{ width: 20 }} />}
@@ -222,6 +224,7 @@ export default function CardComp({
                       px: 0.5,
                       mr: 1,
                     }}
+                    key={index}
                   >
                     {data.label}
                   </Box>

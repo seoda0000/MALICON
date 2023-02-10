@@ -12,7 +12,7 @@ interface ChipData {
 }
 
 const CarouselChips: React.FC<{ chipData: ChipData[] }> = (props) => {
-  console.log(props.chipData);
+  // console.log(props.chipData);
   return (
     <Box
       sx={{
@@ -25,7 +25,7 @@ const CarouselChips: React.FC<{ chipData: ChipData[] }> = (props) => {
       }}
       component="ul"
     >
-      {props.chipData.map((data) => {
+      {props.chipData.map((data, index) => {
         return (
           <Box
             sx={{
@@ -35,6 +35,7 @@ const CarouselChips: React.FC<{ chipData: ChipData[] }> = (props) => {
               px: 0.5,
               mr: 1,
             }}
+            key={index}
           >
             {data.label}
           </Box>

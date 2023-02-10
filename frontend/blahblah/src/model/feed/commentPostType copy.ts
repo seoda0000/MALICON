@@ -1,4 +1,5 @@
 export type CommentPostType = {
-  articleId: number;
+  articleId?: number;
+  videoId?: number;
   content: string;
 };

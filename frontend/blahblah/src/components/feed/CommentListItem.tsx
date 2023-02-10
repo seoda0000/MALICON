@@ -12,7 +12,11 @@ import CommentRemoveDialog from "./CommentRemoveDialog";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FeedProfileImage from "./FeedProfileImage";
-const CommentListItem: React.FC<{ comment: any }> = (props) => {
+const CommentListItem: React.FC<{
+  comment: any;
+  isVideo: boolean;
+  id?: any;
+}> = (props) => {
   // 삭제 다이얼로그 조작
   const [openRemoveDialog, setopenRemoveDialog] = useState<boolean>(false);
   const handleClickOpen = () => {
@@ -50,6 +54,8 @@ const CommentListItem: React.FC<{ comment: any }> = (props) => {
         open={openRemoveDialog}
         handleClose={handleCloseDialog}
         comment={props.comment}
+        isVideo={props.isVideo}
+        id={props.id}
       />
     </ListItem>
   );

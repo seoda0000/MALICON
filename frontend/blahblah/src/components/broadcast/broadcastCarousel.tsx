@@ -49,10 +49,10 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
       <Grid item>
         <div
           style={{
-            // height: "100",
-            // maxHeight: "40vw",
-            // minHeight: 0,
-            // minWidth: 0,
+            height: "100%",
+            maxHeight: "35vw",
+            minHeight: "35vw",
+            minWidth: "60vw",
             maxWidth: "60vw",
             width: "100%",
             // overflow: "hidden",
@@ -69,7 +69,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
             loop={true}
             slidesPerView={1}
             onSlideChange={(swiper) => setIndex(swiper.realIndex)}
-            onSwiper={(swiper) => console.log(swiper)}
+            // onSwiper={(swiper) => console.log(swiper)}
             className="mySwiper"
           >
             {props.sessions.length !== 0
