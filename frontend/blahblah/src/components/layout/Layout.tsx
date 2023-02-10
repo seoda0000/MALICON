@@ -530,7 +530,7 @@ export default function Layout(props: LayoutProps) {
 
           <List sx={{ p: 2 }}>
             {subscribers.map((item) => (
-              <SubscriberItem key={item.userPK} item={item} />
+              <SubscriberItem key={item.userPK} item={item} open={open} />
             ))}
           </List>
         </Drawer>
@@ -571,4 +571,3 @@ export default function Layout(props: LayoutProps) {
     </Box>
   );
 }
-

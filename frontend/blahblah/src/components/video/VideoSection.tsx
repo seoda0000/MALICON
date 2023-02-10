@@ -35,6 +35,9 @@ import { PersonAddRounded } from "@mui/icons-material";
 import { HowToRegRounded } from "@mui/icons-material";
 import { subscribeAction } from "../../redux/modules/profile";
 import { unSubscribeAction } from "../../redux/modules/profile";
+import VideoPlayer from "./VideoPlayer";
+import VideoAvatarSection from "./VideoAvatarSection";
+import VideoBox from "./VideoBox";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -92,12 +95,7 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
 
   return (
     <Card sx={{ width: "100%" }}>
-      <CardMedia
-        component="img"
-        // height=""
-        image="https://i.ytimg.com/vi/JtFI8dtPvxI/maxresdefault.jpg"
-        alt="Paella dish"
-      />
+      <VideoBox />
 
       <CardContent>
         <Box sx={{ display: "flex", alignItems: "center" }}>

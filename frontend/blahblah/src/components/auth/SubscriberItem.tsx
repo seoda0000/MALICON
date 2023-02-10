@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { Avatar, css, Typography } from "@mui/material";
 import { createAvatar } from "@dicebear/core";
 import React, { useEffect, useState } from "react";
 import { personas } from "@dicebear/collection";
@@ -10,7 +10,7 @@ import { PlayArrowRounded } from "@mui/icons-material";
 import OnAirBadge from "../common/OnAirBadge";
 import { getIsOnAirAction } from "../../redux/modules/user";
 
-const ItemContainer = styled.li`
+const ItemContainer = styled.li<{ open: boolean }>`
   margin-bottom: 18px;
   display: flex;
   align-items: center;
@@ -42,12 +42,23 @@ const ItemContainer = styled.li`
   &:hover {
     cursor: pointer;
   }
+  ${({ open }) =>
+    !open &&
+    css`
+      & {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    `}
 `;
 
 export default function SubscriberItem({
   item,
+  open,
 }: {
   item: SubscriberType;
+  open: boolean;
 }): JSX.Element {
   const dispatch = useAppDispatch();
   const navigator = useNavigate();
@@ -70,21 +81,21 @@ export default function SubscriberItem({
     });
   }, []);
   return (
-    <ItemContainer onClick={onClickItem}>
+    <ItemContainer open={open} onClick={onClickItem}>
       <div>
         <Avatar
           src={dataUri}
           alt="profile_img"
           sx={{
-            width: "45px",
-            height: "45px",
+            width: `${open ? "45px" : "20px"}`,
+            height: `${open ? "45px" : "20px"}`,
             border: `1.5px solid ${isOnAir ? "#e24553" : "black"}`,
           }}
         />
-        <span>{item.nickName}</span>
+        {open && <Typography>{item.nickName} </Typography>}
+        {/* <span>{item.nickName}</span> */}
       </div>
-      {isOnAir && <OnAirBadge />}
+      {open && isOnAir && <OnAirBadge />}
     </ItemContainer>
   );
 }
-
