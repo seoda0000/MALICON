@@ -79,7 +79,7 @@ public class VideoServiceImpl implements VideoService{
 
         VideoEntity v = videoRepository.findById(videoId).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "찾는 비디오가 유효하지 않습니다."));
 
-        videoRepository.updateViewsById(v.getId());
+        videoRepository.updateViewsById(v.getViews()+1, v.getId());
 
         LikeVideoEntity result = likeVideoRepository.findByUserIdAndVideoId(userPK, v.getId());
         List<LikeVideoEntity> list = likeVideoRepository.findAllByVideoId(v.getId());

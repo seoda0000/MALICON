@@ -4,6 +4,7 @@ import com.blahblah.web.controller.exception.CustomException;
 import com.blahblah.web.entity.ArticleEntity;
 import com.blahblah.web.entity.LikeArticleEntity;
 import com.blahblah.web.entity.LikeVideoEntity;
+import com.blahblah.web.entity.VideoEntity;
 import com.blahblah.web.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +56,8 @@ public class LikeServiceImpl implements LikeService{
 
     @Override
     public LikeVideoEntity addLikeVideo(long userPK, long videoId) {
+        VideoEntity v = videoRepository.findById(videoId).orElseThrow();
+        if(v.getViews()>0) videoRepository.updateViewsById(v.getViews()-1, v.getId());
         LikeVideoEntity like = LikeVideoEntity.builder()
                 .videoEntity(videoRepository.findById(videoId).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "좋아요 누를 게시글이 유효하지 않습니다.")))
                 .userEntity(userRepository.findById(userPK).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "사용자가 유효하지 않습니다.")))
@@ -64,6 +67,8 @@ public class LikeServiceImpl implements LikeService{
 
     @Override
     public void deleteLikeVideo(long userPK, long videoId) {
+        VideoEntity v = videoRepository.findById(videoId).orElseThrow();
+        if(v.getViews()>0) videoRepository.updateViewsById(v.getViews()-1, v.getId());
         LikeVideoEntity like = LikeVideoEntity.builder()
                 .videoEntity(videoRepository.findById(videoId).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "좋아요 누를 동영상이 유효하지 않습니다.")))
                 .userEntity(userRepository.findById(userPK).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "사용자가 유효하지 않습니다.")))

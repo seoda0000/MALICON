@@ -26,6 +26,11 @@ public class VideoDTO {
     private String avatar;
     private String title;
     private long views;
+    private String recordingId;
+    private String sessionId;
+    private String timeStamp;
+    private long playTime;
+    private String thumbnail;
     private String pathUrl;
     private LocalDateTime createDate;
     private String hashtags;
@@ -44,6 +49,7 @@ public class VideoDTO {
                 .nickName(v.getUserEntity().getNickName())
                 .avatar(v.getUserEntity().getAvatar())
                 .userPK(v.getUserEntity().getId())
+
                 .pathUrl(v.getPathUrl())
                 .createDate(v.getCreateDate())
                 .userId(v.getUserEntity().getUserId())

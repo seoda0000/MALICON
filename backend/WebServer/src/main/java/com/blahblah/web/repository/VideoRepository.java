@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 @Transactional
 public interface VideoRepository extends JpaRepository<VideoEntity, Long> {
 
-    @Query(value="select * from videos v where v.user_id=(select us.subscribe_user_id from user_subscribes us where us.user_id = :id) or v.user_id =:id", nativeQuery = true)
+    @Query(value="select * from videos where user_id in (select subscribe_user_id from user_subscribes where user_id = :id) or user_id =:id", nativeQuery = true)
     Page<VideoEntity> findAllBy(@Param("id") long id, Pageable pageable);
 
     Page<VideoEntity> findAllByUserId(long userId, Pageable pageable);
@@ -21,6 +21,6 @@ public interface VideoRepository extends JpaRepository<VideoEntity, Long> {
     void deleteById(long id);
 
     @Modifying
-    @Query(value="update videos v set v.views=v.views+1 where v.id=?", nativeQuery = true)
-    int updateViewsById(@Param("id") long id);
+    @Query(value="update videos v set v.views=:view where v.id=:id", nativeQuery = true)
+    int updateViewsById(@Param("view") long view, @Param("id") long id);
 }

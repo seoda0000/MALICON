@@ -22,23 +22,23 @@ import javax.servlet.http.HttpServletRequest;
 public class VideoController {
     private final VideoService videoService;
 
-    @PostMapping
-    public ResponseEntity createVideo(@RequestBody VideoDTO videoDTO, HttpServletRequest request){
-        long userPK = JWTutil.getLongIdByAccessToken(request);
-        VideoDTO video = VideoDTO.builder()
-                .userPK(userPK)
-                .userId(videoDTO.getUserId())
-                .title(videoDTO.getTitle())
-                .hashtags(videoDTO.getHashtags())
-                .pathUrl(videoDTO.getPathUrl())
-                .build();
-        VideoEntity result = videoService.createVideo(video);
-        if(result==null){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("비디오 저장 실패"));
-        }else{
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Message("비디오 저장 완료"));
-        }
-    }
+//    @PostMapping
+//    public ResponseEntity createVideo(@RequestBody VideoDTO videoDTO, HttpServletRequest request){
+//        long userPK = JWTutil.getLongIdByAccessToken(request);
+//        VideoDTO video = VideoDTO.builder()
+//                .userPK(userPK)
+//                .userId(videoDTO.getUserId())
+//                .title(videoDTO.getTitle())
+//                .hashtags(videoDTO.getHashtags())
+//                .pathUrl(videoDTO.getPathUrl())
+//                .build();
+//        VideoEntity result = videoService.createVideo(video);
+//        if(result==null){
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("비디오 저장 실패"));
+//        }else{
+//            return ResponseEntity.status(HttpStatus.CREATED).body(new Message("비디오 저장 완료"));
+//        }
+//    }
     @GetMapping("/{size}/{page}")
     public ResponseEntity readVideo(@PathVariable long size, @PathVariable long page, HttpServletRequest request){
         long userPK = JWTutil.getLongIdByAccessToken(request);
