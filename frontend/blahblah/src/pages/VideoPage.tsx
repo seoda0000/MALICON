@@ -9,21 +9,23 @@ import { AppDispatch } from "../redux/configStore";
 import { getVideoById } from "../redux/modules/video";
 
 const drawerWidth = 300;
-// let isInitial = 0;
+let isInitial = true;
 
 export default function VideoPage() {
   const { videoId } = useParams();
   const video = useSelector((state: RootState) => state.video);
   const dispatch = useDispatch<AppDispatch>();
-  // useEffect(() => {
-  //   if (isInitial < 3) {
-  //     isInitial++;
+  let currentVideo = video.currentVideo;
+  useEffect(() => {
+    if (isInitial) {
+      dispatch(getVideoById(Number(videoId))).then(() => {
+        currentVideo = video.currentVideo;
+      });
+      isInitial = false;
 
-  //     dispatch(getVideoById(Number(videoId)));
-
-  //     return;
-  //   }
-  // }, [video, dispatch]);
+      return;
+    }
+  }, [video, dispatch]);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -34,7 +36,7 @@ export default function VideoPage() {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <VideoSection videoId={Number(videoId)} />
+        <VideoSection video={currentVideo} />
       </Box>
       <RightVideoSection drawerWidth={drawerWidth} />
     </Box>

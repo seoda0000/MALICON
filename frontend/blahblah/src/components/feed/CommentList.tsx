@@ -10,7 +10,6 @@ import { CommentType } from "../../model/feed/commentType";
 import CommentListItem from "./CommentListItem";
 
 const CommentList: React.FC<{ comments: CommentType[] }> = (props) => {
-  console.log("댓글 목록", props.comments);
   return (
     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
       {props.comments.length !== 0 ? (

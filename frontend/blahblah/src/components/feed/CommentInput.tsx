@@ -32,12 +32,12 @@ const CommentInput: React.FC<{
       );
     } else {
       // 비디오 덧글 쓰기 기능 구현
-      // const res = dispatch(
-      //   postVideoCommentData({
-      //     videoId: props.articleId,
-      //     content,
-      //   })
-      // );
+      const res = dispatch(
+        postCommentData({
+          videoId: props.articleId,
+          content,
+        })
+      );
     }
 
     // console.log("덧글 작성 : " + res);

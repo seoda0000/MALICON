@@ -9,7 +9,9 @@ import { FeedRemoveType } from "../../../model/feed/feedRemoveType";
 import { getAccessToken } from "../user/token";
 import { axiosInitializer } from "../../utils/axiosInitializer";
 import { CommentPostType } from "../../../model/feed/commentPostType copy";
-
+import { videoActions } from "../video/video-slice";
+import video from "../video";
+import { getVideoById } from "../video";
 // 피드 목록 가져오기
 export const fetchFeedData = createAsyncThunk(
   "feed/fetchFeedData",
@@ -165,9 +167,13 @@ export const postCommentData = createAsyncThunk(
         .then(({ data }: any) => {
           console.log("덧글 작성: ", data);
 
-          thunkAPI.dispatch(fetchFeedData());
-
-          console.log("피드 리스트 갱신 완료");
+          if (postData.articleId) {
+            thunkAPI.dispatch(fetchFeedData());
+            console.log("피드 리스트 갱신 완료");
+          } else {
+            thunkAPI.dispatch(getVideoById(postData.videoId!));
+            console.log("비디오 리스트 갱신 완료");
+          }
         });
     } catch (e: any) {
       console.log("덧글 작성 실패");

@@ -21,16 +21,17 @@ import FeedProfileImage from "../feed/FeedProfileImage";
 import { Box } from "@mui/system";
 import { AppDispatch } from "../../redux/configStore";
 import { Button } from "@mui/material";
-import { VideoDetailType } from "../../model/video/VideoDetailType";
 import { RootState } from "../../redux/configStore";
-
+import { useState, useEffect } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
 import { getVideoById } from "../../redux/modules/video";
+import { VideoDetailType } from "../../model/video/VideoDetailType";
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
+
+let isInitial = true;
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props;
@@ -43,16 +44,27 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const VideoSection: React.FC<{ videoId: number }> = (props) => {
+const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
   const video = useSelector((state: RootState) => state.video);
   const dispatch = useDispatch<AppDispatch>();
 
   const [expanded, setExpanded] = React.useState(false);
-  const currentVideo = video.currentVideo;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  // let currentVideo = video.currentVideo;
+
+  // useEffect(() => {
+  //   if (isInitial) {
+  //     dispatch(getVideoById(Number(props.videoId))).then(() => {
+  //       currentVideo = video.currentVideo;
+  //     });
+  //     isInitial = false;
+
+  //     return;
+  //   }
+  // }, [video, dispatch]);
 
   return (
     <Card sx={{ width: "100%" }}>
@@ -66,47 +78,48 @@ const VideoSection: React.FC<{ videoId: number }> = (props) => {
       <CardContent>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="h6" sx={{ mr: 1 }}>
-            {currentVideo.title}
+            {props.video?.title}
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {/* 해시태그 표시 */}
-            {JSON.parse(currentVideo.hashtags).map((data: any, index: any) => {
-              return (
-                <Box
-                  sx={{
-                    backgroundColor: "#dddddd",
-                    // color: "white",
-                    fontSize: 9,
-                    borderRadius: 13,
-                    px: 0.5,
-                    mr: 1,
-                    height: 15,
-                  }}
-                  key={index}
-                >
-                  {data.label}
-                </Box>
-              );
-            })}
+            {props.video?.hashtags &&
+              JSON.parse(props.video.hashtags).map((data: any, index: any) => {
+                return (
+                  <Box
+                    sx={{
+                      backgroundColor: "#dddddd",
+                      // color: "white",
+                      fontSize: 9,
+                      borderRadius: 13,
+                      px: 0.5,
+                      mr: 1,
+                      height: 15,
+                    }}
+                    key={index}
+                  >
+                    {data.label}
+                  </Box>
+                );
+              })}
           </Box>
           <Typography
             variant="caption"
             sx={{ fontSize: "sm", fontWeight: "sm", ml: 1 }}
           >
-            {currentVideo?.createDate}
+            {props.video?.createDate}
           </Typography>
 
           {/* 좋아요 표시 */}
           <IconButton aria-label="add to favorites" sx={{ ml: "auto" }}>
             <FavoriteIcon />
           </IconButton>
-          <Typography variant="body2">{currentVideo.likeCnt}</Typography>
+          <Typography variant="body2">{props.video?.likeCnt}</Typography>
 
           {/* 조회수 표시 */}
           <IconButton aria-label="add to favorites" sx={{ ml: 1 }}>
             <VisibilityIcon />
           </IconButton>
-          <Typography variant="body2">{currentVideo.views}</Typography>
+          <Typography variant="body2">{props.video?.views}</Typography>
         </Box>
 
         {/* =================== */}
@@ -114,7 +127,7 @@ const VideoSection: React.FC<{ videoId: number }> = (props) => {
         <Box sx={{ display: "flex", gap: 1, mt: 1.5, alignItems: "center" }}>
           {/* 아바타 */}
 
-          <FeedProfileImage avatar={currentVideo?.avatar} />
+          <FeedProfileImage avatar={props.video?.avatar} />
 
           <Box
             sx={{
@@ -129,7 +142,7 @@ const VideoSection: React.FC<{ videoId: number }> = (props) => {
               variant="body1"
               sx={{ fontSize: "sm", fontWeight: "lg" }}
             >
-              {currentVideo.nickName}
+              {props.video?.nickName}
             </Typography>
 
             {/* 팔로우 버튼 */}
@@ -156,8 +169,8 @@ const VideoSection: React.FC<{ videoId: number }> = (props) => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <CommentSection
-            comments={currentVideo.comments}
-            videoId={currentVideo.id}
+            comments={props.video?.comments}
+            videoId={props.video?.id}
           />
         </CardContent>
       </Collapse>
