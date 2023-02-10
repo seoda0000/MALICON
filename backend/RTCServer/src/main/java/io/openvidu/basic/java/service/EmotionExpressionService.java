@@ -11,4 +11,5 @@ import java.util.List;
 public interface EmotionExpressionService {
     public void write(String sessionId, EmotionExpressionDto emotionExpressionDto);
     public List<EmotionExpressionDto> select(String sessionId);
+    public List<EmotionExpressionDto> select(String sessionId, int from, int count);
 }
