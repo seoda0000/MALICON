@@ -16,8 +16,8 @@ import AvatarSection from "./avatar/AvatarSection";
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production"
-    ? "https://blahblah.movebxeax.me/stream-service/"
-    : "https://blahblah.movebxeax.me/stream-service/";
+    ? "https://blahblah.movebxeax.me/stream-service"
+    : "https://blahblah.movebxeax.me/stream-service";
 
 // 타입 생성
 interface VideoRoomProps {
@@ -204,8 +204,11 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         this.connectWebCam().then(() => {
           if (this.isPublisher) {
             setTimeout(() => {
-              this.sendThumbnail();
               console.log("썸네일 보내냐?");
+              this.sendThumbnail();
+              this.startRecording(this.state.mySessionId)
+                .then((data) => console.log(data))
+              .catch((e)=> console.error(e))
             }, 1000);
           }
         });
@@ -704,7 +707,9 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   async sendThumbnail() {
     let encodedImage = await this.captureThumbnail();
     console.log("썸네일", encodedImage);
-    this.createThumbnail(this.state.mySessionId, encodedImage);
+    this.createThumbnail(this.state.mySessionId, encodedImage)
+      .then((data) => console.log(data))
+    .catch((e)=> console.error(e))
     // 아래 함수는 이미지화 하는 법
     // const decodedImage = decodeURIComponent(encodedImage);
     // const imageElement = document.createElement('img');
@@ -843,7 +848,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
 
   async createToken(sessionId: any) {
     const { data } = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+      APPLICATION_SERVER_URL + "/api/sessions/" + sessionId + "/connections",
       {},
       {
         headers: {
@@ -860,7 +865,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   async deleteSession(sessionId: any) {
     console.log("delete 요청 보내");
     const { data } = await axios.delete(
-      APPLICATION_SERVER_URL + "api/sessions/" + sessionId,
+      APPLICATION_SERVER_URL + "/api/sessions/" + sessionId,
       {
         headers: {
           "Content-Type": "application/json",
@@ -872,8 +877,8 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   async createThumbnail(sessionId: any, thumbnailImage: any) {
-    const { data } = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions/thumbnail/" + sessionId,
+    const { data } = await axios.put(
+      APPLICATION_SERVER_URL + "/api/sessions/" + sessionId,
       {
         thumbnail: thumbnailImage,
       },
@@ -886,6 +891,20 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     );
     return data;
   }
+
+  async startRecording(sessionId: any) {
+    const { data } = await axios.get(
+      APPLICATION_SERVER_URL + "/api/recording/" + sessionId,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
+      }
+    );
+    return data; // The token
+  }
+
 }
 export default VideoRoomComponent;
 
