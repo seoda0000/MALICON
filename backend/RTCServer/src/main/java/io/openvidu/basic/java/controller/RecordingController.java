@@ -112,9 +112,6 @@ public class RecordingController {
         }
     }
 
-
-
-
     @DeleteMapping(value = "/api/recording/delete/{recordingId}")
     public ResponseEntity<?> deleteRecording(@PathVariable("recordingId")String recordingId) {
         log.info("\n----------- DELETE RECORDING START -----------");

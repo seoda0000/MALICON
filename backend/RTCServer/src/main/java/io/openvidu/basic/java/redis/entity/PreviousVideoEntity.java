@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name ="videos")
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +18,8 @@ public class PreviousVideoEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // 이거 필요 없음
     @Column(name = "recording_id")
     private String recordingId;
     @Column(name = "title", nullable = false)
@@ -40,13 +41,4 @@ public class PreviousVideoEntity extends BaseEntity{
     private String hashTags;
     @Column(name = "user_id", insertable = false, updatable = false)
     private Long userId;
-    @ManyToOne(targetEntity = UserEntity.class,
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity userEntity;
-    @OneToMany(mappedBy = "videoEntity",
-            targetEntity = CommentEntity.class,
-            cascade = CascadeType.REMOVE)
-    private List<CommentEntity> comments;
-
 }
