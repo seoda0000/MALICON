@@ -1,4 +1,5 @@
 import { CommentType } from "../feed/commentType";
+import { VideoEmotionType } from "./VideoEmotionType";
 export type VideoDetailType = {
   id: number;
   userPK: number;
@@ -15,4 +16,7 @@ export type VideoDetailType = {
   like: boolean;
   likeCnt: number;
   comments: CommentType[];
+
+  // 아바타 감정표현
+  emotionLog?: VideoEmotionType[];
 };

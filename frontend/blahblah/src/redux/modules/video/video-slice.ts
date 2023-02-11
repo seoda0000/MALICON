@@ -93,6 +93,32 @@ const initialState: VideoStateType = {
         nickName: "덧글단사람",
       },
     ],
+    // emotionLog: [
+    //   {
+    //     time: 2000,
+    //     avatar: "test",
+    //     type: "type",
+    //     userId: "ssafy1",
+    //   },
+    //   {
+    //     time: 3000,
+    //     avatar: "test",
+    //     type: "type",
+    //     userId: "ssafy2",
+    //   },
+    //   {
+    //     time: 4000,
+    //     avatar: "test",
+    //     type: "type",
+    //     userId: "ssafy3",
+    //   },
+    //   {
+    //     time: 5000,
+    //     avatar: "test",
+    //     type: "type",
+    //     userId: "ssafy4",
+    //   },
+    // ],
   },
 };
 
