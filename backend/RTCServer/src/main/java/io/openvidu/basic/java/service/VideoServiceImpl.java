@@ -26,13 +26,9 @@ public class VideoServiceImpl implements VideoService{
 
     private final PreviousVideoRepository videoRepository;
     private final UserEntityRepository userEntityRepository;
-    //private final Base64imgWriter base64imgWriter;
 
     @Override
     public boolean saveVideo(LiveRoomEntity liveRoomEntity, Recording recording, Long userId) {
-//        String thumbnail = liveRoomEntity.getThumbnail();
-//        if(!base64imgWriter.decoder(thumbnail, recording.getId()))
-//            throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "썸네일 저장 실패");
 
         Instant date = LocalDateTime.now().toInstant(ZoneOffset.of("+9"));
 
