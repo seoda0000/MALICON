@@ -1,7 +1,10 @@
 import AvatarComp2 from "../common/AvatarComp2";
+import { useState, useRef } from "react";
+
 interface UserAvatar {
   userId: string;
   avatar: string;
+  type: string;
 }
 
 const SAMPLE_EMOTION_LOG = [
@@ -9,29 +12,36 @@ const SAMPLE_EMOTION_LOG = [
     time: 2000,
     avatar:
       '{"body":["rounded"],"clothingColor":["54d7c7"],"eyes":["happy"],"facialHair":[""],"facialHairProbability":100,"hair":["curlyHighTop"],"hairColor":["6c4545"],"mouth":["bigSmile"],"nose":["smallRound"],"skinColor":["d78774"]}',
-    type: "type",
+    type: "happy",
     userId: "ssafy1",
   },
   {
     time: 3000,
     avatar:
       '{"body":["rounded"],"clothingColor":["54d7c7"],"eyes":["glasses"],"facialHair":[""],"facialHairProbability":100,"hair":["curlyHighTop"],"hairColor":["6c4545"],"mouth":["smile"],"nose":["smallRound"],"skinColor":["d78774"]}',
-    type: "type",
+    type: "sad",
     userId: "ssafy2",
   },
   {
     time: 4000,
     avatar:
       '{"body":["rounded"],"clothingColor":["54d7c7"],"eyes":["happy"],"facialHair":[""],"facialHairProbability":100,"hair":["curlyHighTop"],"hairColor":["6c4545"],"mouth":["bigSmile"],"nose":["smallRound"],"skinColor":["d78774"]}',
-    type: "type",
+    type: "fearful",
     userId: "ssafy3",
   },
   {
     time: 5000,
     avatar:
       '{"body":["rounded"],"clothingColor":["54d7c7"],"eyes":["happy"],"facialHair":[""],"facialHairProbability":100,"hair":["curlyHighTop"],"hairColor":["6c4545"],"mouth":["bigSmile"],"nose":["smallRound"],"skinColor":["d78774"]}',
-    type: "type",
+    type: "happy",
     userId: "ssafy4",
+  },
+  {
+    time: 6000,
+    avatar:
+      '{"body":["rounded"],"clothingColor":["54d7c7"],"eyes":["happy"],"facialHair":[""],"facialHairProbability":100,"hair":["curlyHighTop"],"hairColor":["6c4545"],"mouth":["bigSmile"],"nose":["smallRound"],"skinColor":["d78774"]}',
+    type: "happy",
+    userId: "ssafy1",
   },
 ];
 const VideoAvatarSection: React.FC<{ emotionLog: any }> = (props) => {
@@ -43,6 +53,7 @@ const VideoAvatarSection: React.FC<{ emotionLog: any }> = (props) => {
         let user: UserAvatar = {
           userId: emotion.userId,
           avatar: emotion.avatar,
+          type: emotion.type,
         };
         if (!avatarList.find((element) => element.userId === user.userId)) {
           avatarList.push(user);
@@ -51,6 +62,15 @@ const VideoAvatarSection: React.FC<{ emotionLog: any }> = (props) => {
   }
 
   console.log(avatarList);
+  const [emotionLog, setEmotionLog] = useState(
+    avatarList.map((elem) => {
+      return {
+        userId: elem.userId,
+        avatar: elem.avatar,
+        type: "happy",
+      };
+    })
+  );
 
   return (
     <div
@@ -63,9 +83,9 @@ const VideoAvatarSection: React.FC<{ emotionLog: any }> = (props) => {
         display: "flex",
       }}
     >
-      {avatarList.map((elem) => (
+      {emotionLog.map((elem) => (
         <AvatarComp2
-          currentState="happy"
+          currentState={elem.type}
           currentScore={0}
           avatar={elem.avatar}
           key={elem.userId}
