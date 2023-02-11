@@ -23,6 +23,33 @@ public class VideoEntity extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(name="recoding_id")
+    private String recodingId;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name="session_id", nullable=false)
+    private String sessionId;
+
+    @Column(name="time_stamp", nullable = false)
+    private Long timeStamp;
+
+    @Column(name = "views")
+    @ColumnDefault("0")
+    private long views;
+
+    @Column(name = "path_url")
+    private String pathUrl;
+
+    @Column(name="play_time")
+    private Double playTime;
+
+    @Column(name="thumbnail")
+    private String thumbnail;
+
+    @Column(name="hashtags")
+    private String hashtags;
 
     @Column(name = "user_id", insertable = false, updatable = false)
     private long userId;
@@ -33,16 +60,5 @@ public class VideoEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "videoEntity", cascade = CascadeType.REMOVE)
     private List<CommentEntity> comments;
-    @Column(name="hashtags")
-    private String hashtags;
 
-    @Column(name = "title")
-    private String title;
-
-    @Column(name = "views")
-    @ColumnDefault("0")
-    private long views;
-
-    @Column(name = "path_url")
-    private String pathUrl;
 }
