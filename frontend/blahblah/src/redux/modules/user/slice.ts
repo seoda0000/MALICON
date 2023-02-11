@@ -11,6 +11,8 @@ import {
   signinAction,
   signupAction,
   updateUserAction,
+  sendEmailAction,
+  sendPasswordAction
 } from "./thunk";
 
 const initialState: UserStateType = {
@@ -36,6 +38,7 @@ const initialState: UserStateType = {
   deleteUser: { loading: false, data: null, error: null },
   getSubscribers: { loading: false, data: null, error: null },
   getIsOnAir: { loading: false, data: null, error: null },
+  checkEmail: { loading: false, data: null, error: null },
 };
 
 const userSlice = createSlice({
@@ -206,7 +209,23 @@ const userSlice = createSlice({
         state.getIsOnAir.loading = false;
         state.getIsOnAir.data = null;
         state.getIsOnAir.error = payload;
-      });
+      })
+      .addCase(sendEmailAction.pending, (state) => {
+        state.checkEmail.loading = true;
+        state.checkEmail.data = null;
+        state.checkEmail.error = null;
+      })
+      .addCase(sendEmailAction.fulfilled, (state, { payload }) => {
+        state.checkEmail.loading = false;
+        state.checkEmail.data = payload;
+        state.checkEmail.error = null;
+      })
+      .addCase(sendEmailAction.rejected, (state, { payload }) => {
+        state.checkEmail.loading = false;
+        state.checkEmail.data = null;
+        state.checkEmail.error = payload;
+      })
+      ;
   },
 });
 

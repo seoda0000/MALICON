@@ -3,3 +3,7 @@ export type SigninType = {
   password: string;
 };
 
+export type NewPasswordType = {
+  userId: string;
+  email: string;
+}

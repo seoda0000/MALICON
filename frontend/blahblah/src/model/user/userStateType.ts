@@ -15,5 +15,6 @@ export type UserStateType = {
   deleteUser: ReduxStateType;
   getSubscribers: ReduxStateType;
   getIsOnAir: ReduxStateType;
+  checkEmail: ReduxStateType;
 };
 
