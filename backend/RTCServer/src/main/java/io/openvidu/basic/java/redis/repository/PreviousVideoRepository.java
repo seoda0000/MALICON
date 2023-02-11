@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface PreviousVideoRepository extends JpaRepository<PreviousVideoEntity, String> {
+public interface PreviousVideoRepository extends JpaRepository<PreviousVideoEntity, Long> {
 
     List<PreviousVideoEntity> findAllBySessionId(String sessionId);
+    void deleteByRecordingId(String recordingId);
 }

@@ -1,5 +1,6 @@
 package io.openvidu.basic.java.controller;
 
+import io.openvidu.basic.java.dto.request.StartRecordDto;
 import io.openvidu.basic.java.dto.request.StopRecordDto;
 import io.openvidu.basic.java.redis.entity.PreviousVideoEntity;
 import io.openvidu.basic.java.redis.repository.PreviousVideoRepository;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -34,10 +34,11 @@ public class RecordingController {
 
 
     @PostMapping(value = "/api/recording/start")
-    public ResponseEntity<?> startRecording(@RequestBody(required = false) Map<String, String> params) {
+    public ResponseEntity<?> startRecording(@RequestBody StartRecordDto startRecordDto) {
         log.info("\n----------- RECORDING START -----------");
 
-        String sessionId = params.get("sessionId");
+        String sessionId = startRecordDto.getSessionId();
+
         log.info("받아온 sessionId : "+sessionId);
         //비디오를 저장할 때 옵션 관리
         RecordingProperties properties = new RecordingProperties
@@ -72,6 +73,8 @@ public class RecordingController {
         String recordingId = stopRecordDto.getRecordingId();
         String title = stopRecordDto.getTitle();
         String thumbnail = stopRecordDto.getThumbnail();
+        String hashTags = stopRecordDto.getHashTags();
+        Long userId = stopRecordDto.getUser_id();
 
         log.info("recordingId : " + recordingId +  ",  title : "+title);
 
@@ -87,18 +90,20 @@ public class RecordingController {
             String id = recording.getId();
             String sessionId = recording.getSessionId();
 
+
             PreviousVideoEntity previousVideoEntity = PreviousVideoEntity.builder()
-                    .url(url)
-                    .playTime(playTime)
                     .recordingId(id)
-                    .createAt(createAt)
                     .title(title)
                     .sessionId(sessionId)
-                    .videoLike(0)
+                    .timeStamp(createAt)
+                    .playTime(playTime)
+                    .pathUrl(url)
                     .thumbnail(thumbnail)
+                    .hashTags(hashTags)
+                    .userId(userId)
                     .build();
-            log.info("저장될 지난영상정보 : "+previousVideoEntity.toString());
 
+            log.info("저장될 지난영상정보 : "+previousVideoEntity.toString());
             previousVideoRepository.save(previousVideoEntity);
 
             return new ResponseEntity<>(previousVideoEntity, HttpStatus.OK);
@@ -118,49 +123,12 @@ public class RecordingController {
 
         try {
             this.openvidu.deleteRecording(recordingId);
-            previousVideoRepository.deleteById(recordingId);
+            previousVideoRepository.deleteByRecordingId(recordingId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-
-    @GetMapping(value = "/api/recording/get/{recordingId}")
-    public ResponseEntity<?> getRecording(@PathVariable(value = "recordingId") String recordingId) {
-        log.info("\n----------- GET PREVIDOUS VIDEO START -----------");
-        log.info("recordingId : "+recordingId);
-
-        try {
-            Recording recording = this.openvidu.getRecording(recordingId);
-            PreviousVideoEntity pre = previousVideoRepository.findById(recordingId).get();
-            // url 확인 출력
-            System.out.println("get recording: " + recording.getUrl());
-            return new ResponseEntity<>(pre, HttpStatus.OK);
-        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-
-
-
-    //특정 유저의 지난영상 목록 가져오기
-    @GetMapping(value = "/api/recording/list/{sessionId}")
-    public ResponseEntity<?> listRecordings(@PathVariable("sessionId") String sessionId) {
-        log.info("\n----------- GET PREVIDOUS VIDEO LIST START -----------");
-        log.info("sessionId : "+sessionId);
-
-        try {
-
-            List<Recording> recordings = this.openvidu.listRecordings(); // 잘동작함
-            List<PreviousVideoEntity> preVideoList = previousVideoRepository.findAllBySessionId(sessionId);
-            return new ResponseEntity<>(preVideoList, HttpStatus.OK);
-        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
 
 
 
