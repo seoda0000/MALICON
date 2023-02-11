@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +34,11 @@ public class UserEntity extends BaseEntity {
 
     @Column(name = "light_stick")
     private String lightStick;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "userEntity",
+            cascade = CascadeType.REMOVE,
+            targetEntity = PreviousVideoEntity.class
+    )
+    private List<PreviousVideoEntity> videos = new ArrayList<>();
 }

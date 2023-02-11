@@ -37,7 +37,8 @@ dependencies {
     implementation 'com.influxdb:influxdb-client-java:6.7.0'
     implementation 'com.github.miwurster:spring-data-influxdb:1.8'
     implementation "com.influxdb:flux-dsl:6.7.0"
-
+    //query logging
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
 }
 
 tasks.named('test') {

@@ -19,10 +19,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,13 +53,6 @@ public class Controller {
 
 		log.info("유저 정보 : " + userInfo);
 
-		RecordingProperties recordingProperties = new RecordingProperties
-				.Builder()
-				.outputMode(Recording.OutputMode.COMPOSED)
-				.hasAudio(true)
-				.hasVideo(true)
-				.build();
-
 		// 바꿔야댐
 		String sessionId = userInfo.getUserId();
 
@@ -67,15 +60,11 @@ public class Controller {
 		//customSessionId => userId 가 들어있어야 한다.
 		SessionProperties properties = new SessionProperties.Builder()
 				.customSessionId(sessionId)
-				.defaultRecordingProperties(recordingProperties)
 				.build();
 
 		Session session = openvidu.createSession(properties);
 
-		Recording recording = openvidu.startRecording(sessionId, recordingProperties);
-		if(recording == null) throw new CustomException(HttpStatus.BAD_REQUEST, "녹화 실패");
-
-		LiveRoomEntity room = liveRoomService.saveRoom(roomDto,userInfo, sessionId, recording);
+		LiveRoomEntity room = liveRoomService.saveRoom(roomDto,userInfo, sessionId);
 
 		if(session == null || room == null)
 			throw new CustomException(HttpStatus.BAD_REQUEST , "방 생성 실패");
@@ -135,11 +124,12 @@ public class Controller {
 
 	//방송 종료
 	//세션 삭제, 영상 저장
-	@Transactional
 	@DeleteMapping("/api/sessions/{sessionId}")
+	@Transactional
 	public ResponseEntity<?> deleteRoom(@PathVariable("sessionId") String sessionId,
 										HttpServletRequest request) throws OpenViduJavaClientException, OpenViduHttpException {
 
+		log.info("delete start!!");
 		String accessToken = JwtUtil.getAccessTokenFromHeader(request);
 		Long id = JwtUtil.getIdFromClaims(JwtUtil.parseClaims(accessToken));
 
@@ -151,10 +141,12 @@ public class Controller {
 
 		LiveRoomEntity liveRoomEntity = liveRoomService.findBySessionId(sessionId);
 
+		String recordingId = liveRoomEntity.getRecordingId();
+		if(recordingId == null) return ResponseEntity.internalServerError().build();
 		// 녹화 저장
-		Recording recording = openvidu.stopRecording(liveRoomEntity.getRecording().getId());
+		Recording recording = openvidu.stopRecording(recordingId);
 		if(recording == null
-				|| videoService.saveVideo(liveRoomEntity, recording, id))
+				|| !videoService.saveVideo(liveRoomEntity, recording, id))
 			throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "녹화 저장 실패");
 
 		// 세션 삭제
@@ -177,9 +169,9 @@ public class Controller {
 	public ResponseEntity<?> updateRoom(@PathVariable("sessionId") String sessionId,
 										@RequestBody(required = false) RoomUpdateDto roomUpdateDto){
 
-		log.info("\n----------- updateRoom START -----------");
+		log.info("----------- updateRoom START ----------- dto : " + roomUpdateDto.toString());
 
-		if(!liveRoomService.updateRoom(sessionId, roomUpdateDto))
+		if(!liveRoomService.updateRoom(sessionId, roomUpdateDto, null))
 			throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "방송 정보 수정 실패");
 
 		return new ResponseEntity<>(roomUpdateDto, HttpStatus.OK);

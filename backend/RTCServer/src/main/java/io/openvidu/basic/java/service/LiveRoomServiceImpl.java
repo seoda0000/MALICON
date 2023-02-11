@@ -30,7 +30,7 @@ public class LiveRoomServiceImpl implements LiveRoomService{
     private final OpenVidu openVidu;
 
     @Override
-    public LiveRoomEntity saveRoom(CreateRoomDto roomDto, UserDto userInfo, String sessionId, Recording recording) {
+    public LiveRoomEntity saveRoom(CreateRoomDto roomDto, UserDto userInfo, String sessionId) {
         String title = roomDto.getTitle();
         String hashTag = roomDto.getHashTag();
         Instant date = LocalDateTime.now().toInstant(ZoneOffset.of("+9"));
@@ -41,7 +41,6 @@ public class LiveRoomServiceImpl implements LiveRoomService{
                 .startAt(date.toEpochMilli())
                 .sessionId(sessionId)
                 .hashTag(hashTag)
-                .recording(recording)
                 .build();
 
         return liveRoomRepository.save(liveRoomEntity);
@@ -60,7 +59,7 @@ public class LiveRoomServiceImpl implements LiveRoomService{
     }
 
     @Override
-    public boolean updateRoom(String sessionId, RoomUpdateDto roomUpdateDto) {
+    public boolean updateRoom(String sessionId, RoomUpdateDto roomUpdateDto, Recording recording) {
         LiveRoomEntity liveRoomEntity = liveRoomRepository.findById(sessionId).orElseThrow(
                 ()-> new CustomException(HttpStatus.NOT_FOUND, "존재하지 않는 방송 입니다.")
         );
@@ -70,6 +69,9 @@ public class LiveRoomServiceImpl implements LiveRoomService{
 
         liveRoomEntity.setTitle(title == null? liveRoomEntity.getTitle():title);
         liveRoomEntity.setThumbnail(thumbnail == null? liveRoomEntity.getThumbnail(): thumbnail);
+        liveRoomEntity.setRecordingId(recording == null? liveRoomEntity.getRecordingId(): recording.getId());
+
+        liveRoomRepository.save(liveRoomEntity);
         return true;
     }
 
@@ -83,7 +85,7 @@ public class LiveRoomServiceImpl implements LiveRoomService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<LiveRoomDto> getRoomList() throws OpenViduJavaClientException, OpenViduHttpException {
+    public List<LiveRoomDto> getRoomList() {
         List<LiveRoomDto> rooms = new ArrayList<>();
         Iterator<LiveRoomEntity> it = liveRoomRepository.findAll().iterator();
 
@@ -95,7 +97,11 @@ public class LiveRoomServiceImpl implements LiveRoomService{
             if(session != null){
                 // 비두 서버의 상태로 업데이트
                 // thread safe한지 모르겠음
-                session.fetch();
+                try{
+                    session.fetch();
+                }catch (OpenViduJavaClientException | OpenViduHttpException e){
+                    e.printStackTrace();
+                }
                 viewNumber = session.getConnections().size();
             }
 

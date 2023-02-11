@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface LiveRoomService {
-    public LiveRoomEntity saveRoom(CreateRoomDto roomDto, UserDto userInfo, String sessionId, Recording recording);
+    public LiveRoomEntity saveRoom(CreateRoomDto roomDto, UserDto userInfo, String sessionId);
     public boolean existBySessionId(String sessionId);
     public boolean deleteRoomBySessionId(String sessionId);
-    public boolean updateRoom(String sessionId, RoomUpdateDto roomUpdateDto);
+    public boolean updateRoom(String sessionId, RoomUpdateDto roomUpdateDto, Recording recording);
     public LiveRoomEntity findBySessionId(String sessionId);
     public List<LiveRoomDto> getRoomList() throws OpenViduJavaClientException, OpenViduHttpException;
 }

@@ -32,5 +32,5 @@ public class LiveRoomEntity {
 
     private String hashTag;
 
-    private Recording recording;
+    private String recordingId;
 }
