@@ -12,7 +12,6 @@ import {
   signupAction,
   updateUserAction,
   sendEmailAction,
-  sendPasswordAction
 } from "./thunk";
 
 const initialState: UserStateType = {

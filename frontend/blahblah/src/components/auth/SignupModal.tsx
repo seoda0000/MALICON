@@ -111,6 +111,9 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
     setIsAgree((prev) => !prev);
   };
 
+  const onChangeCheckNumber=(e: React.ChangeEvent<HTMLInputElement>) =>{
+    setCheckNumber(e.target.value);
+  }
   const onConfirmID = () => {
     dispatch(checkDuplicateAction(id));
   };
@@ -157,10 +160,11 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
   };
 
   useEffect(() => {
-    if(checkEmailNumber.data===checkNumber){
+    if(checkEmailNumber.data==checkNumber){
       setValidEmail(true);
+      setEmailAvail("Available")
     }else{
-      setValidEmail(true);
+      setValidEmail(false);
     }
   }, [checkEmailNumber.data, checkNumber]);
 
@@ -323,6 +327,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             id="check-email"
             value={checkNumber}
             type="string"
+            onChange={onChangeCheckNumber}
             required
             error={checkNumber? true : false}
             aria-describedby="chmail-helper-text"
