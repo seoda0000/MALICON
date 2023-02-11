@@ -4,6 +4,7 @@ import { useAppDispatch } from "../../redux/configStore.hooks";
 import { signinAction } from "../../redux/modules/user";
 import { removeToken } from "../../redux/modules/user/token";
 import BasicModal from "../ui/BasicModal";
+import NewPasswordModal from "./NewPasswordModal";
 
 const buttonBoxStyle = {
   display: "flex",
@@ -70,6 +71,7 @@ export default function SigninModal({ open, setOpen }: any): JSX.Element {
           <Button variant="contained" type="submit">
             Signin
           </Button>
+          <NewPasswordModal/>
         </Box>
       </Box>
     </BasicModal>

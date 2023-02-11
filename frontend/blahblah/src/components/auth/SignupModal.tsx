@@ -14,7 +14,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
-import { checkDuplicateAction, signupAction } from "../../redux/modules/user";
+import { checkDuplicateAction, signupAction, sendEmailAction } from "../../redux/modules/user";
 import BasicModal from "../ui/BasicModal";
 
 const buttonBoxStyle = {
@@ -35,19 +35,23 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
   const checkDup = useAppSelector((state) => state.user.checkDuplicate);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const checkEmailNumber = useAppSelector((state) => state.user.checkEmail);
 
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
   const [rePw, setRePw] = useState<string>("");
   const [nickName, setNickName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [validEmail, setValidEmail] = useState<boolean>(false);
   const [phone, setPhone] = useState<string>("");
   const [showPw, setShowPw] = useState<boolean>(false);
   const [idAvail, setIdAvail] = useState<string>("PleaseCheckId");
   const [pwAvail, setPwAvail] = useState<boolean>(false);
   const [nickNameActivated, setNickNameActivated] = useState<boolean>(false);
   const [rePwAvail, setRePwAvail] = useState<boolean>(false);
-  const [emailAvail, setEmailAvail] = useState<boolean>(false);
+  const [emailAvail, setEmailAvail] = useState<string>("PleaseCheckEmail");
+  // const [checkEmailNumber, setCheckEmailNumber] = useState<string>("");
+  const [checkNumber, setCheckNumber] = useState<string>("");
   const [phoneAvail, setPhoneAvail] = useState<boolean>(false);
   const [isAgree, setIsAgree] = useState<boolean>(false);
 
@@ -87,10 +91,10 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
     setEmail(e.target.value);
 
     const regex = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
-    if (regex.test(e.target.value)) {
-      setEmailAvail(true);
+    if (!regex.test(e.target.value)) {
+      setEmailAvail("RegexFail");
     } else {
-      setEmailAvail(false);
+      setEmailAvail("PleaseCheckEmail");
     }
   };
   const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,6 +111,9 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
     setIsAgree((prev) => !prev);
   };
 
+  const onChangeCheckNumber=(e: React.ChangeEvent<HTMLInputElement>) =>{
+    setCheckNumber(e.target.value);
+  }
   const onConfirmID = () => {
     dispatch(checkDuplicateAction(id));
   };
@@ -117,6 +124,10 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
   const handleMouseDownPw = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
   };
+
+  const onSendEmail = () => {
+    dispatch(sendEmailAction(email));
+  }
 
   const onCloseModal = () => {
     setOpen((prev: boolean) => !prev);
@@ -147,6 +158,15 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
       navigate("/", { replace: true });
     }
   };
+
+  useEffect(() => {
+    if(checkEmailNumber.data==checkNumber){
+      setValidEmail(true);
+      setEmailAvail("Available")
+    }else{
+      setValidEmail(false);
+    }
+  }, [checkEmailNumber.data, checkNumber]);
 
   useEffect(() => {
     if (pw === rePw) {
@@ -276,13 +296,51 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             onChange={onChangeEmail}
             type="email"
             required
-            error={email && !emailAvail ? true : false}
+            error={email && emailAvail!=="Available" ? true : false}
             aria-describedby="email-helper-text"
           />
           <FormHelperText id="email-helper-text">
-            {email && !emailAvail && <span>올바른 이메일 형식이 아닙니다</span>}
+            {email && 
+              (emailAvail === "Available" ? (
+                <span>사용 가능한 이메일 입니다</span>
+              ) : emailAvail === "PleaseCheckEmail" ? (
+                <span>이메일 인증을 해주세요</span>
+              ) : emailAvail === "RegexFail" ? (
+                <span>올바른 이메일 형식이 아닙니다</span>
+              ):(
+                <span>유효한 이메일이 아닙니다</span>
+              ))
+            }
           </FormHelperText>
         </FormControl>
+        <Button 
+            onClick={onSendEmail}
+            disabled={
+              emailAvail === "RegexFail" ||
+              emailAvail === "Available" ? true : false
+            }>
+            인증번호 보내기
+          </Button>
+          <FormControl variant="standard">
+          <InputLabel htmlFor="check-email">인증 번호 *</InputLabel>
+          <Input
+            id="check-email"
+            value={checkNumber}
+            type="string"
+            onChange={onChangeCheckNumber}
+            required
+            error={checkNumber? true : false}
+            aria-describedby="chmail-helper-text"
+            endAdornment={
+              <InputAdornment position="end">
+                {emailAvail === "Available" && <CheckRounded />}
+              </InputAdornment>
+            }
+          />
+          <FormHelperText id="chmail-helper-text">
+            {checkNumber && !validEmail && <span>인증번호가 일치하지 않습니다</span>}
+          </FormHelperText>
+          </FormControl>
         <FormControl variant="standard">
           <InputLabel htmlFor="phone">phone</InputLabel>
           <Input

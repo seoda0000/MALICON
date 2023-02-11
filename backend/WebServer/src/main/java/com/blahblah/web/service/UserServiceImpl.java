@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService{
         UserEntity userEntity = userRepository.findByEmail(email);
 
         SecureRandom secureRandom = new SecureRandom();
-        int temporaryPassword = secureRandom.nextInt();
+        int temporaryPassword = secureRandom.nextInt(888888)+111111;
         userRepository.updatePasswordByEmail(userEntity.getId(), passwordEncoder.encode(String.valueOf(temporaryPassword)));
 
         MailDto mailDto = MailDto.builder()
