@@ -7,8 +7,20 @@ const FeedProfileImage: React.FC<{
   // small?: boolean;
   // onRemoveTodo: () => void;
 }> = (props) => {
+  const tempAvatar = JSON.stringify({
+    body: ["rounded"],
+    clothingColor: ["54d7c7"],
+    eyes: ["happy"],
+    facialHair: [""],
+    facialHairProbability: 100,
+    hair: ["curlyHighTop"],
+    hairColor: ["6c4545"],
+    mouth: ["bigSmile"],
+    nose: ["smallRound"],
+    skinColor: ["d78774"],
+  });
   const dataUri = createAvatar(personas, {
-    ...JSON.parse(props.avatar!),
+    ...JSON.parse(props.avatar ? props.avatar : tempAvatar),
     backgroundColor: ["ffffff"],
   }).toDataUriSync();
 
@@ -22,3 +34,4 @@ const FeedProfileImage: React.FC<{
 };
 
 export default FeedProfileImage;
+

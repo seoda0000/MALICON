@@ -175,7 +175,6 @@ export const getVideoAction = createAsyncThunk(
   ) => {
     try {
       const axios = axiosInitializer();
-      console.log(userPK, size, page);
       const { data } = await axios.get<VideoWrapType>(
         `/api/videos/${parseInt(userPK)}/${size}/${page}`,
         {

@@ -244,7 +244,7 @@ export default function ProfilePage(): JSX.Element {
     dispatch(getVideoAction({ userPK: userpk, size: 5, page: 0 }));
 
     // 피드 목록 가져오기
-    dispatch(getFeedAction({ userPK: userpk, size: 5, page: 0 })); // 확인필요
+    dispatch(getFeedAction({ userPK: userpk, size: 5, page: 0 }));
   }, []);
 
   // if (!(getProfile && getisOnAir && getVideos && getFeed))
@@ -383,13 +383,13 @@ export default function ProfilePage(): JSX.Element {
             <div className="title">
               <h2>Feed</h2>
             </div>
-            {/* {feeds && (
+            {feeds && (
               <InfiniteScroll
                 feed={true}
                 itemsWrap={feeds}
                 totalPage={feeds.totalPages}
               />
-            )} */}
+            )}
           </FeedContainer>
         </>
       ) : (
