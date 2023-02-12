@@ -9,9 +9,14 @@ import { ProfileFeedType } from "../../model/profile/profileFeedType";
 import FeedListItem from "../feed/FeedListItem";
 import { VideoWrapType } from "../../model/profile/videoWrapType";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
-import { getFeedAction, getVideoAction } from "../../redux/modules/profile";
+import {
+  getFeedAction,
+  getVideoAction,
+  GetVideoActionPropsType,
+} from "../../redux/modules/profile";
 import { useParams } from "react-router-dom";
 import { FeedWrapType } from "../../model/profile/feedWrapType";
+import { AsyncThunk, AsyncThunkAction } from "@reduxjs/toolkit";
 
 const InfiniteScrollContainer = styled.div`
   & > ul {
@@ -29,6 +34,8 @@ const InfiniteScrollContainer = styled.div`
 type InfiniteScrollPropsType = {
   video?: boolean;
   feed?: boolean;
+  feedPage?: boolean;
+  actionFunc: any;
   itemsWrap?: VideoWrapType | FeedWrapType;
   totalPage: number;
 };
@@ -36,12 +43,15 @@ type InfiniteScrollPropsType = {
 export default function InfiniteScroll({
   video = false,
   feed = false,
+  feedPage = false,
+  actionFunc,
   itemsWrap,
   totalPage,
 }: InfiniteScrollPropsType): JSX.Element {
   const { userpk } = useParams() as { userpk: string };
   const videos = useAppSelector((state) => state.profile.videoData);
-  const feeds = useAppSelector((state) => state.profile.feedData);
+  const profileFeeds = useAppSelector((state) => state.profile.feedData);
+  const feedFeeds = useAppSelector((state) => state.feed.feedData);
   const [pageInfo, setPageInfo] = useState({
     page: 1,
     totalPage: totalPage,
@@ -62,11 +72,19 @@ export default function InfiniteScroll({
         return temp;
       });
       setItemArr(temp);
-    } else if (feed && feeds) {
+    } else if (feed && profileFeeds) {
       let temp: ProfileFeedType[] = [...(itemArr as ProfileFeedType[])];
 
-      feeds.content.map((video) => {
-        temp = [...temp, video];
+      profileFeeds.content.map((feed) => {
+        temp = [...temp, feed];
+        return temp;
+      });
+      setItemArr(temp);
+    } else if (feedPage && feedFeeds) {
+      let temp: ProfileFeedType[] = [...(itemArr as ProfileFeedType[])];
+
+      feedFeeds.content.map((feed) => {
+        temp = [...temp, feed];
         return temp;
       });
       setItemArr(temp);
@@ -107,16 +125,13 @@ export default function InfiniteScroll({
   }, [handleIntersect, target]);
 
   useEffect(() => {
-    if (video) {
-      console.log(pageInfo.page + " 페이지 부름");
-      dispatch(
-        getVideoAction({ userPK: userpk, size: 5, page: pageInfo.page })
-      ).then(() => {
+    if (feedPage) {
+      dispatch(actionFunc({ size: 5, page: pageInfo.page })).then(() => {
         updateItemsFunc();
       });
-    } else if (feed) {
+    } else {
       dispatch(
-        getFeedAction({ userPK: userpk, size: 5, page: pageInfo.page })
+        actionFunc({ userPK: userpk, size: 5, page: pageInfo.page })
       ).then(() => {
         updateItemsFunc();
       });
@@ -137,7 +152,9 @@ export default function InfiniteScroll({
                 video={item as VideoType | ProfileVideoType}
               />
             )}
-            {feed && <FeedListItem feed={item as FeedType | ProfileFeedType} />}
+            {(feed || feedPage) && (
+              <FeedListItem feed={item as FeedType | ProfileFeedType} />
+            )}
           </li>
         ))}
       </ul>

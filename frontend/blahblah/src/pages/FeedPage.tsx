@@ -8,11 +8,16 @@ import Button from "@mui/material/Button";
 import CreateIcon from "@mui/icons-material/Create";
 
 import { useSelector, useDispatch } from "react-redux";
-import { fetchFeedData } from "../redux/modules/feed/feed-action";
+import {
+  fetchFeedData,
+  getFeedsAction,
+} from "../redux/modules/feed/feed-action";
 import { useEffect, useState } from "react";
 import { AppDispatch } from "../redux/configStore";
 import { RootState } from "../redux/configStore";
 import RightVideoSection from "../components/video/RightVideoSection";
+import InfiniteScroll from "../components/ui/InfiniteScroll";
+import { useAppSelector } from "../redux/configStore.hooks";
 
 const drawerWidth = 300;
 let isInitial = true;
@@ -20,11 +25,12 @@ let isInitial = true;
 export default function FeedPage() {
   const dispatch = useDispatch<AppDispatch>();
   const feed = useSelector((state: RootState) => state.feed);
+  const feeds = useAppSelector((state) => state.feed.feedData);
 
   useEffect(() => {
     if (isInitial) {
       isInitial = false;
-      dispatch(fetchFeedData());
+      // dispatch(fetchFeedData());
       return;
     }
   }, [feed, dispatch]);
@@ -34,6 +40,11 @@ export default function FeedPage() {
   const onClickEditor = () => {
     setOpenEditorModal((prev) => !prev);
   };
+
+  useEffect(() => {
+    dispatch(getFeedsAction({ size: 5, page: 0 }));
+    console.log("feeds", feeds);
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -55,8 +66,15 @@ export default function FeedPage() {
 
         <br />
         <br />
-        <FeedList feeds={feed.feeds} />
-
+        {/* <FeedList feeds={feed.feeds} /> */}
+        {feeds && (
+          <InfiniteScroll
+            feedPage={true}
+            actionFunc={getFeedsAction}
+            itemsWrap={feeds}
+            totalPage={feeds.totalPages}
+          />
+        )}
         {openEditorModal && (
           <EditorModal
             open={openEditorModal}
@@ -72,3 +90,4 @@ export default function FeedPage() {
     </Box>
   );
 }
+

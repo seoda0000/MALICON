@@ -162,7 +162,7 @@ export const unSubscribeAction = createAsyncThunk(
 );
 
 // 지난영상목록 가져오기
-type GetVideoActionPropsType = {
+export type GetVideoActionPropsType = {
   userPK: string;
   size: number;
   page: number;

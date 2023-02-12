@@ -386,6 +386,7 @@ export default function ProfilePage(): JSX.Element {
             {feeds && (
               <InfiniteScroll
                 feed={true}
+                actionFunc={getFeedAction}
                 itemsWrap={feeds}
                 totalPage={feeds.totalPages}
               />
@@ -401,6 +402,7 @@ export default function ProfilePage(): JSX.Element {
           {videos && (
             <InfiniteScroll
               video={true}
+              actionFunc={getVideoAction}
               itemsWrap={videos}
               totalPage={videos.totalPages}
             />
