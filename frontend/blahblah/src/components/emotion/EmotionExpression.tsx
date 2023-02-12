@@ -24,7 +24,7 @@ export default function EmotionExpression(props: iEmotionExpressionProps) {
     setCurrentState(state);
   };
 
-  async function signalEmotion(type: string) {
+  async function sendEmotion(type: string) {
     if (props.user) {
       const data = {
         message: type,
@@ -53,17 +53,23 @@ export default function EmotionExpression(props: iEmotionExpressionProps) {
   }
 
   useEffect(() => {
-    signalEmotion(currentPose);
+    sendEmotion(currentPose);
   }, [currentPose]);
 
   useEffect(() => {
-    signalEmotion(currentState);
+    sendEmotion(currentState);
   }, [currentState]);
 
   return (
     <div>
-      <PoseRecognition onPoseChange={saveCurrentPose} videoRef={props.videoRef} />
-      <FaceExpressionRecognition onStateChange={saveCurrentState} videoRef={props.videoRef} />
+      <PoseRecognition
+        onPoseChange={saveCurrentPose}
+        videoRef={props.videoRef}
+      />
+      <FaceExpressionRecognition
+        onStateChange={saveCurrentState}
+        videoRef={props.videoRef}
+      />
     </div>
   );
 }

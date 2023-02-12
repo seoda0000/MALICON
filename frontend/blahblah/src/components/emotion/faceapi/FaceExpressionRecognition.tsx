@@ -7,14 +7,18 @@ interface iFaceExpressionRecognitionProps {
   onStateChange: any;
 }
 
-export default function FaceExpressionRecognition(props: iFaceExpressionRecognitionProps) {
+export default function FaceExpressionRecognition(
+  props: iFaceExpressionRecognitionProps
+) {
   const videoRef = props.videoRef as RefObject<HTMLVideoElement>;
 
   const [currentState, setCurrentState] = useState<string>("");
   const [currentScore, setCurrentScore] = useState<number>(0);
 
   const startPredict = async () => {
-    if (videoRef.current === null) { return };
+    if (videoRef.current === null) {
+      return;
+    }
 
     const displaySize = {
       width: videoRef.current.videoWidth,
@@ -70,7 +74,7 @@ export default function FaceExpressionRecognition(props: iFaceExpressionRecognit
 
   useEffect(() => {
     props.onStateChange(currentState);
-  }, [currentState])
+  }, [currentState]);
 
   return (
     <div>

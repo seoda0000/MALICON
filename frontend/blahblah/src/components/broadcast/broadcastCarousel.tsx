@@ -91,7 +91,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
               : basicList.map((item, index) => (
                   <SwiperSlide>
                     <CarouselCompBasic nth={index}>
-                      <img src={item} />
+                      <img src={item} alt="" />
                     </CarouselCompBasic>
                   </SwiperSlide>
                 ))}
