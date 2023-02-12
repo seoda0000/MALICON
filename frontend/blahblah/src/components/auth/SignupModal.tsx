@@ -14,7 +14,11 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
-import { checkDuplicateAction, signupAction, sendEmailAction } from "../../redux/modules/user";
+import {
+  checkDuplicateAction,
+  signupAction,
+  sendEmailAction,
+} from "../../redux/modules/user";
 import BasicModal from "../ui/BasicModal";
 
 const buttonBoxStyle = {
@@ -111,9 +115,9 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
     setIsAgree((prev) => !prev);
   };
 
-  const onChangeCheckNumber=(e: React.ChangeEvent<HTMLInputElement>) =>{
+  const onChangeCheckNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCheckNumber(e.target.value);
-  }
+  };
   const onConfirmID = () => {
     dispatch(checkDuplicateAction(id));
   };
@@ -127,7 +131,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
 
   const onSendEmail = () => {
     dispatch(sendEmailAction(email));
-  }
+  };
 
   const onCloseModal = () => {
     setOpen((prev: boolean) => !prev);
@@ -160,10 +164,10 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
   };
 
   useEffect(() => {
-    if(checkEmailNumber.data==checkNumber){
+    if (checkEmailNumber.data == checkNumber) {
       setValidEmail(true);
-      setEmailAvail("Available")
-    }else{
+      setEmailAvail("Available");
+    } else {
       setValidEmail(false);
     }
   }, [checkEmailNumber.data, checkNumber]);
@@ -296,32 +300,33 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             onChange={onChangeEmail}
             type="email"
             required
-            error={email && emailAvail!=="Available" ? true : false}
+            error={email && emailAvail !== "Available" ? true : false}
             aria-describedby="email-helper-text"
           />
           <FormHelperText id="email-helper-text">
-            {email && 
+            {email &&
               (emailAvail === "Available" ? (
                 <span>사용 가능한 이메일 입니다</span>
               ) : emailAvail === "PleaseCheckEmail" ? (
                 <span>이메일 인증을 해주세요</span>
               ) : emailAvail === "RegexFail" ? (
                 <span>올바른 이메일 형식이 아닙니다</span>
-              ):(
+              ) : (
                 <span>유효한 이메일이 아닙니다</span>
-              ))
-            }
+              ))}
           </FormHelperText>
         </FormControl>
-        <Button 
-            onClick={onSendEmail}
-            disabled={
-              emailAvail === "RegexFail" ||
-              emailAvail === "Available" ? true : false
-            }>
-            인증번호 보내기
-          </Button>
-          <FormControl variant="standard">
+        <Button
+          onClick={onSendEmail}
+          disabled={
+            emailAvail === "RegexFail" || emailAvail === "Available"
+              ? true
+              : false
+          }
+        >
+          인증번호 보내기
+        </Button>
+        <FormControl variant="standard">
           <InputLabel htmlFor="check-email">인증 번호 *</InputLabel>
           <Input
             id="check-email"
@@ -329,7 +334,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             type="string"
             onChange={onChangeCheckNumber}
             required
-            error={checkNumber? true : false}
+            error={checkNumber ? true : false}
             aria-describedby="chmail-helper-text"
             endAdornment={
               <InputAdornment position="end">
@@ -338,9 +343,11 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             }
           />
           <FormHelperText id="chmail-helper-text">
-            {checkNumber && !validEmail && <span>인증번호가 일치하지 않습니다</span>}
+            {checkNumber && !validEmail && (
+              <span>인증번호가 일치하지 않습니다</span>
+            )}
           </FormHelperText>
-          </FormControl>
+        </FormControl>
         <FormControl variant="standard">
           <InputLabel htmlFor="phone">phone</InputLabel>
           <Input
@@ -382,4 +389,3 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
     </BasicModal>
   );
 }
-

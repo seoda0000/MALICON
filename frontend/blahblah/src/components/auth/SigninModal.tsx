@@ -13,7 +13,12 @@ const buttonBoxStyle = {
   marginTop: "32px",
 };
 
-export default function SigninModal({ open, setOpen }: any): JSX.Element {
+export default function SigninModal({
+  open,
+  setOpen,
+  openAlert,
+  setOpenAlert,
+}: any): JSX.Element {
   const dispatch = useAppDispatch();
 
   const [id, setId] = useState<string>("");
@@ -37,7 +42,11 @@ export default function SigninModal({ open, setOpen }: any): JSX.Element {
         userId: id,
         password: pw,
       })
-    );
+    ).then((data) => {
+      if (data.type === "SIGNIN/fulfilled") {
+        setOpenAlert({ state: true, username: id });
+      }
+    });
 
     onCloseModal();
   };
@@ -71,10 +80,9 @@ export default function SigninModal({ open, setOpen }: any): JSX.Element {
           <Button variant="contained" type="submit">
             Signin
           </Button>
-          <NewPasswordModal/>
+          <NewPasswordModal />
         </Box>
       </Box>
     </BasicModal>
   );
 }
-
