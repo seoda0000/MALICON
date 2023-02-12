@@ -95,7 +95,10 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
 
   return (
     <Card sx={{ width: "100%" }}>
-      <VideoBox emotionLog={props.video.emotionLog} />
+      <VideoBox
+        emotionLog={props.video.emotionLog}
+        pathUrl={props.video.pathUrl}
+      />
 
       <CardContent>
         <Box sx={{ display: "flex", alignItems: "center" }}>

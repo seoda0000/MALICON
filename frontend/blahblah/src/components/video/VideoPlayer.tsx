@@ -1,8 +1,12 @@
 import React from "react";
-import ReactPlayer from "react-player/youtube";
+import ReactPlayer from "react-player";
 import { useState, useRef, useEffect } from "react";
 
-const VideoPlayer: React.FC<{ played: number; setPlayed: any }> = (props) => {
+const VideoPlayer: React.FC<{
+  played: number;
+  setPlayed: any;
+  pathUrl: any;
+}> = (props) => {
   // function VideoPlayer() {
   const videoRef = useRef<any>(null);
   const videoControllerRef = useRef(null);
@@ -26,7 +30,7 @@ const VideoPlayer: React.FC<{ played: number; setPlayed: any }> = (props) => {
   return (
     <div>
       <ReactPlayer
-        url="https://www.youtube.com/watch?v=11cta61wi0g"
+        url={props.pathUrl}
         ref={videoRef}
         // url={video}                    // 서버에서 받아온 video url
         playing={playing} // true = 재생중 / false = 멈춤

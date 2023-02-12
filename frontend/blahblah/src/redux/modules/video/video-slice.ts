@@ -20,6 +20,8 @@ const initialState: VideoStateType = {
         '[{"key":14,"label":"통기타","selected":true},{"key":16,"label":"밴드","selected":true}]',
       like: true,
       likeCnt: 3514,
+      thumbnail:
+        "https://i.ytimg.com/vi/0gY_z7fqPjs/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0w_6PP55kpL3H-VNAhtDIWuISAA",
       // comments: {
       //   content: [],
       // },
@@ -38,6 +40,8 @@ const initialState: VideoStateType = {
       hashtags: '[{"key":13,"label":"EDM","selected":true}]',
       like: true,
       likeCnt: 3514,
+      thumbnail:
+        "https://i.ytimg.com/vi/0gY_z7fqPjs/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0w_6PP55kpL3H-VNAhtDIWuISAA",
       // comments: {
       //   content: [],
       // },
@@ -57,6 +61,8 @@ const initialState: VideoStateType = {
         '[{"key":18,"label":"팬미팅","selected":true},{"key":17,"label":"리코더","selected":true}]',
       like: true,
       likeCnt: 3514,
+      thumbnail:
+        "https://i.ytimg.com/vi/0gY_z7fqPjs/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0w_6PP55kpL3H-VNAhtDIWuISAA",
       // comments: {
       //   content: [],
       // },
@@ -78,6 +84,8 @@ const initialState: VideoStateType = {
       '[{"key":18,"label":"팬미팅","selected":true},{"key":17,"label":"리코더","selected":true}]',
     like: true,
     likeCnt: 1,
+    thumbnail:
+      "https://i.ytimg.com/vi/0gY_z7fqPjs/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0w_6PP55kpL3H-VNAhtDIWuISAA",
     comments: [
       {
         id: 13,
