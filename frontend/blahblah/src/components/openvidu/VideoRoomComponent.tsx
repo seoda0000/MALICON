@@ -795,7 +795,9 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
             )}
         </div>
         {localUser !== undefined &&
-            localUser.getStreamManager() !== undefined && (<AvatarSection user={localUser}/>)}
+          localUser.getStreamManager() !== undefined && (
+            <AvatarSection user={localUser} viewers={this.remotes} />
+          )}
       </div>
     );
   }

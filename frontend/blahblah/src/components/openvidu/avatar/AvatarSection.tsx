@@ -1,46 +1,60 @@
-import { useEffect } from 'react'
+import styled from "@emotion/styled";
+import { useEffect, useState } from "react";
+import { EmotionSignalType } from "../../../model/openvidu/emotionSignalType";
 import AvatarComp from "../../common/AvatarComp";
+
+const AvatarSectionContainer = styled.div`
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  width: 100vw;
+  height: 120px;
+  display: flex;
+  justify-content: space-around;
+`;
 
 interface iAvatarSectionProp {
   user: any;
+  viewers: any;
 }
+
+const initialSignal: EmotionSignalType = {
+  message: "",
+  nickname: "",
+  isPublisher: false,
+};
 export default function AvatarSection(props: iAvatarSectionProp) {
+  const [signal, setSignal] = useState<EmotionSignalType>(initialSignal);
 
   const onEmotionSignalRecieved = () => {
-    props.user.getStreamManager().stream.session.on("signal:emotion", (event: any) => {
-      const data = JSON.parse(event.data);
-      console.log(data);
-    });
+    props.user
+      .getStreamManager()
+      .stream.session.on("signal:emotion", (event: any) => {
+        const data: EmotionSignalType = JSON.parse(event.data);
+        console.log("signal:emotion", data);
+        setSignal(data);
+      });
   };
 
   useEffect(() => {
     onEmotionSignalRecieved();
-  }, [])
+  }, []);
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        // backgroundColor: "red",
-        zIndex: 10,
-        bottom: 0,
-        width: "100%",
-        display: "flex",
-      }}
-    >
-      <AvatarComp currentState="happy" currentScore={0} />
-      <AvatarComp currentState="happy" currentScore={0} />
-      <AvatarComp currentState="happy" currentScore={0} />
-      <AvatarComp currentState="happy" currentScore={0} />
-      <AvatarComp currentState="happy" currentScore={0} />
-      <AvatarComp currentState="happy" currentScore={0} />
-      <AvatarComp currentState="happy" currentScore={0} />
-      <AvatarComp currentState="happy" currentScore={0} />
-      <AvatarComp currentState="happy" currentScore={0} />
-      <AvatarComp currentState="happy" currentScore={0} />
-      <AvatarComp currentState="happy" currentScore={0} />
-      <AvatarComp currentState="happy" currentScore={0} />
-      <AvatarComp currentState="happy" currentScore={0} />
-    </div>
+    <AvatarSectionContainer>
+      {props.viewers.map((viewer: any) => (
+        <AvatarComp
+          key={viewer.nickname}
+          viewer={viewer}
+          signal={signal}
+          currentState={signal.message}
+          currentScore={0}
+        />
+      ))}
+      {/* 생방 들어오아있는 인원.map((시청자) => {
+        <AvatarComp 현재 발생한 시그널같으면 state 보냄? />
+      }) */}
+    </AvatarSectionContainer>
   );
 }
+

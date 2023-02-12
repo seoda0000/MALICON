@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { createElement, useCallback, useEffect } from "react";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { useRef } from "react";
@@ -6,27 +6,82 @@ import { createAvatar } from "@dicebear/core";
 import { personas } from "@dicebear/collection";
 import { useAppSelector } from "../../redux/configStore.hooks";
 import { throttle } from "lodash";
+import { EmotionSignalType } from "../../model/openvidu/emotionSignalType";
 import Surprised from "../../assets/emoji/surprised.png";
 import Sad from "../../assets/emoji/sad.png";
 import Angry from "../../assets/emoji/angry.png";
 import Happy from "../../assets/emoji/happy.png";
 import Fearful from "../../assets/emoji/fearful.png";
 import Disgusted from "../../assets/emoji/disgusted.png";
+import Clap from "../../assets/emoji/clap.png";
+import Heart from "../../assets/emoji/heart.png";
+import Tears from "../../assets/emoji/tears.png";
+import Tears2 from "../../assets/emoji/tears2.png";
+import Red from "../../assets/lightStick/red.png";
+import Puple from "../../assets/lightStick/puple.png";
+import Blue from "../../assets/lightStick/blue.png";
+import Green from "../../assets/lightStick/green.png";
+import Pink from "../../assets/lightStick/pink.png";
+
+const lightStickShakeKeyFrame = keyframes`
+  from {
+    transform: rotate(70deg);
+    left: 34px;
+  }
+  to {
+    transform : perspective(50px) rotate(60deg) rotateX(311deg) translate(18px, 4px);
+    left: 14px;
+  } 
+`;
+
+const lightStickBalladKeyFrame = keyframes`
+  from {
+  }
+  to {
+    transform: rotate(90deg) translateX(-6px); 
+  }
+`;
+
+const emotionKeyFrame2 = keyframes`
+  0% {
+    top: -10px;
+    width: 10px;
+    height: 10px;
+  }
+  30% {
+    top: -30px;
+    width: 30px;
+    height: 30px;
+    top: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    top: -60px;
+    opacity: 0;
+    width: 20px;
+    height: 20px;
+  }
+`;
 
 const emotionKeyFrame = keyframes`
   0% {
     opacity: 1;
   }
-  25% {
-    transform: translateX(-10px);
+  15% {
+    transform: translateX(-15px);
   }
-  60% {
-    transform: translateX(5px);
+  50% {
+    opacity: 1;
+  }
+  70% {
+    transform: translateX(10px);
   }
   100% {
     opacity: 0;
     top: -50px;
-    transform: translateX(2px);
+    transform: translateX(-10px);
   }
 `;
 
@@ -39,120 +94,143 @@ const AvatarCompContainer = styled.div`
     height: 100%;
   }
   & > div.avatar-comp-emotion {
-    width: 20px;
-    height: 20px;
-    & > span {
+    width: 30px;
+    height: 30px;
+    & > span.emotion {
       position: absolute;
-      width: 20px;
-      height: 20px;
+      width: 30px;
+      height: 30px;
       top: 0px;
       left: 50px;
       right: 0;
-      font-size: 30px;
-      color: red;
       z-index: 10;
-      opacity: 0;
+      animation: ${emotionKeyFrame} 2s ease-out infinite;
+      /* animation: ${emotionKeyFrame2} 2s ease-out infinite; */
       & > img {
         width: 100%;
         height: 100%;
         object-fit: contain;
       }
-      &.active {
-        animation: ${emotionKeyFrame} 1.5s ease backwards;
+    }
+    & > span.ballad {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      top: -28px;
+      left: -7px;
+      z-index: 10;
+      transform-origin: 90% 100%;
+      animation: ${lightStickBalladKeyFrame} 1s ease-in-out alternate infinite;
+      & > img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+    & > span.shake {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      top: -28px;
+      left: 14px;
+      z-index: 10;
+      animation: ${lightStickShakeKeyFrame} 0.3s ease-in-out alternate infinite;
+      & > img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
       }
     }
   }
 `;
 
 type AvatarCompPropsType = {
+  signal?: EmotionSignalType;
+  viewer?: any;
   currentState: string;
   currentScore: number;
 };
 
 export default function AvatarComp({
+  signal,
+  viewer,
   currentState,
   currentScore,
 }: AvatarCompPropsType): JSX.Element {
   const avatar = useAppSelector((state) => state.user.userData.avatar!);
-  const happyEl = useRef<HTMLDivElement>(null);
-  const sadEl = useRef<HTMLDivElement>(null);
-  const angryEl = useRef<HTMLDivElement>(null);
-  const fearfulEl = useRef<HTMLDivElement>(null);
-  const disgustedEl = useRef<HTMLDivElement>(null);
-  const surprisedEl = useRef<HTMLDivElement>(null);
+  const parentEl = useRef<HTMLDivElement>(null);
 
   const dataUri = createAvatar(personas, {
     ...JSON.parse(avatar),
   }).toDataUriSync();
 
   const createEmotion = (state: string) => {
-    if (state === "happy") {
-      happyEl.current?.classList.toggle("active");
-      setTimeout(() => {
-        happyEl.current?.classList.toggle("active");
-      }, 1500);
-    } else if (state === "sad") {
-      sadEl.current?.classList.toggle("active");
-      setTimeout(() => {
-        sadEl.current?.classList.toggle("active");
-      }, 1500);
-    } else if (state === "fearful") {
-      fearfulEl.current?.classList.toggle("active");
-      setTimeout(() => {
-        fearfulEl.current?.classList.toggle("active");
-      }, 1500);
-    } else if (state === "disgusted") {
-      disgustedEl.current?.classList.toggle("active");
-      setTimeout(() => {
-        disgustedEl.current?.classList.toggle("active");
-      }, 1500);
-    } else if (state === "angry") {
-      angryEl.current?.classList.toggle("active");
-      setTimeout(() => {
-        angryEl.current?.classList.toggle("active");
-      }, 1500);
-    } else if (state === "surprised") {
-      surprisedEl.current?.classList.toggle("active");
-      setTimeout(() => {
-        surprisedEl.current?.classList.toggle("active");
-      }, 1500);
+    const spanEl = document.createElement("span");
+    if (state === "left") {
+      // 왔다갔다
+      spanEl.classList.add("ballad");
+    } else if (state === "right") {
+      // 와악
+      spanEl.classList.add("shake");
+    } else {
+      spanEl.classList.add("emotion");
     }
+
+    const imgEl = document.createElement("img");
+    if (state === "sad") {
+      imgEl.src = Tears2;
+    } else if (state === "angry") {
+      imgEl.src = Angry;
+    } else if (state === "fearful") {
+      imgEl.src = Fearful;
+    } else if (state === "disgusted") {
+      imgEl.src = Disgusted;
+    } else if (state === "surprised") {
+      imgEl.src = Surprised;
+    } else if (state === "clap") {
+      imgEl.src = Clap;
+    } else if (state === "happy") {
+      imgEl.src = Happy;
+    } else if (state === "left" || state === "right") {
+      // 응원봉
+      imgEl.src = Pink;
+    } else {
+      imgEl.src = Heart;
+    }
+
+    spanEl.appendChild(imgEl);
+    parentEl.current?.appendChild(spanEl);
+
+    setTimeout(
+      () => {
+        spanEl.remove();
+      },
+      state === "left" ? 4000 : state === "right" ? 2500 : 2000
+    );
   };
 
   const throttled = useCallback(
-    throttle((state) => createEmotion(state), 5000),
+    throttle((state) => createEmotion(state), 4000),
     []
   );
 
   useEffect(() => {
-    if (currentState && currentState !== "neutral") {
-      throttled(currentState);
+    console.log(signal?.nickname, viewer.nickname, viewer.streamId);
+    if (signal?.nickname === viewer.nickname) {
+      if (currentState && currentState !== "neutral") {
+        throttled(currentState);
+      }
     }
-  }, [currentState, currentScore]);
+  }, [signal, currentState, currentScore]);
+
+  useEffect(() => {
+    createEmotion("happy");
+  }, []);
 
   return (
     <AvatarCompContainer>
       <img className="avatar-comp-avatar" alt="Sample" src={dataUri} />
-      <div className="avatar-comp-emotion">
-        <span ref={happyEl}>
-          <img src={Happy} alt="" />
-        </span>
-        <span ref={sadEl}>
-          <img src={Sad} alt="" />
-        </span>
-        <span ref={angryEl}>
-          <img src={Angry} alt="" />
-        </span>
-        <span ref={fearfulEl}>
-          <img src={Fearful} alt="" />
-        </span>
-        <span ref={disgustedEl}>
-          <img src={Disgusted} alt="" />
-        </span>
-        <span ref={surprisedEl}>
-          <img src={Surprised} alt="" />
-        </span>
-      </div>
+      <div className="avatar-comp-emotion" ref={parentEl}></div>
     </AvatarCompContainer>
   );
 }
