@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import List from "@mui/material/List";
+import { useNavigate } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -136,6 +137,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Layout(props: LayoutProps) {
+  const navigate = useNavigate();
   const loggedUser = useAppSelector((state) => state.user.userData);
   const subscribers = useAppSelector((state) => state.user.subscribers);
   const dispatch = useAppDispatch();
@@ -208,8 +210,11 @@ export default function Layout(props: LayoutProps) {
     username: "",
   });
 
-  const handleAlert = () => {
+  const handleAlert = (e: any) => {
+    e.preventDefault();
+    console.log("꺼져야함");
     setOpenAlert({ state: !openAlert.state, username: "" });
+    navigate("/avatar");
   };
 
   const action = (
@@ -598,21 +603,12 @@ export default function Layout(props: LayoutProps) {
         open={openAlert.state}
         autoHideDuration={6000}
         onClose={handleAlert}
-        // message={`환영합니다! ${openAlert.username}님!`}
-        // action={action}
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       >
         <Alert variant="filled" severity="success" action={action}>
           <AlertTitle>환영합니다, {openAlert.username}님!</AlertTitle>
           MALICON에 처음 오셨나요? —
-          <Link
-            style={{ color: "white" }}
-            to="/avatar"
-            // color="success"
-            // variant="contained"
-            // size="small"
-            // endIcon={<SendIcon />}
-          >
+          <Link style={{ color: "white" }} to="/avatar" onClick={handleAlert}>
             아바타 만들기
           </Link>
         </Alert>
