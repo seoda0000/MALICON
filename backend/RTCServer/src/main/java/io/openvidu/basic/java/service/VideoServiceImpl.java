@@ -43,6 +43,7 @@ public class VideoServiceImpl implements VideoService{
                 .thumbnail(liveRoomEntity.getThumbnail())
                 .hashTags(liveRoomEntity.getHashTag())
                 .pathUrl(recording.getUrl())
+                .views((long)0)
                 .playTime(recording.getDuration())
                 .title(liveRoomEntity.getTitle()) // 일단 방송 제목으로
                 .timeStamp(date.toEpochMilli())
