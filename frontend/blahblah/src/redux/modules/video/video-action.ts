@@ -202,7 +202,7 @@ export const postVideoCommentData = createAsyncThunk(
       const axios = axiosInitializer();
 
       await axios
-        .post<CommentPostType>(`/api/comments`, postData, {
+        .post<CommentPostType>(`/api/comments/videos`, postData, {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Baerer " + getAccessToken(),
@@ -232,7 +232,7 @@ export const removeVideoCommentData = createAsyncThunk(
       const axios = axiosInitializer();
 
       await axios
-        .delete(`/api/comments/${removeData.id}/${removeData.userPK}`, {
+        .delete(`/api/comments/videos/${removeData.id}/${removeData.userPK}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Baerer " + getAccessToken(),
