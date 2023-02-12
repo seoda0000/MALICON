@@ -45,12 +45,17 @@ import SubscriberItem from "../auth/SubscriberItem";
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import FaceIcon from "@mui/icons-material/Face";
 import BroadcastModal from "../broadcast/BroadcastModal";
-
+import CloseIcon from "@mui/icons-material/Close";
 import VideoRoomComponent from "../openvidu/VideoRoomComponent";
 import { RootState } from "../../redux/configStore";
 import { useSelector } from "react-redux";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AccountModal from "../auth/AccountModal";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import SendIcon from "@mui/icons-material/Send";
 
 interface LayoutProps {
   children: ReactNode;
@@ -196,6 +201,23 @@ export default function Layout(props: LayoutProps) {
 
   // 회원정보 수정 모달 조작
   const [openAccountModal, setOpenAccountModal] = useState<boolean>(false);
+
+  // alert
+  const [openAlert, setOpenAlert] = React.useState({
+    state: false,
+    username: "",
+  });
+
+  const handleAlert = () => {
+    setOpenAlert({ state: !openAlert.state, username: "" });
+  };
+
+  const action = (
+    <Button color="inherit" size="small" onClick={handleAlert}>
+      <CloseIcon />
+    </Button>
+  );
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -545,7 +567,12 @@ export default function Layout(props: LayoutProps) {
 
       {/* 로그인 모달 */}
       {openSigninModal && (
-        <SigninModal open={openSigninModal} setOpen={setOpenSigninModal} />
+        <SigninModal
+          open={openSigninModal}
+          setOpen={setOpenSigninModal}
+          setOpenAlert={setOpenAlert}
+          openAlert={openAlert}
+        />
       )}
 
       {/* 회원가입 모달 */}
@@ -566,8 +593,30 @@ export default function Layout(props: LayoutProps) {
         />
       )}
 
-      {/* 오픈비두 창 */}
-      {/* {isViewed && <VideoRoomComponent />} */}
+      {/* alert */}
+      <Snackbar
+        open={openAlert.state}
+        autoHideDuration={6000}
+        onClose={handleAlert}
+        // message={`환영합니다! ${openAlert.username}님!`}
+        // action={action}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Alert variant="filled" severity="success" action={action}>
+          <AlertTitle>환영합니다, {openAlert.username}님!</AlertTitle>
+          MALICON에 처음 오셨나요? —
+          <Link
+            style={{ color: "white" }}
+            to="/avatar"
+            // color="success"
+            // variant="contained"
+            // size="small"
+            // endIcon={<SendIcon />}
+          >
+            아바타 만들기
+          </Link>
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

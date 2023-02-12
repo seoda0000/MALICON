@@ -12,6 +12,7 @@ export type VideoType = {
   hashtags: string;
   like: boolean;
   likeCnt: number;
+  thumbnail: string | null;
 
   // comments: CommentType[];
 };

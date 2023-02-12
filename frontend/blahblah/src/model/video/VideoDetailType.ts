@@ -11,6 +11,7 @@ export type VideoDetailType = {
   pathUrl: string;
   createDate: string;
   hashtags: string;
+  thumbnail: string | null;
 
   // 디테일
   like: boolean;

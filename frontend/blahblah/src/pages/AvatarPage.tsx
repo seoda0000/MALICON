@@ -5,11 +5,16 @@ import { Button, Card, Box, Paper } from "@mui/material";
 import { Stack } from "@mui/system";
 import Divider from "@mui/material/Divider";
 import { useAppDispatch } from "../redux/configStore.hooks";
+import { Link } from "react-router-dom";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import { updateUserAction } from "../redux/modules/user";
 import { RootState } from "../redux/configStore";
 import { useSelector } from "react-redux";
+import CloseIcon from "@mui/icons-material/Close";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 const AVATAR_OPTION = {
   body: ["checkered", "rounded", "small", "squared"],
   clothingColor: [
@@ -267,6 +272,19 @@ function AvatarPage() {
     },
   };
 
+  // alert
+  const [openAlert, setOpenAlert] = React.useState(false);
+
+  const handleAlert = () => {
+    setOpenAlert(!openAlert);
+  };
+
+  const action = (
+    <Button color="inherit" size="small" onClick={handleAlert}>
+      <CloseIcon />
+    </Button>
+  );
+
   // 아바타 서버에 저장
   const dispatch = useAppDispatch();
   const userId = useSelector((state: RootState) => state.user.userData.userId);
@@ -283,7 +301,8 @@ function AvatarPage() {
 
     // console.log("아바타 저장 : " + JSON.stringify(selectedAvatar));
 
-    alert("아바타 저장 완료");
+    // alert("아바타 저장 완료");
+    setOpenAlert(!openAlert);
   };
 
   return (
@@ -328,6 +347,24 @@ function AvatarPage() {
           </Stack>
         </Card>
       </Box>
+
+      {/* alert */}
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={6000}
+        onClose={handleAlert}
+        // message="아바타가 업데이트 되었습니다."
+        // action={action}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert variant="filled" severity="success" action={action}>
+          <AlertTitle>나만의 아바타 생성 완료!</AlertTitle>
+          튜토리얼을 진행할까요? —
+          <Link style={{ color: "white" }} to="/tutorial">
+            바로가기
+          </Link>
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

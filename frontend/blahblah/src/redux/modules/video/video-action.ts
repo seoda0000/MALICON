@@ -37,6 +37,7 @@ export const fetchAllVideoData = createAsyncThunk(
           hashtags: video.hashtags,
           like: video.like,
           likeCnt: video.likeCnt,
+          thumbnail: video.thumbnail,
 
           //   commentList: video.comments.content,
         };
@@ -80,6 +81,7 @@ export const getVideoById = createAsyncThunk(
         pathUrl: video.pathUrl,
         createDate: video.createDate,
         hashtags: video.hashtags,
+        thumbnail: video.thumbnail,
         like: video.like,
         likeCnt: video.likeCnt,
         userPK: video.userPK,

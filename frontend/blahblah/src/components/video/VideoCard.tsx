@@ -26,7 +26,11 @@ export default function VideoCard({
   return (
     <CardComp nth={nth} title={video.title} caption={true} video={video}>
       <img
-        src="https://i.ytimg.com/vi/0gY_z7fqPjs/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0w_6PP55kpL3H-VNAhtDIWuISAA"
+        src={
+          video.thumbnail
+            ? video.thumbnail
+            : "https://i.ytimg.com/vi/0gY_z7fqPjs/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0w_6PP55kpL3H-VNAhtDIWuISAA"
+        }
         srcSet="https://images.unsplash.com/photo-1515825838458-f2a94b20105a?auto=format&fit=crop&w=300&dpr=2 2x"
         loading="lazy"
         alt="Yosemite by Casey Horner"
@@ -34,4 +38,3 @@ export default function VideoCard({
     </CardComp>
   );
 }
-
