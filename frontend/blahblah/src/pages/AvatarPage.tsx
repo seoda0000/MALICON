@@ -10,6 +10,10 @@ import { styled } from "@mui/material/styles";
 import { updateUserAction } from "../redux/modules/user";
 import { RootState } from "../redux/configStore";
 import { useSelector } from "react-redux";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
+import Snackbar from "@mui/material/Snackbar";
+
 const AVATAR_OPTION = {
   body: ["checkered", "rounded", "small", "squared"],
   clothingColor: [
@@ -267,6 +271,21 @@ function AvatarPage() {
     },
   };
 
+  // alert
+  const [openAlert, setOpenAlert] = React.useState(false);
+
+  const handleAlert = () => {
+    setOpenAlert(!openAlert);
+  };
+
+  const action = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleAlert}>
+        <CheckCircleIcon />
+      </Button>
+    </React.Fragment>
+  );
+
   // 아바타 서버에 저장
   const dispatch = useAppDispatch();
   const userId = useSelector((state: RootState) => state.user.userData.userId);
@@ -283,7 +302,8 @@ function AvatarPage() {
 
     // console.log("아바타 저장 : " + JSON.stringify(selectedAvatar));
 
-    alert("아바타 저장 완료");
+    // alert("아바타 저장 완료");
+    setOpenAlert(!openAlert);
   };
 
   return (
@@ -328,6 +348,16 @@ function AvatarPage() {
           </Stack>
         </Card>
       </Box>
+
+      {/* alert */}
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={6000}
+        onClose={handleAlert}
+        message="아바타가 업데이트 되었습니다."
+        action={action}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
     </div>
   );
 }

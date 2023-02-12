@@ -7,6 +7,8 @@ import ChipsArray from "./ChipsArray";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux/configStore";
 import { useNavigate } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 interface ChipData {
   key: number;
@@ -73,6 +75,21 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
     );
   };
 
+  // alert
+  const [openAlert, setOpenAlert] = React.useState(false);
+
+  const handleAlert = () => {
+    setOpenAlert(!openAlert);
+  };
+
+  const action = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleAlert}>
+        <CheckCircleIcon />
+      </Button>
+    </React.Fragment>
+  );
+
   // 방송 시작
   const navigate = useNavigate();
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -84,11 +101,9 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
       hashTag: JSON.stringify(chipList),
     };
 
-    // console.log(JSON.stringify(chipList));
     if (title === "") {
-      alert("방송 제목을 입력하세요.");
+      setOpenAlert(!openAlert);
     } else {
-      // 리덕스에 저장하기 전에 호출되어서 프롭스에 안담겼음
       dispatch(startSession(sessionData)).then(() => {
         onCloseModal();
         navigate("/broadcast");
@@ -118,6 +133,16 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
           </Button>
         </Box>
       </Box>
+
+      {/* alert */}
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={6000}
+        onClose={handleAlert}
+        message="방송 제목을 입력하세요"
+        action={action}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
     </BasicModal>
   );
 }
