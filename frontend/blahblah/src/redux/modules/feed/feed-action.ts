@@ -12,6 +12,33 @@ import { CommentPostType } from "../../../model/feed/commentPostType copy";
 import { videoActions } from "../video/video-slice";
 import video from "../video";
 import { getVideoById } from "../video";
+
+import feed from ".";
+import { FeedWrapType } from "../../../model/profile/feedWrapType";
+
+// 피드 목록 가져오기 (무한스크롤 페이징 적용)
+export const getFeedsAction = createAsyncThunk(
+  "GET_FEEDS",
+  async (reqData: { size: number; page: number }, { rejectWithValue }) => {
+    try {
+      const axios = axiosInitializer();
+      console.log("피드목롥 가지러감?");
+      const { data } = await axios.get<FeedWrapType>(
+        `/api/articles/${reqData.size}/${reqData.page}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + getAccessToken(),
+          },
+        }
+      );
+      return data;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
 // 피드 목록 가져오기
 export const fetchFeedData = createAsyncThunk(
   "feed/fetchFeedData",
@@ -190,13 +217,16 @@ export const removeCommentData = createAsyncThunk(
       const axios = axiosInitializer();
 
       await axios
-        .delete(`/api/comments/articles/${removeData.id}/${removeData.userPK}`, {
-          // data: removeData,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Baerer " + getAccessToken(),
-          },
-        })
+        .delete(
+          `/api/comments/articles/${removeData.id}/${removeData.userPK}`,
+          {
+            // data: removeData,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Baerer " + getAccessToken(),
+            },
+          }
+        )
         .then((data) => {
           console.log("덧글 삭제: ", data);
           if (removeData.isVideo) {
@@ -275,3 +305,4 @@ export const likeCancelAction = createAsyncThunk(
     }
   }
 );
+

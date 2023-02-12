@@ -18,6 +18,7 @@ import {
   checkDuplicateAction,
   signupAction,
   sendEmailAction,
+  checkDupNickNameAction,
 } from "../../redux/modules/user";
 import BasicModal from "../ui/BasicModal";
 
@@ -37,6 +38,7 @@ const checkBoxStyle = {
 
 export default function SignupModal({ open, setOpen }: any): JSX.Element {
   const checkDup = useAppSelector((state) => state.user.checkDuplicate);
+  const checkDupNick = useAppSelector((state) => state.user.checkDupNickName);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const checkEmailNumber = useAppSelector((state) => state.user.checkEmail);
@@ -52,6 +54,9 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
   const [idAvail, setIdAvail] = useState<string>("PleaseCheckId");
   const [pwAvail, setPwAvail] = useState<boolean>(false);
   const [nickNameActivated, setNickNameActivated] = useState<boolean>(false);
+  const [nickNameAvail, setNickNameAvail] = useState<string>(
+    "PleaseCheckNickName"
+  );
   const [rePwAvail, setRePwAvail] = useState<boolean>(false);
   const [emailAvail, setEmailAvail] = useState<string>("PleaseCheckEmail");
   // const [checkEmailNumber, setCheckEmailNumber] = useState<string>("");
@@ -85,6 +90,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
   };
   const onChangeNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickNameActivated(true);
+    setNickNameAvail("PleaseCheckNickName");
 
     const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
     if (regex.test(e.target.value) || e.target.value === "") {
@@ -122,6 +128,10 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
     dispatch(checkDuplicateAction(id));
   };
 
+  const onConfirmNickName = () => {
+    dispatch(checkDupNickNameAction(nickName));
+  };
+
   const handleClickShowPw = () => {
     setShowPw((prev) => !prev);
   };
@@ -156,10 +166,11 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
           email,
           phoneNumber: phone === "" ? null : phone,
         })
-      );
+      ).then(() => {
+        onCloseModal();
+      });
 
-      onCloseModal();
-      navigate("/", { replace: true });
+      // navigate("/", { replace: true });
     }
   };
 
@@ -179,6 +190,14 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
       setRePwAvail(false);
     }
   }, [pw, rePw]);
+
+  useEffect(() => {
+    if (checkDupNick.error) {
+      setNickNameAvail("UnAvailable");
+    } else if (checkDupNick.data) {
+      setNickNameAvail("Available");
+    }
+  }, [checkDupNick]);
 
   useEffect(() => {
     if (checkDup.error) {
@@ -291,7 +310,30 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             required
             error={nickNameActivated && nickName === "" ? true : false}
           />
+          <FormHelperText id="nick-helper-text">
+            {nickNameActivated &&
+              (nickNameAvail === "Available" ? (
+                <span>사용 가능한 닉네임입니다</span>
+              ) : nickNameAvail === "UnAvailable" ? (
+                <span>이미 사용중인 닉네임입니다</span>
+              ) : (
+                <span>닉네임 중복 체크를 해주세요</span>
+              ))}
+          </FormHelperText>
         </FormControl>
+        <Button
+          onClick={onConfirmNickName}
+          disabled={
+            !nickNameActivated ||
+            nickName.length === 0 ||
+            nickNameAvail === "Available"
+          }
+          // disabled={
+          //   idAvail === "RegexFail" || idAvail === "Available" ? true : false
+          // }
+        >
+          닉네임 중복 확인
+        </Button>
         <FormControl variant="standard">
           <InputLabel htmlFor="email">email *</InputLabel>
           <Input
@@ -389,3 +431,4 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
     </BasicModal>
   );
 }
+

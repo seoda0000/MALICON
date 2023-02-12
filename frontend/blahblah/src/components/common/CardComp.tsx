@@ -11,9 +11,10 @@ import {
   Link,
   Typography,
 } from "@mui/joy";
-import React from "react";
-import { VideoType } from "../../model/video/VideoType";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ProfileVideoType } from "../../model/profile/profileVideoType";
+import { VideoType } from "../../model/video/VideoType";
 import FeedProfileImage from "../feed/FeedProfileImage";
 import { AppDispatch } from "../../redux/configStore";
 import { useDispatch } from "react-redux";
@@ -46,26 +47,29 @@ const CardWrapper = styled(Card)<{ nth: number }>`
       border-radius: 13px;
       border: 1.5px solid black;
       position: absolute;
-      ${({ nth }) =>
-        nth &&
-        (nth % 4 === 0
-          ? css`
-              background: #54d7c7;
-            `
-          : nth % 4 === 1
-          ? css`
-              background: #f3b63a;
-            `
-          : nth % 4 === 2
-          ? css`
-              background: #f55d81;
-            `
-          : css`
-              background: #6dbb58;
-            `)}
       z-index: -1;
       right: 0;
       bottom: 0;
+      ${({ nth }) =>
+        nth
+          ? nth % 4 === 0
+            ? css`
+                background: #54d7c7;
+              `
+            : nth % 4 === 1
+            ? css`
+                background: #f3b63a;
+              `
+            : nth % 4 === 2
+            ? css`
+                background: #f55d81;
+              `
+            : css`
+                background: #6dbb58;
+              `
+          : css`
+              background: #6dbb58;
+            `};
     }
   }
   &:hover {
@@ -78,28 +82,42 @@ const CardWrapper = styled(Card)<{ nth: number }>`
   }
 `;
 
+type HashTagJSONType = {
+  key: number;
+  label: string;
+  selected: boolean;
+};
+
 type CardCompPropsType = {
   children: React.ReactNode;
   nth: number;
   title?: string;
   caption?: boolean;
-  video?: VideoType;
+  video?: ProfileVideoType | VideoType;
 };
 
 export default function CardComp({
   children,
-  nth,
+  nth = 0,
   title,
   caption,
   video,
 }: CardCompPropsType): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [hashtags, setHashtags] = useState<HashTagJSONType[]>();
+
   function onClickHandler() {
     dispatch(getVideoById(video!.id)).then(() => {
       navigate(`/video/${video?.id}`);
     });
   }
+
+  useEffect(() => {
+    if (video) {
+      setHashtags(JSON.parse(video.hashtags));
+    }
+  }, [video]);
   return (
     <CardWrapper nth={nth} onClick={onClickHandler}>
       <Box sx={{ position: "relative" }}>
@@ -142,6 +160,7 @@ export default function CardComp({
             >
               <Typography level="h2" noWrap sx={{ fontSize: "lg" }}>
                 <Link
+                  href={video?.pathUrl}
                   overlay
                   underline="none"
                   sx={{
@@ -213,23 +232,24 @@ export default function CardComp({
             </Link>
             <Box sx={{ display: "flex" }}>
               {/* 해시태그 표시 */}
-              {JSON.parse(video!.hashtags).map((data: any, index: any) => {
-                return (
-                  <Box
-                    sx={{
-                      backgroundColor: "#dddddd",
-                      // color: "white",
-                      fontSize: 9,
-                      borderRadius: 13,
-                      px: 0.5,
-                      mr: 1,
-                    }}
-                    key={index}
-                  >
-                    {data.label}
-                  </Box>
-                );
-              })}
+              {video &&
+                hashtags &&
+                hashtags.map((hashtag: HashTagJSONType, index: number) => {
+                  return (
+                    <Box
+                      sx={{
+                        backgroundColor: "#dddddd",
+                        // color: "white",
+                        fontSize: 9,
+                        borderRadius: 13,
+                        px: 0.5,
+                        mr: 1,
+                      }}
+                    >
+                      {hashtag.label}
+                    </Box>
+                  );
+                })}
             </Box>
           </Box>
         </Box>
@@ -237,3 +257,4 @@ export default function CardComp({
     </CardWrapper>
   );
 }
+

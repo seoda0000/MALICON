@@ -43,26 +43,29 @@ const CardWrapper = styled(Card)<{ nth: number }>`
       border-radius: 13px;
       border: 1.5px solid black;
       position: absolute;
-      ${({ nth }) =>
-        nth &&
-        (nth % 4 === 0
-          ? css`
-              background: #54d7c7;
-            `
-          : nth % 4 === 1
-          ? css`
-              background: #f3b63a;
-            `
-          : nth % 4 === 2
-          ? css`
-              background: #f55d81;
-            `
-          : css`
-              background: #6dbb58;
-            `)}
       z-index: -1;
       right: 0;
       bottom: 0;
+      ${({ nth }) =>
+        nth
+          ? nth % 4 === 0
+            ? css`
+                background: #54d7c7;
+              `
+            : nth % 4 === 1
+            ? css`
+                background: #f3b63a;
+              `
+            : nth % 4 === 2
+            ? css`
+                background: #f55d81;
+              `
+            : css`
+                background: #6dbb58;
+              `
+          : css`
+              background: #54d7c7;
+            `};
     }
   }
   &:hover {
@@ -190,3 +193,4 @@ CardCompPropsType): JSX.Element {
     </CardWrapper>
   );
 }
+

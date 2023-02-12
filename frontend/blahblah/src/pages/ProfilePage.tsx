@@ -32,6 +32,7 @@ import {
 import { updateUserAction } from "../redux/modules/user";
 import ButtonComp from "../components/common/ButtonComp";
 import OnAirBadge from "../components/common/OnAirBadge";
+import { fetchFeedData } from "../redux/modules/feed";
 
 const MoreVideoContainer = styled.div`
   margin-top: 60px;
@@ -157,10 +158,8 @@ export default function ProfilePage(): JSX.Element {
   const onClickSubscribe = () => {
     if (!isSubscribing) {
       dispatch(subscribeAction(userpk)); // 확인필요
-      console.log("구독!!");
     } else {
       dispatch(unSubscribeAction(userpk));
-      console.log("구독 취소!");
     }
   };
 
@@ -233,20 +232,20 @@ export default function ProfilePage(): JSX.Element {
 
   useEffect(() => {
     // 프로필 가져오기
-    dispatch(getAboutMeAction(userpk));
+    dispatch(getAboutMeAction(userpk)).then(() => {
+      // 생방송 중 여부 가져오기
+      // dispatch(getIsOnAirAction(user.userId));
 
-    // 팔로잉 목록 가져오기 (구독중인지확인)
-    dispatch(getIsSubscribeAction());
-
-    // 생방송 중 여부 가져오기
-    dispatch(getIsOnAirAction(user.userId));
+      // 팔로잉 목록 가져오기 (구독중인지확인)
+      dispatch(getIsSubscribeAction());
+    });
 
     // 지난 동영상 목록 가져오기
     dispatch(getVideoAction({ userPK: userpk, size: 5, page: 0 }));
 
     // 피드 목록 가져오기
-    // dispatch(getFeedAction(userpk)); // 확인필요
-  });
+    dispatch(getFeedAction({ userPK: userpk, size: 5, page: 0 }));
+  }, []);
 
   // if (!(getProfile && getisOnAir && getVideos && getFeed))
   //   return <div>loading..</div>;
@@ -378,14 +377,20 @@ export default function ProfilePage(): JSX.Element {
               <h2>Videos</h2>
               <span onClick={onClickMoreVideo}>more &gt;</span>
             </div>
-            <Carousel items={videos} />
+            {videos && <Carousel items={videos} />}
           </VideoContainer>
           <FeedContainer>
             <div className="title">
               <h2>Feed</h2>
             </div>
-            {/* <InfiniteScroll /> */}
-            {/* <FeedList feeds={feeds} /> */}
+            {feeds && (
+              <InfiniteScroll
+                feed={true}
+                actionFunc={getFeedAction}
+                itemsWrap={feeds}
+                totalPage={feeds.totalPages}
+              />
+            )}
           </FeedContainer>
         </>
       ) : (
@@ -394,7 +399,14 @@ export default function ProfilePage(): JSX.Element {
             <h2>Videos</h2>
             <span onClick={onClickMoreVideo}>&lt; back</span>
           </div>
-          {/* <InfiniteScroll /> */}
+          {videos && (
+            <InfiniteScroll
+              video={true}
+              actionFunc={getVideoAction}
+              itemsWrap={videos}
+              totalPage={videos.totalPages}
+            />
+          )}
         </MoreVideoContainer>
       )}
     </ProfilePageLayout>

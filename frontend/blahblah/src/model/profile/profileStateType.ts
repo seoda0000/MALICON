@@ -1,14 +1,16 @@
 import { ReduxStateType } from "../reduxStateType";
 import { SubscriberType } from "../subscribe/subscriberType";
+import { FeedWrapType } from "./feedWrapType";
 import { ProfileFeedType } from "./profileFeedType";
 import { ProfileUserType } from "./profileUserType";
-import { VideoType } from "./VideoType";
+import { ProfileVideoType } from "./profileVideoType";
+import { VideoWrapType } from "./videoWrapType";
 
 export type ProfileStateType = {
   userData: ProfileUserType;
   isSubscribing: boolean;
-  feedData: ProfileFeedType[] | null;
-  videoData: VideoType[];
+  videoData: VideoWrapType | null;
+  feedData: FeedWrapType | null;
   getAboutMe: ReduxStateType;
   addAboutMe: ReduxStateType;
   updateAboutMe: ReduxStateType;

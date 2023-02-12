@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
+import { styled, useTheme, Theme, CSSObject, css } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
@@ -25,7 +25,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AvatarShortcutButton from "./AvatarShortcutButton";
 // import ProfileAvatar from "../auth/ProfileAvatar";
 import { getAccessToken, removeToken } from "../../redux/modules/user/token";
@@ -56,12 +56,61 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import SendIcon from "@mui/icons-material/Send";
+import { Favorite } from "@mui/icons-material";
+
+const LayoutContainer = styled(Box)<{ open: boolean }>`
+  ${({ open }) =>
+    open &&
+    css`
+      .badge-wrapper {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .badge-inner {
+          position: absolute;
+          .badge-alart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(10px, -84px);
+          }
+          .badge-setting {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(25px, 25px);
+          }
+          .badge-subscribers {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-112px, 5px);
+          }
+          .badge-userid {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(34px, -43px);
+          }
+          .badge-nickname {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-117px, -84px);
+          }
+        }
+      }
+    `};
+`;
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const menuWithLogin = ["Profile", "Account", "Dashboard", "Logout"];
+// const menuWithLogin = ["Profile", "Account", "Dashboard", "Logout"];
+const menuWithLogin = ["Profile", "Logout"];
 const menuWithLogout = ["Signup", "Login"];
 
 const drawerWidth = 240;
@@ -139,6 +188,7 @@ export default function Layout(props: LayoutProps) {
   const loggedUser = useAppSelector((state) => state.user.userData);
   const subscribers = useAppSelector((state) => state.user.subscribers);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [openSigninModal, setOpenSigninModal] = useState<boolean>(false);
@@ -171,12 +221,20 @@ export default function Layout(props: LayoutProps) {
   };
 
   // 로그아웃
-
-  const logout = () => {
+  const onClickLogout = () => {
     removeToken();
     console.log("로그아웃");
-    window.location.replace("/");
+    window.location.replace("/main");
   };
+
+  const onClickMyProfile = () => {
+    handleCloseUserMenu();
+    navigate(`/profile/${loggedUser.id}`);
+  };
+
+  const onClickAccount = () => {};
+
+  const onClickDashboard = () => {};
 
   useEffect(() => {
     dispatch(getSubscribersAction());
@@ -219,7 +277,7 @@ export default function Layout(props: LayoutProps) {
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <LayoutContainer open={open} sx={{ display: "flex" }}>
       <CssBaseline />
 
       <ThemeProvider theme={BoldKoreanFont}>
@@ -242,7 +300,7 @@ export default function Layout(props: LayoutProps) {
               variant="h6"
               noWrap
               component="a"
-              href="/"
+              href="/main"
               sx={{
                 fontWeight: 700,
                 letterSpacing: ".3rem",
@@ -281,43 +339,10 @@ export default function Layout(props: LayoutProps) {
               </IconButton>
             </Box>
 
-            {/* Drawer 열렸을 때 작은 아이콘들 */}
-            {open && loggedUser.isLoggedIn && (
+            {/* {open && loggedUser.isLoggedIn && (
               <MenuItem>
-                {/* 알림 아이콘 */}
-                <IconButton
-                  size="large"
-                  aria-label="show 17 new notifications"
-                  color="inherit"
-                >
-                  <Badge badgeContent={17} color="error">
-                    <NotificationsIcon />
-                  </Badge>
-                </IconButton>
-                {/* 설정 아이콘 */}
-                <IconButton
-                  size="large"
-                  aria-label="show 17 new notifications"
-                  color="inherit"
-                  onClick={() => setOpenAccountModal((prev) => !prev)}
-                >
-                  <SettingsIcon />
-                </IconButton>
               </MenuItem>
-            )}
-
-            {open && loggedUser.isLoggedIn && (
-              <MenuItem>
-                <ListItemText
-                  primary={"id: " + loggedUser.userId}
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-                <ListItemText
-                  primary={"닉네임: " + loggedUser.nickName}
-                  sx={{ opacity: open ? 1 : 0, ml: 2 }}
-                />
-              </MenuItem>
-            )}
+            )} */}
 
             {/* Drawer 열렸을 때 큰 아바타 */}
             {open && (
@@ -332,21 +357,69 @@ export default function Layout(props: LayoutProps) {
                   },
                 }}
               >
-                <Tooltip title="Open settings">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ mr: 1 }}>
-                    {loggedUser.isLoggedIn ? (
-                      <ProfileImage big={true} border={true} />
-                    ) : (
-                      <AccountCircleRoundedIcon
-                        sx={{
-                          height: 120,
-                          width: 120,
-                        }}
-                      />
-                    )}
-                  </IconButton>
-                </Tooltip>
+                <div className="badge-wrapper">
+                  <Tooltip title="Open settings">
+                    <IconButton onClick={handleOpenUserMenu} sx={{ mr: 1 }}>
+                      {loggedUser.isLoggedIn ? (
+                        <ProfileImage big={true} border={true} />
+                      ) : (
+                        <AccountCircleRoundedIcon
+                          sx={{
+                            height: 120,
+                            width: 120,
+                          }}
+                        />
+                      )}
+                    </IconButton>
+                  </Tooltip>
 
+                  {/* Drawer 열렸을 때 작은 아이콘들 */}
+                  {open && loggedUser.isLoggedIn && (
+                    <MenuItem className="badge-inner">
+                      {/* 알림 아이콘 */}
+                      <IconButton
+                        className="badge-alart"
+                        size="large"
+                        aria-label="show 17 new notifications"
+                        color="inherit"
+                      >
+                        <Badge badgeContent={17} color="error">
+                          <NotificationsIcon />
+                        </Badge>
+                      </IconButton>
+                      {/* 설정 아이콘 */}
+                      <IconButton
+                        className="badge-setting"
+                        size="large"
+                        aria-label="show 17 new notifications"
+                        color="inherit"
+                        onClick={() => setOpenAccountModal((prev) => !prev)}
+                      >
+                        <SettingsIcon />
+                      </IconButton>
+                      <IconButton
+                        className="badge-subscribers"
+                        size="large"
+                        aria-label="show 17 new notifications"
+                        color="inherit"
+                        onClick={() => setOpenAccountModal((prev) => !prev)}
+                      >
+                        <Favorite />
+                        <span>3</span>
+                      </IconButton>
+                      <ListItemText
+                        className="badge-userid"
+                        primary={loggedUser.userId}
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                      <ListItemText
+                        className="badge-nickname"
+                        primary={loggedUser.nickName}
+                        sx={{ opacity: open ? 1 : 0, ml: 2 }}
+                      />
+                    </MenuItem>
+                  )}
+                </div>
                 <Menu
                   sx={{ mt: "45px" }}
                   id="menu-appbar"
@@ -368,7 +441,13 @@ export default function Layout(props: LayoutProps) {
                       <MenuItem
                         key={item}
                         onClick={
-                          item === "Logout" ? logout : handleCloseUserMenu
+                          item === "Profile"
+                            ? onClickMyProfile
+                            : // : item === "Account"
+                              // ? onClickAccount
+                              // : item === "Dashboard"
+                              // ? onClickDashboard
+                              onClickLogout
                         }
                       >
                         <Typography textAlign="center">{item}</Typography>
@@ -617,6 +696,9 @@ export default function Layout(props: LayoutProps) {
           </Link>
         </Alert>
       </Snackbar>
-    </Box>
+      {/* 오픈비두 창 */}
+      {/* {isViewed && <VideoRoomComponent />} */}
+    </LayoutContainer>
   );
 }
+

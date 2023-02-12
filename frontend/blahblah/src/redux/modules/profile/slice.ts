@@ -25,8 +25,8 @@ const initialState: ProfileStateType = {
   },
   isSubscribing: false,
   subscribers: [],
+  videoData: null,
   feedData: null,
-  videoData: [],
   getAboutMe: { loading: false, data: null, error: null },
   addAboutMe: { loading: false, data: null, error: null },
   updateAboutMe: { loading: false, data: null, error: null },
@@ -145,8 +145,6 @@ const profileSlice = createSlice({
           (subscriber: SubscriberType) =>
             subscriber.userPK === state.userData.userPK
         );
-        console.log(state.getIsSub.data);
-        console.log(sub);
         if (sub.length === 0) {
           state.isSubscribing = false;
         } else {
@@ -215,7 +213,7 @@ const profileSlice = createSlice({
         state.getFeed.data = payload;
         state.getFeed.error = null;
 
-        // state.feedData = payload; ///////////
+        state.feedData = payload;
       })
       .addCase(getFeedAction.rejected, (state, { payload }) => {
         state.getFeed.loading = false;

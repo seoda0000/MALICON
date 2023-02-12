@@ -1,6 +1,9 @@
+import { ConstructionOutlined } from "@mui/icons-material";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { FeedWrapType } from "../../../model/profile/feedWrapType";
 import { ProfileFeedType } from "../../../model/profile/profileFeedType";
+import { VideoWrapType } from "../../../model/profile/videoWrapType";
 // import { ProfileFeedWrapType } from "../../../model/profile/ProfileFeedWrapType";
 import { SubscriberType } from "../../../model/subscribe/subscriberType";
 import { AboutMeType } from "../../../model/user/aboutMeType";
@@ -35,6 +38,7 @@ export const getIsOnAirAction = createAsyncThunk(
   async (userId: string, { rejectWithValue }) => {
     try {
       const axios = openviduInitializer();
+      console.log("!!!!", userId);
       const { data } = await axios.get<boolean>(
         `api/sessions/onAir/${userId}`,
         {
@@ -157,7 +161,8 @@ export const unSubscribeAction = createAsyncThunk(
   }
 );
 
-type GetVideoActionPropsType = {
+// 지난영상목록 가져오기
+export type GetVideoActionPropsType = {
   userPK: string;
   size: number;
   page: number;
@@ -170,7 +175,7 @@ export const getVideoAction = createAsyncThunk(
   ) => {
     try {
       const axios = axiosInitializer();
-      const { data } = await axios.get(
+      const { data } = await axios.get<VideoWrapType>(
         `/api/videos/${parseInt(userPK)}/${size}/${page}`,
         {
           headers: {
@@ -190,20 +195,23 @@ export const getVideoAction = createAsyncThunk(
 // 피드 가져오기
 export const getFeedAction = createAsyncThunk(
   "GET_FEED",
-  async (userPK: string, { rejectWithValue }) => {
+  async (
+    { userPK, size, page }: GetVideoActionPropsType,
+    { rejectWithValue }
+  ) => {
     try {
       const axios = axiosInitializer();
-      // const { data } = await axios.get<ProfileFeedWrapType>(
-      //   `/api/articles/${parseInt(userPK)}`,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Authorization: "Bearer " + getAccessToken(),
-      //     },
-      //   }
-      // );
+      const { data } = await axios.get<FeedWrapType>(
+        `/api/articles/${parseInt(userPK)}/${size}/${page}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + getAccessToken(),
+          },
+        }
+      );
 
-      // return data;
+      return data;
     } catch (e) {
       return rejectWithValue(e);
     }

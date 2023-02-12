@@ -8,8 +8,10 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ProfileImage from "../common/ProfileImage";
-import { VideoType } from "../../model/profile/VideoType";
+import { ProfileVideoType } from "../../model/profile/profileVideoType";
 import VideoCard from "../video/VideoCard";
+import { VideoType } from "../../model/video/VideoType";
+import { VideoWrapType } from "../../model/profile/videoWrapType";
 
 const CarouselContainer = styled.div`
   .slick-slider {
@@ -90,20 +92,18 @@ const ItemDetailBox = styled.div`
 `;
 
 const settings = {
-  className: "center",
-  centerMode: true,
-  infinite: true,
   centerPadding: "60px",
-  slidesToShow: 3,
-  speed: 500,
   arrows: true,
   pauseOnFocus: true,
-  dots: true,
   accessibility: true,
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 3,
 };
 
 type CarouselPorpsType = {
-  items: VideoType[];
+  items: VideoWrapType | VideoType[];
 };
 
 const mockupData = [
@@ -193,35 +193,9 @@ export default function Carousel({ items }: CarouselPorpsType): JSX.Element {
   return (
     <CarouselContainer>
       <Slider {...settings}>
-        {mockupData.map((item, idx) => (
+        {(items as VideoWrapType).content.map((item, idx) => (
           <CarouselItemBox key={item.id}>
-            {/* <VideoCard nth={idx} video={item} /> */}
-            {/* <div className="img-box">
-              <img src={item.thumbNail} alt="" />
-              <ItemDetailBox>
-                <p> 간단한 소개글 블라블라 is a perfect party dish</p>
-                <span>
-                  <FavoriteIcon /> 조회수 {item.hit}k
-                </span>
-              </ItemDetailBox>
-            </div>
-            <CardHeader
-              avatar={<ProfileImage />}
-              action={
-                <IconButton
-                  aria-label="video-more"
-                  onClick={onClickVideoMore}
-                  aria-controls={open ? "more-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                >
-                  <MoreVertIcon />
-                </IconButton>
-              }
-              title={item.title}
-              subheader="2023. 01. 28"
-            /> */}
-
+            <VideoCard nth={idx} video={item} />
             <Menu
               anchorEl={anchorEl}
               id="more-menu"
