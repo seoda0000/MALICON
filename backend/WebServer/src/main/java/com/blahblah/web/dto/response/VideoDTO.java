@@ -1,6 +1,7 @@
 package com.blahblah.web.dto.response;
 
 import com.blahblah.web.dto.request.CommentDTO;
+import com.blahblah.web.entity.CommentVideoEntity;
 import com.blahblah.web.entity.VideoEntity;
 import lombok.*;
 import org.springframework.data.domain.Page;

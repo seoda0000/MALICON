@@ -3,6 +3,7 @@ package com.blahblah.web.service;
 import com.blahblah.web.controller.exception.CustomException;
 import com.blahblah.web.dto.request.CommentDTO;
 import com.blahblah.web.dto.response.VideoDTO;
+import com.blahblah.web.entity.CommentVideoEntity;
 import com.blahblah.web.entity.LikeVideoEntity;
 import com.blahblah.web.entity.VideoEntity;
 import com.blahblah.web.repository.LikeVideoRepository;
@@ -92,7 +93,7 @@ public class VideoServiceImpl implements VideoService{
                 .userId(v.getUserEntity().getUserId())
                 .userPK(v.getUserId())
                 .pathUrl(v.getPathUrl())
-                .comments(new CommentDTO().toVDtoList(new PageImpl<>(v.getComments().subList(start, Math.min(end, v.getComments().size())), pageRequest, v.getComments().size())))
+                .comments(new CommentDTO().toVDtoList(new PageImpl<CommentVideoEntity>(v.getComments().subList(start, Math.min(end, v.getComments().size())), pageRequest, v.getComments().size())))
                 .title(v.getTitle())
                 .like(check)
                 .likeCnt(list.size())

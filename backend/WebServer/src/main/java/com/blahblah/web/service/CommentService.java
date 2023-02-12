@@ -1,14 +1,21 @@
 package com.blahblah.web.service;
 
 import com.blahblah.web.dto.request.CommentDTO;
-import com.blahblah.web.entity.CommentEntity;
+import com.blahblah.web.entity.CommentArticleEntity;
+import com.blahblah.web.entity.CommentVideoEntity;
 import org.springframework.data.domain.Page;
 
 public interface CommentService {
 
-    CommentEntity createComment(CommentDTO commentDTO);
+    CommentArticleEntity createArticleComment(CommentDTO commentDTO);
 
-    Page<CommentDTO> readComments(long check, long articleId, long size, long page);
+    CommentVideoEntity createVideoComment(CommentDTO commentDTO);
 
-    void deleteComment(long id);
+    Page<CommentDTO> readArticleComments(long articleId, long size, long page);
+
+    Page<CommentDTO> readVideoComments(long videoId, long size, long page);
+
+    void deleteArticleComment(long id);
+
+    void deleteVideoComment(long id);
 }

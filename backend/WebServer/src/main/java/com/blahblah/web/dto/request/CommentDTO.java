@@ -1,6 +1,7 @@
 package com.blahblah.web.dto.request;
 
-import com.blahblah.web.entity.CommentEntity;
+import com.blahblah.web.entity.CommentArticleEntity;
+import com.blahblah.web.entity.CommentVideoEntity;
 import lombok.*;
 import org.springframework.data.domain.Page;
 
@@ -33,7 +34,7 @@ public class CommentDTO {
 
     private LocalDateTime lastModifiedDate;
 
-    public Page<CommentDTO> toVDtoList(Page<CommentEntity> commentList){
+    public Page<CommentDTO> toVDtoList(Page<CommentVideoEntity> commentList){
         Page<CommentDTO> dtoList = commentList.map(c -> CommentDTO.builder()
                 .id(c.getId())
                 .videoId((c.getVideoEntity())==null?null:c.getVideoEntity().getId())
@@ -48,7 +49,7 @@ public class CommentDTO {
 
         return dtoList;
     }
-    public Page<CommentDTO> toADtoList(Page<CommentEntity> commentList) {
+    public Page<CommentDTO> toADtoList(Page<CommentArticleEntity> commentList) {
         Page<CommentDTO> dtoList = commentList.map(c -> CommentDTO.builder()
                 .id(c.getId())
                 .articleId((c.getArticleEntity())==null?null:c.getArticleEntity().getId())

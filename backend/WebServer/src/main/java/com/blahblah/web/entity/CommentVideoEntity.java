@@ -8,25 +8,16 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name ="comments")
+@Table(name ="video_comments")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentEntity extends BaseEntity{
+public class CommentVideoEntity extends BaseEntity{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "article_id", insertable = false, updatable = false, nullable = true)
-    private Long articleId;
-    @ManyToOne(
-            targetEntity = ArticleEntity.class,
-            fetch = FetchType.LAZY
-    )
-    @JoinColumn(name = "article_id", nullable = true)
-    private ArticleEntity articleEntity;
-
 
     @ManyToOne(
             targetEntity = UserEntity.class,
@@ -41,7 +32,7 @@ public class CommentEntity extends BaseEntity{
             targetEntity = VideoEntity.class,
             fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "video_id", nullable = true)
+    @JoinColumn(name = "video_id")
     private VideoEntity videoEntity;
 
 
