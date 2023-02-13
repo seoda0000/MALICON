@@ -10,7 +10,7 @@ export type ProfileVideoType = {
   views: number;
   recordingId: string;
   sessionId: string;
-  timeStamp: string;
+  timeStamp: number;
   playTime: number;
   thumbnail: string;
   pathUrl: string;
