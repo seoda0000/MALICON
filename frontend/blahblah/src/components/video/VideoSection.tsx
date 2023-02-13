@@ -38,6 +38,8 @@ import { unSubscribeAction } from "../../redux/modules/profile";
 import VideoPlayer from "./VideoPlayer";
 import VideoAvatarSection from "./VideoAvatarSection";
 import VideoBox from "./VideoBox";
+import FeedSettingButton from "../feed/FeedSettingButton";
+import FeedRemoveDialog from "../feed/FeedRemoveDialog";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -91,6 +93,15 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
       dispatch(unSubscribeAction(String(props.video.userPK)));
       console.log("구독 취소!");
     }
+  };
+
+  // 삭제 다이얼로그 조작
+  const [openRemoveDialog, setopenRemoveDialog] = useState<boolean>(false);
+  const handleClickOpen = () => {
+    setopenRemoveDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setopenRemoveDialog(false);
   };
 
   return (
@@ -149,6 +160,10 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
             <VisibilityIcon />
           </IconButton>
           <Typography variant="body2">{props.video?.views}</Typography>
+          <FeedSettingButton
+            // onClickEditor={onClickEditor}
+            handleClickOpen={handleClickOpen}
+          />
         </Box>
 
         {/* =================== */}
@@ -227,6 +242,11 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
           />
         </CardContent>
       </Collapse>
+      <FeedRemoveDialog
+        open={openRemoveDialog}
+        handleClose={handleCloseDialog}
+        video={props.video}
+      />
     </Card>
   );
 };

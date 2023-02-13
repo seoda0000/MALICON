@@ -86,7 +86,10 @@ export default function InfiniteScroll({
       setItemArr(temp);
     } else if (feedPage && feedFeeds) {
       let temp: ProfileFeedType[];
+      console.log("새 글 감지 직전", newest);
       if (feedFeeds.content[0].id === newest) {
+        temp = [];
+      } else if (newest === 0) {
         temp = [];
       } else {
         temp = [...(itemArr as ProfileFeedType[])];
@@ -119,13 +122,14 @@ export default function InfiniteScroll({
   );
 
   useEffect(() => {
-    console.log("새 글 감지");
-    window.scrollTo(0, 0);
-    updateItemsFunc();
+    console.log("새 글 감지", newest);
     setPageInfo({
       page: 1,
       totalPage: totalPage,
     });
+    window.scrollTo(0, 0);
+
+    updateItemsFunc();
   }, [newest]);
 
   useEffect(() => {

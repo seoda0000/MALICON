@@ -19,6 +19,7 @@ const initialState: VideoStateType = {
     hashtags: "",
     like: false,
     likeCnt: 0,
+    recordingId: 0,
     thumbnail: "",
     comments: [],
   },
@@ -43,4 +44,3 @@ const videoSlice = createSlice({
 export const videoActions = videoSlice.actions;
 
 export default videoSlice.reducer;
-

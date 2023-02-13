@@ -12,7 +12,7 @@ import EditorModal from "./EditorModal";
 import FeedRemoveDialog from "./FeedRemoveDialog";
 
 const FeedSettingButton: React.FC<{
-  onClickEditor: any;
+  onClickEditor?: any;
   handleClickOpen: any;
 }> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -75,9 +75,11 @@ const FeedSettingButton: React.FC<{
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={props.onClickEditor}>수정</MenuItem>
+        {props.onClickEditor && (
+          <MenuItem onClick={props.onClickEditor}>수정</MenuItem>
+        )}
         <MenuItem onClick={props.handleClickOpen}>삭제</MenuItem>
-        <MenuItem onClick={handleClose}>신고</MenuItem>
+        {/* <MenuItem onClick={handleClose}>신고</MenuItem> */}
       </Menu>
     </React.Fragment>
   );

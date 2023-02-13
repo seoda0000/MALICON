@@ -17,8 +17,8 @@ const feedSlice = createSlice({
     replaceFeed(state, action) {
       state.feedData = action.payload.feeds;
     },
-    resetFeed(state, action) {
-      state.feedData = null;
+    resetNewest(state, action) {
+      state.newest = action.payload.newest;
     },
   },
   extraReducers: (builder) => {

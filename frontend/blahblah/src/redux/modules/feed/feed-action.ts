@@ -114,15 +114,19 @@ export const removeFeedData = createAsyncThunk(
     try {
       const axios = axiosInitializer();
 
-      const { data } = await axios.delete<FeedRemoveType>("/api/articles", {
-        data: removeData,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Baerer " + getAccessToken(),
-        },
-      });
+      const { data } = await axios.delete<FeedRemoveType>(
+        `/api/articles/${removeData.id}/${removeData.userPK}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        }
+      );
       console.log("피드 삭제: ", data);
-      thunkAPI.dispatch(fetchFeedData());
+      // thunkAPI.dispatch(fetchFeedData());
+      thunkAPI.dispatch(feedActions.resetNewest({ newest: 0 }));
+      thunkAPI.dispatch(getFeedsAction({ size: 5, page: 0 })).then(() => {});
 
       return data;
     } catch (e) {
@@ -183,7 +187,11 @@ export const postCommentData = createAsyncThunk(
           console.log("덧글 작성: ", data);
 
           if (postData.articleId) {
-            thunkAPI.dispatch(fetchFeedData());
+            // thunkAPI.dispatch(fetchFeedData());
+            thunkAPI.dispatch(feedActions.resetNewest({ newest: 0 }));
+            thunkAPI
+              .dispatch(getFeedsAction({ size: 5, page: 0 }))
+              .then(() => {});
           } else {
             thunkAPI.dispatch(getVideoById(postData.videoId!));
           }

@@ -20,7 +20,11 @@
     "jsx": "react-jsx",
     "module": "commonjs",
     "noEmit": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": [
+      // ...other types...
+      "react-router-dom"
+    ]
   },
   "include": ["src"],
   "exclude": ["node_modules"]
