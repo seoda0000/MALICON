@@ -272,7 +272,7 @@ export default function Layout(props: LayoutProps) {
     e.preventDefault();
     console.log("꺼져야함");
     setOpenAlert({ state: !openAlert.state, username: "" });
-    navigate("/avatar");
+    // navigate("/avatar");
   };
 
   const action = (
