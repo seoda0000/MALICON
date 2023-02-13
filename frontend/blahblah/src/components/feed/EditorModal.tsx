@@ -1,7 +1,7 @@
 import { Box, Button, FormControl, Input, InputLabel } from "@mui/material";
 
 import BasicModal from "../ui/BasicModal";
-
+import ScrollModal from "../ui/ScrollModal";
 import TextField from "@mui/material/TextField";
 
 import React, { useRef, useState, useMemo } from "react";
@@ -12,6 +12,7 @@ import { AppDispatch } from "../../redux/configStore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/configStore";
 import { postFeedData, editFeedData } from "../../redux/modules/feed";
+import "../../theme/quill.custom.css";
 // const buttonBoxStyle = {
 //   display: "flex",
 //   justifyContent: "center",
@@ -90,11 +91,17 @@ export default function EditorModal({
   );
 
   return (
-    <BasicModal open={open} setOpen={setOpen}>
+    <ScrollModal open={open} setOpen={setOpen}>
+      {/* <BasicModal open={open} setOpen={setOpen}> */}
       <Box
         component="form"
         sx={{
-          "& .MuiFormControl-root": { m: 1, width: "25ch", display: "flex" },
+          "& .MuiFormControl-root": {
+            m: 1,
+            minWidth: "25ch",
+            // minHeight: "40ch",
+            display: "flex",
+          },
         }}
         noValidate
         autoComplete="off"
@@ -102,7 +109,7 @@ export default function EditorModal({
       >
         <TextField
           id="title"
-          label="title"
+          label="제목을 입력해주세요"
           type="title"
           variant="standard"
           inputRef={titleRef}
@@ -123,11 +130,13 @@ export default function EditorModal({
           placeholder="내용을 입력해주세요."
           // defaultValue="엥?"
         />
-
-        <Button size="medium" type="submit">
-          확인
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button size="medium" type="submit">
+            확인
+          </Button>
+        </Box>
       </Box>
-    </BasicModal>
+      {/* </BasicModal> */}
+    </ScrollModal>
   );
 }
