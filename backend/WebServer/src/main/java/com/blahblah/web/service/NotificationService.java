@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface NotificationService {
     public List<NotificationDTO> getNotifications(long userPK);
-    public List<NotificationEntity> sendNotificationToFollowers(long userId, String msg);
+    public List<NotificationEntity> sendNotificationToFollowers(long userId, NotificationRequestDTO msg);
     public NotificationEntity sendNotificationToSingleUser(long userId, NotificationRequestDTO notificationRequestDTO);
 
     NotificationEntity readNotification(long msgId, long userId);

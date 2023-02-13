@@ -31,7 +31,7 @@ public class NotificationController {
     }
 
     @PostMapping("/send")
-    public ResponseEntity sendNotifications(@RequestBody String msg, HttpServletRequest request) {
+    public ResponseEntity sendNotifications(@RequestBody NotificationRequestDTO msg, HttpServletRequest request) {
         long id = JWTutil.getLongIdByAccessToken(request);
 
         List<NotificationEntity> notificationEntity = notificationService.sendNotificationToFollowers(id, msg);

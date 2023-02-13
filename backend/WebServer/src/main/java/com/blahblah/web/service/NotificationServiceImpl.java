@@ -45,7 +45,7 @@ public class NotificationServiceImpl implements NotificationService{
     }
 
     @Override
-    public List<NotificationEntity> sendNotificationToFollowers(long userId, String msg) {
+    public List<NotificationEntity> sendNotificationToFollowers(long userId, NotificationRequestDTO notificationRequestDTO) {
         List<UserSubscribeEntity> userSubscribeEntityList = subscribeRepository.findAllBySubscribeUserId(userId);
 
         List<NotificationEntity> notificationEntityList = new ArrayList<>();
@@ -58,7 +58,7 @@ public class NotificationServiceImpl implements NotificationService{
                             .timestamp(timestamp)
                             .userEntity(ue.getUserEntity())
                             .userId(ue.getUserId())
-                            .msg(msg)
+                            .msg(notificationRequestDTO.msg)
                             .isRead(false)
                             .build()
             );
