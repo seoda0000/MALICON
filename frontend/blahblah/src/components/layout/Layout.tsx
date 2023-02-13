@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import List from "@mui/material/List";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -186,7 +186,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Layout(props: LayoutProps) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const loggedUser = useAppSelector((state) => state.user.userData);
   const subscribers = useAppSelector((state) => state.user.subscribers);
   const dispatch = useAppDispatch();
