@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 // Entity는 defalut Constructor가 필요
 // NoArgsConstructor를 만드는데 Builder 에러뜨니까 AllArgsConstructor도 넣자
-public class UserEntity extends BaseEntity implements UserDetails {
+public class UserEntity extends BaseEntity implements UserDetails, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,6 +41,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Builder.Default
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
     private List<VideoEntity> videos = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
+    private List<NotificationEntity> notifications = new ArrayList<>();
 
     @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;

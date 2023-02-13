@@ -25,8 +25,14 @@ public class UserSubscribeEntity implements Serializable {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
+    @Id
     @Column(name = "subscribe_user_id", insertable = false, updatable = false)
     private long subscribeUserId;
+
+    @Id
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private long userId;
+
     @Id
     @ManyToOne(
             targetEntity = UserEntity.class,
@@ -35,4 +41,13 @@ public class UserSubscribeEntity implements Serializable {
     @JoinColumn(name = "subscribe_user_id")
     private UserEntity subscribeUserEntity;
 
+    @Override
+    public String toString() {
+        return "UserSubscribeEntity{" +
+                "userEntity=" + userEntity +
+                ", subscribeUserId=" + subscribeUserId +
+                ", userId=" + userId +
+                ", subscribeUserEntity=" + subscribeUserEntity +
+                '}';
+    }
 }
