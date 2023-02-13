@@ -138,6 +138,7 @@ export const getVideoById = createAsyncThunk(
         userId: video.userId,
         nickName: video.nickName,
         avatar: video.avatar,
+        recordingId: video.recordingId,
         comments: video.comments.content,
       };
 
@@ -186,31 +187,34 @@ export const getVideoById = createAsyncThunk(
 //   }
 // );
 
-// // 피드 삭제하기
+// 피드 삭제하기
 
-// export const removeFeedData = createAsyncThunk(
-//   "feed/removeFeedData",
-//   async (removeData: any, thunkAPI) => {
-//     try {
-//       const axios = axiosInitializer();
+export const removeVideoData = createAsyncThunk(
+  "video/removeVideoData",
+  async (removeData: any, thunkAPI) => {
+    try {
+      const axios = axiosInitializer();
 
-//       const { data } = await axios.delete<FeedRemoveType>("/api/articles", {
-//         data: removeData,
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: "Baerer " + getAccessToken(),
-//         },
-//       });
-//       console.log("피드 삭제: ", data);
-//       thunkAPI.dispatch(fetchFeedData());
+      const { data } = await axios.delete(
+        `/api/recording/delete/${removeData.recordingId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        }
+      );
+      console.log("비디오 삭제: ", data);
+      thunkAPI.dispatch(fetchAllVideoData());
 
-//       return data;
-//     } catch (e) {
-//       console.error(e);
-//       return thunkAPI.rejectWithValue(e);
-//     }
-//   }
-// );
+      return data;
+    } catch (e) {
+      console.error(e);
+      console.log("비디오 삭제 실패");
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
 
 // // 피드 수정하기
 

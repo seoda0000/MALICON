@@ -328,4 +328,3 @@ export default function AccountModal({ open, setOpen }: any): JSX.Element {
     </BasicModal>
   );
 }
-

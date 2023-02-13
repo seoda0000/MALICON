@@ -78,10 +78,9 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
 
   return (
     <div>
-      {/* <Card sx={{ maxWidth: 345 }}> */}
       <Card>
         <CardHeader
-          avatar={<FeedProfileImage avatar={props.feed.userAvatar} />}
+          avatar={<FeedProfileImage avatar={props.feed.avatar} />}
           action={
             <FeedSettingButton
               onClickEditor={onClickEditor}
