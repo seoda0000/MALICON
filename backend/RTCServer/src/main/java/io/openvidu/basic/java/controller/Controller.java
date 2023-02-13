@@ -69,8 +69,15 @@ public class Controller {
 		if(session == null || room == null)
 			throw new CustomException(HttpStatus.BAD_REQUEST , "방 생성 실패");
 
-		LiveRoomDto liveRoomDto = getRoomInfo(room);
-
+		LiveRoomDto liveRoomDto = LiveRoomDto.builder()
+				.sessionId(sessionId)
+				.title(room.getTitle())
+				.startAt(room.getStartAt())
+				.viewerNumber(1)
+				.hashTag(room.getHashTag())
+				.streamer(room.getStreamer())
+				.thumbnail(room.getThumbnail())
+				.build();
 		return new ResponseEntity<>(liveRoomDto, HttpStatus.OK);
 	}
 
@@ -193,36 +200,4 @@ public class Controller {
 
 		return new ResponseEntity<>(onAir, HttpStatus.OK);
 	}
-
-	public LiveRoomDto getRoomInfo (LiveRoomEntity liveRoomEntity) throws OpenViduJavaClientException, OpenViduHttpException {
-
-		String title = liveRoomEntity.getTitle();
-		Long startAt = liveRoomEntity.getStartAt();
-		String thumbnail = liveRoomEntity.getThumbnail();
-		String sessionId = liveRoomEntity.getSessionId();
-		UserDto streamer = liveRoomEntity.getStreamer();
-		String hashTag = liveRoomEntity.getHashTag();
-		Session ActiveSession = openvidu.getActiveSession(sessionId);
-		int viewerNumber = -31;
-		if(ActiveSession != null){
-			ActiveSession.fetch();
-			viewerNumber = ActiveSession.getConnections().size();
-		}
-
-		LiveRoomDto liveRoomDto = LiveRoomDto.builder()
-				.title(title)
-				.streamer(streamer)
-				.sessionId(sessionId)
-				.viewerNumber(viewerNumber)
-				.startAt(startAt)
-				.thumbnail(thumbnail)
-				.hashTag(hashTag)
-				.build();
-
-		return liveRoomDto;
-	}
-
-
-
-
 }
