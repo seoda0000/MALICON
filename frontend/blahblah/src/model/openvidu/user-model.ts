@@ -1,3 +1,33 @@
+export type UserModelType = {
+  connectionId: string;
+  audioActive: boolean;
+  videoActive: boolean;
+  screenShareActive: boolean;
+  nickname: string;
+  streamManager: any;
+  avatar: string;
+  type: string;
+
+  isAudioActive: () => boolean;
+  isVideoActive: () => boolean;
+  isScreenShareActive: () => boolean;
+  getConnectionId: () => string;
+  getNickname: () => string;
+  getAvatar: () => string;
+  getStreamManager: () => any;
+  isLocal: () => boolean;
+  isRemote: () => boolean;
+  setAudioActive: (isAudioActive: boolean) => void;
+  setVideoActive: (isVideoActive: boolean) => void;
+  setScreenShareActive: (isScreenShareActive: boolean) => void;
+  setStreamManager: (streamManager: any) => void;
+  setConnectionId: (connectionId: string) => void;
+  setNickname: (nickname: string) => void;
+  setAvatar: (avatar: string) => void;
+
+  setType: (type: string) => void;
+};
+
 class UserModel {
   connectionId: string;
   audioActive: boolean;
@@ -5,6 +35,7 @@ class UserModel {
   screenShareActive: boolean;
   nickname: string;
   streamManager: any;
+  avatar: string;
   type: string; // 'remote' | 'local'
 
   constructor() {
@@ -15,6 +46,7 @@ class UserModel {
     this.nickname = "";
     this.streamManager = null;
     this.type = "local";
+    this.avatar = "";
   }
 
   isAudioActive() {
@@ -39,6 +71,9 @@ class UserModel {
 
   getStreamManager() {
     return this.streamManager;
+  }
+  getAvatar() {
+    return this.avatar;
   }
 
   isLocal() {
@@ -66,6 +101,10 @@ class UserModel {
   setNickname(nickname: string) {
     this.nickname = nickname;
   }
+  setAvatar(avatar: string) {
+    this.avatar = avatar;
+  }
+
   setType(type: string) {
     if (type === "local" || type === "remote") {
       this.type = type;
@@ -74,3 +113,4 @@ class UserModel {
 }
 
 export default UserModel;
+

@@ -22,6 +22,8 @@ import Puple from "../../assets/lightStick/puple.png";
 import Blue from "../../assets/lightStick/blue.png";
 import Green from "../../assets/lightStick/green.png";
 import Pink from "../../assets/lightStick/pink.png";
+import { UserModelType } from "../../model/openvidu/user-model";
+import { ViewerModelType } from "../../model/openvidu/viewer-model";
 
 const lightStickShakeKeyFrame = keyframes`
   from {
@@ -146,7 +148,7 @@ const AvatarCompContainer = styled.div`
 
 type AvatarCompPropsType = {
   signal?: EmotionSignalType;
-  viewer?: any;
+  viewer?: ViewerModelType;
   currentState: string;
   currentScore: number;
 };
@@ -161,7 +163,7 @@ export default function AvatarComp({
   const parentEl = useRef<HTMLDivElement>(null);
 
   const dataUri = createAvatar(personas, {
-    ...JSON.parse(avatar),
+    ...JSON.parse(viewer ? viewer.avatar : avatar),
   }).toDataUriSync();
 
   const createEmotion = (state: string) => {
@@ -215,8 +217,8 @@ export default function AvatarComp({
   );
 
   useEffect(() => {
-    console.log(signal?.nickname, viewer.nickname, viewer.streamId);
-    if (signal?.nickname === viewer.nickname) {
+    console.log(signal?.nickname, viewer?.nickname);
+    if (signal?.nickname === viewer?.nickname) {
       if (currentState && currentState !== "neutral") {
         throttled(currentState);
       }
@@ -234,3 +236,4 @@ export default function AvatarComp({
     </AvatarCompContainer>
   );
 }
+
