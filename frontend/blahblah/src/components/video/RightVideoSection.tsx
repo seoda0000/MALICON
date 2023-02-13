@@ -3,10 +3,23 @@ import { Paper } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import VideoCard from "./VideoCard";
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { RootState } from "../../redux/configStore";
-
+import { AppDispatch } from "../../redux/configStore";
+import { fetchFollowingVideoData } from "../../redux/modules/video";
+let isInitial = true;
 const RightVideoSection: React.FC<{ drawerWidth: number }> = (props) => {
   const video = useSelector((state: RootState) => state.video);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (isInitial) {
+      isInitial = false;
+      dispatch(fetchFollowingVideoData());
+
+      return;
+    }
+  }, [video, dispatch]);
 
   return (
     <Box sx={{ width: { md: props.drawerWidth }, flexShrink: { sm: 0 } }}>
@@ -24,12 +37,16 @@ const RightVideoSection: React.FC<{ drawerWidth: number }> = (props) => {
       >
         {/* 컨텐츠 내용 */}
         <Grid container rowSpacing={3}>
-          <h3>Latest Video</h3>
-          {video.followingVideoList.map((video, index) => (
-            <Grid item width={"100%"} key={index}>
-              <VideoCard nth={3} video={video} />
-            </Grid>
-          ))}
+          <h3>Following Video</h3>
+          {video.followingVideoList.length > 0 ? (
+            video.followingVideoList.slice(0, 4).map((video, index) => (
+              <Grid item width={"100%"} key={index}>
+                <VideoCard nth={3} video={video} />
+              </Grid>
+            ))
+          ) : (
+            <div>팔로잉 중인 뮤지션이 없습니다. 팔로우 해주세요! </div>
+          )}
         </Grid>
       </Paper>
     </Box>

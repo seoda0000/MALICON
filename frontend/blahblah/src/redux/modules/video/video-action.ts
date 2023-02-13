@@ -57,6 +57,56 @@ export const fetchAllVideoData = createAsyncThunk(
   }
 );
 
+// 구독 비디오 목록 가져오기
+export const fetchFollowingVideoData = createAsyncThunk(
+  "video/fetchFollowingVideoData",
+  async (_, thunkAPI) => {
+    try {
+      // const dispatch = useDispatch<AppDispatch>();
+      const axios = axiosInitializer();
+
+      const response = await axios.get("/api/videos/100/0", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
+      });
+
+      const videos = response.data.content;
+      const newVideos = videos.map((video: any) => {
+        return {
+          id: video.id,
+          userPK: video.userPK,
+          userId: video.userId,
+          nickName: video.nickName,
+          avatar: video.avatar,
+          title: video.title,
+          views: video.views,
+          pathUrl: video.pathUrl,
+          createDate: video.createDate,
+          hashtags: video.hashtags,
+          like: video.like,
+          likeCnt: video.likeCnt,
+          thumbnail: video.thumbnail,
+
+          //   commentList: video.comments.content,
+        };
+      });
+      console.log("구독 비디오 목록", videos);
+      thunkAPI.dispatch(
+        videoActions.replaceFollowingVideos({
+          followingVideoList: newVideos,
+        })
+      );
+
+      return response.data;
+    } catch (e: any) {
+      console.error(e.response.data);
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
 // 특정 비디오 가져오기
 export const getVideoById = createAsyncThunk(
   "video/getVideoById",
