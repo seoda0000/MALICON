@@ -8,9 +8,16 @@ export type ProfileVideoType = {
   avatar: string | null;
   title: string;
   views: number;
+  recordingId: string;
+  sessionId: string;
+  timeStamp: string;
+  playTime: number;
+  thumbnail: string;
   pathUrl: string;
   createDate: Date;
   hashtags: string;
+  like: boolean;
+  likeCnt: number;
   comments: CommentWrapType;
 };
 
