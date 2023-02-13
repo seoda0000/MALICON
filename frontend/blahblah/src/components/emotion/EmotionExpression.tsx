@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import FaceExpressionRecognition from "./faceapi/FaceExpressionRecognition";
 import PoseRecognition from "./PoseRecognition/PoseRecognition";
 import { openviduInitializer } from "../../redux/utils/axiosInitializer";
-import user from "../../redux/modules/user";
 import { getAccessToken } from "../../redux/modules/user/token";
 import { useAppSelector } from "../../redux/configStore.hooks";
 
 interface iEmotionExpressionProps {
   videoRef: React.RefObject<HTMLVideoElement>;
   user: any;
+  isTutorial: boolean;
+  onPoseChange?: any;
+  onStateChange?: any;
 }
 
 export default function EmotionExpression(props: iEmotionExpressionProps) {
@@ -53,11 +55,17 @@ export default function EmotionExpression(props: iEmotionExpressionProps) {
   }
 
   useEffect(() => {
-    sendEmotion(currentPose);
+    if (props.isTutorial)
+      props.onPoseChange(currentPose);
+    else
+      sendEmotion(currentPose);
   }, [currentPose]);
 
   useEffect(() => {
-    sendEmotion(currentState);
+    if (props.isTutorial)
+      props.onStateChange(currentState);
+    else
+      sendEmotion(currentState);
   }, [currentState]);
 
   return (
