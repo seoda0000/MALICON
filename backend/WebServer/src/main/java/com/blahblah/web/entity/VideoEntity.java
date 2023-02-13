@@ -45,7 +45,7 @@ public class VideoEntity extends BaseEntity{
     @Column(name="play_time")
     private Double playTime;
 
-    @Column(name="thumbnail")
+    @Column(name="thumbnail", columnDefinition = "MEDIUMTEXT")
     private String thumbnail;
 
     @Column(name="hashtags")
