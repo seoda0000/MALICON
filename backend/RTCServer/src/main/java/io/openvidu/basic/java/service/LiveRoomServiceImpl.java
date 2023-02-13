@@ -84,38 +84,30 @@ public class LiveRoomServiceImpl implements LiveRoomService{
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<LiveRoomDto> getRoomList() {
+    public List<LiveRoomDto> getRoomList(){
         List<LiveRoomDto> rooms = new ArrayList<>();
         Iterator<LiveRoomEntity> it = liveRoomRepository.findAll().iterator();
-
 
         while(it.hasNext()){
             LiveRoomEntity et = it.next();
             int viewNumber = -31;
             Session session = openVidu.getActiveSession(et.getSessionId());
-            if(session != null){
-                // 비두 서버의 상태로 업데이트
-                // thread safe한지 모르겠음
-                try{
-                    session.fetch();
-                }catch (OpenViduJavaClientException | OpenViduHttpException e){
-                    e.printStackTrace();
-                }
+            if(session == null){
+                liveRoomRepository.deleteById(et.getSessionId());
+            }else {
                 viewNumber = session.getConnections().size();
+                rooms.add(
+                        LiveRoomDto.builder()
+                                .title(et.getTitle())
+                                .sessionId(et.getSessionId())
+                                .hashTag(et.getHashTag())
+                                .startAt(et.getStartAt())
+                                .streamer(et.getStreamer())
+                                .viewerNumber(viewNumber)
+                                .thumbnail(et.getThumbnail())
+                                .build()
+                );
             }
-
-            rooms.add(
-                    LiveRoomDto.builder()
-                            .title(et.getTitle())
-                            .sessionId(et.getSessionId())
-                            .hashTag(et.getHashTag())
-                            .startAt(et.getStartAt())
-                            .streamer(et.getStreamer())
-                            .viewerNumber(viewNumber)
-                            .thumbnail(et.getThumbnail())
-                            .build()
-            );
         }
         return rooms;
     }
