@@ -18,6 +18,7 @@ import { useParams } from "react-router-dom";
 import { FeedWrapType } from "../../model/profile/feedWrapType";
 import { AsyncThunk, AsyncThunkAction } from "@reduxjs/toolkit";
 
+let isInitial = true;
 const InfiniteScrollContainer = styled.div`
   & > ul {
     display: flex;
@@ -52,10 +53,13 @@ export default function InfiniteScroll({
   const videos = useAppSelector((state) => state.profile.videoData);
   const profileFeeds = useAppSelector((state) => state.profile.feedData);
   const feedFeeds = useAppSelector((state) => state.feed.feedData);
+  const newest = useAppSelector((state) => state.feed.newest);
+  // const feedFeeds = itemsWrap;
   const [pageInfo, setPageInfo] = useState({
     page: 1,
     totalPage: totalPage,
   });
+
   const [itemArr, setItemArr] = useState<
     VideoType[] | ProfileVideoType[] | FeedType[] | ProfileFeedType[]
   >([]);
@@ -81,7 +85,12 @@ export default function InfiniteScroll({
       });
       setItemArr(temp);
     } else if (feedPage && feedFeeds) {
-      let temp: ProfileFeedType[] = [...(itemArr as ProfileFeedType[])];
+      let temp: ProfileFeedType[];
+      if (feedFeeds.content[0].id === newest) {
+        temp = [];
+      } else {
+        temp = [...(itemArr as ProfileFeedType[])];
+      }
 
       feedFeeds.content.map((feed) => {
         temp = [...temp, feed];
@@ -96,7 +105,6 @@ export default function InfiniteScroll({
     ([entry]: IntersectionObserverEntry[]) => {
       if (entry.isIntersecting) {
         setPageInfo((prev) => {
-          console.log("츄츄!", prev.page);
           if (prev.totalPage > prev.page) {
             return {
               ...prev,
@@ -109,6 +117,20 @@ export default function InfiniteScroll({
     },
     []
   );
+
+  useEffect(() => {
+    console.log("새 글 감지");
+    window.scrollTo(0, 0);
+    updateItemsFunc();
+    setPageInfo({
+      page: 1,
+      totalPage: totalPage,
+    });
+  }, [newest]);
+
+  useEffect(() => {
+    console.log("아이템 어레이", itemArr, pageInfo.page);
+  }, [itemArr]);
 
   // (3)
   useEffect(() => {
@@ -127,12 +149,14 @@ export default function InfiniteScroll({
   useEffect(() => {
     if (feedPage) {
       dispatch(actionFunc({ size: 5, page: pageInfo.page })).then(() => {
+        console.log("183", pageInfo);
         updateItemsFunc();
       });
     } else {
       dispatch(
         actionFunc({ userPK: userpk, size: 5, page: pageInfo.page })
       ).then(() => {
+        console.log("188", pageInfo);
         updateItemsFunc();
       });
     }
@@ -141,6 +165,7 @@ export default function InfiniteScroll({
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <InfiniteScrollContainer>
       <ul>
@@ -161,4 +186,3 @@ export default function InfiniteScroll({
     </InfiniteScrollContainer>
   );
 }
-

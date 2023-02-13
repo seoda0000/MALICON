@@ -88,7 +88,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
               handleClickOpen={handleClickOpen}
             />
           }
-          title={props.feed.userNickname}
+          title={props.feed.nickName}
           subheader={props.feed.createDate}
         />
 
@@ -113,7 +113,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
             <ShareIcon />
           </IconButton>
           <Typography sx={{ ml: "auto" }}>
-            덧글 {props.feed.commentList.length}개
+            덧글 {props.feed.commentList.content.length}개
           </Typography>
           <ExpandMore
             expand={expanded}
@@ -128,7 +128,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <CommentSection
-              comments={props.feed.commentList}
+              comments={props.feed.commentList.content}
               articleId={props.feed.id}
             />
           </CardContent>

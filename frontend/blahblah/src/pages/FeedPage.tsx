@@ -18,6 +18,7 @@ import { RootState } from "../redux/configStore";
 import RightVideoSection from "../components/video/RightVideoSection";
 import InfiniteScroll from "../components/ui/InfiniteScroll";
 import { useAppSelector } from "../redux/configStore.hooks";
+import { ProfileFeedType } from "../model/profile/profileFeedType";
 
 const drawerWidth = 300;
 let isInitial = true;
@@ -26,14 +27,20 @@ export default function FeedPage() {
   const dispatch = useDispatch<AppDispatch>();
   const feed = useSelector((state: RootState) => state.feed);
   const feeds = useAppSelector((state) => state.feed.feedData);
+  const newest = useAppSelector((state) => state.feed.newest);
 
-  useEffect(() => {
-    if (isInitial) {
-      isInitial = false;
-      // dispatch(fetchFeedData());
-      return;
-    }
-  }, [feed, dispatch]);
+  // useEffect(() => {
+  //   console.log("하...........", feeds);
+
+  //   console.log("첫글", newest);
+  //   if (isInitial) {
+  //     isInitial = false;
+  //     // console.log("하...........", feeds);
+  //     // dispatch(getFeedsAction({ size: 5, page: 0 }));
+
+  //     return;
+  //   }
+  // }, [feeds, dispatch]);
 
   // 모달 조작
   const [openEditorModal, setOpenEditorModal] = useState<boolean>(false);
@@ -42,8 +49,12 @@ export default function FeedPage() {
   };
 
   useEffect(() => {
-    dispatch(getFeedsAction({ size: 5, page: 0 }));
-    console.log("feeds", feeds);
+    dispatch(getFeedsAction({ size: 5, page: 0 })).then(() => {
+      console.log("feeds!!!!!!!!!!!!!!", feeds);
+    });
+    if (isInitial) {
+      isInitial = false;
+    }
   }, []);
 
   return (
@@ -90,4 +101,3 @@ export default function FeedPage() {
     </Box>
   );
 }
-
