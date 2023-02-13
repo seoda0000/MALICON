@@ -12,12 +12,12 @@ export type ProfileVideoType = {
   sessionId: string;
   timeStamp: number;
   playTime: number;
-  thumbnail: string;
+  thumbnail: string | null;
   pathUrl: string;
   createDate: Date;
   hashtags: string;
   like: boolean;
   likeCnt: number;
   comments: CommentWrapType;
-  thumbnail: string | null;
 };
+
