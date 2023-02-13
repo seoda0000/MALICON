@@ -12,5 +12,5 @@ export type ProfileVideoType = {
   createDate: Date;
   hashtags: string;
   comments: CommentWrapType;
+  thumbnail: string | null;
 };
-
