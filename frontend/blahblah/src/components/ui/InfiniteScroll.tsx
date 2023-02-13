@@ -88,7 +88,12 @@ export default function InfiniteScroll({
       setItemArr(temp);
     } else if (feedPage && feedFeeds) {
       console.log("붙이는 데이터입니다", feedFeeds);
-      let temp: ProfileFeedType[] = [...(itemArr as ProfileFeedType[])];
+      let temp: ProfileFeedType[];
+      if (feedFeeds.content[0].id === newest) {
+        temp = [];
+      } else {
+        temp = [...(itemArr as ProfileFeedType[])];
+      }
 
       feedFeeds.content.map((feed) => {
         temp = [...temp, feed];
@@ -155,17 +160,19 @@ export default function InfiniteScroll({
   //   await func();
   // };
 
-  // useEffect(() => {
-  //   console.log("누가먼저 실행될까요ㄴㄴㄴ");
-  //   if (newest !== 0) {
-  //     handleFunc();
-  //   }
-  //   console.log("왜...?");
-  // }, [newest]);
+  useEffect(() => {
+    console.log("새 글 감지");
+    window.scrollTo(0, 0);
+    updateItemsFunc();
+    setPageInfo({
+      page: 1,
+      totalPage: totalPage,
+    });
+  }, [newest]);
 
-  // useEffect(() => {
-  //   console.log("나는야 아이템 어레이", itemArr, pageInfo.page);
-  // }, [itemArr]);
+  useEffect(() => {
+    console.log("나는야 아이템 어레이", itemArr, pageInfo.page);
+  }, [itemArr]);
 
   // (3)
   useEffect(() => {

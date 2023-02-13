@@ -88,7 +88,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
               handleClickOpen={handleClickOpen}
             />
           }
-          title={props.feed.userNickname}
+          title={props.feed.nickName}
           subheader={props.feed.createDate}
         />
 
