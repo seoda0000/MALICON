@@ -59,9 +59,7 @@ export default function InfiniteScroll({
     page: 1,
     totalPage: totalPage,
   });
-  // const [itemArr, setItemArr] = useState<
-  //   VideoType[] | ProfileVideoType[] | FeedType[] | ProfileFeedType[]
-  // >([]);
+
   const [itemArr, setItemArr] = useState<
     VideoType[] | ProfileVideoType[] | FeedType[] | ProfileFeedType[]
   >([]);
@@ -87,7 +85,6 @@ export default function InfiniteScroll({
       });
       setItemArr(temp);
     } else if (feedPage && feedFeeds) {
-      console.log("붙이는 데이터입니다", feedFeeds);
       let temp: ProfileFeedType[];
       if (feedFeeds.content[0].id === newest) {
         temp = [];
@@ -103,42 +100,11 @@ export default function InfiniteScroll({
     }
   };
 
-  // const replaceItemsFunc = () => {
-  //   console.log("replace");
-  //   if (video && videos) {
-  //     let temp: ProfileVideoType[] = [];
-
-  //     videos.content.map((video) => {
-  //       temp = [...temp, video];
-  //       return temp;
-  //     });
-  //     setItemArr(temp);
-  //   } else if (feed && profileFeeds) {
-  //     let temp: ProfileFeedType[] = [];
-
-  //     profileFeeds.content.map((feed) => {
-  //       temp = [...temp, feed];
-  //       return temp;
-  //     });
-  //     setItemArr(temp);
-  //   } else if (feedPage && feedFeeds) {
-  //     let temp: ProfileFeedType[] = [];
-
-  //     console.log("replace 데이터입니다", feedFeeds);
-  //     feedFeeds.content.map((feed) => {
-  //       temp = [...temp, feed];
-  //       return temp;
-  //     });
-  //     setItemArr(temp);
-  //   }
-  // };
-
   // (2)
   const handleIntersect = useCallback(
     ([entry]: IntersectionObserverEntry[]) => {
       if (entry.isIntersecting) {
         setPageInfo((prev) => {
-          console.log("츄츄!", prev.page);
           if (prev.totalPage > prev.page) {
             return {
               ...prev,
@@ -151,14 +117,6 @@ export default function InfiniteScroll({
     },
     []
   );
-  // const func = async () => {
-  //   replaceItemsFunc();
-  // };
-
-  // const handleFunc = async () => {
-  //   // setItemArr((itemArr) => []);
-  //   await func();
-  // };
 
   useEffect(() => {
     console.log("새 글 감지");
@@ -171,12 +129,11 @@ export default function InfiniteScroll({
   }, [newest]);
 
   useEffect(() => {
-    console.log("나는야 아이템 어레이", itemArr, pageInfo.page);
+    console.log("아이템 어레이", itemArr, pageInfo.page);
   }, [itemArr]);
 
   // (3)
   useEffect(() => {
-    console.log("누가먼저 실행될까요3");
     const observer = new IntersectionObserver(handleIntersect, {
       threshold: 0,
       root: null,
@@ -190,7 +147,6 @@ export default function InfiniteScroll({
   }, [handleIntersect, target]);
 
   useEffect(() => {
-    console.log("누가먼저 실행될까요ㅇㅇㅇ");
     if (feedPage) {
       dispatch(actionFunc({ size: 5, page: pageInfo.page })).then(() => {
         console.log("183", pageInfo);
@@ -207,7 +163,6 @@ export default function InfiniteScroll({
   }, [pageInfo.page]);
 
   useEffect(() => {
-    console.log("누가먼저 실행될까요ㅅㅅㅅㅅ");
     window.scrollTo(0, 0);
   }, []);
 
