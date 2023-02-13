@@ -26,17 +26,17 @@ public class VideoDTO {
     private String nickName;
     private String avatar;
     private String title;
-    private long views;
+    private Long views;
     private String recordingId;
     private String sessionId;
-    private String timeStamp;
-    private long playTime;
+    private Long timeStamp;
+    private Double playTime;
     private String thumbnail;
     private String pathUrl;
     private LocalDateTime createDate;
     private String hashtags;
     private boolean like;
-    private long likeCnt;
+    private int likeCnt;
     private Page<CommentDTO> comments;
 
     public Page<VideoDTO> toDtoList(Page<VideoEntity> videoList){
@@ -50,7 +50,11 @@ public class VideoDTO {
                 .nickName(v.getUserEntity().getNickName())
                 .avatar(v.getUserEntity().getAvatar())
                 .userPK(v.getUserEntity().getId())
-
+                .recordingId(v.getRecodingId())
+                .sessionId(v.getSessionId())
+                .timeStamp(v.getTimeStamp())
+                .playTime(v.getPlayTime())
+                .thumbnail(v.getThumbnail())
                 .pathUrl(v.getPathUrl())
                 .createDate(v.getCreateDate())
                 .userId(v.getUserEntity().getUserId())
