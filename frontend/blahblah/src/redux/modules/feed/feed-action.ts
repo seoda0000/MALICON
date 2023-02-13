@@ -227,7 +227,8 @@ export const removeCommentData = createAsyncThunk(
           if (removeData.isVideo) {
             thunkAPI.dispatch(getVideoById(removeData.videoId));
           } else {
-            thunkAPI.dispatch(fetchFeedData());
+            thunkAPI.dispatch(feedActions.resetNewest({ newest: 0 }));
+            thunkAPI.dispatch(getFeedsAction({ size: 5, page: 0 }));
           }
         });
     } catch (e) {
