@@ -155,7 +155,8 @@ export const editFeedData = createAsyncThunk(
         .then(({ data }: any) => {
           console.log("피드 수정: ", data);
 
-          thunkAPI.dispatch(fetchFeedData());
+          thunkAPI.dispatch(getFeedsAction({ size: 5, page: 0 }));
+          thunkAPI.dispatch(feedActions.resetNewest({ newest: 0 }));
         });
 
       // return data;
@@ -189,9 +190,7 @@ export const postCommentData = createAsyncThunk(
           if (postData.articleId) {
             // thunkAPI.dispatch(fetchFeedData());
             thunkAPI.dispatch(feedActions.resetNewest({ newest: 0 }));
-            thunkAPI
-              .dispatch(getFeedsAction({ size: 5, page: 0 }))
-              .then(() => {});
+            thunkAPI.dispatch(getFeedsAction({ size: 5, page: 0 }));
           } else {
             thunkAPI.dispatch(getVideoById(postData.videoId!));
           }
