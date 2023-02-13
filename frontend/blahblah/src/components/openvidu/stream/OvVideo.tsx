@@ -71,7 +71,7 @@ export default class OvVideoComponent extends Component<OvVideoProps, {}> {
           height={240}
         />
 
-        {(!this.props.isPublisher && this.videoRef.current) && <EmotionExpression user={this.props.user} videoRef={this.videoRef} />}
+        {(!this.props.isPublisher && this.videoRef.current) && <EmotionExpression user={this.props.user} videoRef={this.videoRef} isTutorial={false} />}
       </div>
     );
   }
