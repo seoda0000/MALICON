@@ -19,8 +19,9 @@ import { FeedWrapType } from "../../../model/profile/feedWrapType";
 // 피드 목록 가져오기 (무한스크롤 페이징 적용)
 export const getFeedsAction = createAsyncThunk(
   "GET_FEEDS",
-  async (reqData: { size: number; page: number }, { rejectWithValue }) => {
+  async (reqData: { size: number; page: number }, thunkAPI) => {
     try {
+      console.log("작성 후 getfeeds", reqData.page);
       const axios = axiosInitializer();
       console.log("피드목롥 가지러감?");
       const { data } = await axios.get<FeedWrapType>(
@@ -32,9 +33,11 @@ export const getFeedsAction = createAsyncThunk(
           },
         }
       );
+      console.log(data);
+
       return data;
     } catch (e) {
-      return rejectWithValue(e);
+      return thunkAPI.rejectWithValue(e);
     }
   }
 );
@@ -47,35 +50,18 @@ export const fetchFeedData = createAsyncThunk(
       // const dispatch = useDispatch<AppDispatch>();
       const axios = axiosInitializer();
 
-      const response = await axios.get("/api/articles/100/0", {
+      const response = await axios.get(`/api/articles/5/0`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Baerer " + getAccessToken(),
         },
       });
 
-      const feeds = response.data.content;
-      const newFeeds = feeds.map((feed: any) => {
-        return {
-          id: feed.id,
-          title: feed.title,
-          content: feed.content,
-          createDate: feed.createDate,
-          lastModifiedDate: feed.lastModifiedDate,
-          like: feed.like,
-          likeCnt: feed.likeCnt,
-          userPK: feed.userPK,
-          userId: feed.userId,
-          userNickname: feed.nickName,
-          userAvatar: feed.avatar,
-
-          commentList: feed.commentList.content,
-        };
-      });
+      const feeds = response.data;
 
       thunkAPI.dispatch(
         feedActions.replaceFeed({
-          feeds: newFeeds,
+          feeds: feeds,
         })
       );
 
@@ -105,7 +91,9 @@ export const postFeedData = createAsyncThunk(
         .then(({ data }: any) => {
           console.log("피드 작성: ", data);
 
-          thunkAPI.dispatch(fetchFeedData());
+          // thunkAPI.dispatch(fetchFeedData());
+
+          thunkAPI.dispatch(getFeedsAction({ size: 5, page: 0 }));
         });
 
       // return data;
@@ -305,4 +293,3 @@ export const likeCancelAction = createAsyncThunk(
     }
   }
 );
-

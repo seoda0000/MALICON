@@ -14,4 +14,3 @@ export type ProfileFeedType = {
   likeCnt: number;
   commentList: CommentWrapType;
 };
-

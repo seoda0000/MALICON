@@ -5,10 +5,9 @@ import BasicModal from "../ui/BasicModal";
 import TextField from "@mui/material/TextField";
 
 import React, { useRef, useState, useMemo } from "react";
-
+import { useAppSelector } from "../../redux/configStore.hooks";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
 import { AppDispatch } from "../../redux/configStore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/configStore";
@@ -31,7 +30,7 @@ export default function EditorModal({
   const titleRef = useRef<HTMLInputElement>(null);
   const QuillRef = useRef<ReactQuill>();
   const [contents, setContents] = useState(feed.content);
-
+  const feeds = useAppSelector((state) => state.feed.feedData);
   // quill에서 사용할 모듈을 설정하는 코드
   // useMemo를 사용하지 않으면, 키를 입력할 때마다, imageHandler 때문에 focus가 계속 풀리게 됩니다.
 
@@ -64,6 +63,7 @@ export default function EditorModal({
         dispatch(postFeedData(postData));
       }
     }
+    // window.scrollTo(0, 0);
     onCloseModal();
   };
 

@@ -17,4 +17,3 @@ export type CommentWrapType = {
   numberOfElements: number;
   empty: boolean;
 };
-
