@@ -5,6 +5,8 @@ import { SignupType } from "../../../model/user/signupType";
 import { UserType } from "../../../model/user/userType";
 import { UpdateUserType } from "../../../model/user/updateUserType";
 import { useAppDispatch } from "../../configStore.hooks";
+import { fetchAllVideoData } from "../video";
+import { fetchSessionData } from "../broadcast";
 import {
   getAccessToken,
   getRefreshToken,
@@ -55,19 +57,18 @@ export const checkDuplicateAction = createAsyncThunk(
 // 인증번호 이메일 전송
 export const sendEmailAction = createAsyncThunk(
   "SEND_EMAIL",
-  async(email:string, { rejectWithValue }) => {
-    try{
+  async (email: string, { rejectWithValue }) => {
+    try {
       const axios = axiosInitializer();
       const { data } = await axios.get(`/api/mails/${email}`);
-      alert("인증번호를 발송하였습니다.")
+      alert("인증번호를 발송하였습니다.");
       return data;
-        
-    } catch (e){
+    } catch (e) {
       console.log("이메일이 유효하지 않습니다.");
       return rejectWithValue(e);
     }
   }
-)
+);
 
 // 닉네임 중복 확인
 export const checkDupNickNameAction = createAsyncThunk(
@@ -105,6 +106,8 @@ export const signinAction = createAsyncThunk(
         .then(() => {
           // user state에 저장
           dispatch(getMeWithTokenAction());
+          dispatch(fetchSessionData());
+          dispatch(fetchAllVideoData());
         });
 
       // return data;
@@ -147,13 +150,12 @@ export const sendPasswordAction = createAsyncThunk(
       const axios = axiosInitializer();
       await axios.post("/api/mails/password", userData);
       alert("임시 비밀번호를 발송하였습니다.");
-
     } catch (e) {
       console.log("사용자 정보가 유효하지않습니다.");
       return rejectWithValue(e);
     }
   }
-)
+);
 
 export const refreshTokenAction = createAsyncThunk(
   "REFRESH_TOKEN",
@@ -278,4 +280,3 @@ export const getIsOnAirAction = createAsyncThunk(
     }
   }
 );
-

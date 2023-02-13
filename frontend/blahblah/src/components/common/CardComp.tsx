@@ -160,7 +160,7 @@ export default function CardComp({
             >
               <Typography level="h2" noWrap sx={{ fontSize: "lg" }}>
                 <Link
-                  href={video?.pathUrl}
+                  // href={video?.pathUrl}
                   overlay
                   underline="none"
                   sx={{
@@ -257,4 +257,3 @@ export default function CardComp({
     </CardWrapper>
   );
 }
-

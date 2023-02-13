@@ -19,5 +19,5 @@ export type ProfileVideoType = {
   like: boolean;
   likeCnt: number;
   comments: CommentWrapType;
+  thumbnail: string | null;
 };
-

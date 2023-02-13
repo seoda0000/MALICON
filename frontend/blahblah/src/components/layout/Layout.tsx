@@ -266,8 +266,11 @@ export default function Layout(props: LayoutProps) {
     username: "",
   });
 
-  const handleAlert = () => {
+  const handleAlert = (e: any) => {
+    e.preventDefault();
+    console.log("꺼져야함");
     setOpenAlert({ state: !openAlert.state, username: "" });
+    navigate("/avatar");
   };
 
   const action = (
@@ -677,28 +680,19 @@ export default function Layout(props: LayoutProps) {
         open={openAlert.state}
         autoHideDuration={6000}
         onClose={handleAlert}
-        // message={`환영합니다! ${openAlert.username}님!`}
-        // action={action}
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       >
         <Alert variant="filled" severity="success" action={action}>
           <AlertTitle>환영합니다, {openAlert.username}님!</AlertTitle>
           MALICON에 처음 오셨나요? —
-          <Link
-            style={{ color: "white" }}
-            to="/avatar"
-            // color="success"
-            // variant="contained"
-            // size="small"
-            // endIcon={<SendIcon />}
-          >
+          <Link style={{ color: "white" }} to="/avatar" onClick={handleAlert}>
             아바타 만들기
           </Link>
         </Alert>
       </Snackbar>
+
       {/* 오픈비두 창 */}
       {/* {isViewed && <VideoRoomComponent />} */}
     </LayoutContainer>
   );
 }
-
