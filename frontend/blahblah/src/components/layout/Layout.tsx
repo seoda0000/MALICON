@@ -64,16 +64,9 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { LightKoreanFont } from "../../theme/font";
+import Notification from "./Notification";
 
-function generate(element: React.ReactElement) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    })
-  );
-}
-
-const LayoutContainer = styled(Box)<{ open: boolean }>`
+const LayoutContainer = styled(Box) <{ open: boolean }>`
   ${({ open }) =>
     open &&
     css`
@@ -295,22 +288,6 @@ export default function Layout(props: LayoutProps) {
     </Button>
   );
 
-  //alarm
-  const [anchorAl, setAnchorAl] = React.useState<HTMLButtonElement | null>(
-    null
-  );
-
-  const handleClickAlarm = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorAl(event.currentTarget);
-  };
-
-  const handleCloseAlarm = () => {
-    setAnchorAl(null);
-  };
-
-  const openAlarm = Boolean(anchorAl);
-  const idAl = openAlarm ? "simple-popover" : undefined;
-
   return (
     <LayoutContainer open={open} sx={{ display: "flex" }}>
       <CssBaseline />
@@ -411,90 +388,9 @@ export default function Layout(props: LayoutProps) {
                   {/* Drawer 열렸을 때 작은 아이콘들 */}
                   {open && loggedUser.isLoggedIn && (
                     <MenuItem className="badge-inner">
-                      {/* 알림 아이콘 */}
-                      <IconButton
-                        className="badge-alart"
-                        size="large"
-                        aria-label="show 17 new notifications"
-                        color="inherit"
-                        onClick={handleClickAlarm}
-                        aria-describedby={idAl}
-                      >
-                        <Badge badgeContent={6} color="error">
-                          <NotificationsIcon />
-                        </Badge>
-                      </IconButton>
 
-                      {/* 알림창 팝오버 */}
-                      <Popover
-                        id={idAl}
-                        open={openAlarm}
-                        anchorEl={anchorAl}
-                        onClose={handleCloseAlarm}
-                        anchorOrigin={{
-                          vertical: "top",
-                          horizontal: "right",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "left",
-                        }}
-                      >
-                        <Box sx={{ m: 3 }}>
-                          <h4 style={{ fontFamily: "NanumSquareRound" }}>
-                            6개의 방송 알림이 있습니다.
-                          </h4>
-                          <Divider />
+                      <Notification userData={loggedUser} />
 
-                          <List dense={true}>
-                            {generate(
-                              <ListItem>
-                                <Avatar
-                                  sx={{ width: 24, height: 24, mr: 2 }}
-                                ></Avatar>
-
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                  }}
-                                >
-                                  <p
-                                    style={{
-                                      fontFamily: "NanumSquareRound",
-                                      fontSize: 14,
-                                      margin: 0,
-                                    }}
-                                  >
-                                    ssafy님의 방송이 시작되었습니다.
-                                  </p>
-                                  <p
-                                    style={{
-                                      fontFamily: "NanumSquareRound",
-                                      margin: 0,
-                                      fontSize: 5,
-                                      color: "grey",
-                                    }}
-                                  >
-                                    2023-02-13
-                                  </p>
-                                </div>
-                                <CloseIcon
-                                  fontSize="small"
-                                  sx={{
-                                    width: 12,
-                                    height: 12,
-                                    alignSelf: "flex-start",
-                                    justifySelf: "flex-start",
-                                    mt: 0.4,
-                                    ml: 2,
-                                  }}
-                                />
-                              </ListItem>
-                            )}
-                          </List>
-                        </Box>
-                      </Popover>
                       {/* 설정 아이콘 */}
                       <IconButton
                         className="badge-setting"

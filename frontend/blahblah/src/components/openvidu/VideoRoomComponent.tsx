@@ -12,6 +12,9 @@ import ToolbarComponent from "./toolbar/ToolbarComponent";
 import { getAccessToken } from "../../redux/modules/user/token";
 import html2canvas from "html2canvas";
 import AvatarSection from "./avatar/AvatarSection";
+import { axiosInitializer } from "../../redux/utils/axiosInitializer";
+import { useAppSelector } from "../../redux/configStore.hooks";
+import { UserType } from "../../model/user/userType";
 
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
@@ -21,7 +24,7 @@ const APPLICATION_SERVER_URL =
 
 // 타입 생성
 interface VideoRoomProps {
-  user?: any;
+  user?: UserType;
   sessionName?: string;
   token?: any;
   error?: any;
@@ -78,7 +81,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.layout = new OpenViduLayout();
     let userList = ["user", "streamer"];
     let userName = this.props.user
-      ? this.props.user
+      ? this.props.user.nickName
       : userList[Math.floor(Math.random() * 2)];
     let sessionName = this.props.sessionName
       ? this.props.sessionName
@@ -203,12 +206,26 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       .then(() => {
         this.connectWebCam().then(() => {
           if (this.isPublisher) {
+
+            /* 팔로워 알림 전송 */
+            const axios = axiosInitializer();
+            axios.post("/api/notifications/send",
+              {
+                msg: `${this.state.myUserName} 님이 콘서트를 연대요! 빨리 가서 확인해볼까요?`
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Baerer " + getAccessToken(),
+                },
+              })
+
             setTimeout(() => {
               console.log("썸네일 보내냐?");
               this.sendThumbnail();
               this.startRecording(this.state.mySessionId)
                 .then((data) => console.log(data))
-              .catch((e)=> console.error(e))
+                .catch((e) => console.error(e))
             }, 1000);
           }
         });
@@ -709,7 +726,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     console.log("썸네일", encodedImage);
     this.createThumbnail(this.state.mySessionId, encodedImage)
       .then((data) => console.log(data))
-    .catch((e)=> console.error(e))
+      .catch((e) => console.error(e))
     // 아래 함수는 이미지화 하는 법
     // const decodedImage = decodeURIComponent(encodedImage);
     // const imageElement = document.createElement('img');
