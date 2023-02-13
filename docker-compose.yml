@@ -29,6 +29,8 @@ services:
     networks:
       - default
       - blahblah_net
+    volumes:
+      - /var/blahblah/attachments/img:/var/blahblah/attachments/img
 
   blahblah_api_gateway:
     container_name: blahblah_api_gateway
