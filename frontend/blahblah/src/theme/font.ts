@@ -5,3 +5,9 @@ export const BoldKoreanFont = createTheme({
     fontFamily: "Tenada",
   },
 });
+
+export const LightKoreanFont = createTheme({
+  typography: {
+    fontFamily: "Tenada",
+  },
+});
