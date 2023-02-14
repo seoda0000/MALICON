@@ -59,8 +59,6 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
   const [expanded, setExpanded] = React.useState(false);
 
-  console.log("VideoSection", props.video);
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };

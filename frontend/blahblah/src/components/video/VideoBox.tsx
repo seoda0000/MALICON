@@ -4,8 +4,6 @@ import { Box } from "@mui/system";
 import { useState, useRef, useEffect } from "react";
 
 const VideoBox: React.FC<{ emotionLog: any; pathUrl: any }> = (props) => {
-  console.log("VideoBox", props.emotionLog);
-  console.log("VideoBox", props.pathUrl);
   const [played, setPlayed] = useState(0);
 
   return (

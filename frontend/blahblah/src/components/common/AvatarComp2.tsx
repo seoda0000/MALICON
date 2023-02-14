@@ -34,6 +34,8 @@ const AvatarCompContainer = styled.div`
   position: relative;
   min-width: 40px;
   min-height: 40px;
+  max-width: 150px;
+  max-height: 150px;
   & > img.avatar-comp-avatar {
     width: 100%;
     height: 100%;
