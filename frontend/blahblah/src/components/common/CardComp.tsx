@@ -119,7 +119,7 @@ export default function CardComp({
     }
   }, [video]);
   return (
-    <CardWrapper nth={nth} onClick={onClickHandler}>
+    <CardWrapper nth={nth}>
       <Box sx={{ position: "relative" }}>
         <AspectRatio ratio="9/5">
           <div className="float-wrapper">
@@ -157,6 +157,7 @@ export default function CardComp({
                 flexGrow: 1,
                 alignSelf: "flex-end",
               }}
+              onClick={onClickHandler}
             >
               <Typography level="h2" noWrap sx={{ fontSize: "lg" }}>
                 <Link

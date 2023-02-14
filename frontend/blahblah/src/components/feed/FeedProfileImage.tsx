@@ -6,11 +6,12 @@ import { useNavigate } from "react-router-dom";
 
 const FeedProfileImage: React.FC<{
   avatar: string;
-  userPK?: number;
+  userPK: number;
   // small?: boolean;
   // onRemoveTodo: () => void;
 }> = (props) => {
   const navigate = useNavigate();
+
   const tempAvatar = JSON.stringify({
     body: ["rounded"],
     clothingColor: ["54d7c7"],
@@ -29,6 +30,7 @@ const FeedProfileImage: React.FC<{
   }).toDataUriSync();
 
   const onClickHandler = () => {
+    console.log("userPK", props.userPK);
     navigate(`/profile/${props.userPK}`);
   };
   return (
