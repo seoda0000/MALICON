@@ -17,6 +17,7 @@ export default function EmotionExpression(props: iEmotionExpressionProps) {
   const [currentPose, setCurrentPose] = useState<string>("");
   const [currentState, setCurrentState] = useState<string>("");
   const avatar = useAppSelector((state) => state.user.userData.avatar!)
+  const userId = useAppSelector((state) => state.user.userData.userId)
 
   const saveCurrentPose = (pose: string) => {
     setCurrentPose(pose);
@@ -44,6 +45,7 @@ export default function EmotionExpression(props: iEmotionExpressionProps) {
     await axios.post("/api/emotion/" + props.user.getStreamManager().stream.session.sessionId, {
       avatar,
       type,
+      userId,
       timestamp: Date.now()
     }, {
 
