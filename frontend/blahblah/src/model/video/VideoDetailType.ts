@@ -12,7 +12,6 @@ export type VideoDetailType = {
   createDate: string;
   hashtags: string;
   thumbnail: string | null;
-  recordingId: number;
 
   // 디테일
   like: boolean;
