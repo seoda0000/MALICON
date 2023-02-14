@@ -107,22 +107,44 @@ export const fetchFollowingVideoData = createAsyncThunk(
   }
 );
 
+const getVideo = async (videoId: number) => {
+  const axios = axiosInitializer();
+  const response = await axios.get(`/api/videos/details/${videoId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Baerer " + getAccessToken(),
+    },
+  });
+
+  if (response.status === 200) {
+    const data = await response.data;
+    return data;
+  }
+};
+
+const getEmotion = async (sessionId: string) => {
+  const axios = openviduInitializer();
+  const response = await axios.get(`/api/emotion/${sessionId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Baerer " + getAccessToken(),
+    },
+  });
+
+  if (response.status === 200) {
+    const data = await response.data;
+    return data;
+  }
+};
+
 // 특정 비디오 가져오기
 export const getVideoById = createAsyncThunk(
   "video/getVideoById",
   async (videoId: number, thunkAPI) => {
     try {
-      // const dispatch = useDispatch<AppDispatch>();
-      const axios = axiosInitializer();
+      const video = await getVideo(videoId);
+      const emotionLog = await getEmotion(video.sessionId);
 
-      const response = await axios.get(`/api/videos/details/${videoId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Baerer " + getAccessToken(),
-        },
-      });
-
-      const video = response.data;
       const newVideo = {
         id: video.id,
         title: video.title,
@@ -140,7 +162,7 @@ export const getVideoById = createAsyncThunk(
         recordingId: video.recordingId,
         sessionId: video.sessionId,
         comments: video.comments.content,
-        emotionLog: [],
+        emotionLog: emotionLog,
       };
 
       thunkAPI.dispatch(
@@ -151,7 +173,7 @@ export const getVideoById = createAsyncThunk(
       // thunkAPI.dispatch(getVideoEmotion(newVideo.sessionId));
       // console.log("현재 비디오 :", newVideo);
 
-      return response.data;
+      return video;
     } catch (e: any) {
       console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
@@ -175,8 +197,6 @@ export const getVideoEmotion = createAsyncThunk(
       });
 
       const emotionLog = response.data;
-      console.log("emotion log!!!!!!!!!", emotionLog);
-
       thunkAPI.dispatch(
         videoActions.replaceEmotionLog({
           emotionLog: emotionLog,
