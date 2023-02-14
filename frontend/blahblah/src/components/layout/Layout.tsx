@@ -66,7 +66,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { LightKoreanFont } from "../../theme/font";
 import Notification from "./Notification";
 
-const LayoutContainer = styled(Box) <{ open: boolean }>`
+const LayoutContainer = styled(Box)<{ open: boolean }>`
   ${({ open }) =>
     open &&
     css`
@@ -195,6 +195,7 @@ const Drawer = styled(MuiDrawer, {
 export default function Layout(props: LayoutProps) {
   // const navigate = useNavigate();
   const loggedUser = useAppSelector((state) => state.user.userData);
+  const isLoggedIn = loggedUser.isLoggedIn;
   const subscribers = useAppSelector((state) => state.user.subscribers);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -287,6 +288,15 @@ export default function Layout(props: LayoutProps) {
       <CloseIcon />
     </Button>
   );
+
+  // 피드 페이지 분기
+  const handleFeedButton = () => {
+    if (isLoggedIn) {
+      navigate("/feed");
+    } else {
+      alert("로그인이 필요합니다.");
+    }
+  };
 
   return (
     <LayoutContainer open={open} sx={{ display: "flex" }}>
@@ -388,7 +398,6 @@ export default function Layout(props: LayoutProps) {
                   {/* Drawer 열렸을 때 작은 아이콘들 */}
                   {open && loggedUser.isLoggedIn && (
                     <MenuItem className="badge-inner">
-
                       <Notification userData={loggedUser} />
 
                       {/* 설정 아이콘 */}
@@ -529,13 +538,14 @@ export default function Layout(props: LayoutProps) {
             {/* 피드 버튼 */}
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
-                component={Link}
-                to="/feed"
+                // component={Link}
+                // to="/feed"
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
+                onClick={handleFeedButton}
               >
                 <ListItemIcon
                   sx={{

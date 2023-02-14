@@ -9,7 +9,7 @@ import { AppDispatch } from "../redux/configStore";
 import { getVideoById } from "../redux/modules/video";
 import { useAppSelector } from "../redux/configStore.hooks";
 import { getVideoEmotion } from "../redux/modules/video";
-
+import { videoActions } from "../redux/modules/video/video-slice";
 const drawerWidth = 300;
 let isInitial = true;
 
@@ -21,19 +21,20 @@ export default function VideoPage() {
   let currentVideo = video.currentVideo;
   useEffect(() => {
     // if (isInitial) {
-    dispatch(getVideoById(Number(videoId)))
-      .then(() => {
-        dispatch(getVideoEmotion(video.currentVideo.sessionId!));
-        // console.log("emotion log 가져와", currentVideo);
-        // setTimeout(
-        //   () => dispatch(getVideoEmotion(video.currentVideo.sessionId!)),
-        //   2000
-        // );
-      })
-      .then(() => {
-        currentVideo = video.currentVideo;
-        // console.log("확인해보자", currentVideo.emotionLog);
-      });
+    dispatch(getVideoById(Number(videoId)));
+    // .then(() => {
+    //   dispatch(getVideoEmotion(video.currentVideo.sessionId!));
+    //   // console.log("emotion log 가져와", currentVideo);
+    //   // setTimeout(
+    //   //   () => dispatch(getVideoEmotion(video.currentVideo.sessionId!)),
+    //   //   2000
+    //   // );
+    // })
+    // .then(() => {
+    //   currentVideo = video.currentVideo;
+    //   // console.log("확인해보자", currentVideo.emotionLog);
+    // });
+    currentVideo = video.currentVideo;
     isInitial = false;
 
     return;
@@ -41,21 +42,9 @@ export default function VideoPage() {
   }, []);
 
   useEffect(() => {
-    // if (isInitial) {
     dispatch(getVideoEmotion(video.currentVideo.sessionId!));
-    // console.log("emotion log 가져와", currentVideo);
-    // setTimeout(
-    //   () => dispatch(getVideoEmotion(video.currentVideo.sessionId!)),
-    //   2000
-    // );
-
     currentVideo = video.currentVideo;
     console.log("확인해보자", currentVideo.emotionLog);
-
-    // isInitial = false;
-
-    // return;
-    // }
   }, [video.currentVideo.id, dispatch]);
 
   return (
