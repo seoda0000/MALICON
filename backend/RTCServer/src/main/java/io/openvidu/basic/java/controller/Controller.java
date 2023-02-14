@@ -54,7 +54,7 @@ public class Controller {
 		log.info("유저 정보 : " + userInfo);
 
 		// 바꿔야댐
-		String sessionId = userInfo.getUserId();
+		String sessionId = userInfo.getUserId() + "-" + UUID.randomUUID().toString();
 
 		//session 생성
 		//customSessionId => userId 가 들어있어야 한다.
@@ -107,7 +107,7 @@ public class Controller {
 		UserDto userInfo = userService.getUserById(id);
 
 		// 로그인 된 userId와 sessionId가 같을 때
-		if(userInfo.getUserId().equals(sessionId))
+		if(sessionId.startsWith(userInfo.getUserId()+"-"))
 		{
 			properties = new ConnectionProperties.Builder().role(OpenViduRole.PUBLISHER).build();
 			connection = session.createConnection(properties);
@@ -143,7 +143,7 @@ public class Controller {
 		UserDto userInfo = userService.getUserById(id);
 
 		// 방송을 킨사람만 삭제 가능
-		if(!userInfo.getUserId().equals(sessionId))
+		if(!sessionId.startsWith(userInfo.getUserId()+"-"))
 			throw new CustomException(HttpStatus.FORBIDDEN, "방송 정보를 삭제할 권한이 없습니다.");
 
 		LiveRoomEntity liveRoomEntity = liveRoomService.findBySessionId(sessionId);
@@ -190,13 +190,21 @@ public class Controller {
 
 		log.info("\n----------- isOnAir START -----------");
 
-		boolean onAir = true;
+		boolean onAir = false;
 
 		String sessionId = userId;
 
-		Session session = openvidu.getActiveSession(sessionId);
+		List<Session> sessionList = openvidu.getActiveSessions();
 
-		if(!liveRoomService.existBySessionId(sessionId) || session == null) onAir = false;
+		for(Session session : sessionList) {
+			if (session.getSessionId().startsWith(userId + "-")) {
+				if (liveRoomService.existBySessionId(sessionId))
+				{
+					onAir = true;
+					break;
+				}
+			}
+		}
 
 		return new ResponseEntity<>(onAir, HttpStatus.OK);
 	}
