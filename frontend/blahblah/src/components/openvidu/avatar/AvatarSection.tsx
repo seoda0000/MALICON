@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { EmotionSignalType } from "../../../model/openvidu/emotionSignalType";
+import { UserModelType } from "../../../model/openvidu/user-model";
+import { ViewerModelType } from "../../../model/openvidu/viewer-model";
 import AvatarComp from "../../common/AvatarComp";
 
 const AvatarSectionContainer = styled.div`
@@ -15,7 +17,7 @@ const AvatarSectionContainer = styled.div`
 
 interface iAvatarSectionProp {
   user: any;
-  viewers: any;
+  viewers: ViewerModelType[];
 }
 
 const initialSignal: EmotionSignalType = {
@@ -36,13 +38,15 @@ export default function AvatarSection(props: iAvatarSectionProp) {
       });
   };
 
+  console.log("!!!!!!!!!!!!!!!!", props.viewers);
+
   useEffect(() => {
     onEmotionSignalRecieved();
   }, []);
 
   return (
     <AvatarSectionContainer>
-      {props.viewers.map((viewer: any) => (
+      {props.viewers.map((viewer: ViewerModelType) => (
         <AvatarComp
           key={viewer.nickname}
           viewer={viewer}

@@ -1,21 +1,22 @@
 import VideoRoomComponent from "../components/openvidu/VideoRoomComponent";
-import registerServiceWorker from "../registerServiceWorker";
-import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch } from "../redux/configStore";
+import { useSelector } from "react-redux";
 import { RootState } from "../redux/configStore";
-import { useState } from "react";
 import { useAppSelector } from "../redux/configStore.hooks";
 
 function BroadcastPage() {
-  const dispatch = useDispatch<AppDispatch>();
   const broadcast = useSelector((state: RootState) => state.broadcast);
+  const user = useAppSelector((state) => state.user.userData);
 
   return (
     <div>
-      <VideoRoomComponent sessionName={broadcast.currentSession.sessionId} user={useAppSelector((state) => state.user.userData)} />
+      <VideoRoomComponent
+        sessionName={broadcast.currentSession.sessionId}
+        user={user}
+      />
       {/* <VideoRoomComponent /> */}
     </div>
   );
 }
 // registerServiceWorker();
 export default BroadcastPage;
+

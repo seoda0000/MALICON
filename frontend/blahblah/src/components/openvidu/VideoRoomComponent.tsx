@@ -7,7 +7,7 @@ import StreamComponent from "./stream/StreamComponent";
 import "./VideoRoomComponent.css";
 
 import OpenViduLayout from "../layout/openvidu-layout";
-import UserModel from "../../model/openvidu/user-model";
+import UserModel, { UserModelType } from "../../model/openvidu/user-model";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import { getAccessToken } from "../../redux/modules/user/token";
 import html2canvas from "html2canvas";
@@ -15,8 +15,12 @@ import AvatarSection from "./avatar/AvatarSection";
 import { axiosInitializer } from "../../redux/utils/axiosInitializer";
 import { useAppSelector } from "../../redux/configStore.hooks";
 import { UserType } from "../../model/user/userType";
+import ViewerModel, {
+  ViewerModelType,
+} from "../../model/openvidu/viewer-model";
 
-var localUser = new UserModel();
+var localViewer: ViewerModelType = new ViewerModel();
+var localUser: UserModelType = new UserModel();
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production"
     ? "https://blahblah.movebxeax.me/stream-service"
@@ -24,7 +28,7 @@ const APPLICATION_SERVER_URL =
 
 // 타입 생성
 interface VideoRoomProps {
-  user?: UserType;
+  user: UserType;
   sessionName?: string;
   token?: any;
   error?: any;
@@ -34,10 +38,13 @@ interface VideoRoomProps {
 
 interface StateType {
   localUser: any;
+  localViewer: ViewerModelType;
   session: any;
   myUserName: any;
   mySessionId: any;
-  subscribers: any;
+  myUserAvatar: any;
+  subscribers: UserModelType[];
+  viewers: ViewerModelType[];
   chatDisplay: any;
   currentVideoDevice: any;
   showExtensionDialog?: any;
@@ -71,7 +78,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   localUserAccessAllowed: any;
   isPublisher: boolean;
   state: StateType;
-  remotes: any;
+  remotes: UserModelType[];
   OV: any;
   mySessionId: any;
 
@@ -79,10 +86,8 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     super(props);
     this.hasBeenUpdated = false;
     this.layout = new OpenViduLayout();
-    let userList = ["user", "streamer"];
-    let userName = this.props.user
-      ? this.props.user.nickName
-      : userList[Math.floor(Math.random() * 2)];
+    let userName = this.props.user.nickName;
+    let userAvatar = this.props.user.avatar;
     let sessionName = this.props.sessionName
       ? this.props.sessionName
       : "sessionA";
@@ -94,9 +99,12 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.state = {
       mySessionId: sessionName,
       myUserName: userName,
+      myUserAvatar: userAvatar,
       session: undefined,
       localUser: undefined,
+      localViewer: new ViewerModel(),
       subscribers: [],
+      viewers: [],
       chatDisplay: "none",
       currentVideoDevice: undefined,
     };
@@ -110,17 +118,21 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.nicknameChanged = this.nicknameChanged.bind(this);
     this.toggleFullscreen = this.toggleFullscreen.bind(this);
     this.switchCamera = this.switchCamera.bind(this);
-    // this.screenShare = this.screenShare.bind(this);
-    // this.stopScreenShare = this.stopScreenShare.bind(this);
     this.closeDialogExtension = this.closeDialogExtension.bind(this);
     this.toggleChat = this.toggleChat.bind(this);
     this.checkNotification = this.checkNotification.bind(this);
     this.checkSize = this.checkSize.bind(this);
-    // this.sendSignalEndBroadCast = this.sendSignalEndBroadCast.bind(this);
-    // this.afterEndBroadCast = this.afterEndBroadCast.bind(this);
-    // this.exitButton = this.exitButton.bind(this);
     this.captureThumbnail = this.captureThumbnail.bind(this);
     this.sendThumbnail = this.sendThumbnail.bind(this);
+    // 여기부터
+    this.subscriberCreated = this.subscriberCreated.bind(this);
+    this.sendSignalSubcriberCreated =
+      this.sendSignalSubcriberCreated.bind(this);
+    this.deleteViewer = this.deleteViewer.bind(this);
+    this.subscriberDeleted = this.subscriberDeleted.bind(this);
+    this.sendSignalSubcriberDeleted = this.sendSignalSubcriberDeleted.bind(this);
+    this.sendSignalViewersBroadCast = this.sendSignalViewersBroadCast.bind(this);
+    this.viewerBroadCastListener = this.viewerBroadCastListener.bind(this);
   }
 
   componentDidMount() {
@@ -167,7 +179,15 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       },
       async () => {
         this.subscribeToStreamCreated();
-        await this.connectToSession();
+        
+        await this.connectToSession().then(() => {
+          if (this.isPublisher) {
+            this.subscriberDeleted();
+            this.subscriberCreated();
+          } else {
+            this.viewerBroadCastListener();
+          }
+        })
       }
     );
   }
@@ -267,26 +287,10 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       frameRate: 30,
       insertMode: "APPEND",
     });
-
-    // 내가 스트리머 라면 방송 송출가능
-    // if (this.state.session.capabilities.publish && this.isPublisher) {
-    //   publisher.on("accessAllowed", () => {
-    //     this.state.session.publish(publisher).then(() => {
-    //       this.updateSubscribers();
-    //       this.localUserAccessAllowed = true;
-    //       if (this.props.joinSession) {
-    //         this.props.joinSession();
-    //       }
-    //     });
-    //   });
-    // }
     if (this.state.session.capabilities.publish && this.isPublisher) {
       this.state.session.publish(publisher).then(() => {
         this.updateSubscribers();
         this.localUserAccessAllowed = true;
-        // if (this.props.joinSession) {
-        //   this.props.joinSession();
-        // }
       });
     } else {
       //내가 시청자라면 방송송출 안하고 다른 사람꺼 받아오기만한다.
@@ -296,12 +300,21 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     localUser.setConnectionId(this.state.session.connection.connectionId);
     localUser.setScreenShareActive(false);
     localUser.setStreamManager(publisher);
+    localUser.setAvatar(this.state.myUserAvatar);
+
+    localViewer.setNickname(this.state.myUserName);
+    localViewer.setAvatar(this.state.myUserAvatar);
+
     this.subscribeToUserChanged();
     this.subscribeToStreamDestroyed();
-    //this.afterEndBroadCast();
+    console.log("센도 시그널 유저 첸지");
     this.sendSignalUserChanged({
       isScreenShareActive: localUser.isScreenShareActive(),
+      avatar: localUser.getAvatar(),
     });
+    if (!this.isPublisher) {
+      this.sendSignalSubcriberCreated(localViewer);
+    }
 
     this.setState(
       { currentVideoDevice: videoDevices[0], localUser: localUser },
@@ -331,6 +344,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
             isVideoActive: this.state.localUser.isVideoActive(),
             nickname: this.state.localUser.getNickname(),
             isScreenShareActive: this.state.localUser.isScreenShareActive(),
+            avatar: this.state.localUser.getAvatar(),
           });
         }
         this.updateLayout();
@@ -343,7 +357,6 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     const mySession = this.state.session;
 
     if (mySession) {
-      mySession.disconnect();
       if (this.isPublisher) {
         console.log("세션 지우기");
         this.deleteSession(this.state.mySessionId)
@@ -356,11 +369,11 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
           });
       } else {
         // 원하는 라우팅 경로로
+        this.sendSignalSubcriberDeleted(localViewer);
         //window.location.replace("http://naver.com");
       }
+      mySession.disconnect();
     }
-
-    // Empty all properties...
     this.OV = null;
     this.setState({
       session: undefined,
@@ -369,10 +382,6 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       myUserName: this.state.myUserName,
       localUser: undefined,
     });
-
-    // if (this.props.leaveSession) {
-    //   this.props.leaveSession();
-    // }
   }
   camStatusChanged() {
     localUser.setVideoActive(!localUser.isVideoActive());
@@ -403,6 +412,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       (user: any) => user.getStreamManager().stream === stream
     )[0];
     let index = remoteUsers.indexOf(userStream, 0);
+    
     if (index > -1) {
       remoteUsers.splice(index, 1);
       this.setState({
@@ -416,10 +426,8 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   subscribeToStreamCreated() {
     this.state.session.on("streamCreated", (event: any) => {
       const subscriber = this.state.session.subscribe(event.stream, undefined);
-      // var subscribers = this.state.subscribers;
       console.log("subscribeToStreamCreated 376 + 누군가가 생성됐다!");
       subscriber.on("streamPlaying", (e: any) => {
-        //this.checkSomeoneShareScreen();
         subscriber.videos[0].video.parentElement.classList.remove(
           "custom-class"
         );
@@ -430,6 +438,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       newUser.setType("remote");
       const nickname = event.stream.connection.data.split("%")[0];
       newUser.setNickname(JSON.parse(nickname).clientData);
+      console.log("그 누군가는", newUser);
       this.remotes.push(newUser);
       if (this.localUserAccessAllowed) {
         this.updateSubscribers();
@@ -437,28 +446,99 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     });
   }
 
+  subscriberCreated() {
+    this.state.session.on("signal:subscribe", (event: any) => {
+      console.log("구독자가 들어왔삼용! ㅋ");
+      const viewer = JSON.parse(event.data);
+      let viewers = [...this.state.viewers, viewer];
+      this.setState({
+        viewers: viewers,
+      });
+      this.sendSignalViewersBroadCast(viewers);
+    });
+  }
+
+  subscriberDeleted() {
+    this.state.session.on("signal:unSubscribe", (event: any) => {
+      const viewer = JSON.parse(event.data);
+      console.log("구독자가 나갔슴용! ㅜ")
+      this.deleteViewer(viewer).then(() => {
+        this.sendSignalViewersBroadCast(this.state.viewers);
+      })
+    });
+  }
+
+  async viewerBroadCastListener() {
+    this.state.session.on("signal:viewerBroadCast", (event: any) => {
+      const viewers = JSON.parse(event.data);
+      console.log("브로드캐스트 당해버려!!", viewers);
+      this.setState(
+        {
+          viewers: viewers
+        }
+      );
+    });
+  }
+
+  async deleteViewer(deletedViewer: ViewerModel) {
+    console.log("뷰어를 지워버려");
+    const viewers = this.state.viewers;
+    console.log("뷰어 지우기 직전 찍기", viewers);
+    const viewer = viewers.filter(
+      (v: ViewerModel) => v.nickname === deletedViewer.nickname)[0];
+    let index = viewers.indexOf(viewer, 0);
+    console.log("뷰어지우는 인덱스", index);
+    if (index > -1) {
+      viewers.splice(index, 1);
+      this.setState({
+        viewers: viewers
+      });
+    }
+    
+  }
+
+  sendSignalSubcriberCreated(data: any) {
+    console.log("구독자 생성됐음을 알려버려");
+    const signalOptions = {
+      data: JSON.stringify(data),
+      type: "subscribe",
+    };
+    this.state.session.signal(signalOptions);
+  }
+
+  sendSignalSubcriberDeleted(data: any) {
+    console.log("구독자 삭제됐음을 알려버려");
+    const signalOptions = {
+      data: JSON.stringify(data),
+      type: "unSubscribe",
+    };
+    this.state.session.signal(signalOptions);
+  }
+
+  sendSignalViewersBroadCast(viewers: ViewerModel[]) {
+    console.log("브로드 캐스트 한다고 알려버려");
+    const signalOptions = {
+      data: JSON.stringify(viewers),
+      type: "viewerBroadCast",
+    };
+    this.state.session.signal(signalOptions);
+  }
+
   // 스트리머가 방송을 종료하면 streamDestroyed 이벤트 발생
   // 모든 시청자는 방송을 떠나게 된다.
   // leaveSession 함수 앞에 원하는 작업 추가 가능
   subscribeToStreamDestroyed() {
-    // On every Stream destroyed...
     this.state.session.on("streamDestroyed", (event: any) => {
-      // Remove the stream from 'subscribers' array
       console.log("subscribeToStreamCreated 401 + 누군가가 떠났다!");
       console.log("stream : ", event.stream);
       this.leaveSession();
-      // this.deleteSubscriber(event.stream);
-      // setTimeout(() => {
-      //   this.checkSomeoneShareScreen();
-      // }, 20);
-      // event.preventDefault();
-      // this.updateLayout();
     });
   }
 
   subscribeToUserChanged() {
     this.state.session.on("signal:userChanged", (event: any) => {
       let remoteUsers = this.state.subscribers;
+
       remoteUsers.forEach((user: any) => {
         if (user.getConnectionId() === event.from.connectionId) {
           const data = JSON.parse(event.data);
@@ -472,16 +552,15 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
           if (data.nickname !== undefined) {
             user.setNickname(data.nickname);
           }
-          // if (data.isScreenShareActive !== undefined) {
-          //   user.setScreenShareActive(data.isScreenShareActive);
-          // }
+          if (data.avatar !== undefined) {
+            user.setAvatar(data.avatar);
+          }
         }
       });
       this.setState(
         {
           subscribers: remoteUsers,
         }
-        //() => this.checkSomeoneShareScreen()
       );
     });
   }
@@ -545,8 +624,6 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         );
 
         if (newVideoDevice.length > 0) {
-          // Creating a new publisher with specific videoSource
-          // In mobile devices the default and first camera is the front one
           var newPublisher = this.OV.initPublisher(undefined, {
             audioSource: undefined,
             videoSource: newVideoDevice[0].deviceId,
@@ -554,8 +631,6 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
             publishVideo: localUser.isVideoActive(),
             mirror: true,
           });
-
-          //newPublisher.once("accessAllowed", () => {
           await this.state.session.unpublish(
             this.state.localUser.getStreamManager()
           );
@@ -572,78 +647,9 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     }
   }
 
-  // screenShare() {
-  //   const videoSource =
-  //     navigator.userAgent.indexOf("Firefox") !== -1 ? "window" : "screen";
-  //   const publisher = this.OV.initPublisher(
-  //     undefined,
-  //     {
-  //       videoSource: videoSource,
-  //       publishAudio: localUser.isAudioActive(),
-  //       publishVideo: localUser.isVideoActive(),
-  //       mirror: false,
-  //     },
-  //     (error: any) => {
-  //       if (error && error.name === "SCREEN_EXTENSION_NOT_INSTALLED") {
-  //         this.setState({ showExtensionDialog: true });
-  //       } else if (error && error.name === "SCREEN_SHARING_NOT_SUPPORTED") {
-  //         alert("Your browser does not support screen sharing");
-  //       } else if (error && error.name === "SCREEN_EXTENSION_DISABLED") {
-  //         alert("You need to enable screen sharing extension");
-  //       } else if (error && error.name === "SCREEN_CAPTURE_DENIED") {
-  //         alert("You need to choose a window or application to share");
-  //       }
-  //     }
-  //   );
-
-  //   publisher.once("accessAllowed", () => {
-  //     this.state.session.unpublish(localUser.getStreamManager());
-  //     localUser.setStreamManager(publisher);
-  //     this.state.session.publish(localUser.getStreamManager()).then(() => {
-  //       localUser.setScreenShareActive(true);
-  //       this.setState({ localUser: localUser }, () => {
-  //         this.sendSignalUserChanged({
-  //           isScreenShareActive: localUser.isScreenShareActive(),
-  //         });
-  //       });
-  //     });
-  //   });
-  //   publisher.on("streamPlaying", () => {
-  //     this.updateLayout();
-  //     publisher.videos[0].video.parentElement.classList.remove("custom-class");
-  //   });
-  // }
-
   closeDialogExtension() {
     this.setState({ showExtensionDialog: false });
   }
-
-  // stopScreenShare() {
-  //   this.state.session.unpublish(localUser.getStreamManager());
-  //   this.connectWebCam();
-  // }
-
-  // checkSomeoneShareScreen() {
-  //   let isScreenShared;
-  //   // return true if at least one passes the test
-  //   isScreenShared =
-  //     this.state.subscribers.some((user: any) => user.isScreenShareActive()) ||
-  //     localUser.isScreenShareActive();
-  //   const openviduLayoutOptions = {
-  //     maxRatio: 3 / 2,
-  //     minRatio: 9 / 16,
-  //     fixedRatio: isScreenShared,
-  //     bigClass: "OV_big",
-  //     bigPercentage: 0.8,
-  //     bigFixedRatio: false,
-  //     bigMaxRatio: 3 / 2,
-  //     bigMinRatio: 9 / 16,
-  //     bigFirst: true,
-  //     animate: true,
-  //   };
-  //   this.layout.setLayoutOptions(openviduLayoutOptions);
-  //   this.updateLayout();
-  // }
 
   toggleChat(property: any) {
     let display = property;
@@ -683,30 +689,6 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     }
   }
 
-  // 커스텀 함수
-  // sendSignalEndBroadCast() {
-  //   const signalOptions = {
-  //     data: "zz",
-  //     type: "EndBroadCast",
-  //   };
-  //   this.state.session.signal(signalOptions);
-  // }
-
-  // afterEndBroadCast() {
-  //   this.state.session.on("signal:EndBroadCast", (event: any) => {
-  //     this.leaveSession();
-  //     window.location.replace("http://naver.com");
-  //   });
-  // }
-
-  // async exitButton() {
-  //   if (this.isPublisher) {
-  //     await this.sendSignalEndBroadCast();
-  //     await this.deleteSession(this.mySessionId);
-  //   }
-  //   this.leaveSession();
-  // }
-
   async captureThumbnail() {
     let id = "video-" + localUser.getStreamManager().stream.streamId;
     console.log("아이디는 이거에옹 ", id);
@@ -726,7 +708,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     console.log("썸네일", encodedImage);
     this.createThumbnail(this.state.mySessionId, encodedImage)
       .then((data) => console.log(data))
-      .catch((e) => console.error(e))
+      .catch((e) => console.error(e));
     // 아래 함수는 이미지화 하는 법
     // const decodedImage = decodeURIComponent(encodedImage);
     // const imageElement = document.createElement('img');
@@ -746,8 +728,6 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
           showNotification={this.state.messageReceived}
           camStatusChanged={this.camStatusChanged}
           micStatusChanged={this.micStatusChanged}
-          // screenShare={this.screenShare}
-          // stopScreenShare={this.stopScreenShare}
           toggleFullscreen={this.toggleFullscreen}
           switchCamera={this.switchCamera}
           exitButton={this.leaveSession}
@@ -818,53 +798,14 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         </div>
         {localUser !== undefined &&
           localUser.getStreamManager() !== undefined && (
-            <AvatarSection user={localUser} viewers={this.remotes} />
+            <AvatarSection user={localUser} viewers={this.state.viewers} />
           )}
       </div>
     );
   }
-
-  /**
-   * --------------------------------------------
-   * GETTING A TOKEN FROM YOUR APPLICATION SERVER
-   * --------------------------------------------
-   * The methods below request the creation of a Session and a Token to
-   * your application server. This keeps your OpenVidu deployment secure.
-   *
-   * In this sample code, there is no user control at all. Anybody could
-   * access your application server endpoints! In a real production
-   * environment, your application server must identify the user to allow
-   * access to the endpoints.
-   *
-   * Visit https://docs.openvidu.io/en/stable/application-server to learn
-   * more about the integration of OpenVidu in your application server.
-   */
-
-  // ========================================================
   async getToken() {
-    // const sessionId = await this.createSession(this.state.mySessionId);
     return await this.createToken(this.state.mySessionId);
   }
-
-  // async createSession(sessionId: any) {
-  //   const response = await axios.post(
-  //     APPLICATION_SERVER_URL + "api/sessions",
-  //     {
-  //       customSessionId: sessionId,
-  //       title: "김치찌개",
-  //       avatar: "hhihi",
-  //       nickName: "된장찌개",
-  //     },
-  //     {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: "Baerer " + getAccessToken(),
-  //       },
-  //     }
-  //   );
-  //   return response.data; // The sessionId
-  // }
-
   async createToken(sessionId: any) {
     const { data } = await axios.post(
       APPLICATION_SERVER_URL + "/api/sessions/" + sessionId + "/connections",
@@ -892,7 +833,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         },
       }
     );
-    return data; // The sessionId
+    return data;
   }
 
   async createThumbnail(sessionId: any, thumbnailImage: any) {
@@ -921,9 +862,8 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         },
       }
     );
-    return data; // The token
+    return data;
   }
-
 }
 export default VideoRoomComponent;
 
