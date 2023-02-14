@@ -19,7 +19,8 @@ import FeedProfileImage from "../feed/FeedProfileImage";
 import { AppDispatch } from "../../redux/configStore";
 import { useDispatch } from "react-redux";
 import { getVideoById } from "../../redux/modules/video";
-const CardWrapper = styled(Card)<{ nth: number }>`
+import { useAppSelector } from "../../redux/configStore.hooks";
+const CardWrapper = styled(Card) <{ nth: number }>`
   width: 100%;
   padding: 0;
   & div.float-wrapper {
@@ -51,23 +52,23 @@ const CardWrapper = styled(Card)<{ nth: number }>`
       right: 0;
       bottom: 0;
       ${({ nth }) =>
-        nth
-          ? nth % 4 === 0
-            ? css`
+    nth
+      ? nth % 4 === 0
+        ? css`
                 background: #54d7c7;
               `
-            : nth % 4 === 1
-            ? css`
+        : nth % 4 === 1
+          ? css`
                 background: #f3b63a;
               `
-            : nth % 4 === 2
+          : nth % 4 === 2
             ? css`
                 background: #f55d81;
               `
             : css`
                 background: #6dbb58;
               `
-          : css`
+      : css`
               background: #6dbb58;
             `};
     }
@@ -106,11 +107,14 @@ export default function CardComp({
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [hashtags, setHashtags] = useState<HashTagJSONType[]>();
+  const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn);
 
   function onClickHandler() {
-    dispatch(getVideoById(video!.id)).then(() => {
-      navigate(`/video/${video?.id}`);
-    });
+    if (isLoggedIn) {
+      dispatch(getVideoById(video!.id)).then(() => {
+        navigate(`/video/${video?.id}`);
+      });
+    }
   }
 
   useEffect(() => {

@@ -134,6 +134,7 @@ const ProfilePageLayout = styled.div`
 export default function ProfilePage(): JSX.Element {
   const { userpk } = useParams() as { userpk: string };
   const loggedUser = useAppSelector((state) => state.user.userData);
+  const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn);
   const user = useAppSelector((state) => state.profile.userData);
   const videos = useAppSelector((state) => state.profile.videoData);
   const feeds = useAppSelector((state) => state.profile.feedData);
@@ -313,7 +314,7 @@ export default function ProfilePage(): JSX.Element {
               </div>
               {isMine ? (
                 <></>
-              ) : isSubscribing ? (
+              ) : isLoggedIn ? isSubscribing ? (
                 <ButtonComp
                   onClick={onClickSubscribe}
                   text="FOLLOW"
@@ -332,7 +333,9 @@ export default function ProfilePage(): JSX.Element {
                 >
                   <PersonAddRounded />
                 </ButtonComp>
-              )}
+              )
+                : <></>
+              }
             </div>
             <div className="aboutme-wrapper">
               {!isEditAboutMe && user.aboutMe.length !== 0 && (

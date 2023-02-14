@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button, Card, Box, Paper } from "@mui/material";
 import { Stack } from "@mui/system";
 import Divider from "@mui/material/Divider";
-import { useAppDispatch } from "../redux/configStore.hooks";
+import { useAppDispatch, useAppSelector } from "../redux/configStore.hooks";
 import { Link } from "react-router-dom";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
@@ -15,6 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import SigninModal from "../components/auth/SigninModal";
 const AVATAR_OPTION = {
   body: ["checkered", "rounded", "small", "squared"],
   clothingColor: [
@@ -111,6 +112,9 @@ function AvatarPage() {
   const [mouth, setMouth] = useState<number>(0);
   const [nose, setNose] = useState<number>(0);
   const [skinColor, setSkinColor] = useState<number>(0);
+
+  const [openSigninModal, setOpenSigninModal] = useState<boolean>(false);
+  const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn);
 
   const selectedAvatar = {
     body: [AVATAR_OPTION.body[body]],
@@ -290,6 +294,11 @@ function AvatarPage() {
   const userId = useSelector((state: RootState) => state.user.userData.userId);
   const userpk = useSelector((state: RootState) => state.user.userData.id);
   const saveAvatarHandler = () => {
+    if(!isLoggedIn)
+    {
+      setOpenSigninModal(true);
+      return;
+    }
     // console.log("아바타 저장 시도");
     const res = dispatch(
       updateUserAction({
@@ -365,6 +374,9 @@ function AvatarPage() {
           </Link>
         </Alert>
       </Snackbar>
+
+      <SigninModal open={openSigninModal} setOpen={setOpenSigninModal}></SigninModal>
+
     </div>
   );
 }
