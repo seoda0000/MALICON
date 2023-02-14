@@ -144,7 +144,7 @@ export const getVideoById = createAsyncThunk(
     try {
       const video = await getVideo(videoId);
       const emotionLog = await getEmotion(video.sessionId);
-
+      console.log("덧글이 왜 안나올까?", video);
       const newVideo = {
         id: video.id,
         title: video.title,
@@ -181,68 +181,6 @@ export const getVideoById = createAsyncThunk(
   }
 );
 
-// 특정 비디오 감정표현 로그 가져오기
-export const getVideoEmotion = createAsyncThunk(
-  "video/getVideoEmotion",
-  async (sessionId: string, thunkAPI) => {
-    try {
-      // const dispatch = useDispatch<AppDispatch>();
-      const axios = openviduInitializer();
-
-      const response = await axios.get(`/api/emotion/${sessionId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Baerer " + getAccessToken(),
-        },
-      });
-
-      const emotionLog = response.data;
-      thunkAPI.dispatch(
-        videoActions.replaceEmotionLog({
-          emotionLog: emotionLog,
-        })
-      );
-
-      return response.data;
-    } catch (e: any) {
-      console.log("emotion log!!!!!!!!! error!!!!");
-      console.error(e.response.data);
-      return thunkAPI.rejectWithValue(e);
-    }
-  }
-);
-
-// // 새 피드 작성하기
-
-// export const postFeedData = createAsyncThunk(
-//   "feed/postFeedData",
-//   async (postData: FeedPostType, thunkAPI) => {
-//     try {
-//       const axios = axiosInitializer();
-
-//       await axios
-//         .post<FeedPostType>(`/api/articles`, postData, {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: "Baerer " + getAccessToken(),
-//           },
-//         })
-//         .then(({ data }: any) => {
-//           console.log("피드 작성: ", data);
-
-//           thunkAPI.dispatch(fetchFeedData());
-//         });
-
-//       // return data;
-//     } catch (e: any) {
-//       console.log("작성 실패");
-//       console.log(e.request);
-//       console.error(e.response.data);
-//       return thunkAPI.rejectWithValue(e);
-//     }
-//   }
-// );
-
 // 비디오 삭제하기
 
 export const removeVideoData = createAsyncThunk(
@@ -261,7 +199,7 @@ export const removeVideoData = createAsyncThunk(
         }
       );
       console.log("비디오 삭제: ", data);
-      thunkAPI.dispatch(fetchAllVideoData());
+      // thunkAPI.dispatch(fetchAllVideoData());
 
       return data;
     } catch (e) {

@@ -68,14 +68,25 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
   };
 
   // 피드 좋아요
+  const [heartColor, setHeartColor] = useState<any>(false);
+  useEffect(() => {
+    if (props.feed.like) {
+      setHeartColor(true);
+    }
+  }, []);
+
   const dispatch = useDispatch<AppDispatch>();
   const likeFeedHandler = () => {
     const articleId = props.feed.id;
     dispatch(likeFeedAction(articleId));
+    setHeartColor(!heartColor);
+    console.log(heartColor);
   };
   const likeCancelHandler = () => {
     const articleId = props.feed.id;
     dispatch(likeCancelAction(articleId));
+    setHeartColor(!heartColor);
+    console.log(heartColor);
   };
 
   return (
@@ -104,9 +115,15 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
 
           <IconButton aria-label="add to favorites">
             {props.feed.like ? (
-              <FavoriteIcon color="error" onClick={likeCancelHandler} />
+              <FavoriteIcon
+                color={heartColor ? "error" : "inherit"}
+                onClick={likeCancelHandler}
+              />
             ) : (
-              <FavoriteIcon onClick={likeFeedHandler} />
+              <FavoriteIcon
+                color={heartColor ? "error" : "inherit"}
+                onClick={likeFeedHandler}
+              />
             )}
           </IconButton>
           <Typography variant="subtitle2" color={"grey"}>

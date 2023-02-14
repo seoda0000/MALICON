@@ -8,7 +8,6 @@ import { useState, useEffect } from "react";
 import { AppDispatch } from "../redux/configStore";
 import { getVideoById } from "../redux/modules/video";
 import { useAppSelector } from "../redux/configStore.hooks";
-import { getVideoEmotion } from "../redux/modules/video";
 import { videoActions } from "../redux/modules/video/video-slice";
 const drawerWidth = 300;
 let isInitial = true;
