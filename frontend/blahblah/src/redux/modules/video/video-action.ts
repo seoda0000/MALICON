@@ -123,7 +123,6 @@ export const getVideoById = createAsyncThunk(
       });
 
       const video = response.data;
-      console.log(video);
       const newVideo = {
         id: video.id,
         title: video.title,
@@ -139,7 +138,9 @@ export const getVideoById = createAsyncThunk(
         nickName: video.nickName,
         avatar: video.avatar,
         recordingId: video.recordingId,
+        sessionId: video.sessionId,
         comments: video.comments.content,
+        emotionLog: [],
       };
 
       thunkAPI.dispatch(
@@ -147,9 +148,44 @@ export const getVideoById = createAsyncThunk(
           currentVideo: newVideo,
         })
       );
+      // thunkAPI.dispatch(getVideoEmotion(newVideo.sessionId));
+      // console.log("현재 비디오 :", newVideo);
 
       return response.data;
     } catch (e: any) {
+      console.error(e.response.data);
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
+// 특정 비디오 감정표현 로그 가져오기
+export const getVideoEmotion = createAsyncThunk(
+  "video/getVideoEmotion",
+  async (sessionId: string, thunkAPI) => {
+    try {
+      // const dispatch = useDispatch<AppDispatch>();
+      const axios = openviduInitializer();
+
+      const response = await axios.get(`/api/emotion/${sessionId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Baerer " + getAccessToken(),
+        },
+      });
+
+      const emotionLog = response.data;
+      console.log("emotion log!!!!!!!!!", emotionLog);
+
+      thunkAPI.dispatch(
+        videoActions.replaceEmotionLog({
+          emotionLog: emotionLog,
+        })
+      );
+
+      return response.data;
+    } catch (e: any) {
+      console.log("emotion log!!!!!!!!! error!!!!");
       console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
@@ -187,13 +223,13 @@ export const getVideoById = createAsyncThunk(
 //   }
 // );
 
-// 피드 삭제하기
+// 비디오 삭제하기
 
 export const removeVideoData = createAsyncThunk(
   "video/removeVideoData",
   async (removeData: any, thunkAPI) => {
     try {
-      const axios = axiosInitializer();
+      const axios = openviduInitializer();
 
       const { data } = await axios.delete(
         `/api/recording/delete/${removeData.recordingId}`,

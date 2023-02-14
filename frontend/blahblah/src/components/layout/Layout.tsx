@@ -66,7 +66,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { LightKoreanFont } from "../../theme/font";
 import Notification from "./Notification";
 
-const LayoutContainer = styled(Box) <{ open: boolean }>`
+const LayoutContainer = styled(Box)<{ open: boolean }>`
   ${({ open }) =>
     open &&
     css`
@@ -195,6 +195,7 @@ const Drawer = styled(MuiDrawer, {
 export default function Layout(props: LayoutProps) {
   // const navigate = useNavigate();
   const loggedUser = useAppSelector((state) => state.user.userData);
+  const isLoggedIn = loggedUser.isLoggedIn;
   const subscribers = useAppSelector((state) => state.user.subscribers);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -225,6 +226,7 @@ export default function Layout(props: LayoutProps) {
     setOpenSigninModal((prev) => !prev);
   };
   const onClickSignup = () => {
+    setOpenLoginAlert(false);
     handleCloseUserMenu();
     setOpenSignupModal((prev) => !prev);
   };
@@ -276,14 +278,55 @@ export default function Layout(props: LayoutProps) {
   });
 
   const handleAlert = () => {
-    // e.preventDefault();
     console.log("꺼져야함");
     navigate("/avatar");
     setOpenAlert({ state: !openAlert.state, username: "" });
   };
 
+  const handleAlertClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenAlert({ state: false, username: loggedUser.userId });
+  };
+
   const action = (
     <Button color="inherit" size="small" onClick={handleAlert}>
+      <CloseIcon />
+    </Button>
+  );
+
+  // 피드 버튼 분기
+  const handleFeedButton = () => {
+    if (isLoggedIn) {
+      navigate("/feed");
+    } else {
+      setOpenLoginAlert(true);
+    }
+  };
+
+  // 방송버튼 분기
+  const handleBroadcastButton = () => {
+    if (isLoggedIn) {
+      onClickBroadcast();
+    } else {
+      setOpenLoginAlert(true);
+    }
+  };
+
+  // 로그인이 필요한 서비스입니다.
+  const [openLoginAlert, setOpenLoginAlert] = React.useState(false);
+
+  const handleLoginAlert = () => {
+    setOpenLoginAlert(!openLoginAlert);
+  };
+
+  const actionLogin = (
+    <Button color="inherit" size="small" onClick={handleLoginAlert}>
       <CloseIcon />
     </Button>
   );
@@ -388,7 +431,6 @@ export default function Layout(props: LayoutProps) {
                   {/* Drawer 열렸을 때 작은 아이콘들 */}
                   {open && loggedUser.isLoggedIn && (
                     <MenuItem className="badge-inner">
-
                       <Notification userData={loggedUser} />
 
                       {/* 설정 아이콘 */}
@@ -529,13 +571,14 @@ export default function Layout(props: LayoutProps) {
             {/* 피드 버튼 */}
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
-                component={Link}
-                to="/feed"
+                // component={Link}
+                // to="/feed"
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
+                onClick={handleFeedButton}
               >
                 <ListItemIcon
                   sx={{
@@ -553,7 +596,7 @@ export default function Layout(props: LayoutProps) {
             {/* 방송하기 버튼 */}
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
-                onClick={onClickBroadcast}
+                onClick={handleBroadcastButton}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
@@ -679,11 +722,16 @@ export default function Layout(props: LayoutProps) {
       {/* alert */}
       <Snackbar
         open={openAlert.state}
-        autoHideDuration={6000}
-        // onClose={handleAlert}
+        autoHideDuration={5000}
+        onClose={handleAlertClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       >
-        <Alert variant="filled" severity="success" action={action}>
+        <Alert
+          variant="filled"
+          severity="success"
+          action={action}
+          onClose={handleAlertClose}
+        >
           <AlertTitle>환영합니다, {openAlert.username}님!</AlertTitle>
           MALICON에 처음 오셨나요? —
           <Typography variant="button" onClick={handleAlert}>
@@ -692,8 +740,21 @@ export default function Layout(props: LayoutProps) {
         </Alert>
       </Snackbar>
 
-      {/* 오픈비두 창 */}
-      {/* {isViewed && <VideoRoomComponent />} */}
+      {/* 로그인이 필요한 서비스입니다. */}
+      <Snackbar
+        open={openLoginAlert}
+        autoHideDuration={1000}
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert variant="filled" severity="error" action={actionLogin}>
+          <AlertTitle>로그인이 필요한 서비스입니다.</AlertTitle>
+          아직 회원이 아니신가요? —
+          <Typography variant="button" onClick={onClickSignup}>
+            회원가입 바로가기
+          </Typography>
+        </Alert>
+      </Snackbar>
     </LayoutContainer>
   );
 }
