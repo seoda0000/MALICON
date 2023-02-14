@@ -77,9 +77,10 @@ export const fetchFeedData = createAsyncThunk(
 
 export const postFeedData = createAsyncThunk(
   "feed/postFeedData",
-  async (postData: FeedPostType, thunkAPI) => {
+  async ({postData, file} : {postData: FeedPostType, file:FormData}, thunkAPI) => {
     try {
       const axios = axiosInitializer();
+
 
       await axios
         .post<FeedPostType>(`/api/articles`, postData, {
@@ -87,6 +88,7 @@ export const postFeedData = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: "Baerer " + getAccessToken(),
           },
+          data:file
         })
         .then(({ data }: any) => {
           console.log("피드 작성: ", data);
@@ -105,6 +107,7 @@ export const postFeedData = createAsyncThunk(
     }
   }
 );
+
 
 // 피드 삭제하기
 

@@ -28,4 +28,6 @@ public class ArticleDTO {
 
     private List<FileInfoDTO> fileInfos;
 
+    private String file;
+
 }

@@ -42,7 +42,7 @@ public class ArticleController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("빈 문자열"));
         }
         List<FileInfoDTO> fileInfos = new ArrayList<FileInfoDTO>();
-        if(!files[0].isEmpty()){
+        if(!files[0].isEmpty()) {
             String today = new SimpleDateFormat("yyMMdd").format(new Date());
             File folder = new File(filePath);
             if (!folder.exists())
@@ -63,6 +63,7 @@ public class ArticleController {
                 fileInfos.add(fileInfoDto);
             }
         }
+
         ArticleDTO a = ArticleDTO.builder()
                 .title(articleDTO.getTitle())
                 .content(articleDTO.getContent())
@@ -70,9 +71,9 @@ public class ArticleController {
                 .fileInfos(fileInfos)
                 .build();
         ArticleEntity result = articleService.createArticle(a);
-        if(result==null){
+        if (result == null) {
             throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "글 작성 실패");
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.OK).body(new Message("글 작성 완료"));
         }
     }
