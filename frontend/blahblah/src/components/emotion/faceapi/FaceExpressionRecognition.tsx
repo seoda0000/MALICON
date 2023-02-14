@@ -25,6 +25,8 @@ export default function FaceExpressionRecognition(
       height: videoRef.current.videoHeight,
     };
 
+    console.log("!!!!!", displaySize);
+
     // FaceRecognitionStart
     const faceDetecting = async () => {
       if (videoRef.current === null) return;
