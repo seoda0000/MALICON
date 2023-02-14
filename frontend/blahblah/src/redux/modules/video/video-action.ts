@@ -138,6 +138,7 @@ export const getVideoById = createAsyncThunk(
         userId: video.userId,
         nickName: video.nickName,
         avatar: video.avatar,
+        recordingId: video.recordingId,
         comments: video.comments.content,
       };
 
