@@ -18,6 +18,7 @@ export type VideoDetailType = {
   like: boolean;
   likeCnt: number;
   comments: CommentType[];
+  recordingId: string | null;
 
   // 아바타 감정표현
   emotionLog?: VideoEmotionType[];

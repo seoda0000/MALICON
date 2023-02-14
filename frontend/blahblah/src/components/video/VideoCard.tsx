@@ -24,12 +24,19 @@ export default function VideoCard({
   nth,
   video,
 }: VideoCardPropsType): JSX.Element {
+  let decodedImage;
+  if (video.thumbnail) {
+    decodedImage = decodeURIComponent(video.thumbnail);
+    // const imageElement = document.createElement("img");
+    // imageElement.src = `data:image/jpeg;base64,${decodedImage}`;
+  }
+
   return (
     <CardComp nth={nth} title={video.title} caption={true} video={video}>
       <img
         src={
           video.thumbnail
-            ? video.thumbnail
+            ? `data:image/jpeg;base64,${decodedImage}`
             : "https://i.ytimg.com/vi/0gY_z7fqPjs/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0w_6PP55kpL3H-VNAhtDIWuISAA"
         }
         // srcSet="https://images.unsplash.com/photo-1515825838458-f2a94b20105a?auto=format&fit=crop&w=300&dpr=2 2x"

@@ -21,6 +21,7 @@ const initialState: VideoStateType = {
     likeCnt: 0,
     recordingId: 0,
     thumbnail: "",
+    recordingId: "",
     comments: [],
   },
 };
