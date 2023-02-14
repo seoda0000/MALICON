@@ -199,6 +199,8 @@ export default function Layout(props: LayoutProps) {
   const subscribers = useAppSelector((state) => state.user.subscribers);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const logo = require("../../assets/img/logo.png");
+  const logo_small = require("../../assets/img/logo_small.png");
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [openSigninModal, setOpenSigninModal] = useState<boolean>(false);
@@ -340,32 +342,28 @@ export default function Layout(props: LayoutProps) {
           <DrawerHeader
             sx={{
               minHeight: 48,
-              justifyContent: open ? "initial" : "center",
+              // justifyContent: open ? "initial" : "center",
+              justifyContent: "center",
               px: 2.5,
             }}
           >
-            <AdbIcon
-              sx={{
-                minWidth: 0,
-                mr: open ? 3 : "auto",
-                justifyContent: "center",
-              }}
-            />
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/main"
-              sx={{
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-                opacity: open ? 1 : 0,
-              }}
-            >
-              MALICON
-            </Typography>
+            {!open && (
+              <Box component={Link} to="/main">
+                <img src={logo_small} style={{ width: "30px" }} />
+              </Box>
+            )}
+
+            {open && (
+              <Box
+                component={Link}
+                to="/main"
+                sx={{
+                  opacity: open ? 1 : 0,
+                }}
+              >
+                <img src={logo} style={{ width: "150px" }} />
+              </Box>
+            )}
           </DrawerHeader>
           <Divider />
 
