@@ -192,13 +192,11 @@ public class Controller {
 
 		boolean onAir = false;
 
-		String sessionId = userId;
-
 		List<Session> sessionList = openvidu.getActiveSessions();
 
 		for(Session session : sessionList) {
 			if (session.getSessionId().startsWith(userId + "-")) {
-				if (liveRoomService.existBySessionId(sessionId))
+				if (liveRoomService.existBySessionId(session.getSessionId()))
 				{
 					onAir = true;
 					break;
