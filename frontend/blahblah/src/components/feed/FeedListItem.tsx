@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/configStore";
 import { likeFeedAction } from "../../redux/modules/feed";
 import { likeCancelAction } from "../../redux/modules/feed";
+import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -44,6 +45,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 const FeedListItem: React.FC<{ feed: any }> = (props) => {
+  const loggedUserId = useAppSelector((state) => state.user.userData.userId);
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -82,10 +84,12 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
         <CardHeader
           avatar={<FeedProfileImage avatar={props.feed.avatar} />}
           action={
-            <FeedSettingButton
-              onClickEditor={onClickEditor}
-              handleClickOpen={handleClickOpen}
-            />
+            props.feed.userId === loggedUserId && (
+              <FeedSettingButton
+                onClickEditor={onClickEditor}
+                handleClickOpen={handleClickOpen}
+              />
+            )
           }
           title={props.feed.nickName}
           subheader={props.feed.createDate}

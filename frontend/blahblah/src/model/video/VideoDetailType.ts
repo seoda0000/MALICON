@@ -12,14 +12,14 @@ export type VideoDetailType = {
   createDate: string;
   hashtags: string;
   thumbnail: string | null;
-  recordingId: number;
 
   // 디테일
   like: boolean;
   likeCnt: number;
   comments: CommentType[];
   recordingId: string | null;
+  sessionId: string | null;
 
   // 아바타 감정표현
-  emotionLog?: VideoEmotionType[];
+  emotionLog: VideoEmotionType[];
 };

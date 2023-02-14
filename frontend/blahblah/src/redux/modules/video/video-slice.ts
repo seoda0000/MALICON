@@ -19,10 +19,12 @@ const initialState: VideoStateType = {
     hashtags: "",
     like: false,
     likeCnt: 0,
-    recordingId: 0,
     thumbnail: "",
     recordingId: "",
+    sessionId: "",
     comments: [],
+
+    emotionLog: [],
   },
 };
 
@@ -38,6 +40,9 @@ const videoSlice = createSlice({
     },
     replaceCurrentVideo(state, action) {
       state.currentVideo = action.payload.currentVideo;
+    },
+    replaceEmotionLog(state, action) {
+      state.currentVideo.emotionLog = action.payload.emotionLog;
     },
   },
 });
