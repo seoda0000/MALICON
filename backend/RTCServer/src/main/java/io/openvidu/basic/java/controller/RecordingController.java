@@ -9,6 +9,7 @@ import io.openvidu.basic.java.redis.entity.PreviousVideoEntity;
 import io.openvidu.basic.java.redis.repository.LiveRoomRepository;
 import io.openvidu.basic.java.redis.repository.PreviousVideoRepository;
 import io.openvidu.basic.java.service.LiveRoomService;
+import io.openvidu.basic.java.service.RecordingService;
 import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import retrofit2.http.Path;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,6 +30,8 @@ public class RecordingController {
 
     private final OpenVidu openvidu;
     private final LiveRoomService liveRoomService;
+
+    private final RecordingService recordingService;
 
     @GetMapping(value = "/api/recording/{sessionId}")
     public ResponseEntity<?> startRecording(@PathVariable String sessionId) {
@@ -58,5 +62,13 @@ public class RecordingController {
             e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @DeleteMapping(value = "/api/recording/{recordingId}")
+    public ResponseEntity<?> deleteRecording(@PathVariable String recordingId){
+        log.info("delete recording start");
+        if(recordingService.deleteByRecordingId(recordingId))
+            return ResponseEntity.noContent().build();
+        else return ResponseEntity.badRequest().build();
     }
 }
