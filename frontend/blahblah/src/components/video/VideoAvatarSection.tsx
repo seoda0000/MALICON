@@ -29,7 +29,7 @@ const VideoAvatarSection: React.FC<{ played: number; emotionLog: any }> = (
       }
 
       // 타임라인 생성
-      let time = Math.round(emotion.timestamp / 1000 - 1); // 싱크 조정
+      let time = Math.round(emotion.timestamp / 1000 - 3); // 싱크 조정
       if (timeList.indexOf(time) === -1) {
         timeline.push({ time: time, user: [user] });
         timeList.push(time);
