@@ -19,7 +19,6 @@ const initialState: VideoStateType = {
     hashtags: "",
     like: false,
     likeCnt: 0,
-    recordingId: 0,
     thumbnail: "",
     recordingId: "",
     comments: [],
