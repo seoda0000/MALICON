@@ -183,7 +183,7 @@ export default function CardComp({
         >
           {/* 아바타 */}
           {video?.avatar ? (
-            <FeedProfileImage avatar={video.avatar} />
+            <FeedProfileImage avatar={video.avatar} userPK={video.userPK} />
           ) : (
             <div>아바타 없다</div>
           )}

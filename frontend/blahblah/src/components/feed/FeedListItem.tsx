@@ -93,7 +93,12 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
     <div>
       <Card>
         <CardHeader
-          avatar={<FeedProfileImage avatar={props.feed.avatar} />}
+          avatar={
+            <FeedProfileImage
+              avatar={props.feed.avatar}
+              userPK={props.feed.userPK}
+            />
+          }
           action={
             props.feed.userId === loggedUserId && (
               <FeedSettingButton
