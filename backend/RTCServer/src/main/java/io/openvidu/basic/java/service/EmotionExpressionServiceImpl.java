@@ -42,7 +42,7 @@ public class EmotionExpressionServiceImpl implements EmotionExpressionService {
     public List<EmotionExpressionDto> select(String sessionId) {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("select * from ").append(sessionId);
+        sb.append("select * from \"").append(sessionId).append("\"");
         Query query = BoundParameterQuery.QueryBuilder.newQuery(sb.toString()).forDatabase(databaseName).create();
 
         QueryResult queryResult = influxDBTemplate.query(query);
@@ -54,7 +54,7 @@ public class EmotionExpressionServiceImpl implements EmotionExpressionService {
     public List<EmotionExpressionDto> select(String sessionId, int from, int count) {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("select * from ").append(sessionId).append(" limit ").append(count).append(" offset ").append(from);
+        sb.append("select * from \"").append(sessionId).append("\"").append(" limit ").append(count).append(" offset ").append(from);
         Query query = BoundParameterQuery.QueryBuilder.newQuery(sb.toString()).forDatabase(databaseName).create();
 
         QueryResult queryResult = influxDBTemplate.query(query);

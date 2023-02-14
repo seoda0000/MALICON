@@ -16,6 +16,8 @@ public class EmotionExpressionDto {
     @TimeColumn
     @Column(name = "time")
     private Instant time;
+    @Column(name = "userId")
+    private String userId;
     @Column(name = "timestamp")
     private Long timestamp;
     @Column(name = "avatar")
