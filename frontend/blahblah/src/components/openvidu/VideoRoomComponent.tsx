@@ -789,6 +789,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
                 <ChatComponent
                   user={localUser}
                   chatDisplay={this.state.chatDisplay}
+                  viewer={localViewer}
                   close={this.toggleChat}
                   messageReceived={this.checkNotification}
                   isPublisher={this.isPublisher}

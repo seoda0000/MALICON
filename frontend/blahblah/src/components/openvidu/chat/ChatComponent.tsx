@@ -5,12 +5,13 @@ import Tooltip from "@mui/material/Tooltip";
 import Send from "@mui/icons-material/Send";
 
 import "./ChatComponent.css";
+import { ViewerModelType } from "../../../model/openvidu/viewer-model";
+import ProfileImage from "../../common/ProfileImage";
 
 // 타입 생성
 interface MessageType {
-  connectionId: string;
-  nickname: string;
   message: string;
+  viewer: ViewerModelType;
   isPublisher: boolean;
 }
 
@@ -27,6 +28,7 @@ interface ChatProps {
   isPublisher: boolean;
   localUser?: any;
   handleNickname?: any;
+  viewer?: ViewerModelType;
 }
 // ChatComponent
 
@@ -61,31 +63,12 @@ export default class ChatComponent extends Component<ChatProps, {}> {
         let messageList = this.state.messageList;
         console.log("data.publish", data.isPublisher);
         messageList.push({
-          connectionId: event.from.connectionId,
-          nickname: data.nickname,
           message: data.message,
+          viewer: data.viewer,
           isPublisher: data.isPublisher,
         });
-        const document = window.document;
         setTimeout(() => {
-          const userImg = document.getElementById(
-            "userImg-" + (this.state.messageList.length - 1)
-          );
-          const video = document.getElementById("video-" + data.streamId);
-
-          const avatar = (userImg as HTMLCanvasElement).getContext("2d");
-          console.log(avatar);
-          (avatar as CanvasRenderingContext2D).drawImage(
-            video as any,
-            200,
-            120,
-            285,
-            285,
-            0,
-            0,
-            60,
-            60
-          );
+          
           this.props.messageReceived();
         }, 50);
         this.setState({ messageList: messageList });
@@ -110,8 +93,7 @@ export default class ChatComponent extends Component<ChatProps, {}> {
       if (message !== "" && message !== " ") {
         const data = {
           message: message,
-          nickname: this.props.user.getNickname(),
-          streamId: this.props.user.getStreamManager().stream.streamId,
+          viewer: this.props.viewer,
           isPublisher: this.props.isPublisher,
         };
         console.log("메세지 보낼 때", data);
@@ -151,9 +133,6 @@ export default class ChatComponent extends Component<ChatProps, {}> {
               {this.props.user.getStreamManager().stream.session.sessionId} -
               CHAT
             </span>
-            {/* <IconButton id="closeButton" onClick={this.close}>
-                            <HighlightOff color="secondary" />
-                        </IconButton> */}
           </div>
 
           <div className="message-wrap" ref={this.chatScroll}>
@@ -163,15 +142,10 @@ export default class ChatComponent extends Component<ChatProps, {}> {
                 id="remoteUsers"
                 className={"message" + (!data.isPublisher ? " left" : " right")}
               >
-                <canvas
-                  id={"userImg-" + i}
-                  width="60"
-                  height="60"
-                  className="user-img"
-                />
+                <ProfileImage userAvatar={data.viewer.avatar}/>
                 <div className="msg-detail">
                   <div className="msg-info">
-                    <p> {data.nickname}</p>
+                    <p> {data.viewer.nickname}</p>
                   </div>
                   <div className="msg-content">
                     <span className="triangle" />
