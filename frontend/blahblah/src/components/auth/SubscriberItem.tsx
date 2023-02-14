@@ -75,9 +75,10 @@ export default function SubscriberItem({
 
   useEffect(() => {
     // 방송중인 사용자면
-    setIsOnAir(true);
-    dispatch(getIsOnAirAction(item.userId)).then((data) => {
-      console.log("으아아아ㅏ아아ㅏ ", data);
+    
+    dispatch(getIsOnAirAction(item.userId)).then(({payload}: any): void => {
+      console.log("으아아아ㅏ아아ㅏ ", payload);
+      setIsOnAir(payload);
     });
   }, []);
   return (
