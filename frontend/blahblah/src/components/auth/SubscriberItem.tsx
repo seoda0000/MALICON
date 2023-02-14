@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { PlayArrowRounded } from "@mui/icons-material";
 import OnAirBadge from "../common/OnAirBadge";
 import { getIsOnAirAction } from "../../redux/modules/user";
-
+import { getAboutMeAction } from "../../redux/modules/profile";
 const ItemContainer = styled.li<{ open: boolean }>`
   margin-bottom: 18px;
   display: flex;
@@ -70,7 +70,9 @@ export default function SubscriberItem({
   }).toDataUriSync();
 
   const onClickItem = () => {
-    navigator(`/profile/${item.userPK}`);
+    dispatch(getAboutMeAction(String(item.userPK))).then(() => {
+      navigator(`/profile/${item.userPK}`);
+    });
   };
 
   useEffect(() => {

@@ -6,8 +6,6 @@ import { useState, useRef, useEffect } from "react";
 const VideoBox: React.FC<{ emotionLog: any; pathUrl: any }> = (props) => {
   const [played, setPlayed] = useState(0);
 
-  console.log("Video Box", props.emotionLog);
-
   return (
     <Box sx={{ width: "100%", backgroundColor: "black" }}>
       <h1 style={{ color: "white" }}>현재 재생 시점 : {played} sec</h1>

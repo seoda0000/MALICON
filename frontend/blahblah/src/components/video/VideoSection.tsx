@@ -59,8 +59,6 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
   const [expanded, setExpanded] = React.useState(false);
 
-  console.log("VideoSection", props.video);
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -173,7 +171,10 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
         <Box sx={{ display: "flex", gap: 1, mt: 1.5, alignItems: "center" }}>
           {/* 아바타 */}
 
-          <FeedProfileImage avatar={props.video?.avatar} />
+          <FeedProfileImage
+            avatar={props.video.avatar}
+            userPK={props.video.userPK}
+          />
 
           <Box
             sx={{

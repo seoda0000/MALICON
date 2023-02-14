@@ -29,7 +29,10 @@ const CommentListItem: React.FC<{
   return (
     <ListItem alignItems="flex-start">
       <ListItemAvatar>
-        <FeedProfileImage avatar={props.comment.avatar} />
+        <FeedProfileImage
+          avatar={props.comment.avatar}
+          userPK={props.comment.userPK}
+        />
       </ListItemAvatar>
       <ListItemText
         primary={
