@@ -7,10 +7,12 @@ import { useEffect } from "react";
 import { RootState } from "../../redux/configStore";
 import { AppDispatch } from "../../redux/configStore";
 import { fetchFollowingVideoData } from "../../redux/modules/video";
+import { useAppSelector } from "../../redux/configStore.hooks";
 let isInitial = true;
 const RightVideoSection: React.FC<{ drawerWidth: number }> = (props) => {
   const video = useSelector((state: RootState) => state.video);
   const dispatch = useDispatch<AppDispatch>();
+  const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn)
 
   useEffect(() => {
     if (isInitial) {
@@ -44,9 +46,9 @@ const RightVideoSection: React.FC<{ drawerWidth: number }> = (props) => {
                 <VideoCard nth={3} video={video} />
               </Grid>
             ))
-          ) : (
+          ) : isLoggedIn ? (
             <div>팔로잉 중인 뮤지션이 없습니다. 팔로우 해주세요! </div>
-          )}
+          ) : <div>팔로잉 목록을 표시하려면 로그인 해주세요!</div>}
         </Grid>
       </Paper>
     </Box>

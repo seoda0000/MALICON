@@ -19,6 +19,7 @@ import RightVideoSection from "../components/video/RightVideoSection";
 import InfiniteScroll from "../components/ui/InfiniteScroll";
 import { useAppSelector } from "../redux/configStore.hooks";
 import { ProfileFeedType } from "../model/profile/profileFeedType";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 300;
 let isInitial = true;
@@ -28,6 +29,8 @@ export default function FeedPage() {
   const feed = useSelector((state: RootState) => state.feed);
   const feeds = useAppSelector((state) => state.feed.feedData);
   const newest = useAppSelector((state) => state.feed.newest);
+  const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn);
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   console.log("하...........", feeds);
@@ -45,10 +48,15 @@ export default function FeedPage() {
   // 모달 조작
   const [openEditorModal, setOpenEditorModal] = useState<boolean>(false);
   const onClickEditor = () => {
-    setOpenEditorModal((prev) => !prev);
+    if (isLoggedIn)
+      setOpenEditorModal((prev) => !prev);
   };
 
   useEffect(() => {
+    if(!isLoggedIn) {
+      alert("로그인 되지 않은 사용자입니다. 메인페이지로 돌아갑니다.");
+      navigate("/main");
+    }
     dispatch(getFeedsAction({ size: 5, page: 0 })).then(() => {
       console.log("feeds!!!!!!!!!!!!!!", feeds);
     });
@@ -67,13 +75,14 @@ export default function FeedPage() {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <Button
+        {isLoggedIn && <Button
           onClick={onClickEditor}
           variant="outlined"
           startIcon={<CreateIcon />}
         >
           새 피드
         </Button>
+        }
 
         <br />
         <br />
