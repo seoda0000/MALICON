@@ -5,26 +5,15 @@ import org.hibernate.annotations.ColumnDefault;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name ="videos")
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class PreviousVideoEntity extends BaseEntity{
-
-    @Builder
-    public PreviousVideoEntity(Long id, String recordingId, String title, String sessionId, Long timeStamp, Long views, String pathUrl, Double playTime, String thumbnail, String hashTags, UserEntity userEntity) {
-        this.id = id;
-        this.recordingId = recordingId;
-        this.title = title;
-        this.sessionId = sessionId;
-        this.timeStamp = timeStamp;
-        this.views = views;
-        this.pathUrl = pathUrl;
-        this.playTime = playTime;
-        this.thumbnail = thumbnail;
-        this.hashTags = hashTags;
-        this.userEntity = userEntity;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,4 +42,11 @@ public class PreviousVideoEntity extends BaseEntity{
             fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "previousVideo",
+            cascade = CascadeType.REMOVE,
+            targetEntity = VideoHashtagEntity.class
+    )
+    private List<VideoHashtagEntity> hashTagList = new ArrayList<>();
 }

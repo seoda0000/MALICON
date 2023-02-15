@@ -1,11 +1,19 @@
 package io.openvidu.basic.java.service;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import io.openvidu.basic.java.controller.exception.CustomException;
+import io.openvidu.basic.java.dto.HashTag;
 import io.openvidu.basic.java.redis.entity.LiveRoomEntity;
 import io.openvidu.basic.java.redis.entity.PreviousVideoEntity;
 import io.openvidu.basic.java.redis.entity.UserEntity;
+import io.openvidu.basic.java.redis.entity.VideoHashtagEntity;
 import io.openvidu.basic.java.redis.repository.PreviousVideoRepository;
 import io.openvidu.basic.java.redis.repository.UserEntityRepository;
+import io.openvidu.basic.java.redis.repository.VideoHashtagRepository;
 import io.openvidu.java.client.Recording;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +22,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +36,9 @@ public class VideoServiceImpl implements VideoService{
 
     private final PreviousVideoRepository videoRepository;
     private final UserEntityRepository userEntityRepository;
+
+
+    private final VideoHashtagRepository videoHashtagRepository;
 
     @Override
     public boolean saveVideo(LiveRoomEntity liveRoomEntity, Recording recording, Long userId) {
@@ -49,8 +62,23 @@ public class VideoServiceImpl implements VideoService{
                 .timeStamp(date.toEpochMilli())
                 .build();
 
-        log.info(pv.toString());
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<HashTag>>(){}.getType();
 
-        return videoRepository.save(pv) != null;
+        List<HashTag> hashTags = gson.fromJson(liveRoomEntity.getHashTag(), type);
+
+        PreviousVideoEntity savedPv = videoRepository.save(pv);
+
+        if(pv != null)
+            hashTags.forEach((ht)->{
+                    videoHashtagRepository.save(
+                            VideoHashtagEntity.builder()
+                                    .previousVideo(savedPv)
+                                    .key(ht.getKey())
+                                    .build()
+                    );}
+            );
+
+        return savedPv != null;
     }
 }
