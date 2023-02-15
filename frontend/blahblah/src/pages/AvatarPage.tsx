@@ -1,7 +1,14 @@
 import AvatarTest from "../components/avatar/AvatarTest";
 import SelectList from "../components/avatar/SelectList";
 import { useState } from "react";
-import { Button, Card, Box, Paper } from "@mui/material";
+import {
+  Button,
+  Card,
+  Box,
+  Paper,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import { Stack } from "@mui/system";
 import Divider from "@mui/material/Divider";
 import { useAppDispatch, useAppSelector } from "../redux/configStore.hooks";
@@ -16,6 +23,21 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import SigninModal from "../components/auth/SigninModal";
+import { ThemeProvider } from "@mui/material/styles";
+import { BoldKoreanFont } from "../theme/font";
+import CheckroomIcon from "@mui/icons-material/Checkroom";
+import PaletteIcon from "@mui/icons-material/Palette";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import FaceRetouchingNaturalIcon from "@mui/icons-material/FaceRetouchingNatural";
+import InvertColorsIcon from "@mui/icons-material/InvertColors";
+import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+
+const BeardIcon = require("../assets/img/BeardIcon.png");
+const MouthIcon = require("../assets/img/MouthIcon.png");
+const NoseIcon = require("../assets/img/NoseIcon.png");
+
 const AVATAR_OPTION = {
   body: ["checkered", "rounded", "small", "squared"],
   clothingColor: [
@@ -294,8 +316,7 @@ function AvatarPage() {
   const userId = useSelector((state: RootState) => state.user.userData.userId);
   const userpk = useSelector((state: RootState) => state.user.userData.id);
   const saveAvatarHandler = () => {
-    if(!isLoggedIn)
-    {
+    if (!isLoggedIn) {
       setOpenSigninModal(true);
       return;
     }
@@ -316,13 +337,12 @@ function AvatarPage() {
 
   return (
     <div>
-      <h1>아바타 페이지</h1>
       {/* 제목 영역 */}
 
       <Box
         sx={{
           display: "flex",
-          flexWrap: "wrap",
+          // flexWrap: "wrap",
           justifyContent: "center",
           "& > :not(style)": {
             m: 1,
@@ -331,30 +351,70 @@ function AvatarPage() {
           },
         }}
       >
-        <h1>Avatar Page</h1>
-      </Box>
+        <ThemeProvider theme={BoldKoreanFont}>
+          <Typography variant="h4">Make your own Avatar</Typography>
+        </ThemeProvider>
 
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          "& > :not(style)": {
-            m: 1,
-            // width: 1500,
-            // height: 500,
-          },
-        }}
-      >
-        <Card sx={{ maxWidth: 500 }}>
-          <AvatarTest selectedAvatar={selectedAvatar} />
-        </Card>
-        <Card sx={{ minWidth: 400, maxWidth: 500 }}>
-          <SelectList options={AVATAR_OPTION} selectHandler={selectHandler} />
-          <Stack direction="column" spacing={1} justifyContent="center">
-            <Button onClick={saveAvatarHandler}>확정</Button>
-          </Stack>
-        </Card>
+        <Box
+          sx={{
+            display: "flex",
+            // flexWrap: "wrap",
+            justifyContent: "center",
+            flexDirection: "column",
+            // "& > :not(style)": {
+            //   m: 1,
+            //   // width: 1500,
+            //   // height: 500,
+            // },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
+            }}
+          >
+            <IconButton color="primary">
+              <NavigateBeforeIcon />
+            </IconButton>
+            <AvatarTest selectedAvatar={selectedAvatar} />
+            <IconButton color="primary">
+              <NavigateNextIcon />
+            </IconButton>
+          </Box>
+
+          <Box>
+            {/* <SelectList options={AVATAR_OPTION} selectHandler={selectHandler} /> */}
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            "& > :not(style)": {
+              m: 1,
+              // width: 1500,
+              // height: 500,
+            },
+          }}
+        >
+          <IconButton>
+            <CheckroomIcon />
+          </IconButton>
+          <PaletteIcon />
+          <RemoveRedEyeIcon />
+          <FaceRetouchingNaturalIcon />
+          <InvertColorsIcon />
+          <EmojiEmotionsIcon />
+          <IconButton>
+            <img src={BeardIcon} style={{ width: "24px", height: "24px" }} />
+          </IconButton>
+          <img src={MouthIcon} style={{ width: "24px", height: "24px" }} />
+          <img src={NoseIcon} style={{ width: "24px", height: "24px" }} />
+        </Box>
+        <Button onClick={saveAvatarHandler}>확정</Button>
       </Box>
 
       {/* alert */}
@@ -375,8 +435,10 @@ function AvatarPage() {
         </Alert>
       </Snackbar>
 
-      <SigninModal open={openSigninModal} setOpen={setOpenSigninModal}></SigninModal>
-
+      <SigninModal
+        open={openSigninModal}
+        setOpen={setOpenSigninModal}
+      ></SigninModal>
     </div>
   );
 }

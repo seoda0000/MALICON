@@ -12,9 +12,17 @@ const AvatarTest: React.FC<{ selectedAvatar: any }> = (props) => {
 
   return (
     <Stack direction="row" spacing={1} justifyContent="center">
-      <img src={dataUri} width="400px" alt="" />
+      <img
+        src={dataUri}
+        width="400px"
+        alt=""
+        style={
+          {
+            // filter: `drop-shadow(10px 10px  #3ba89b)`,
+          }
+        }
+      />
     </Stack>
   );
 };
 export default AvatarTest;
-
