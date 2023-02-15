@@ -2,6 +2,7 @@ import CommentInput from "./CommentInput";
 import CommentList from "./CommentList";
 import { Box } from "@mui/system";
 import { CommentType } from "../../model/feed/commentType";
+import { useAppSelector } from "../../redux/configStore.hooks";
 
 const CommentSection: React.FC<{
   comments: CommentType[];
@@ -17,9 +18,12 @@ const CommentSection: React.FC<{
     id = props.videoId;
     isVideo = true;
   }
+
+  const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn);
+
   return (
     <Box sx={{ mx: 2 }}>
-      <CommentInput articleId={id} isVideo={isVideo} />
+      {isLoggedIn && <CommentInput articleId={id} isVideo={isVideo} />}
       <CommentList comments={props.comments} isVideo={isVideo} id={id} />
     </Box>
   );

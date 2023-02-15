@@ -77,6 +77,7 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
   // 구독
   const isSubscribing = useAppSelector((state) => state.profile.isSubscribing);
   const userPK = useAppSelector((state) => state.user.userData.id);
+  const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn)
 
   let isMine;
   if (props.video.userPK === userPK) {
@@ -196,7 +197,7 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
 
             {isMine ? (
               <></>
-            ) : isSubscribing ? (
+            ) : isLoggedIn ? isSubscribing ? (
               <ButtonComp
                 onClick={onClickSubscribe}
                 text="FOLLOW"
@@ -215,7 +216,7 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
               >
                 <PersonAddRounded />
               </ButtonComp>
-            )}
+            ) : <></>}
             {/* ============ */}
             <IconButton aria-label="share" sx={{ ml: "auto" }}>
               <ShareIcon />
