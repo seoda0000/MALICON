@@ -33,6 +33,7 @@ import InvertColorsIcon from "@mui/icons-material/InvertColors";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import Chip from "@mui/material/Chip";
 
 const BeardIcon = require("../assets/img/BeardIcon.png");
 const MouthIcon = require("../assets/img/MouthIcon.png");
@@ -134,6 +135,8 @@ function AvatarPage() {
   const [mouth, setMouth] = useState<number>(0);
   const [nose, setNose] = useState<number>(0);
   const [skinColor, setSkinColor] = useState<number>(0);
+
+  const [currentHandler, setCurrentHandler] = useState<string>("skinColor");
 
   const [openSigninModal, setOpenSigninModal] = useState<boolean>(false);
   const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn);
@@ -344,6 +347,7 @@ function AvatarPage() {
           display: "flex",
           // flexWrap: "wrap",
           justifyContent: "center",
+          flexDirection: "column",
           "& > :not(style)": {
             m: 1,
             // width: 1500,
@@ -353,6 +357,7 @@ function AvatarPage() {
       >
         <ThemeProvider theme={BoldKoreanFont}>
           <Typography variant="h4">Make your own Avatar</Typography>
+          <Typography variant="h6">나만의 아바타 만들기</Typography>
         </ThemeProvider>
 
         <Box
@@ -375,11 +380,24 @@ function AvatarPage() {
               justifyContent: "center",
             }}
           >
-            <IconButton color="primary">
+            <IconButton
+              color="primary"
+              onClick={
+                selectHandler[currentHandler as keyof typeof selectHandler]
+                  .prevHandler
+              }
+            >
               <NavigateBeforeIcon />
             </IconButton>
+
             <AvatarTest selectedAvatar={selectedAvatar} />
-            <IconButton color="primary">
+            <IconButton
+              color="primary"
+              onClick={
+                selectHandler[currentHandler as keyof typeof selectHandler]
+                  .nextHandler
+              }
+            >
               <NavigateNextIcon />
             </IconButton>
           </Box>
@@ -400,19 +418,78 @@ function AvatarPage() {
             },
           }}
         >
-          <IconButton>
+          <IconButton
+            color="warning"
+            onClick={() => {
+              setCurrentHandler("body");
+            }}
+          >
             <CheckroomIcon />
           </IconButton>
-          <PaletteIcon />
-          <RemoveRedEyeIcon />
-          <FaceRetouchingNaturalIcon />
-          <InvertColorsIcon />
-          <EmojiEmotionsIcon />
-          <IconButton>
+          <IconButton
+            color="warning"
+            onClick={() => {
+              setCurrentHandler("clothingColor");
+            }}
+          >
+            <PaletteIcon />
+          </IconButton>
+          <IconButton
+            color="warning"
+            onClick={() => {
+              setCurrentHandler("eyes");
+            }}
+          >
+            <RemoveRedEyeIcon />
+          </IconButton>
+          <IconButton
+            color="warning"
+            onClick={() => {
+              setCurrentHandler("hair");
+            }}
+          >
+            <FaceRetouchingNaturalIcon />
+          </IconButton>
+          <IconButton
+            color="warning"
+            onClick={() => {
+              setCurrentHandler("hairColor");
+            }}
+          >
+            <InvertColorsIcon />
+          </IconButton>
+          <IconButton
+            color="warning"
+            onClick={() => {
+              setCurrentHandler("skinColor");
+            }}
+          >
+            <EmojiEmotionsIcon />
+          </IconButton>
+          <IconButton
+            color="warning"
+            onClick={() => {
+              setCurrentHandler("facialHair");
+            }}
+          >
             <img src={BeardIcon} style={{ width: "24px", height: "24px" }} />
           </IconButton>
-          <img src={MouthIcon} style={{ width: "24px", height: "24px" }} />
-          <img src={NoseIcon} style={{ width: "24px", height: "24px" }} />
+          <IconButton
+            color="warning"
+            onClick={() => {
+              setCurrentHandler("mouth");
+            }}
+          >
+            <img src={MouthIcon} style={{ width: "24px", height: "24px" }} />
+          </IconButton>
+          <IconButton
+            color="warning"
+            onClick={() => {
+              setCurrentHandler("nose");
+            }}
+          >
+            <img src={NoseIcon} style={{ width: "24px", height: "24px" }} />
+          </IconButton>
         </Box>
         <Button onClick={saveAvatarHandler}>확정</Button>
       </Box>
