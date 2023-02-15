@@ -75,20 +75,18 @@ export default function PoseRecognition(props: iPositionRecognitionProps) {
 
   function analyzePoseWithPositions(pose: iPartPosition) {
     // 1. 머리 위 하트
-    if (isLeftWristBetweenShoulders(pose)
-      && isRightWristBetweenShoulders(pose)
+    if (isLeftWristHigherThanLeftShoulder(pose)
+      && isRightWristHigherThanRightShoulder(pose)
       && isLeftElbowHighterThanLeftShoulder(pose)
       && isRightElblowHigherThanRightShoulder(pose))
       setCurrentPose("heart");
     // // 2. 왼손들기
     else if (isLeftWristHigherThanLeftShoulder(pose)
-      && isLeftWristHigherThanLeftElbow(pose)
-      && isLeftElbowHighterThanLeftShoulder(pose))
+      && isLeftWristHigherThanLeftElbow(pose))
       setCurrentPose("left");
     // // 3. 오른손들기
     else if (isRightWristHigherThanRightShoulder(pose)
-      && isRightWristHigherThanRightElbow(pose)
-      && isRightElblowHigherThanRightShoulder(pose))
+      && isRightWristHigherThanRightElbow(pose))
       setCurrentPose("right");
     // // 4. 박수치기
     else if (isLeftWristBetweenShoulders(pose)
