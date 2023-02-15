@@ -43,45 +43,40 @@ public class ArticleController {
         if(articleDTO.getTitle().isEmpty() || articleDTO.getContent().isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("빈 문자열"));
         }
-        log.trace(""+articleDTO.getTitle()+file.getOriginalFilename());
 
         ArticleEntity result = null;
-        if(!file.isEmpty()) {
+        if(file!=null) {
+            String realPath = request.getServletContext().getRealPath(filePath);
             String today = new SimpleDateFormat("yyMMdd").format(new Date());
-            String absolPath = request.getServletContext().getRealPath(filePath);
-            File folder = new File(absolPath);
-            
-            if (!folder.exists())
+            log.info(""+file);
+            log.info("realpat"+realPath);
+            String saveFolder = realPath + File.separator + today;
+            File folder = new File(saveFolder);
+            String saveFileName = "";
+            if(!folder.exists())
                 folder.mkdirs();
-//            for (MultipartFile mfile : files) {
-            FileInfoDTO fileInfoDto = null;
             String originalFileName = file.getOriginalFilename();
-            if (!originalFileName.isEmpty()) {
-                String saveFileName = System.nanoTime()//UUID.randomUUID().toString()
-                        + originalFileName.substring(originalFileName.lastIndexOf('.'));
-                fileInfoDto = FileInfoDTO.builder()
-                        .saveFolder(today)
-                        .originalFile(originalFileName)
-                        .saveFile(saveFileName)
-                        .build();
-                Path path = Paths.get(filePath+saveFileName).toAbsolutePath();
-                log.info(path+"");
-                folder = new File(absolPath + "/"+saveFileName);
-
-                file.transferTo(folder);
-//                    file.transferTo(filePath+saveFileName);
-                ArticleDTO a = ArticleDTO.builder()
-                        .title(articleDTO.getTitle())
-                        .content(articleDTO.getContent())
-                        .userPK(userId)
-//                            .filePath(path.toFile().toString())
-                        .filePath(filePath+saveFileName)
-                        .build();
-                result = articleService.createArticle(a);
-//                }
-//                fileInfos.add(fileInfoDto);
+            if(!originalFileName.isEmpty()){
+                saveFileName = System.nanoTime()+originalFileName.substring(originalFileName.lastIndexOf('.'));
+                file.transferTo(new File(folder, saveFileName));
             }
+
+            ArticleDTO a = ArticleDTO.builder()
+                    .title(articleDTO.getTitle())
+                    .content(articleDTO.getContent())
+                    .userPK(userId)
+                    .filePath(folder+saveFileName)
+                    .build();
+            result = articleService.createArticle(a);
+        } else{
+            ArticleDTO a = ArticleDTO.builder()
+                    .title(articleDTO.getTitle())
+                    .content(articleDTO.getContent())
+                    .userPK(userId)
+                    .build();
+            result = articleService.createArticle(a);
         }
+
 
 
 

@@ -65,7 +65,7 @@ export default function EditorModal({
       userPK,
     };
 
-    formData.append("files", file as Blob)
+    
     formData.append(
       "postData",
       new Blob([JSON.stringify(postData)], {
@@ -78,10 +78,9 @@ export default function EditorModal({
       if (isEdit) {
         dispatch(editFeedData(editData));
       } else if (file) {
-        console.log(file);
-        // dispatch(postFeedData({ postData, file }));
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",formData.get("files"))
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!",formData.get("postData"))
+        formData.append("files", file as Blob)
+        dispatch(postFeedData(formData));
+      } else{
         dispatch(postFeedData(formData));
       }
     }
@@ -147,8 +146,6 @@ export default function EditorModal({
           onChange={handleChangeFile}
           formEncType="multipart/form-data"
         />
-        {/* <label htmlFor="upfile">파일:</label>
-    <input type="file" onChange={handleChangeFile} className="form-control border" name="upfile" formEncType="multipart/form-data" /> */}
 
         <ReactQuill
           ref={(element: any) => {

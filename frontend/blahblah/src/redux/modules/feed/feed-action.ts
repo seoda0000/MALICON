@@ -112,9 +112,7 @@ export const postFeedData = createAsyncThunk(
   async (formData : FormData, thunkAPI) => {
     try {
       const axios = axiosInitializer();
-      console.log("야임마",formData.get("files"))
       
-      console.log("야임마2",formData.get("postData"))
       await axios
         .post<FeedPostType>(`/api/articles`, formData ,{
           headers: {
