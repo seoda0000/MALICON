@@ -13,18 +13,21 @@ import { getAccessToken } from "../../redux/modules/user/token";
 import html2canvas from "html2canvas";
 import AvatarSection from "./avatar/AvatarSection";
 import { axiosInitializer } from "../../redux/utils/axiosInitializer";
-import { useAppSelector } from "../../redux/configStore.hooks";
 import { UserType } from "../../model/user/userType";
+
 import ViewerModel, {
   ViewerModelType,
 } from "../../model/openvidu/viewer-model";
 
 var localViewer: ViewerModelType = new ViewerModel();
 var localUser: UserModelType = new UserModel();
+
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production"
     ? "https://blahblah.movebxeax.me/stream-service"
     : "https://blahblah.movebxeax.me/stream-service";
+
+const APPLICATION_CONTEXT_PATH = window.location.origin;
 
 // 타입 생성
 interface VideoRoomProps {
@@ -109,6 +112,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       currentVideoDevice: undefined,
     };
 
+
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
@@ -170,6 +174,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.leaveSession();
   }
 
+
   joinSession() {
     this.OV = new OpenVidu();
 
@@ -202,20 +207,13 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         console.log(token);
         this.connect(token);
       } catch (error: any) {
+        alert("방송 중이 아닙니다.");
         console.error(
           "There was an error getting the token:",
           error.code,
           error.message
         );
-        if (this.props.error) {
-          this.props.error({
-            error: error.error,
-            messgae: error.message,
-            code: error.code,
-            status: error.status,
-          });
-        }
-        alert("There was an error getting the token:" + error.message);
+        window.location.replace(APPLICATION_CONTEXT_PATH + "/main");
       }
     }
   }
@@ -251,20 +249,13 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         });
       })
       .catch((error: any) => {
-        if (this.props.error) {
-          this.props.error({
-            error: error.error,
-            messgae: error.message,
-            code: error.code,
-            status: error.status,
-          });
-        }
-        alert("There was an error connecting to the session:" + error.message);
+        alert("방송 중이 아닙니다.");
         console.log(
           "There was an error connecting to the session:",
           error.code,
           error.message
         );
+        window.location.replace(APPLICATION_CONTEXT_PATH + "/main");
       });
   }
 
@@ -361,18 +352,17 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
         console.log("세션 지우기");
         this.deleteSession(this.state.mySessionId)
           .then(() => {
-            // 원하는 라우팅 경로로
-            //window.location.replace("http://naver.com");
+            mySession.disconnect();
+            window.location.replace(APPLICATION_CONTEXT_PATH + "/main");
           })
           .catch((e) => {
             console.error(e);
           });
       } else {
-        // 원하는 라우팅 경로로
         this.sendSignalSubcriberDeleted(localViewer);
-        //window.location.replace("http://naver.com");
+        mySession.disconnect();
+        window.location.replace(APPLICATION_CONTEXT_PATH + "/main");
       }
-      mySession.disconnect();
     }
     this.OV = null;
     this.setState({
