@@ -260,6 +260,7 @@ export default function ProfilePage(): JSX.Element {
               big={true}
               border={true}
               borderColor={isOnAir ? "#e24553" : "black"}
+              userAvatar={user.avatar}
             />
             {isMine && (
               <Link to="/avatar">
@@ -412,4 +413,3 @@ export default function ProfilePage(): JSX.Element {
     </ProfilePageLayout>
   );
 }
-
