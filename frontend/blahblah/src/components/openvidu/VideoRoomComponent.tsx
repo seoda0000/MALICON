@@ -109,7 +109,6 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       currentVideoDevice: undefined,
     };
 
-
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
@@ -131,8 +130,10 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       this.sendSignalSubcriberCreated.bind(this);
     this.deleteViewer = this.deleteViewer.bind(this);
     this.subscriberDeleted = this.subscriberDeleted.bind(this);
-    this.sendSignalSubcriberDeleted = this.sendSignalSubcriberDeleted.bind(this);
-    this.sendSignalViewersBroadCast = this.sendSignalViewersBroadCast.bind(this);
+    this.sendSignalSubcriberDeleted =
+      this.sendSignalSubcriberDeleted.bind(this);
+    this.sendSignalViewersBroadCast =
+      this.sendSignalViewersBroadCast.bind(this);
     this.viewerBroadCastListener = this.viewerBroadCastListener.bind(this);
     this.thumbnailReapeat = this.thumbnailReapeat.bind(this);
   }
@@ -172,7 +173,6 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.leaveSession();
   }
 
-
   joinSession() {
     this.OV = new OpenVidu();
 
@@ -182,7 +182,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       },
       async () => {
         this.subscribeToStreamCreated();
-        
+
         await this.connectToSession().then(() => {
           if (this.isPublisher) {
             this.subscriberDeleted();
@@ -190,7 +190,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
           } else {
             this.viewerBroadCastListener();
           }
-        })
+        });
       }
     );
   }
@@ -217,26 +217,27 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       .then(() => {
         this.connectWebCam().then(() => {
           if (this.isPublisher) {
-
             /* 팔로워 알림 전송 */
             const axios = axiosInitializer();
-            axios.post("/api/notifications/send",
+            axios.post(
+              "/api/notifications/send",
               {
-                msg: `${this.state.myUserName} 님이 콘서트를 연대요! 빨리 가서 확인해볼까요?`
+                msg: `${this.state.myUserName} 님이 콘서트를 연대요! 빨리 가서 확인해볼까요?`,
               },
               {
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: "Baerer " + getAccessToken(),
                 },
-              })
+              }
+            );
 
             setTimeout(() => {
               console.log("썸네일 보내냐?");
               this.sendThumbnail();
               this.startRecording(this.state.mySessionId)
                 .then((data) => console.log(data))
-                .catch((e) => console.error(e))
+                .catch((e) => console.error(e));
             }, 1000);
             this.thumbnailReapeat();
           }
@@ -396,7 +397,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       (user: any) => user.getStreamManager().stream === stream
     )[0];
     let index = remoteUsers.indexOf(userStream, 0);
-    
+
     if (index > -1) {
       remoteUsers.splice(index, 1);
       this.setState({
@@ -445,10 +446,10 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   subscriberDeleted() {
     this.state.session.on("signal:unSubscribe", (event: any) => {
       const viewer = JSON.parse(event.data);
-      console.log("구독자가 나갔슴용! ㅜ")
+      console.log("구독자가 나갔슴용! ㅜ");
       this.deleteViewer(viewer).then(() => {
         this.sendSignalViewersBroadCast(this.state.viewers);
-      })
+      });
     });
   }
 
@@ -456,11 +457,9 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.state.session.on("signal:viewerBroadCast", (event: any) => {
       const viewers = JSON.parse(event.data);
       console.log("브로드캐스트 당해버려!!", viewers);
-      this.setState(
-        {
-          viewers: viewers
-        }
-      );
+      this.setState({
+        viewers: viewers,
+      });
     });
   }
 
@@ -469,16 +468,16 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     const viewers = this.state.viewers;
     console.log("뷰어 지우기 직전 찍기", viewers);
     const viewer = viewers.filter(
-      (v: ViewerModel) => v.nickname === deletedViewer.nickname)[0];
+      (v: ViewerModel) => v.nickname === deletedViewer.nickname
+    )[0];
     let index = viewers.indexOf(viewer, 0);
     console.log("뷰어지우는 인덱스", index);
     if (index > -1) {
       viewers.splice(index, 1);
       this.setState({
-        viewers: viewers
+        viewers: viewers,
       });
     }
-    
   }
 
   sendSignalSubcriberCreated(data: any) {
@@ -542,11 +541,9 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
           }
         }
       });
-      this.setState(
-        {
-          subscribers: remoteUsers,
-        }
-      );
+      this.setState({
+        subscribers: remoteUsers,
+      });
     });
   }
 
@@ -700,9 +697,9 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     // imageElement.src = `data:image/jpeg;base64,${decodedImage}`
   }
 
-  thumbnailReapeat(){
-    setInterval(()=>{
-      this.sendThumbnail()
+  thumbnailReapeat() {
+    setInterval(() => {
+      this.sendThumbnail();
     }, 60000);
   }
 
@@ -857,4 +854,3 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 }
 export default VideoRoomComponent;
-

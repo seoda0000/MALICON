@@ -1,7 +1,14 @@
 import AvatarTest from "../components/avatar/AvatarTest";
 import SelectList from "../components/avatar/SelectList";
 import { useState } from "react";
-import { Button, Card, Box, Paper } from "@mui/material";
+import {
+  Button,
+  Card,
+  Box,
+  Paper,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import { Stack } from "@mui/system";
 import Divider from "@mui/material/Divider";
 import { useAppDispatch, useAppSelector } from "../redux/configStore.hooks";
@@ -16,6 +23,25 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import SigninModal from "../components/auth/SigninModal";
+import { ThemeProvider } from "@mui/material/styles";
+import { BoldKoreanFont } from "../theme/font";
+import CheckroomIcon from "@mui/icons-material/Checkroom";
+import PaletteIcon from "@mui/icons-material/Palette";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import FaceRetouchingNaturalIcon from "@mui/icons-material/FaceRetouchingNatural";
+import InvertColorsIcon from "@mui/icons-material/InvertColors";
+import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import Chip from "@mui/material/Chip";
+
+const BeardIcon = require("../assets/img/BeardIcon.png");
+const MouthIcon = require("../assets/img/MouthIcon.png");
+const NoseIcon = require("../assets/img/NoseIcon.png");
+const BeardIcon_w = require("../assets/img/BeardIcon_w.png");
+const MouthIcon_w = require("../assets/img/MouthIcon_w.png");
+const NoseIcon_w = require("../assets/img/NoseIcon_w.png");
+
 const AVATAR_OPTION = {
   body: ["checkered", "rounded", "small", "squared"],
   clothingColor: [
@@ -112,6 +138,8 @@ function AvatarPage() {
   const [mouth, setMouth] = useState<number>(0);
   const [nose, setNose] = useState<number>(0);
   const [skinColor, setSkinColor] = useState<number>(0);
+
+  const [currentHandler, setCurrentHandler] = useState<string>("skinColor");
 
   const [openSigninModal, setOpenSigninModal] = useState<boolean>(false);
   const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn);
@@ -276,6 +304,68 @@ function AvatarPage() {
     },
   };
 
+  const BUTTON_LIST = [
+    {
+      item: "skinColor",
+      color: "error" as "error",
+      icon: <EmojiEmotionsIcon />,
+    },
+    { item: "body", color: "warning" as "warning", icon: <CheckroomIcon /> },
+    {
+      item: "clothingColor",
+      color: "success" as "success",
+      icon: <PaletteIcon />,
+    },
+    {
+      item: "hair",
+      color: "primary" as "primary",
+      icon: <FaceRetouchingNaturalIcon />,
+    },
+    {
+      item: "hairColor",
+      color: "secondary" as "secondary",
+      icon: <InvertColorsIcon />,
+    },
+    {
+      item: "facialHair",
+      color: "error" as "error",
+      icon: (
+        <img
+          src={currentHandler === "facialHair" ? BeardIcon_w : BeardIcon}
+          style={{ width: "24px", height: "24px" }}
+        />
+      ),
+    },
+    {
+      item: "eyes",
+      color: "warning" as "warning",
+      icon: <RemoveRedEyeIcon />,
+    },
+    {
+      item: "nose",
+      color: "success" as "success",
+      icon: (
+        <img
+          src={currentHandler === "nose" ? NoseIcon_w : NoseIcon}
+          style={{ width: "24px", height: "24px" }}
+        />
+      ),
+    },
+    {
+      item: "mouth",
+      color: "primary" as "primary",
+      icon: (
+        <img
+          src={currentHandler === "mouth" ? MouthIcon_w : MouthIcon}
+          style={{
+            width: "24px",
+            height: "24px",
+          }}
+        />
+      ),
+    },
+  ];
+
   // alert
   const [openAlert, setOpenAlert] = React.useState(false);
 
@@ -294,8 +384,7 @@ function AvatarPage() {
   const userId = useSelector((state: RootState) => state.user.userData.userId);
   const userpk = useSelector((state: RootState) => state.user.userData.id);
   const saveAvatarHandler = () => {
-    if(!isLoggedIn)
-    {
+    if (!isLoggedIn) {
       setOpenSigninModal(true);
       return;
     }
@@ -316,14 +405,14 @@ function AvatarPage() {
 
   return (
     <div>
-      <h1>아바타 페이지</h1>
       {/* 제목 영역 */}
 
       <Box
         sx={{
           display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
+          // flexWrap: "wrap",
+          // justifyContent: "center",
+          flexDirection: "column",
           "& > :not(style)": {
             m: 1,
             // width: 1500,
@@ -331,30 +420,104 @@ function AvatarPage() {
           },
         }}
       >
-        <h1>Avatar Page</h1>
-      </Box>
+        <ThemeProvider theme={BoldKoreanFont}>
+          <Typography variant="h4">Make your own Avatar</Typography>
+          <Typography variant="h6">나만의 아바타 만들기</Typography>
+        </ThemeProvider>
 
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          "& > :not(style)": {
-            m: 1,
-            // width: 1500,
-            // height: 500,
-          },
-        }}
-      >
-        <Card sx={{ maxWidth: 500 }}>
-          <AvatarTest selectedAvatar={selectedAvatar} />
-        </Card>
-        <Card sx={{ minWidth: 400, maxWidth: 500 }}>
-          <SelectList options={AVATAR_OPTION} selectHandler={selectHandler} />
-          <Stack direction="column" spacing={1} justifyContent="center">
-            <Button onClick={saveAvatarHandler}>확정</Button>
-          </Stack>
-        </Card>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignContent: "center",
+          }}
+        >
+          {/* 아바타 선택 영역 */}
+          <Box
+            sx={{
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
+              // mr: 10,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignContent: "center",
+                justifyContent: "center",
+              }}
+            >
+              <IconButton
+                sx={{ marginBlock: "auto" }}
+                color="primary"
+                onClick={
+                  selectHandler[currentHandler as keyof typeof selectHandler]
+                    .prevHandler
+                }
+              >
+                <NavigateBeforeIcon />
+              </IconButton>
+            </Box>
+
+            <AvatarTest selectedAvatar={selectedAvatar} />
+            <Box
+              sx={{
+                display: "flex",
+                alignContent: "center",
+                justifyContent: "center",
+              }}
+            >
+              <IconButton
+                sx={{ marginBlock: "auto" }}
+                color="primary"
+                onClick={
+                  selectHandler[currentHandler as keyof typeof selectHandler]
+                    .nextHandler
+                }
+              >
+                <NavigateNextIcon />
+              </IconButton>
+            </Box>
+          </Box>
+
+          {/* 버튼 영역 */}
+          <Box
+            sx={{
+              mt: "auto",
+              display: "flex",
+              flexWrap: "wrap",
+              width: "300px",
+              mx: 3,
+              // height: "300px",
+            }}
+          >
+            {BUTTON_LIST.map((button) => (
+              <Button
+                variant={
+                  currentHandler === button.item ? "contained" : "outlined"
+                }
+                sx={{ width: "100px", height: "100px" }}
+                color={button.color}
+                onClick={() => {
+                  setCurrentHandler(button.item);
+                }}
+              >
+                {button.icon}
+              </Button>
+            ))}
+
+            <Button
+              sx={{ width: "300px" }}
+              color="secondary"
+              variant="contained"
+              onClick={saveAvatarHandler}
+            >
+              확정
+            </Button>
+          </Box>
+        </Box>
       </Box>
 
       {/* alert */}
@@ -375,8 +538,10 @@ function AvatarPage() {
         </Alert>
       </Snackbar>
 
-      <SigninModal open={openSigninModal} setOpen={setOpenSigninModal}></SigninModal>
-
+      <SigninModal
+        open={openSigninModal}
+        setOpen={setOpenSigninModal}
+      ></SigninModal>
     </div>
   );
 }

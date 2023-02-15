@@ -73,6 +73,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
       .badge-wrapper {
         position: relative;
         width: 100%;
+
         display: flex;
         justify-content: center;
         align-items: center;
@@ -317,7 +318,7 @@ export default function Layout(props: LayoutProps) {
     } else {
       setOpenLoginAlert(true);
     }
-  }
+  };
 
   // 로그인이 필요한 서비스입니다.
   const [openLoginAlert, setOpenLoginAlert] = React.useState(false);
@@ -333,7 +334,7 @@ export default function Layout(props: LayoutProps) {
   );
 
   return (
-    <LayoutContainer open={open} sx={{ display: "flex" }}>
+    <LayoutContainer open={open} sx={{ display: "flex", minHeight: "100%" }}>
       <CssBaseline />
 
       <ThemeProvider theme={BoldKoreanFont}>
@@ -487,10 +488,10 @@ export default function Layout(props: LayoutProps) {
                           item === "Profile"
                             ? onClickMyProfile
                             : // : item === "Account"
-                            // ? onClickAccount
-                            // : item === "Dashboard"
-                            // ? onClickDashboard
-                            onClickLogout
+                              // ? onClickAccount
+                              // : item === "Dashboard"
+                              // ? onClickDashboard
+                              onClickLogout
                         }
                       >
                         <Typography textAlign="center">{item}</Typography>
@@ -575,7 +576,7 @@ export default function Layout(props: LayoutProps) {
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
-                onClick={((e) => handleNavigateButton("/feed"))}
+                onClick={(e) => handleNavigateButton("/feed")}
               >
                 <ListItemIcon
                   sx={{
@@ -619,7 +620,7 @@ export default function Layout(props: LayoutProps) {
             {/* 아바타 수정 버튼 (임시) */}
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
-                onClick={((e) => handleNavigateButton("/avatar"))}
+                onClick={(e) => handleNavigateButton("/avatar")}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
@@ -645,7 +646,7 @@ export default function Layout(props: LayoutProps) {
             {/* 튜토리얼 버튼 (임시) */}
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
-                onClick={((e) => handleNavigateButton("/tutorial"))}
+                onClick={(e) => handleNavigateButton("/tutorial")}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
@@ -681,9 +682,28 @@ export default function Layout(props: LayoutProps) {
 
       {/* 메인 화면: 페이지 랜딩되는 곳 */}
 
-      <Box component="main" sx={{ flexGrow: 1, mx: "8%", my: 5 }}>
-        <main className="main">{props.children}</main>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, mx: "8%", pt: 5, minHeight: "100vh", pb: 3 }}
+      >
+        <main className="main" style={{ minHeight: "calc(100% - 10px)" }}>
+          {props.children}
+        </main>
         {/* <AvatarShortcutButton /> */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            height: "8px",
+            flexDirection: "column",
+            mt: 1,
+          }}
+        >
+          <Divider />
+          <Typography sx={{ mx: "auto" }} variant="caption">
+            Copyright 2023. blahblah Co. all rights reserved.
+          </Typography>
+        </Box>
       </Box>
 
       {/* 로그인 모달 */}

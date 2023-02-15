@@ -8,7 +8,7 @@ const SelectItem: React.FC<{ option: any; selectHandler: any }> = (props) => {
   return (
     <Stack direction="row" spacing={1} justifyContent="center">
       <PrevButton PrevHandler={props.selectHandler.prevHandler} />
-      <Button>{props.option}</Button>
+      <Button sx={{ width: "150px" }}>{props.option}</Button>
       <NextButton NextHandler={props.selectHandler.nextHandler} />
     </Stack>
   );
