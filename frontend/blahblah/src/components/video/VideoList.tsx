@@ -16,9 +16,9 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function VideoList() {
+const VideoList: React.FC<{ chipList?: any }> = (props) => {
   const video = useSelector((state: RootState) => state.video);
-
+  console.log("해시태그 선택", props.chipList);
   return (
     <Grid
       container
@@ -40,4 +40,6 @@ export default function VideoList() {
       ))}
     </Grid>
   );
-}
+};
+
+export default VideoList;

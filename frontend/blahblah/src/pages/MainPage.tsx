@@ -75,6 +75,8 @@ function MainPage(): JSX.Element {
     );
   };
 
+  const chipList = chipData.filter((chip) => chip.selected === true);
+
   // 로딩 페이지 적용
   useEffect(() => {
     setIsLoading(true);
@@ -100,7 +102,7 @@ function MainPage(): JSX.Element {
         {/* <BroadcastCarousel sessions={SAMPLE_SESSIONS} /> */}
         {/* <h1>추천 동영상</h1> */}
         <ChipsArray chipData={chipData} handleClick={handleClick} />
-        <VideoList />
+        <VideoList chipList={chipList} />
       </div>
     </Box>
   );
