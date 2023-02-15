@@ -130,7 +130,6 @@ export default class ChatComponent extends Component<ChatProps, {}> {
         <div id="chatComponent" style={styleChat}>
           <div id="chatToolbar">
             <span>
-              {this.props.user.getStreamManager().stream.session.sessionId} -
               CHAT
             </span>
           </div>

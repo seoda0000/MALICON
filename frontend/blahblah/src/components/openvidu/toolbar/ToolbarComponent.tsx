@@ -19,8 +19,9 @@ import PowerSettingsNew from "@mui/icons-material/PowerSettingsNew";
 import QuestionAnswer from "@mui/icons-material/QuestionAnswer";
 
 import IconButton from "@mui/material/IconButton";
+import {SessionType} from "../../../model/broadcast/sessionType";
 
-const logo = require("../../../assets/img/onair_turnoff.png");
+const logo = require("../../../assets/img/ticket_icon.png");
 
 // 타입 생성
 
@@ -30,13 +31,14 @@ interface ToolbarProps {
   // screenShare: any;
   // stopScreenShare: any;
   toggleFullscreen: any;
-  switchCamera: any;
+  // switchCamera: any;
   exitButton: any;
   toggleChat: any;
-  sessionId: any;
+  //sessionId: any;
   user: any;
   isPublisher: any;
   showNotification: any;
+  streamInfo: SessionType;
 }
 
 interface StateType {
@@ -59,7 +61,7 @@ export default class ToolbarComponent extends Component<ToolbarProps, {}> {
     //this.screenShare = this.screenShare.bind(this);
     //this.stopScreenShare = this.stopScreenShare.bind(this);
     this.toggleFullscreen = this.toggleFullscreen.bind(this);
-    this.switchCamera = this.switchCamera.bind(this);
+    //this.switchCamera = this.switchCamera.bind(this);
     this.exitButton = this.exitButton.bind(this);
     this.toggleChat = this.toggleChat.bind(this);
   }
@@ -85,9 +87,9 @@ export default class ToolbarComponent extends Component<ToolbarProps, {}> {
     this.props.toggleFullscreen();
   }
 
-  switchCamera() {
-    this.props.switchCamera();
-  }
+  // switchCamera() {
+  //   this.props.switchCamera();
+  // }
 
   exitButton() {
     this.props.exitButton();
@@ -98,7 +100,7 @@ export default class ToolbarComponent extends Component<ToolbarProps, {}> {
   }
 
   render() {
-    const mySessionId = this.props.sessionId;
+    const streamInfo = this.props.streamInfo;
     const localUser = this.props.user;
     return (
       <AppBar className="toolbar" id="header">
@@ -106,9 +108,9 @@ export default class ToolbarComponent extends Component<ToolbarProps, {}> {
           <div id="navSessionInfo">
             <img id="header_img" alt="OpenVidu Logo" src={logo} />
 
-            {this.props.sessionId && (
+            {this.props.streamInfo && (
               <div id="titleContent">
-                <span id="session-title">{mySessionId}</span>
+                <span id="session-title">{streamInfo.title}</span>
               </div>
             )}
           </div>
@@ -174,13 +176,13 @@ export default class ToolbarComponent extends Component<ToolbarProps, {}> {
 
             {/* 카메라 변경 버튼 */}
 
-            <IconButton
+            {/* <IconButton
               color="inherit"
               className="navButton"
               onClick={this.switchCamera}
             >
               <SwitchVideoIcon />
-            </IconButton>
+            </IconButton> */}
 
             {/* 풀스크린 버튼 */}
             <IconButton

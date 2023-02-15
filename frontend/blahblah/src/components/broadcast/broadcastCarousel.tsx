@@ -33,8 +33,8 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
 
   const joinSessionStart = async () => {
     dispatch(
-      broadcastActions.joinSession({
-        sessionId: props.sessions[index].sessionId,
+      broadcastActions.loadCurrentSession({
+        currentSession : props.sessions[index]
       })
     );
   };
