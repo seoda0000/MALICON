@@ -271,9 +271,9 @@ export default function TutorialAvatar({
     <AvatarCompContainer>
       <img className="avatar-comp-avatar" alt="Sample" src={dataUri} />
       <div className="avatar-comp-emotion" ref={parentEl}>
-        <span className="shake">
+        {/* <span className="shake">
           <img src={Pink} alt="" />
-        </span>
+        </span> */}
       </div>
     </AvatarCompContainer>
   );

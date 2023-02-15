@@ -48,18 +48,17 @@ export default function FeedPage() {
   // 모달 조작
   const [openEditorModal, setOpenEditorModal] = useState<boolean>(false);
   const onClickEditor = () => {
-    if (isLoggedIn)
-      setOpenEditorModal((prev) => !prev);
+    if (isLoggedIn) setOpenEditorModal((prev) => !prev);
   };
 
   useEffect(() => {
-    if(!isLoggedIn) {
+    if (!isLoggedIn) {
       alert("로그인 되지 않은 사용자입니다. 메인페이지로 돌아갑니다.");
       navigate("/main");
     }
-    dispatch(getFeedsAction({ size: 5, page: 0 })).then(() => {
-      console.log("feeds!!!!!!!!!!!!!!", feeds);
-    });
+    // dispatch(getFeedsAction({ size: 5, page: 0 })).then(() => {
+    //   console.log("feeds!!!!!!!!!!!!!!", feeds);
+    // });
     if (isInitial) {
       isInitial = false;
     }
@@ -75,26 +74,19 @@ export default function FeedPage() {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        {isLoggedIn && <Button
-          onClick={onClickEditor}
-          variant="outlined"
-          startIcon={<CreateIcon />}
-        >
-          새 피드
-        </Button>
-        }
+        {isLoggedIn && (
+          <Button
+            onClick={onClickEditor}
+            variant="outlined"
+            startIcon={<CreateIcon />}
+          >
+            새 피드
+          </Button>
+        )}
 
         <br />
         <br />
-        {/* <FeedList feeds={feed.feeds} /> */}
-        {feeds && (
-          <InfiniteScroll
-            feedPage={true}
-            actionFunc={getFeedsAction}
-            itemsWrap={feeds}
-            totalPage={feeds.totalPages}
-          />
-        )}
+        <InfiniteScroll feedPage={true} actionFunc={getFeedsAction} />
         {openEditorModal && (
           <EditorModal
             open={openEditorModal}
@@ -110,3 +102,4 @@ export default function FeedPage() {
     </Box>
   );
 }
+
