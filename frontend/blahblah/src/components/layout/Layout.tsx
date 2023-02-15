@@ -65,8 +65,8 @@ import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { LightKoreanFont } from "../../theme/font";
 import Notification from "./Notification";
-
-const LayoutContainer = styled(Box) <{ open: boolean }>`
+import { getAboutMeAction } from "../../redux/modules/profile";
+const LayoutContainer = styled(Box)<{ open: boolean }>`
   ${({ open }) =>
     open &&
     css`
@@ -117,7 +117,6 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-// const menuWithLogin = ["Profile", "Account", "Dashboard", "Logout"];
 const menuWithLogin = ["Profile", "Logout"];
 const menuWithLogout = ["Signup", "Login"];
 
@@ -242,12 +241,12 @@ export default function Layout(props: LayoutProps) {
 
   const onClickMyProfile = () => {
     handleCloseUserMenu();
-    navigate(`/profile/${loggedUser.id}`);
+    console.log("프로필 누름");
+
+    dispatch(getAboutMeAction(String(loggedUser.id))).then(() => {
+      navigate(`/profile/${loggedUser.id}`);
+    });
   };
-
-  const onClickAccount = () => { };
-
-  const onClickDashboard = () => { };
 
   useEffect(() => {
     dispatch(getSubscribersAction());

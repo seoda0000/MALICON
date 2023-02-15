@@ -10,6 +10,9 @@ import { PlayArrowRounded } from "@mui/icons-material";
 import OnAirBadge from "../common/OnAirBadge";
 import { getIsOnAirAction } from "../../redux/modules/user";
 import { getAboutMeAction } from "../../redux/modules/profile";
+import { getVideoAction } from "../../redux/modules/profile";
+import { getFeedAction } from "../../redux/modules/profile";
+
 const ItemContainer = styled.li<{ open: boolean }>`
   margin-bottom: 18px;
   display: flex;
@@ -70,15 +73,30 @@ export default function SubscriberItem({
   }).toDataUriSync();
 
   const onClickItem = () => {
-    dispatch(getAboutMeAction(String(item.userPK))).then(() => {
-      navigator(`/profile/${item.userPK}`);
-    });
+    dispatch(getAboutMeAction(String(item.userPK)))
+      .then(() => {
+        // 지난 동영상 목록 가져오기
+        console.log("동영상 목록 가져와요");
+        dispatch(
+          getVideoAction({ userPK: String(item.userPK), size: 5, page: 0 })
+        );
+      })
+      .then(() => {
+        // 피드 목록 가져오기
+        console.log("피드 목록 가져와요");
+        dispatch(
+          getFeedAction({ userPK: String(item.userPK), size: 5, page: 0 })
+        );
+      })
+      .then(() => {
+        navigator(`/profile/${item.userPK}`);
+      });
   };
 
   useEffect(() => {
     // 방송중인 사용자면
-    
-    dispatch(getIsOnAirAction(item.userId)).then(({payload}: any): void => {
+
+    dispatch(getIsOnAirAction(item.userId)).then(({ payload }: any): void => {
       console.log("으아아아ㅏ아아ㅏ ", payload);
       setIsOnAir(payload);
     });
