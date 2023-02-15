@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.List;
@@ -35,10 +36,13 @@ public class ArticleEntity extends BaseEntity{
     @OneToMany(mappedBy = "articleEntity", cascade = CascadeType.REMOVE)
     private List<CommentArticleEntity> comments;
 
+    @Column(name="file_path")
+    private String filePath;
+
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "MEDIUMTEXT")
     private String content;
 
     public ArticleDTO toArticleDTO(){
