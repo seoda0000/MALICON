@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/configStore";
 import { AppDispatch } from "../../redux/configStore";
 import { removeVideoData } from "../../redux/modules/video";
+import { useNavigate } from "react-router-dom";
 // import { useHistory } from "react-router-dom";
 
 export default function FeedRemoveDialog({
@@ -20,6 +21,7 @@ export default function FeedRemoveDialog({
 }: any): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const userPK = useSelector((state: RootState) => state.user.userData.id);
+  const navigate = useNavigate();
   // const userId = 23;
   let feedId = 0;
   let videoId = 0;
@@ -45,7 +47,9 @@ export default function FeedRemoveDialog({
         recordingId: videoId,
       };
       // recordingid 확인해야 함
-      dispatch(removeVideoData(videoData));
+      dispatch(removeVideoData(videoData)).then(() => {
+        navigate("/main", { replace: true });
+      });
     }
     handleClose();
   };
