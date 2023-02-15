@@ -38,6 +38,9 @@ import Chip from "@mui/material/Chip";
 const BeardIcon = require("../assets/img/BeardIcon.png");
 const MouthIcon = require("../assets/img/MouthIcon.png");
 const NoseIcon = require("../assets/img/NoseIcon.png");
+const BeardIcon_w = require("../assets/img/BeardIcon_w.png");
+const MouthIcon_w = require("../assets/img/MouthIcon_w.png");
+const NoseIcon_w = require("../assets/img/NoseIcon_w.png");
 
 const AVATAR_OPTION = {
   body: ["checkered", "rounded", "small", "squared"],
@@ -301,6 +304,68 @@ function AvatarPage() {
     },
   };
 
+  const BUTTON_LIST = [
+    {
+      item: "skinColor",
+      color: "error" as "error",
+      icon: <EmojiEmotionsIcon />,
+    },
+    { item: "body", color: "warning" as "warning", icon: <CheckroomIcon /> },
+    {
+      item: "clothingColor",
+      color: "success" as "success",
+      icon: <PaletteIcon />,
+    },
+    {
+      item: "hair",
+      color: "primary" as "primary",
+      icon: <FaceRetouchingNaturalIcon />,
+    },
+    {
+      item: "hairColor",
+      color: "secondary" as "secondary",
+      icon: <InvertColorsIcon />,
+    },
+    {
+      item: "facialHair",
+      color: "error" as "error",
+      icon: (
+        <img
+          src={currentHandler === "facialHair" ? BeardIcon_w : BeardIcon}
+          style={{ width: "24px", height: "24px" }}
+        />
+      ),
+    },
+    {
+      item: "eyes",
+      color: "warning" as "warning",
+      icon: <RemoveRedEyeIcon />,
+    },
+    {
+      item: "nose",
+      color: "success" as "success",
+      icon: (
+        <img
+          src={currentHandler === "nose" ? NoseIcon_w : NoseIcon}
+          style={{ width: "24px", height: "24px" }}
+        />
+      ),
+    },
+    {
+      item: "mouth",
+      color: "primary" as "primary",
+      icon: (
+        <img
+          src={currentHandler === "mouth" ? MouthIcon_w : MouthIcon}
+          style={{
+            width: "24px",
+            height: "24px",
+          }}
+        />
+      ),
+    },
+  ];
+
   // alert
   const [openAlert, setOpenAlert] = React.useState(false);
 
@@ -346,7 +411,7 @@ function AvatarPage() {
         sx={{
           display: "flex",
           // flexWrap: "wrap",
-          justifyContent: "center",
+          // justifyContent: "center",
           flexDirection: "column",
           "& > :not(style)": {
             m: 1,
@@ -363,135 +428,96 @@ function AvatarPage() {
         <Box
           sx={{
             display: "flex",
-            // flexWrap: "wrap",
+            flexWrap: "wrap",
             justifyContent: "center",
-            flexDirection: "column",
-            // "& > :not(style)": {
-            //   m: 1,
-            //   // width: 1500,
-            //   // height: 500,
-            // },
+            alignContent: "center",
           }}
         >
+          {/* 아바타 선택 영역 */}
           <Box
             sx={{
               display: "flex",
               alignContent: "center",
               justifyContent: "center",
+              // mr: 10,
             }}
           >
-            <IconButton
-              color="primary"
-              onClick={
-                selectHandler[currentHandler as keyof typeof selectHandler]
-                  .prevHandler
-              }
+            <Box
+              sx={{
+                display: "flex",
+                alignContent: "center",
+                justifyContent: "center",
+              }}
             >
-              <NavigateBeforeIcon />
-            </IconButton>
+              <IconButton
+                sx={{ marginBlock: "auto" }}
+                color="primary"
+                onClick={
+                  selectHandler[currentHandler as keyof typeof selectHandler]
+                    .prevHandler
+                }
+              >
+                <NavigateBeforeIcon />
+              </IconButton>
+            </Box>
 
             <AvatarTest selectedAvatar={selectedAvatar} />
-            <IconButton
-              color="primary"
-              onClick={
-                selectHandler[currentHandler as keyof typeof selectHandler]
-                  .nextHandler
-              }
+            <Box
+              sx={{
+                display: "flex",
+                alignContent: "center",
+                justifyContent: "center",
+              }}
             >
-              <NavigateNextIcon />
-            </IconButton>
+              <IconButton
+                sx={{ marginBlock: "auto" }}
+                color="primary"
+                onClick={
+                  selectHandler[currentHandler as keyof typeof selectHandler]
+                    .nextHandler
+                }
+              >
+                <NavigateNextIcon />
+              </IconButton>
+            </Box>
           </Box>
 
-          <Box>
-            {/* <SelectList options={AVATAR_OPTION} selectHandler={selectHandler} /> */}
+          {/* 버튼 영역 */}
+          <Box
+            sx={{
+              mt: "auto",
+              display: "flex",
+              flexWrap: "wrap",
+              width: "300px",
+              mx: 3,
+              // height: "300px",
+            }}
+          >
+            {BUTTON_LIST.map((button) => (
+              <Button
+                variant={
+                  currentHandler === button.item ? "contained" : "outlined"
+                }
+                sx={{ width: "100px", height: "100px" }}
+                color={button.color}
+                onClick={() => {
+                  setCurrentHandler(button.item);
+                }}
+              >
+                {button.icon}
+              </Button>
+            ))}
+
+            <Button
+              sx={{ width: "300px" }}
+              color="secondary"
+              variant="contained"
+              onClick={saveAvatarHandler}
+            >
+              확정
+            </Button>
           </Box>
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            "& > :not(style)": {
-              m: 1,
-              // width: 1500,
-              // height: 500,
-            },
-          }}
-        >
-          <IconButton
-            color="warning"
-            onClick={() => {
-              setCurrentHandler("body");
-            }}
-          >
-            <CheckroomIcon />
-          </IconButton>
-          <IconButton
-            color="warning"
-            onClick={() => {
-              setCurrentHandler("clothingColor");
-            }}
-          >
-            <PaletteIcon />
-          </IconButton>
-          <IconButton
-            color="warning"
-            onClick={() => {
-              setCurrentHandler("eyes");
-            }}
-          >
-            <RemoveRedEyeIcon />
-          </IconButton>
-          <IconButton
-            color="warning"
-            onClick={() => {
-              setCurrentHandler("hair");
-            }}
-          >
-            <FaceRetouchingNaturalIcon />
-          </IconButton>
-          <IconButton
-            color="warning"
-            onClick={() => {
-              setCurrentHandler("hairColor");
-            }}
-          >
-            <InvertColorsIcon />
-          </IconButton>
-          <IconButton
-            color="warning"
-            onClick={() => {
-              setCurrentHandler("skinColor");
-            }}
-          >
-            <EmojiEmotionsIcon />
-          </IconButton>
-          <IconButton
-            color="warning"
-            onClick={() => {
-              setCurrentHandler("facialHair");
-            }}
-          >
-            <img src={BeardIcon} style={{ width: "24px", height: "24px" }} />
-          </IconButton>
-          <IconButton
-            color="warning"
-            onClick={() => {
-              setCurrentHandler("mouth");
-            }}
-          >
-            <img src={MouthIcon} style={{ width: "24px", height: "24px" }} />
-          </IconButton>
-          <IconButton
-            color="warning"
-            onClick={() => {
-              setCurrentHandler("nose");
-            }}
-          >
-            <img src={NoseIcon} style={{ width: "24px", height: "24px" }} />
-          </IconButton>
-        </Box>
-        <Button onClick={saveAvatarHandler}>확정</Button>
       </Box>
 
       {/* alert */}
