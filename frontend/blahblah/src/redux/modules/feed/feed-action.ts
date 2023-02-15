@@ -210,8 +210,13 @@ export const postCommentData = createAsyncThunk(
     try {
       const axios = axiosInitializer();
 
+      let target = "articles";
+      if (postData.videoId) {
+        target = "videos";
+      }
+
       await axios
-        .post<CommentPostType>(`/api/comments/articles`, postData, {
+        .post<CommentPostType>(`/api/comments/${target}`, postData, {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Baerer " + getAccessToken(),
@@ -244,9 +249,14 @@ export const removeCommentData = createAsyncThunk(
     try {
       const axios = axiosInitializer();
 
+      let target = "articles";
+      if (removeData.isVideo) {
+        target = "videos";
+      }
+
       await axios
         .delete(
-          `/api/comments/articles/${removeData.id}/${removeData.userPK}`,
+          `/api/comments/${target}/${removeData.id}/${removeData.userPK}`,
           {
             // data: removeData,
             headers: {
