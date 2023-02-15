@@ -40,6 +40,8 @@ public class SubscribeArticleDTO {
 
     private long likeCnt;
 
+    private String filePath;
+
     private Page<CommentDTO> commentList;
 
     public Page<SubscribeArticleDTO> toDtoList(Page<ArticleEntity> articleList, List<Long> likes, List<Long> articles){
@@ -59,6 +61,7 @@ public class SubscribeArticleDTO {
                         .lastModifiedDate(a.getLastModifiedDate())
                         .like(likes.contains(a.getId()))
                                 .likeCnt(Collections.frequency(articles, a.getId()))
+                                .filePath(a.getFilePath())
                         .commentList(new CommentDTO().toADtoList(new PageImpl<>(a.getComments().subList(start, Math.min(end, a.getComments().size())), pageRequest, a.getComments().size())))
                         .build());
         return dtoList;

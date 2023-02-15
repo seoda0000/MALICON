@@ -26,7 +26,7 @@ public class ArticleDTO {
 
     private String content;
 
-    private List<FileInfoDTO> fileInfos;
+    private String filePath;
 
     private String file;
 

@@ -38,23 +38,12 @@ public class ArticleServiceImpl implements ArticleService{
     @Override
     public ArticleEntity createArticle(ArticleDTO articleDTO) {
         List<FileInfoEntity> fileInfos = new ArrayList<>();
-        if(articleDTO.getFileInfos()!=null && !articleDTO.getFileInfos().isEmpty()){
-            for(FileInfoDTO file : articleDTO.getFileInfos()){
-                FileInfoEntity fileInfoEntity = FileInfoEntity.builder()
-                        .saveFile(file.getSaveFile())
-                        .originalFile(file.getOriginalFile())
-                        .saveFolder(file.getSaveFolder())
-                        .build();
-                fileInfos.add(fileInfoEntity);
-                fileInfoRepository.save(fileInfoEntity);
-            }
 
-        }
         ArticleEntity article = ArticleEntity.builder()
                 .userEntity(userRepository.findById(articleDTO.getUserPK()).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "작성자가 유효하지 않습니다.")))
                 .title(articleDTO.getTitle())
                 .content(articleDTO.getContent())
-                .files(fileInfos)
+                .filePath(articleDTO.getFilePath())
                 .build();
 
         return articleRepository.save(article);
@@ -69,6 +58,7 @@ public class ArticleServiceImpl implements ArticleService{
                 .userEntity(article.getUserEntity())
                 .title(articleDTO.getTitle()==null?article.getTitle():articleDTO.getTitle())
                 .content(articleDTO.getContent()==null?article.getContent():articleDTO.getContent())
+                .filePath(articleDTO.getFilePath()==null?article.getFilePath():articleDTO.getFilePath())
                 .build();
         articleRepository.save(update);
         return true;

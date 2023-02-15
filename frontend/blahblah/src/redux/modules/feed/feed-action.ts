@@ -75,9 +75,9 @@ export const fetchFeedData = createAsyncThunk(
 
 // 새 피드 작성하기
 
-export const postFeedData = createAsyncThunk(
+export const postFeedData2 = createAsyncThunk(
   "feed/postFeedData",
-  async ({postData, file} : {postData: FeedPostType, file:FormData}, thunkAPI) => {
+  async (postData : FeedPostType, thunkAPI) => {
     try {
       const axios = axiosInitializer();
 
@@ -88,7 +88,39 @@ export const postFeedData = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: "Baerer " + getAccessToken(),
           },
-          data:file
+        })
+        .then(({ data }: any) => {
+          console.log("피드 작성: ", data);
+
+          // thunkAPI.dispatch(fetchFeedData());
+
+          thunkAPI.dispatch(getFeedsAction({ size: 5, page: 0 }));
+        });
+
+      // return data;
+    } catch (e: any) {
+      console.log("작성 실패");
+      console.log(e.request);
+      console.error(e.response.data);
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
+export const postFeedData = createAsyncThunk(
+  "feed/postFeedData",
+  async (formData : FormData, thunkAPI) => {
+    try {
+      const axios = axiosInitializer();
+      console.log("야임마",formData.get("files"))
+      
+      console.log("야임마2",formData.get("postData"))
+      await axios
+        .post<FeedPostType>(`/api/articles`, formData ,{
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Baerer " + getAccessToken(),
+          },
         })
         .then(({ data }: any) => {
           console.log("피드 작성: ", data);

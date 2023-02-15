@@ -32,20 +32,21 @@ export default function EditorModal({
   const QuillRef = useRef<ReactQuill>();
   const [contents, setContents] = useState(feed.content);
   const feeds = useAppSelector((state) => state.feed.feedData);
-  const [file, setFile] = useState<FormData>();
+  const [file, setFile] = useState<File | undefined>();
   // quill에서 사용할 모듈을 설정하는 코드
   // useMemo를 사용하지 않으면, 키를 입력할 때마다, imageHandler 때문에 focus가 계속 풀리게 됩니다.
+
+  const formData = new FormData();
 
   const onCloseModal = () => {
     setOpen((prev: boolean) => !prev);
   };
 
-  const handleChangeFile = (event:any) => {
-    const formData = new FormData();
-    formData.append("files", event?.target.files[0]);
-
-    setFile(formData);
-  }
+  const handleChangeFile = (event: any) => {
+    // formData.append("files", event?.target.files[0] as Blob);
+    // console.log("체인지",formData.get("files"));
+    setFile(event?.target.files[0]);
+  };
 
   const createFeedHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,7 +55,7 @@ export default function EditorModal({
 
     const postData = {
       title,
-      content
+      content,
     };
 
     const editData = {
@@ -64,13 +65,24 @@ export default function EditorModal({
       userPK,
     };
 
-    
+    formData.append("files", file as Blob)
+    formData.append(
+      "postData",
+      new Blob([JSON.stringify(postData)], {
+        type: "application/json",
+      })
+    );
+
     // console.log(postData);
     if (postData && postData.title && postData.content) {
       if (isEdit) {
         dispatch(editFeedData(editData));
-      } else {
-        dispatch(postFeedData(postData, file));
+      } else if (file) {
+        console.log(file);
+        // dispatch(postFeedData({ postData, file }));
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",formData.get("files"))
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!",formData.get("postData"))
+        dispatch(postFeedData(formData));
       }
     }
     // window.scrollTo(0, 0);
@@ -130,12 +142,13 @@ export default function EditorModal({
           type="file"
           className="form-control border"
           name="upfile"
+          id="upfile"
           multiple
           onChange={handleChangeFile}
+          formEncType="multipart/form-data"
         />
         {/* <label htmlFor="upfile">파일:</label>
-        <input type="file" onChange={handleChangeFile} className="form-control border" name="upfile" formEncType="multipart/form-data" /> */}
-
+    <input type="file" onChange={handleChangeFile} className="form-control border" name="upfile" formEncType="multipart/form-data" /> */}
 
         <ReactQuill
           ref={(element: any) => {

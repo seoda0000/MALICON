@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,44 +35,56 @@ import java.util.List;
 public class ArticleController {
     private final ArticleService articleService;
 
-    private final String filePath = "/var/blahblah/attachments/img";
+    private final String filePath = "/var/blahblah/attachments/img/";
 
     @PostMapping
-    public ResponseEntity insertArticle(@RequestBody @Validated ArticleDTO articleDTO, @RequestParam("upfile") MultipartFile[] files, HttpServletRequest request) throws Exception{
+    public ResponseEntity insertArticle(@RequestPart("postData") @Validated ArticleDTO articleDTO, @RequestPart(value="files", required = false) MultipartFile file, HttpServletRequest request) throws Exception{
         long userId = JWTutil.getLongIdByAccessToken(request);
         if(articleDTO.getTitle().isEmpty() || articleDTO.getContent().isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("빈 문자열"));
         }
-        List<FileInfoDTO> fileInfos = new ArrayList<FileInfoDTO>();
-        if(!files[0].isEmpty()) {
+        log.trace(""+articleDTO.getTitle()+file.getOriginalFilename());
+
+        ArticleEntity result = null;
+        if(!file.isEmpty()) {
             String today = new SimpleDateFormat("yyMMdd").format(new Date());
-            File folder = new File(filePath);
+            String absolPath = request.getServletContext().getRealPath(filePath);
+            File folder = new File(absolPath);
+            
             if (!folder.exists())
                 folder.mkdirs();
-            for (MultipartFile mfile : files) {
-                FileInfoDTO fileInfoDto = null;
-                String originalFileName = mfile.getOriginalFilename();
-                if (!originalFileName.isEmpty()) {
-                    String saveFileName = System.nanoTime()//UUID.randomUUID().toString()
-                            + originalFileName.substring(originalFileName.lastIndexOf('.'));
-                    fileInfoDto = FileInfoDTO.builder()
-                            .saveFolder(today)
-                            .originalFile(originalFileName)
-                            .saveFile(saveFileName)
-                            .build();
-                    mfile.transferTo(new File(folder, saveFileName));
-                }
-                fileInfos.add(fileInfoDto);
+//            for (MultipartFile mfile : files) {
+            FileInfoDTO fileInfoDto = null;
+            String originalFileName = file.getOriginalFilename();
+            if (!originalFileName.isEmpty()) {
+                String saveFileName = System.nanoTime()//UUID.randomUUID().toString()
+                        + originalFileName.substring(originalFileName.lastIndexOf('.'));
+                fileInfoDto = FileInfoDTO.builder()
+                        .saveFolder(today)
+                        .originalFile(originalFileName)
+                        .saveFile(saveFileName)
+                        .build();
+                Path path = Paths.get(filePath+saveFileName).toAbsolutePath();
+                log.info(path+"");
+                folder = new File(absolPath + "/"+saveFileName);
+
+                file.transferTo(folder);
+//                    file.transferTo(filePath+saveFileName);
+                ArticleDTO a = ArticleDTO.builder()
+                        .title(articleDTO.getTitle())
+                        .content(articleDTO.getContent())
+                        .userPK(userId)
+//                            .filePath(path.toFile().toString())
+                        .filePath(filePath+saveFileName)
+                        .build();
+                result = articleService.createArticle(a);
+//                }
+//                fileInfos.add(fileInfoDto);
             }
         }
 
-        ArticleDTO a = ArticleDTO.builder()
-                .title(articleDTO.getTitle())
-                .content(articleDTO.getContent())
-                .userPK(userId)
-                .fileInfos(fileInfos)
-                .build();
-        ArticleEntity result = articleService.createArticle(a);
+
+
         if (result == null) {
             throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "글 작성 실패");
         } else {

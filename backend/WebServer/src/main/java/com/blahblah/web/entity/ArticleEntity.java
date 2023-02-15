@@ -36,8 +36,8 @@ public class ArticleEntity extends BaseEntity{
     @OneToMany(mappedBy = "articleEntity", cascade = CascadeType.REMOVE)
     private List<CommentArticleEntity> comments;
 
-    @OneToMany(mappedBy = "articleEntity", cascade = CascadeType.REMOVE)
-    private List<FileInfoEntity> files;
+    @Column(name="file_path")
+    private String filePath;
 
     @Column(nullable = false)
     private String title;
