@@ -18,7 +18,7 @@ interface StreamProps {
   user: any;
   isPublisher: boolean | null;
   isStreamer?: boolean;
-  handleNickname?: any;
+  //handleNickname?: any;
   streamId?: any;
 }
 // StreamComponent
@@ -34,8 +34,8 @@ export default class StreamComponent extends Component<StreamProps, {}> {
       isFormValid: true,
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handlePressKey = this.handlePressKey.bind(this);
-    this.toggleNicknameForm = this.toggleNicknameForm.bind(this);
+    //this.handlePressKey = this.handlePressKey.bind(this);
+    //this.toggleNicknameForm = this.toggleNicknameForm.bind(this);
     this.toggleSound = this.toggleSound.bind(this);
   }
 
@@ -44,28 +44,28 @@ export default class StreamComponent extends Component<StreamProps, {}> {
     event.preventDefault();
   }
 
-  toggleNicknameForm() {
-    if (this.props.user.isLocal()) {
-      this.setState({ showForm: !this.state.showForm });
-    }
-  }
+  // toggleNicknameForm() {
+  //   if (this.props.user.isLocal()) {
+  //     this.setState({ showForm: !this.state.showForm });
+  //   }
+  // }
 
   toggleSound() {
     this.setState({ mutedSound: !this.state.mutedSound });
   }
 
-  handlePressKey(event: any) {
-    if (event.key === "Enter") {
-      console.log(this.state.nickname);
-      if (this.state.nickname.length >= 3 && this.state.nickname.length <= 20) {
-        this.props.handleNickname(this.state.nickname);
-        this.toggleNicknameForm();
-        this.setState({ isFormValid: true });
-      } else {
-        this.setState({ isFormValid: false });
-      }
-    }
-  }
+  // handlePressKey(event: any) {
+  //   if (event.key === "Enter") {
+  //     console.log(this.state.nickname);
+  //     if (this.state.nickname.length >= 3 && this.state.nickname.length <= 20) {
+  //       //this.props.handleNickname(this.state.nickname);
+  //       //this.toggleNicknameForm();
+  //       this.setState({ isFormValid: true });
+  //     } else {
+  //       this.setState({ isFormValid: false });
+  //     }
+  //   }
+  // }
 
   render() {
     return (
@@ -75,7 +75,7 @@ export default class StreamComponent extends Component<StreamProps, {}> {
           (!this.props.isPublisher && !this.props.isStreamer ? " viewer" : "")
         }
       >
-        <div className="pointer nickname">
+        {/* <div className="pointer nickname">
           {this.state.showForm ? (
             <FormControl id="nicknameForm">
               <IconButton
@@ -113,7 +113,7 @@ export default class StreamComponent extends Component<StreamProps, {}> {
               {this.props.user.isLocal() && <span id=""> (edit)</span>}
             </div>
           )}
-        </div>
+        </div> */}
 
         {this.props.user !== undefined &&
           this.props.user.getStreamManager() !== undefined ? (

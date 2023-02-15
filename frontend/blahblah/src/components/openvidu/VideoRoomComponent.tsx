@@ -8,6 +8,7 @@ import "./VideoRoomComponent.css";
 
 import OpenViduLayout from "../layout/openvidu-layout";
 import UserModel, { UserModelType } from "../../model/openvidu/user-model";
+import {SessionType} from "../../model/broadcast/sessionType";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import { getAccessToken } from "../../redux/modules/user/token";
 import html2canvas from "html2canvas";
@@ -32,11 +33,7 @@ const APPLICATION_CONTEXT_PATH = window.location.origin;
 // 타입 생성
 interface VideoRoomProps {
   user: UserType;
-  sessionName?: string;
-  token?: any;
-  error?: any;
-  joinSession?: any;
-  leaveSession?: any;
+  currentSession: SessionType;
 }
 
 interface StateType {
@@ -52,6 +49,7 @@ interface StateType {
   currentVideoDevice: any;
   showExtensionDialog?: any;
   messageReceived?: any;
+  streamInfo: SessionType;
 }
 
 declare global {
@@ -91,18 +89,17 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.layout = new OpenViduLayout();
     let userName = this.props.user.nickName;
     let userAvatar = this.props.user.avatar;
-    let sessionName = this.props.sessionName
-      ? this.props.sessionName
-      : "sessionA";
+    let currentSession = this.props.currentSession;
 
-    console.log("session 이름그 : ", sessionName);
+    console.log("session 이름그 : ", currentSession.sessionId);
     this.remotes = [];
     this.localUserAccessAllowed = false;
     this.isPublisher = false;
     this.state = {
-      mySessionId: sessionName,
+      mySessionId: currentSession.sessionId,
       myUserName: userName,
       myUserAvatar: userAvatar,
+      streamInfo: currentSession,
       session: undefined,
       localUser: undefined,
       localViewer: new ViewerModel(),
@@ -119,9 +116,9 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.updateLayout = this.updateLayout.bind(this);
     this.camStatusChanged = this.camStatusChanged.bind(this);
     this.micStatusChanged = this.micStatusChanged.bind(this);
-    this.nicknameChanged = this.nicknameChanged.bind(this);
+    //this.nicknameChanged = this.nicknameChanged.bind(this);
     this.toggleFullscreen = this.toggleFullscreen.bind(this);
-    this.switchCamera = this.switchCamera.bind(this);
+    // this.switchCamera = this.switchCamera.bind(this);
     this.closeDialogExtension = this.closeDialogExtension.bind(this);
     this.toggleChat = this.toggleChat.bind(this);
     this.checkNotification = this.checkNotification.bind(this);
@@ -199,23 +196,18 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   async connectToSession() {
-    if (this.props.token !== undefined) {
-      console.log("token received: ", this.props.token);
-      this.connect(this.props.token);
-    } else {
-      try {
-        var token = await this.getToken();
-        console.log(token);
-        this.connect(token);
-      } catch (error: any) {
-        alert("방송 중이 아닙니다.");
-        console.error(
-          "There was an error getting the token:",
-          error.code,
-          error.message
-        );
-        window.location.replace(APPLICATION_CONTEXT_PATH + "/main");
-      }
+    try {
+      var token = await this.getToken();
+      console.log(token);
+      this.connect(token);
+    } catch (error: any) {
+      alert("방송 중이 아닙니다.");
+      console.error(
+        "There was an error getting the token:",
+        error.code,
+        error.message
+      );
+      window.location.replace(APPLICATION_CONTEXT_PATH + "/main");
     }
   }
 
@@ -276,7 +268,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       videoSource: videoDevices[0].deviceId,
       publishAudio: localUser.isAudioActive(),
       publishVideo: localUser.isVideoActive(),
-      resolution: "640x480",
+      resolution: "1280x960",
       frameRate: 30,
       insertMode: "APPEND",
     });
@@ -389,14 +381,14 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.setState({ localUser: localUser });
   }
 
-  nicknameChanged(nickname: any) {
-    let localUser = this.state.localUser;
-    localUser.setNickname(nickname);
-    this.setState({ localUser: localUser });
-    this.sendSignalUserChanged({
-      nickname: this.state.localUser.getNickname(),
-    });
-  }
+  // nicknameChanged(nickname: any) {
+  //   let localUser = this.state.localUser;
+  //   localUser.setNickname(nickname);
+  //   this.setState({ localUser: localUser });
+  //   this.sendSignalUserChanged({
+  //     nickname: this.state.localUser.getNickname(),
+  //   });
+  // }
 
   deleteSubscriber(stream: any) {
     const remoteUsers = this.state.subscribers;
@@ -523,6 +515,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.state.session.on("streamDestroyed", (event: any) => {
       console.log("subscribeToStreamCreated 401 + 누군가가 떠났다!");
       console.log("stream : ", event.stream);
+      alert("방송이 종료되었습니다.");
       this.leaveSession();
     });
   }
@@ -602,42 +595,42 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     }
   }
 
-  async switchCamera() {
-    try {
-      const devices = await this.OV.getDevices();
-      var videoDevices = devices.filter(
-        (device: any) => device.kind === "videoinput"
-      );
+  // async switchCamera() {
+  //   try {
+  //     const devices = await this.OV.getDevices();
+  //     var videoDevices = devices.filter(
+  //       (device: any) => device.kind === "videoinput"
+  //     );
 
-      if (videoDevices && videoDevices.length > 1) {
-        var newVideoDevice = videoDevices.filter(
-          (device: any) =>
-            device.deviceId !== this.state.currentVideoDevice.deviceId
-        );
+  //     if (videoDevices && videoDevices.length > 1) {
+  //       var newVideoDevice = videoDevices.filter(
+  //         (device: any) =>
+  //           device.deviceId !== this.state.currentVideoDevice.deviceId
+  //       );
 
-        if (newVideoDevice.length > 0) {
-          var newPublisher = this.OV.initPublisher(undefined, {
-            audioSource: undefined,
-            videoSource: newVideoDevice[0].deviceId,
-            publishAudio: localUser.isAudioActive(),
-            publishVideo: localUser.isVideoActive(),
-            mirror: true,
-          });
-          await this.state.session.unpublish(
-            this.state.localUser.getStreamManager()
-          );
-          await this.state.session.publish(newPublisher);
-          this.state.localUser.setStreamManager(newPublisher);
-          this.setState({
-            currentVideoDevice: newVideoDevice,
-            localUser: localUser,
-          });
-        }
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  //       if (newVideoDevice.length > 0) {
+  //         var newPublisher = this.OV.initPublisher(undefined, {
+  //           audioSource: undefined,
+  //           videoSource: newVideoDevice[0].deviceId,
+  //           publishAudio: localUser.isAudioActive(),
+  //           publishVideo: localUser.isVideoActive(),
+  //           mirror: true,
+  //         });
+  //         await this.state.session.unpublish(
+  //           this.state.localUser.getStreamManager()
+  //         );
+  //         await this.state.session.publish(newPublisher);
+  //         this.state.localUser.setStreamManager(newPublisher);
+  //         this.setState({
+  //           currentVideoDevice: newVideoDevice,
+  //           localUser: localUser,
+  //         });
+  //       }
+  //     }
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }
 
   closeDialogExtension() {
     this.setState({ showExtensionDialog: false });
@@ -721,22 +714,21 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     return (
       <div className="container" id="container">
         <ToolbarComponent
-          sessionId={mySessionId}
           user={localUser}
           showNotification={this.state.messageReceived}
           camStatusChanged={this.camStatusChanged}
           micStatusChanged={this.micStatusChanged}
           toggleFullscreen={this.toggleFullscreen}
-          switchCamera={this.switchCamera}
           exitButton={this.leaveSession}
           toggleChat={this.toggleChat}
           isPublisher={this.isPublisher}
+          streamInfo={this.state.streamInfo}
         />
 
-        <DialogExtensionComponent
+        {/* <DialogExtensionComponent
           showDialog={this.state.showExtensionDialog}
           cancelClicked={this.closeDialogExtension}
-        />
+        /> */}
 
         <div id="layout" className="bounds">
           {/* 스트리머 화면 */}
@@ -769,7 +761,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
               >
                 <StreamComponent
                   user={localUser}
-                  handleNickname={this.nicknameChanged}
+                  //handleNickname={this.nicknameChanged}
                   isPublisher={this.isPublisher}
                 />
               </div>

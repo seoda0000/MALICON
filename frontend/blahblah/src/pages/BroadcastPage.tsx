@@ -28,7 +28,7 @@ function BroadcastPage() {
   return (
     <div>
       <VideoRoomComponent
-        sessionName={broadcast.currentSession.sessionId}
+        currentSession={broadcast.currentSession}
         user={user}
       />
       {/* <VideoRoomComponent /> */}
