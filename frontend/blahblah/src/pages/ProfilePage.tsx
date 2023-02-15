@@ -143,10 +143,12 @@ export default function ProfilePage(): JSX.Element {
 
   const [isMine, setIsMine] = useState<boolean>(false);
   const [isEditNickName, setIsEditNickName] = useState<boolean>(false);
-  const [newNickName, setNewNickName] = useState<string>(user.nickName);
+  const [newNickName, setNewNickName] = useState<string>(loggedUser.nickName);
   const [isEditAboutMe, setIsEditAboutMe] = useState<boolean>(false);
   const [newAboutMe, setNewAboutMe] = useState<string>(user.aboutMe);
-  const [isAboutMeExist, setIsAboutMeExist] = useState<boolean>(false);
+  const [isAboutMeExist, setIsAboutMeExist] = useState<boolean>(
+    !!loggedUser.aboutMe
+  );
   // const [getProfile, setGetProfile] = useState<boolean>(false);
   // const [getisOnAir, setGetisOnAir] = useState<boolean>(false);
   // const [getVideos, setGetVideos] = useState<boolean>(false);
@@ -176,9 +178,11 @@ export default function ProfilePage(): JSX.Element {
         userId: loggedUser.userId,
         nickName: newNickName,
       })
-    ).then(() => {
-      setIsEditNickName((prev) => !prev);
-    });
+    );
+    setIsEditNickName((prev) => !prev);
+    // .then(() => {
+    //   dispatch(getAboutMeAction(String(loggedUser.id)));
+    // });
   };
 
   const onChangeAboutMe = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -198,7 +202,7 @@ export default function ProfilePage(): JSX.Element {
           setIsEditAboutMe((prev) => !prev);
         });
       } else {
-        dispatch(addAboutMeAction(newAboutMe)).then(() => {
+        dispatch(addAboutMeAction({ content: newAboutMe })).then(() => {
           setIsEditAboutMe((prev) => !prev);
           setIsAboutMeExist(true);
         });

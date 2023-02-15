@@ -21,6 +21,7 @@ import {
 import { AboutMeType } from "../../../model/user/aboutMeType";
 import { UserUpdateType } from "../../../model/user/userUpdateType";
 import { SubscriberType } from "../../../model/subscribe/subscriberType";
+import { getAboutMeAction } from "../profile";
 
 // 회원가입
 export const signupAction = createAsyncThunk(
@@ -206,7 +207,9 @@ export const updateUserAction = createAsyncThunk(
           },
         })
         .then(() => {
-          dispatch(getMeWithTokenAction());
+          dispatch(getMeWithTokenAction()).then(() => {
+            dispatch(getAboutMeAction(String(userData.id)));
+          });
         });
       // return data;
     } catch (e) {

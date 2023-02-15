@@ -12,6 +12,7 @@ import {
   openviduInitializer,
 } from "../../utils/axiosInitializer";
 import { getAccessToken } from "../user/token";
+import { getMeWithTokenAction } from "../user";
 
 // 프로필 정보 가져오기
 export const getAboutMeAction = createAsyncThunk(
@@ -59,16 +60,20 @@ export const getIsOnAirAction = createAsyncThunk(
 // 자기소개 추가
 export const addAboutMeAction = createAsyncThunk(
   "ADD_ABOUTME",
-  async (aboutMeData: string, { rejectWithValue }) => {
+  async (aboutMeData: any, { dispatch, rejectWithValue }) => {
     try {
       const axios = axiosInitializer();
-      const { data } = await axios.post(`/api/aboutme`, aboutMeData, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + getAccessToken(),
-        },
-      });
-      return data;
+      await axios
+        .post(`/api/aboutme`, aboutMeData, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + getAccessToken(),
+          },
+        })
+        .then(() => {
+          dispatch(getAboutMeAction(String(aboutMeData.userPK)));
+        });
+      // return data;
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -78,17 +83,24 @@ export const addAboutMeAction = createAsyncThunk(
 // 자기소개 수정
 export const updateAboutMeAction = createAsyncThunk(
   "UPDATE_ABOUTME",
-  async (aboutMeData: AboutMeType, { rejectWithValue }) => {
+  async (aboutMeData: AboutMeType, { dispatch, rejectWithValue }) => {
     try {
       const axios = axiosInitializer();
-      const { data } = await axios.put(`/api/aboutme`, aboutMeData, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Baerer " + getAccessToken(),
-        },
-      });
-      return data;
+      await axios
+        .put(`/api/aboutme`, aboutMeData, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Baerer " + getAccessToken(),
+          },
+        })
+        .then(() => {
+          dispatch(getAboutMeAction(String(aboutMeData.userPK)));
+        });
+
+      console.log("자기소개 수정 완료");
+      // return data;
     } catch (e) {
+      console.log("자기소개 수정 실패");
       console.error(e);
       return rejectWithValue(e);
     }
@@ -217,4 +229,3 @@ export const getFeedAction = createAsyncThunk(
     }
   }
 );
-
