@@ -137,6 +137,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     this.sendSignalSubcriberDeleted = this.sendSignalSubcriberDeleted.bind(this);
     this.sendSignalViewersBroadCast = this.sendSignalViewersBroadCast.bind(this);
     this.viewerBroadCastListener = this.viewerBroadCastListener.bind(this);
+    this.thumbnailReapeat = this.thumbnailReapeat.bind(this);
   }
 
   componentDidMount() {
@@ -245,6 +246,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
                 .then((data) => console.log(data))
                 .catch((e) => console.error(e))
             }, 1000);
+            this.thumbnailReapeat();
           }
         });
       })
@@ -703,6 +705,12 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     // const decodedImage = decodeURIComponent(encodedImage);
     // const imageElement = document.createElement('img');
     // imageElement.src = `data:image/jpeg;base64,${decodedImage}`
+  }
+
+  thumbnailReapeat(){
+    setInterval(()=>{
+      this.sendThumbnail()
+    }, 60000);
   }
 
   render() {
