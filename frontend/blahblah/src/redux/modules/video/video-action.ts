@@ -190,7 +190,7 @@ export const removeVideoData = createAsyncThunk(
       const axios = openviduInitializer();
 
       const { data } = await axios.delete(
-        `/api/recording/delete/${removeData.recordingId}`,
+        `/api/recording/${removeData.recordingId}`,
         {
           headers: {
             "Content-Type": "application/json",
