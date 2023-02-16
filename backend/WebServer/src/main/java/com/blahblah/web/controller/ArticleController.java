@@ -40,10 +40,11 @@ public class ArticleController {
 
         ArticleEntity result = null;
         if(file!=null) {
-            String realPath = request.getServletContext().getRealPath(filePath);
-            String today = new SimpleDateFormat("yyMMdd").format(new Date());
+//            String realPath = request.getServletContext().getRealPath(filePath);
+//            String today = new SimpleDateFormat("yyMMdd").format(new Date());
 
-            String saveFolder = realPath + File.separator + today;
+//            String saveFolder = filePath + File.separator + today;
+            String saveFolder = filePath;
             File folder = new File(saveFolder);
             String saveFileName = "";
             if(!folder.exists())
@@ -59,7 +60,7 @@ public class ArticleController {
                     .title(articleDTO.getTitle())
                     .content(articleDTO.getContent())
                     .userPK(userId)
-                    .filePath(folder+"/"+saveFileName)
+                    .filePath("/img/"+saveFileName)
                     .build();
             result = articleService.createArticle(a);
         } else{
