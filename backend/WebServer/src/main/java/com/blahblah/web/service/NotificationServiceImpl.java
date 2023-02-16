@@ -31,7 +31,7 @@ public class NotificationServiceImpl implements NotificationService{
     private final UserRepository userRepository;
     @Override
     public List<NotificationDTO> getNotifications(long userId) {
-        List<NotificationEntity> findResult = notificationRepository.findAllByUserId(userId);
+        List<NotificationEntity> findResult = notificationRepository.findAllByUserIdOrderByTimestampDesc(userId);
         List<NotificationDTO> result = new ArrayList<>();
         for(NotificationEntity ne : findResult)
             result.add(NotificationDTO.builder()
