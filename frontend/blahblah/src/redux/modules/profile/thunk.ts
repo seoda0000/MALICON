@@ -13,7 +13,7 @@ import {
 } from "../../utils/axiosInitializer";
 import { getAccessToken } from "../user/token";
 import { getMeWithTokenAction } from "../user";
-
+import { getSubscribersAction } from "../user";
 // 프로필 정보 가져오기
 export const getAboutMeAction = createAsyncThunk(
   "GET_ABOUTME",
@@ -130,7 +130,7 @@ export const getIsSubscribeAction = createAsyncThunk(
 // 구독 추가
 export const subscribeAction = createAsyncThunk(
   "SUBSCRIBE",
-  async (userPK: string, { rejectWithValue }) => {
+  async (userPK: string, { dispatch, rejectWithValue }) => {
     try {
       const axios = axiosInitializer();
       const req = {
@@ -143,6 +143,8 @@ export const subscribeAction = createAsyncThunk(
         },
       });
 
+      dispatch(getSubscribersAction());
+
       return data;
     } catch (e) {
       return rejectWithValue(e);
@@ -153,7 +155,7 @@ export const subscribeAction = createAsyncThunk(
 // 구독 취소
 export const unSubscribeAction = createAsyncThunk(
   "UNSUBSCRIBE",
-  async (userPK: string, { rejectWithValue }) => {
+  async (userPK: string, { dispatch, rejectWithValue }) => {
     try {
       const axios = axiosInitializer();
       const { data } = await axios.delete(
@@ -165,7 +167,7 @@ export const unSubscribeAction = createAsyncThunk(
           },
         }
       );
-
+      dispatch(getSubscribersAction());
       return data;
     } catch (e) {
       return rejectWithValue(e);
