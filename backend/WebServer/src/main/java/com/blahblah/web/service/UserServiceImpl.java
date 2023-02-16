@@ -5,7 +5,10 @@ import com.blahblah.web.controller.exception.CustomException;
 import com.blahblah.web.dto.MailDto;
 import com.blahblah.web.dto.TokenDTO;
 import com.blahblah.web.dto.response.UserDTO;
+import com.blahblah.web.dto.response.UserMeDTO;
 import com.blahblah.web.entity.UserEntity;
+import com.blahblah.web.entity.UserSubscribeEntity;
+import com.blahblah.web.repository.SubscribeRepository;
 import com.blahblah.web.repository.UserRepository;
 import com.blahblah.web.util.JWTutil;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -31,6 +35,7 @@ import java.util.concurrent.CompletableFuture;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final SubscribeRepository subscribeRepository;
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
 
@@ -122,8 +127,21 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDTO readUserByUserId(String userId) {
-        return userRepository.findByUserId(userId).
-                orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "존재하지 않는 아이디입니다.")).toUserDTO();
+        UserEntity user = userRepository.findByUserId(userId).
+                orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "존재하지 않는 아이디입니다."));
+        List<UserSubscribeEntity> subscribers = subscribeRepository.findAllBySubscribeUserId(user.getId());
+
+        UserDTO userDTO = UserDTO.builder()
+                .id(user.getId())
+                .nickName(user.getNickName())
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .lightStick(user.getLightStick())
+                .phoneNumber(user.getPhoneNumber())
+                .subscribers(subscribers.size())
+                .build();
+
+        return userDTO;
     }
 
     @Override

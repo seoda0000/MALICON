@@ -18,4 +18,5 @@ public class UserDTO {
     private String phoneNumber;
     private String avatar;
     private String lightStick;
+    private long subscribers;
 }
