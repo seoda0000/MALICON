@@ -129,10 +129,10 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
 
       <CardContent>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography variant="h6" sx={{ mr: 1 }}>
+          <Typography noWrap variant="h6" sx={{ mr: 1 }}>
             {props.video?.title}
           </Typography>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
             {/* 해시태그 표시 */}
             {props.video?.hashtags &&
               JSON.parse(props.video.hashtags).map((data: any, index: any) => {
