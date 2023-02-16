@@ -12,6 +12,13 @@
   height: 100% !important;
 }
 
+#localUser, #remoteUsers {
+  width: 100% !important;
+  height: 100% !important;
+  overflow:hidden !important;
+  left: 0px !important;
+}
+
 /*!
  * Copyright (c) 2017 TokBox, Inc.
  * Released under the MIT license

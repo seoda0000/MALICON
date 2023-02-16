@@ -6,7 +6,7 @@ import { ViewerModelType } from "../../../model/openvidu/viewer-model";
 import AvatarComp from "../../common/AvatarComp";
 
 const AvatarSectionContainer = styled.div`
-  position: absolute;
+  position: fixed;
   z-index: 10;
   bottom: 0;
   width: 100vw;
