@@ -239,7 +239,7 @@ export default function CardComp({
             >
               {video?.views}
             </Link>
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", flexWrap: "wrap" }}>
               {/* 해시태그 표시 */}
               {video &&
                 hashtags &&

@@ -50,6 +50,7 @@ export default function VideoCard({
         // srcSet="https://images.unsplash.com/photo-1515825838458-f2a94b20105a?auto=format&fit=crop&w=300&dpr=2 2x"
         loading="lazy"
         alt={video.title}
+        style={{ width: "100%" }}
       />
     </CardComp>
   );
