@@ -7,4 +7,5 @@ import lombok.*;
 @RequiredArgsConstructor
 public class NotificationRequestDTO {
     public String msg;
+    public String avatar;
 }

@@ -14,4 +14,5 @@ public class NotificationDTO {
     private long timestamp;
     private String msg;
     private boolean isRead;
+    private String avatar;
 }
