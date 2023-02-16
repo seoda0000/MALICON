@@ -65,7 +65,7 @@ export const fetchHashVideoData = createAsyncThunk(
       // const dispatch = useDispatch<AppDispatch>();
       const axios = axiosInitializer();
 
-      const response = await axios.post("/api/videos/100/0", hashData, {
+      const response = await axios.post("/api/videos/hashtag/100/0", hashData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Baerer " + getAccessToken(),
