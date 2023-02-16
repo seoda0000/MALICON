@@ -11,6 +11,8 @@ import LoadingPage from "./LoadingPage";
 import BroadcastCarousel from "../components/broadcast/broadcastCarousel";
 import { fetchAllVideoData } from "../redux/modules/video";
 import ChipsArray from "../components/broadcast/ChipsArray";
+import { fetchHashVideoData } from "../redux/modules/video";
+
 interface ChipData {
   key: number;
   label: string;
@@ -62,7 +64,10 @@ function MainPage(): JSX.Element {
     { key: 21, label: "듀엣", selected: false },
     { key: 22, label: "그룹", selected: false },
   ]);
+  const [allChip, setAllChip] = useState<boolean>(true);
+  let chipList = chipData.filter((chip) => chip.selected === true);
 
+  // 해시태그 클릭
   const handleClick = (e: any) => {
     const target = e.target.innerHTML;
     setChipData((chips) =>
@@ -73,9 +78,31 @@ function MainPage(): JSX.Element {
         return chip;
       })
     );
+    setAllChip(false);
+    chipList = chipData.filter((chip) => chip.selected === true);
+
+    if (chipList.length) {
+      const hashData = {
+        hashTag: JSON.stringify(chipList),
+      };
+      dispatch(fetchHashVideoData(hashData));
+    } else {
+      setAllChip(true);
+      dispatch(fetchAllVideoData());
+    }
   };
 
-  const chipList = chipData.filter((chip) => chip.selected === true);
+  // 전체 버튼 클릭
+  const handleClickAll = () => {
+    setChipData((chips) =>
+      chips.map((chip) => {
+        chip.selected = false;
+        return chip;
+      })
+    );
+    setAllChip(true);
+    dispatch(fetchAllVideoData());
+  };
 
   // 로딩 페이지 적용
   useEffect(() => {
@@ -101,7 +128,12 @@ function MainPage(): JSX.Element {
         {/* <h1>예시</h1> */}
         {/* <BroadcastCarousel sessions={SAMPLE_SESSIONS} /> */}
         {/* <h1>추천 동영상</h1> */}
-        <ChipsArray chipData={chipData} handleClick={handleClick} />
+        <ChipsArray
+          chipData={chipData}
+          handleClick={handleClick}
+          allChip={allChip}
+          handleClickAll={handleClickAll}
+        />
         <VideoList chipList={chipList} />
       </div>
     </Box>
