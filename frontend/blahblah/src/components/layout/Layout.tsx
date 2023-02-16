@@ -219,7 +219,40 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
               color: #3f3f3f;
             }
           }
+          .badge-login {
+            position: absolute;
+            /* width: 75px; */
+            height: 90px;
+            margin-top: 20px;
+            padding: 28px 15px 0px 15px;
+            background-image: url(${BubbleId});
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: ${IdKeyFrame} 0.7s ease-out forwards;
+            animation-delay: 3s;
+            opacity: 0;
+            & > span {
+              display: inline-block;
+              font-size: 14px;
+              color: #3f3f3f;
+            }
+          }
           .badge-nickname {
+            position: absolute;
+            height: 65px;
+            padding: 16px 15px 0px 15px;
+            background-image: url(${BubbleNickName});
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: ${NickNameKeyFrame} 0.7s ease-out forwards;
+            animation-delay: 3s;
+            opacity: 0;
+            & > span {
+              display: inline-block;
+              font-size: 16px;
+            }
+          }
+          .badge-signup {
             position: absolute;
             height: 65px;
             padding: 16px 15px 0px 15px;
@@ -375,7 +408,7 @@ export default function Layout(props: LayoutProps) {
   };
 
   useEffect(() => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       dispatch(getSubscribersAction());
     }
   }, [isLoggedIn]);
@@ -548,20 +581,22 @@ export default function Layout(props: LayoutProps) {
                 }}
               >
                 <div className="badge-wrapper">
-                  <Tooltip title="Open settings">
-                    <IconButton onClick={handleOpenUserMenu} sx={{ mr: 1 }}>
-                      {loggedUser.isLoggedIn ? (
+                  {loggedUser.isLoggedIn ? (
+                    <Tooltip title="Open settings">
+                      <IconButton onClick={handleOpenUserMenu} sx={{ mr: 1 }}>
                         <ProfileImage big={true} border={true} />
-                      ) : (
-                        <AccountCircleRoundedIcon
-                          sx={{
-                            height: 120,
-                            width: 120,
-                          }}
-                        />
-                      )}
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <IconButton sx={{ mr: 1 }}>
+                      <AccountCircleRoundedIcon
+                        sx={{
+                          height: 120,
+                          width: 120,
+                        }}
+                      />
                     </IconButton>
-                  </Tooltip>
+                  )}
 
                   {/* Drawer 열렸을 때 작은 아이콘들 */}
                   {open && loggedUser.isLoggedIn && (
@@ -602,6 +637,25 @@ export default function Layout(props: LayoutProps) {
                       />
                     </MenuItem>
                   )}
+
+                  {/* 로그아웃시 보이는 작은 아이콘들 */}
+                  {open && !loggedUser.isLoggedIn && (
+                    <MenuItem className="badge-inner">
+                      <ListItemText
+                        className="badge-login"
+                        primary={"로그인"}
+                        sx={{ opacity: open ? 1 : 0, ml: 4 }}
+                        onClick={onClickSignin}
+                      />
+                      <ListItemText
+                        className="badge-signup"
+                        primary={"회원가입"}
+                        sx={{ opacity: open ? 1 : 0, ml: 1 }}
+                        onClick={onClickSignup}
+                      />
+                      {/* <div className="badge-userid">로그인</div> */}
+                    </MenuItem>
+                  )}
                 </div>
                 <Menu
                   sx={{ mt: "45px" }}
@@ -631,17 +685,6 @@ export default function Layout(props: LayoutProps) {
                               // : item === "Dashboard"
                               // ? onClickDashboard
                               onClickLogout
-                        }
-                      >
-                        <Typography textAlign="center">{item}</Typography>
-                      </MenuItem>
-                    ))}
-                  {!loggedUser.isLoggedIn &&
-                    menuWithLogout.map((item) => (
-                      <MenuItem
-                        key={item}
-                        onClick={
-                          item === "Login" ? onClickSignin : onClickSignup
                         }
                       >
                         <Typography textAlign="center">{item}</Typography>
@@ -917,4 +960,3 @@ export default function Layout(props: LayoutProps) {
     </LayoutContainer>
   );
 }
-
