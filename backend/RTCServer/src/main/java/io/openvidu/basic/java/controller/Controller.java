@@ -37,6 +37,8 @@ public class Controller {
 
 	private final VideoService videoService;
 
+	private final JwtUtil jwtUtil;
+
 
 	//방 생성
 	@PostMapping("/api/sessions") //
@@ -46,10 +48,7 @@ public class Controller {
 		log.info("\n----------- initializeSession START -----------");
 
 		// request header에 있는 토큰으로 유저정보 가져오기
-		String accessToken = JwtUtil.getAccessTokenFromHeader(request);
-		Long id = JwtUtil.getIdFromClaims(JwtUtil.parseClaims(accessToken));
-
-		UserDto userInfo = userService.getUserById(id);
+		UserDto userInfo = jwtUtil.getUserFromToken(request);
 
 		log.info("유저 정보 : " + userInfo);
 
@@ -101,10 +100,7 @@ public class Controller {
 		Connection connection;
 		//연결과 토큰 만들기
 
-		String accessToken = JwtUtil.getAccessTokenFromHeader(request);
-		Long id = JwtUtil.getIdFromClaims(JwtUtil.parseClaims(accessToken));
-
-		UserDto userInfo = userService.getUserById(id);
+		UserDto userInfo = jwtUtil.getUserFromToken(request);
 
 		// 로그인 된 userId와 sessionId가 같을 때
 		if(sessionId.startsWith(userInfo.getUserId()+"-"))
@@ -137,8 +133,8 @@ public class Controller {
 										HttpServletRequest request) throws OpenViduJavaClientException, OpenViduHttpException {
 
 		log.info("delete start!!");
-		String accessToken = JwtUtil.getAccessTokenFromHeader(request);
-		Long id = JwtUtil.getIdFromClaims(JwtUtil.parseClaims(accessToken));
+		String acessToken = jwtUtil.getAccessTokenFromHeader(request);
+		Long id = jwtUtil.getIdFromClaims(jwtUtil.parseClaims(acessToken));
 
 		UserDto userInfo = userService.getUserById(id);
 
@@ -174,9 +170,15 @@ public class Controller {
 	//방송 정보 수정, 여기서 썸네일 저장도 같이
 	@PutMapping("/api/sessions/{sessionId}")
 	public ResponseEntity<?> updateRoom(@PathVariable("sessionId") String sessionId,
-										@RequestBody(required = false) RoomUpdateDto roomUpdateDto){
+										@RequestBody(required = false) RoomUpdateDto roomUpdateDto,
+										HttpServletRequest request){
 
 		log.info("----------- updateRoom START ----------- dto : " + roomUpdateDto.toString());
+
+		UserDto userDto = jwtUtil.getUserFromToken(request);
+
+		if(!sessionId.startsWith(userDto.getUserId()))
+			throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없는 사용자입니다.");
 
 		if(!liveRoomService.updateRoom(sessionId, roomUpdateDto, null))
 			throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "방송 정보 수정 실패");
@@ -198,12 +200,10 @@ public class Controller {
 			if (session.getSessionId().startsWith(userId + "-")) {
 				if (liveRoomService.existBySessionId(session.getSessionId()))
 				{
-					onAir = true;
-					break;
+					return ResponseEntity.ok(liveRoomService.findBySessionId(session.getSessionId()));
 				}
 			}
 		}
-
-		return new ResponseEntity<>(onAir, HttpStatus.OK);
+		return ResponseEntity.notFound().build();
 	}
 }

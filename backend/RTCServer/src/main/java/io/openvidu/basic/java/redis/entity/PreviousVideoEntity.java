@@ -35,7 +35,7 @@ public class PreviousVideoEntity extends BaseEntity{
     private Double playTime;
     @Column(name = "thumbnail", nullable=false, columnDefinition = "MEDIUMTEXT")
     private String thumbnail;
-    @Column(name="hashtags")
+    @Column(name="hashtags", columnDefinition = "MEDIUMTEXT")
     private String hashTags;
 
     @ManyToOne(targetEntity = UserEntity.class,

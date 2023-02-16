@@ -17,7 +17,7 @@ public class OpenViduFetchSecheduler {
     private final OpenVidu openVidu;
 
     @Async
-    @Scheduled(fixedDelay=60000)
+    @Scheduled(fixedDelay=15000)
     public void fetch(){
         try {
             openVidu.fetch();
