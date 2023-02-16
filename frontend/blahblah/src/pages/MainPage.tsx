@@ -180,6 +180,7 @@ function MainPage(): JSX.Element {
           handleClick={handleClick}
           allChip={allChip}
           handleClickAll={handleClickAll}
+          isMain={true}
         />
         <VideoList chipList={chipList} setOpenLoginAlert={setOpenLoginAlert} />
       </div>
