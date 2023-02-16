@@ -117,7 +117,7 @@ export const fetchFollowingVideoData = createAsyncThunk(
       // const dispatch = useDispatch<AppDispatch>();
       const axios = axiosInitializer();
 
-      const response = await axios.get("/api/videos/hashtag/100/0", {
+      const response = await axios.get("/api/videos/100/0", {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Baerer " + getAccessToken(),
