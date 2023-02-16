@@ -2,6 +2,6 @@ export type FeedEditType = {
   title: string;
   content: string;
   id: number;
-  filePath: string;
+  filePath: string | null;
   userPK: number | null;
 };
