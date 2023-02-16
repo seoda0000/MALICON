@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styled from "@emotion/styled";
-import { Avatar, CardHeader, IconButton, Menu, MenuItem } from "@mui/material";
+import {
+  Avatar,
+  CardHeader,
+  css,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -12,8 +19,11 @@ import { ProfileVideoType } from "../../model/profile/profileVideoType";
 import VideoCard from "../video/VideoCard";
 import { VideoType } from "../../model/video/VideoType";
 import { VideoWrapType } from "../../model/profile/videoWrapType";
+import { useAppDispatch, useAppSelector } from "../../redux/configStore.hooks";
+import { useParams } from "react-router-dom";
+import EmptyMessage from "../common/EmptyMessage";
 
-const CarouselContainer = styled.div`
+const CarouselContainer = styled.div<{ short: boolean }>`
   .slick-slider {
     width: 90%;
     margin: 0 auto;
@@ -40,6 +50,13 @@ const CarouselContainer = styled.div`
   .slick-next:before {
     color: black;
   }
+  ${({ short }) =>
+    short &&
+    css`
+      .slick-cloned {
+        display: none;
+      }
+    `}
 `;
 
 const CarouselItemBox = styled.div`
@@ -103,85 +120,19 @@ const settings = {
 };
 
 type CarouselPorpsType = {
-  items: VideoWrapType | VideoType[];
+  items?: VideoWrapType | VideoType[];
+  actionFunc: any;
+  setIsMoreVideoExist: any;
 };
 
-const mockupData = [
-  {
-    id: 1,
-    title: "다 연주해드려요",
-    thumbNail:
-      "https://file2.nocutnews.co.kr/newsroom/image/2019/04/06/20190406105500385368_0_710_400.jpg",
-    userId: "ssafy",
-    hit: 15,
-  },
-  {
-    id: 2,
-    title: "다 불러드려요",
-    thumbNail:
-      "https://cdn.mediaus.co.kr/news/photo/201509/50280_121065_140.jpg",
-    userId: "ssafy",
-    hit: 13,
-  },
-  {
-    id: 3,
-    title: "다 어쩌구",
-    thumbNail:
-      "https://file2.nocutnews.co.kr/newsroom/image/2019/04/06/20190406105500385368_0_710_400.jpg",
-    userId: "ssafy",
-    hit: 21,
-  },
-  {
-    id: 4,
-    title: "한곡만 불러드려요",
-    thumbNail:
-      "https://cdn.mediaus.co.kr/news/photo/201509/50280_121065_140.jpg",
-    userId: "ssafy",
-    hit: 31,
-  },
-  {
-    id: 5,
-    title: "한곡만 연주해요",
-    thumbNail:
-      "http://t1.daumcdn.net/tvpot/thumb/sf8760CvvxBdCTBdoJKxRKz/thumb.png",
-    userId: "ssafy",
-    hit: 28,
-  },
-  {
-    id: 6,
-    title: "연습할거에요",
-    thumbNail:
-      "https://file2.nocutnews.co.kr/newsroom/image/2019/04/06/20190406105500385368_0_710_400.jpg",
-    userId: "ssafy",
-    hit: 38,
-  },
-  {
-    id: 7,
-    title: "오오오 그냥켰어요",
-    thumbNail:
-      "http://t1.daumcdn.net/tvpot/thumb/sf8760CvvxBdCTBdoJKxRKz/thumb.png",
-    userId: "ssafy",
-    hit: 40,
-  },
-  {
-    id: 8,
-    title: "메렁",
-    thumbNail:
-      "https://cdn.mediaus.co.kr/news/photo/201509/50280_121065_140.jpg",
-    userId: "ssafy",
-    hit: 33,
-  },
-  {
-    id: 9,
-    title: "연주연주",
-    thumbNail:
-      "https://file2.nocutnews.co.kr/newsroom/image/2019/04/06/20190406105500385368_0_710_400.jpg",
-    userId: "ssafy",
-    hit: 43,
-  },
-];
-
-export default function Carousel({ items }: CarouselPorpsType): JSX.Element {
+export default function Carousel({
+  items,
+  actionFunc,
+  setIsMoreVideoExist,
+}: CarouselPorpsType): JSX.Element {
+  const { userpk } = useParams() as { userpk: string };
+  const dispatch = useAppDispatch();
+  const getVideo = useAppSelector((state) => state.profile.getVideo);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const onClickVideoMore = (event: React.MouseEvent<HTMLElement>) => {
@@ -190,54 +141,75 @@ export default function Carousel({ items }: CarouselPorpsType): JSX.Element {
   const onCloseVideoMore = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    if (getVideo.data) {
+      if (getVideo.data.content.length > 3) {
+        setIsMoreVideoExist(true);
+      } else {
+        setIsMoreVideoExist(false);
+      }
+    }
+  }, [getVideo]);
+
+  useEffect(() => {
+    dispatch(actionFunc({ userPK: userpk, size: 5, page: 0 }));
+  }, []);
   return (
-    <CarouselContainer>
-      <Slider {...settings}>
-        {(items as VideoWrapType).content.map((item, idx) => (
-          <CarouselItemBox key={item.id}>
-            <VideoCard nth={idx} video={item} />
-            <Menu
-              anchorEl={anchorEl}
-              id="more-menu"
-              open={open}
-              onClose={onCloseVideoMore}
-              // onClick={handleClose}
-              PaperProps={{
-                elevation: 0,
-                sx: {
-                  overflow: "visible",
-                  filter: "drop-shadow(0px 0px 3px rgba(0,0,0,0.02))",
-                  mt: 1.5,
-                  "& .MuiAvatar-root": {
-                    width: 32,
-                    height: 32,
-                    ml: -0.5,
-                    mr: 1,
+    <CarouselContainer
+      short={
+        getVideo.data && (getVideo.data as VideoWrapType).content.length < 3
+      }
+    >
+      {getVideo.data ? (
+        <Slider {...settings}>
+          {(getVideo.data as VideoWrapType).content.map((item, idx) => (
+            <CarouselItemBox key={item.id}>
+              <VideoCard nth={idx} video={item} />
+              <Menu
+                anchorEl={anchorEl}
+                id="more-menu"
+                open={open}
+                onClose={onCloseVideoMore}
+                PaperProps={{
+                  elevation: 0,
+                  sx: {
+                    overflow: "visible",
+                    filter: "drop-shadow(0px 0px 3px rgba(0,0,0,0.02))",
+                    mt: 1.5,
+                    "& .MuiAvatar-root": {
+                      width: 32,
+                      height: 32,
+                      ml: -0.5,
+                      mr: 1,
+                    },
+                    "&:before": {
+                      content: '""',
+                      display: "block",
+                      position: "absolute",
+                      top: 0,
+                      right: 14,
+                      width: 10,
+                      height: 10,
+                      bgcolor: "background.paper",
+                      transform: "translateY(-50%) rotate(45deg)",
+                      zIndex: 0,
+                    },
                   },
-                  "&:before": {
-                    content: '""',
-                    display: "block",
-                    position: "absolute",
-                    top: 0,
-                    right: 14,
-                    width: 10,
-                    height: 10,
-                    bgcolor: "background.paper",
-                    transform: "translateY(-50%) rotate(45deg)",
-                    zIndex: 0,
-                  },
-                },
-              }}
-              transformOrigin={{ horizontal: "right", vertical: "top" }}
-              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-            >
-              <MenuItem onClick={onCloseVideoMore}>
-                <ShareIcon /> Share
-              </MenuItem>
-            </Menu>
-          </CarouselItemBox>
-        ))}
-      </Slider>
+                }}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+              >
+                <MenuItem onClick={onCloseVideoMore}>
+                  <ShareIcon /> Share
+                </MenuItem>
+              </Menu>
+            </CarouselItemBox>
+          ))}
+        </Slider>
+      ) : (
+        <EmptyMessage text="지난 영상이 없습니다" />
+      )}
     </CarouselContainer>
   );
 }

@@ -136,8 +136,6 @@ export default function ProfilePage(): JSX.Element {
   const loggedUser = useAppSelector((state) => state.user.userData);
   const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn);
   const user = useAppSelector((state) => state.profile.userData);
-  const videos = useAppSelector((state) => state.profile.videoData);
-  const feeds = useAppSelector((state) => state.profile.feedData);
   const isSubscribing = useAppSelector((state) => state.profile.isSubscribing);
   const isOnAir = useAppSelector((state) => state.profile.userData.isOnAir);
   const dispatch = useAppDispatch();
@@ -150,6 +148,7 @@ export default function ProfilePage(): JSX.Element {
   const [isAboutMeExist, setIsAboutMeExist] = useState<boolean>(
     !!loggedUser.aboutMe
   );
+  const [isMoreVideoExist, setIsMoreVideoExist] = useState<boolean>(false);
   // const [getProfile, setGetProfile] = useState<boolean>(false);
   // const [getisOnAir, setGetisOnAir] = useState<boolean>(false);
   // const [getVideos, setGetVideos] = useState<boolean>(false);
@@ -236,6 +235,7 @@ export default function ProfilePage(): JSX.Element {
   }, [loggedUser, userpk]);
 
   useEffect(() => {
+    console.log("프로필입니당 누구냐면 userpk : " + userpk);
     // 프로필 가져오기
     dispatch(getAboutMeAction(userpk)).then(() => {
       // 생방송 중 여부 가져오기
@@ -246,11 +246,15 @@ export default function ProfilePage(): JSX.Element {
     });
 
     // 지난 동영상 목록 가져오기
-    dispatch(getVideoAction({ userPK: userpk, size: 5, page: 0 }));
+    // dispatch(getVideoAction({ userPK: userpk, size: 5, page: 0 }));
 
     // 피드 목록 가져오기
-    dispatch(getFeedAction({ userPK: userpk, size: 5, page: 0 }));
-  }, []);
+    // dispatch(getFeedAction({ userPK: userpk, size: 5, page: 0 })).catch(() => {
+    //   setIsFeedExist(false);
+    // });
+    setIsMoreVideoExist(false);
+    setMoreVideo(false);
+  }, [userpk]);
 
   // if (!(getProfile && getisOnAir && getVideos && getFeed))
   //   return <div>loading..</div>;
@@ -319,28 +323,30 @@ export default function ProfilePage(): JSX.Element {
               </div>
               {isMine ? (
                 <></>
-              ) : isLoggedIn ? isSubscribing ? (
-                <ButtonComp
-                  onClick={onClickSubscribe}
-                  text="FOLLOW"
-                  width={115}
-                  height={39}
-                  active={true}
-                >
-                  <HowToRegRounded />
-                </ButtonComp>
+              ) : isLoggedIn ? (
+                isSubscribing ? (
+                  <ButtonComp
+                    onClick={onClickSubscribe}
+                    text="FOLLOW"
+                    width={115}
+                    height={39}
+                    active={true}
+                  >
+                    <HowToRegRounded />
+                  </ButtonComp>
+                ) : (
+                  <ButtonComp
+                    onClick={onClickSubscribe}
+                    text="FOLLOW"
+                    width={115}
+                    height={39}
+                  >
+                    <PersonAddRounded />
+                  </ButtonComp>
+                )
               ) : (
-                <ButtonComp
-                  onClick={onClickSubscribe}
-                  text="FOLLOW"
-                  width={115}
-                  height={39}
-                >
-                  <PersonAddRounded />
-                </ButtonComp>
-              )
-                : <></>
-              }
+                <></>
+              )}
             </div>
             <div className="aboutme-wrapper">
               {!isEditAboutMe && user.aboutMe.length !== 0 && (
@@ -383,22 +389,20 @@ export default function ProfilePage(): JSX.Element {
           <VideoContainer>
             <div className="title">
               <h2>Videos</h2>
-              <span onClick={onClickMoreVideo}>more &gt;</span>
+              {isMoreVideoExist && (
+                <span onClick={onClickMoreVideo}>more &gt;</span>
+              )}
             </div>
-            {videos && <Carousel items={videos} />}
+            <Carousel
+              actionFunc={getVideoAction}
+              setIsMoreVideoExist={setIsMoreVideoExist}
+            />
           </VideoContainer>
           <FeedContainer>
             <div className="title">
               <h2>Feed</h2>
             </div>
-            {feeds && (
-              <InfiniteScroll
-                feed={true}
-                actionFunc={getFeedAction}
-                itemsWrap={feeds}
-                totalPage={feeds.totalPages}
-              />
-            )}
+            <InfiniteScroll feed={true} actionFunc={getFeedAction} />
           </FeedContainer>
         </>
       ) : (
@@ -407,16 +411,10 @@ export default function ProfilePage(): JSX.Element {
             <h2>Videos</h2>
             <span onClick={onClickMoreVideo}>&lt; back</span>
           </div>
-          {videos && (
-            <InfiniteScroll
-              video={true}
-              actionFunc={getVideoAction}
-              itemsWrap={videos}
-              totalPage={videos.totalPages}
-            />
-          )}
+          <InfiniteScroll video={true} actionFunc={getVideoAction} />
         </MoreVideoContainer>
       )}
     </ProfilePageLayout>
   );
 }
+

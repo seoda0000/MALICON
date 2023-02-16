@@ -219,6 +219,8 @@ const profileSlice = createSlice({
         state.getFeed.loading = false;
         state.getFeed.data = null;
         state.getFeed.error = payload;
+
+        // state.feedData = null;
       })
       .addCase(getVideoAction.pending, (state) => {
         state.getVideo.loading = true;
@@ -230,12 +232,14 @@ const profileSlice = createSlice({
         state.getVideo.data = payload;
         state.getVideo.error = null;
 
-        state.videoData = payload;
+        // state.videoData = payload;
       })
       .addCase(getVideoAction.rejected, (state, { payload }) => {
         state.getVideo.loading = false;
         state.getVideo.data = null;
         state.getVideo.error = payload;
+
+        state.videoData = null;
       });
   },
 });
