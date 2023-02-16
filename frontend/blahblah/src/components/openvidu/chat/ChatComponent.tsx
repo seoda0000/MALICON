@@ -7,6 +7,7 @@ import Send from "@mui/icons-material/Send";
 import "./ChatComponent.css";
 import { ViewerModelType } from "../../../model/openvidu/viewer-model";
 import ProfileImage from "../../common/ProfileImage";
+import { SendRounded } from "@mui/icons-material";
 
 // 타입 생성
 interface MessageType {
@@ -68,7 +69,6 @@ export default class ChatComponent extends Component<ChatProps, {}> {
           isPublisher: data.isPublisher,
         });
         setTimeout(() => {
-          
           this.props.messageReceived();
         }, 50);
         this.setState({ messageList: messageList });
@@ -128,11 +128,11 @@ export default class ChatComponent extends Component<ChatProps, {}> {
     return (
       <div id="chatContainer">
         <div id="chatComponent" style={styleChat}>
-          <div id="chatToolbar">
+          {/* <div id="chatToolbar">
             <span>
               CHAT
             </span>
-          </div>
+          </div> */}
 
           <div className="message-wrap" ref={this.chatScroll}>
             {this.state.messageList.map((data, i) => (
@@ -141,7 +141,9 @@ export default class ChatComponent extends Component<ChatProps, {}> {
                 id="remoteUsers"
                 className={"message" + (!data.isPublisher ? " left" : " right")}
               >
-                <ProfileImage userAvatar={data.viewer.avatar}/>
+                <div className="msg-avatar">
+                  <ProfileImage userAvatar={data.viewer.avatar} />
+                </div>
                 <div className="msg-detail">
                   <div className="msg-info">
                     <p> {data.viewer.nickname}</p>
@@ -165,7 +167,7 @@ export default class ChatComponent extends Component<ChatProps, {}> {
             />
             <Tooltip title="Send message">
               <Fab size="small" id="sendButton" onClick={this.sendMessage}>
-                <Send />
+                <SendRounded />
               </Fab>
             </Tooltip>
           </div>
@@ -174,3 +176,4 @@ export default class ChatComponent extends Component<ChatProps, {}> {
     );
   }
 }
+

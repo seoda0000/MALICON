@@ -96,14 +96,17 @@ const AvatarCompContainer = styled.div`
     height: 100%;
   }
   & > div.avatar-comp-emotion {
-    width: 30px;
-    height: 30px;
+    position: absolute;
+    top: -7px;
+    left: calc(50% - 15px);
+    width: 35px;
+    height: 35px;
     & > span.emotion {
       position: absolute;
-      width: 30px;
-      height: 30px;
+      width: 35px;
+      height: 35px;
       top: 0px;
-      left: 50px;
+      left: 0px;
       right: 0;
       z-index: 10;
       animation: ${emotionKeyFrame} 2s ease-out infinite;

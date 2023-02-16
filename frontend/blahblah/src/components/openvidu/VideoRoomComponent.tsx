@@ -8,7 +8,7 @@ import "./VideoRoomComponent.css";
 
 import OpenViduLayout from "../layout/openvidu-layout";
 import UserModel, { UserModelType } from "../../model/openvidu/user-model";
-import {SessionType} from "../../model/broadcast/sessionType";
+import { SessionType } from "../../model/broadcast/sessionType";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import { getAccessToken } from "../../redux/modules/user/token";
 import html2canvas from "html2canvas";
@@ -50,6 +50,7 @@ interface StateType {
   showExtensionDialog?: any;
   messageReceived?: any;
   streamInfo: SessionType;
+  mutedSound: boolean;
 }
 
 declare global {
@@ -107,6 +108,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       viewers: [],
       chatDisplay: "none",
       currentVideoDevice: undefined,
+      mutedSound: false,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -136,6 +138,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       this.sendSignalViewersBroadCast.bind(this);
     this.viewerBroadCastListener = this.viewerBroadCastListener.bind(this);
     this.thumbnailReapeat = this.thumbnailReapeat.bind(this);
+    this.toggleSound = this.toggleSound.bind(this);
   }
 
   componentDidMount() {
@@ -315,6 +318,10 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
           });
       }
     );
+  }
+
+  toggleSound() {
+    this.setState({ mutedSound: !this.state.mutedSound });
   }
 
   updateSubscribers() {
@@ -720,6 +727,8 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
           toggleChat={this.toggleChat}
           isPublisher={this.isPublisher}
           streamInfo={this.state.streamInfo}
+          mutedSound={this.state.mutedSound}
+          toggleSound={this.toggleSound}
         />
 
         {/* <DialogExtensionComponent
@@ -741,6 +750,8 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
                   streamId={sub.streamManager.stream.streamId}
                   isStreamer={true}
                   isPublisher={true}
+                  mutedSound={this.state.mutedSound}
+                  toggleSound={this.toggleSound}
                 />
               </div>
             ))}
@@ -760,6 +771,8 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
                   user={localUser}
                   //handleNickname={this.nicknameChanged}
                   isPublisher={this.isPublisher}
+                  mutedSound={this.state.mutedSound}
+                  toggleSound={this.toggleSound}
                 />
               </div>
             )}
@@ -854,3 +867,4 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 }
 export default VideoRoomComponent;
+
