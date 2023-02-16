@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { styled, useTheme, Theme, CSSObject, css } from "@mui/material/styles";
+import {
+  styled,
+  useTheme,
+  Theme,
+  CSSObject,
+  css,
+  keyframes,
+} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
@@ -57,7 +64,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import SendIcon from "@mui/icons-material/Send";
-import { Favorite } from "@mui/icons-material";
+import { Face6Rounded, Favorite, PersonRounded } from "@mui/icons-material";
 import Popover from "@mui/material/Popover";
 import Avatar from "@mui/material/Avatar";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -66,6 +73,79 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { LightKoreanFont } from "../../theme/font";
 import Notification from "./Notification";
 import { getAboutMeAction } from "../../redux/modules/profile";
+import BubbleNickName from "../../assets/chat_icon/chat_2.png";
+import BubbleAlert from "../../assets/chat_icon/chat_3.png";
+import BubbleId from "../../assets/chat_icon/chat_4.png";
+import BubbleSubscribers from "../../assets/chat_icon/chat_1.png";
+
+const AlertKeyFrame = keyframes`
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+  40% {
+    opacity:0;
+  }
+  100% {
+    top: 50%;
+    left: 50%;
+    transform: translate(35px, -64px);
+    opacity: 1;
+    z-index: 2;
+  }
+`;
+
+const NickNameKeyFrame = keyframes`
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+  40% {
+    opacity:0;
+  }
+  100% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-114px, -107px);
+    opacity: 1;
+    z-index: 1;
+  }
+`;
+
+const IdKeyFrame = keyframes`
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+  40% {
+    opacity:0;
+  }
+  100% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-5px, -115px);
+    opacity: 1;
+    z-index: 1;
+  }
+`;
+
+const SubscribersKeyFrame = keyframes`
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+  40% {
+    opacity:0;
+  }
+  100% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-103px, 12px);
+    opacity: 1;
+    z-index: 1;
+  }
+`;
+
 const LayoutContainer = styled(Box)<{ open: boolean }>`
   ${({ open }) =>
     open &&
@@ -79,11 +159,21 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
         align-items: center;
         .badge-inner {
           position: absolute;
-          .badge-alart {
+          .badge-alert {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(10px, -84px);
+            /* top: 50%;
+            left: 50%; */
+            /* transform: translate(10px, -84px); */
+            width: 51px;
+            height: 57px;
+            border-radius: 0;
+            padding: 0;
+            background-image: url(${BubbleAlert});
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: ${AlertKeyFrame} 0.7s ease-out forwards;
+            animation-delay: 3s;
+            opacity: 0;
           }
           .badge-setting {
             position: absolute;
@@ -93,21 +183,56 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
           }
           .badge-subscribers {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-112px, 5px);
+            height: 65px;
+            padding: 17px 10px 0px 10px;
+            background-image: url(${BubbleSubscribers});
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: ${SubscribersKeyFrame} 0.7s ease-out forwards;
+            animation-delay: 3s;
+            opacity: 0;
+            & button {
+              padding: 0;
+              & svg {
+                color: #808080;
+              }
+            }
+            & span {
+              display: inline-block;
+              font-size: 19px;
+            }
           }
           .badge-userid {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(34px, -43px);
+            /* width: 75px; */
+            height: 90px;
+            padding: 28px 15px 0px 15px;
+            background-image: url(${BubbleId});
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: ${IdKeyFrame} 0.7s ease-out forwards;
+            animation-delay: 3s;
+            opacity: 0;
+            & > span {
+              display: inline-block;
+              font-size: 14px;
+              color: #3f3f3f;
+            }
           }
           .badge-nickname {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-117px, -84px);
+            height: 65px;
+            padding: 16px 15px 0px 15px;
+            background-image: url(${BubbleNickName});
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: ${NickNameKeyFrame} 0.7s ease-out forwards;
+            animation-delay: 3s;
+            opacity: 0;
+            & > span {
+              display: inline-block;
+              font-size: 16px;
+            }
           }
         }
       }
@@ -361,7 +486,7 @@ export default function Layout(props: LayoutProps) {
           >
             {!open && (
               <Box component={Link} to="/main">
-                <img src={logo_small} style={{ width: "30px" }} />
+                <img src={logo_small} style={{ width: "30px" }} alt="" />
               </Box>
             )}
 
@@ -373,7 +498,7 @@ export default function Layout(props: LayoutProps) {
                   opacity: open ? 1 : 0,
                 }}
               >
-                <img src={logo} style={{ width: "150px" }} />
+                <img src={logo} style={{ width: "150px" }} alt="" />
               </Box>
             )}
           </DrawerHeader>
@@ -453,19 +578,21 @@ export default function Layout(props: LayoutProps) {
                       >
                         <SettingsIcon />
                       </IconButton>
-                      <IconButton
-                        className="badge-subscribers"
-                        size="large"
-                        aria-label="show 17 new notifications"
-                        color="inherit"
-                        onClick={() => setOpenAccountModal((prev) => !prev)}
-                      >
-                        <Favorite />
-                        <span>3</span>
-                      </IconButton>
+                      <div className="badge-subscribers">
+                        {/* <img src={BubbleSubscribers} alt="" /> */}
+                        <IconButton
+                          size="large"
+                          aria-label="show 17 new notifications"
+                          color="inherit"
+                          onClick={() => setOpenAccountModal((prev) => !prev)}
+                        >
+                          <PersonRounded />
+                          <span>3</span>
+                        </IconButton>
+                      </div>
                       <ListItemText
                         className="badge-userid"
-                        primary={loggedUser.userId}
+                        primary={"@" + loggedUser.userId}
                         sx={{ opacity: open ? 1 : 0 }}
                       />
                       <ListItemText
@@ -790,3 +917,4 @@ export default function Layout(props: LayoutProps) {
     </LayoutContainer>
   );
 }
+
