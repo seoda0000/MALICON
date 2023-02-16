@@ -12,6 +12,7 @@ import CommentRemoveDialog from "./CommentRemoveDialog";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FeedProfileImage from "./FeedProfileImage";
+import { useAppSelector } from "../../redux/configStore.hooks";
 const CommentListItem: React.FC<{
   comment: any;
   isVideo: boolean;
@@ -19,6 +20,8 @@ const CommentListItem: React.FC<{
 }> = (props) => {
   // 삭제 다이얼로그 조작
   const [openRemoveDialog, setopenRemoveDialog] = useState<boolean>(false);
+  const loggedUserId = useAppSelector((state) => state.user.userData.userId);
+
   const handleClickOpen = () => {
     setopenRemoveDialog(true);
   };
@@ -50,9 +53,12 @@ const CommentListItem: React.FC<{
         }
         secondary={props.comment.createDate}
       />
-      <IconButton type="submit" onClick={handleClickOpen}>
-        <DeleteIcon />
-      </IconButton>
+      {props.comment.userId === loggedUserId && (
+        <IconButton type="submit" onClick={handleClickOpen}>
+          <DeleteIcon />
+        </IconButton>
+      )}
+
       <CommentRemoveDialog
         open={openRemoveDialog}
         handleClose={handleCloseDialog}
