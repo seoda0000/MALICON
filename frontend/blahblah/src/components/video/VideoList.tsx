@@ -16,7 +16,9 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const VideoList: React.FC<{ chipList?: any }> = (props) => {
+const VideoList: React.FC<{ chipList?: any; setOpenLoginAlert: any }> = (
+  props
+) => {
   const video = useSelector((state: RootState) => state.video);
   console.log("해시태그 선택", props.chipList);
   console.log(video.allVideoList);
@@ -37,7 +39,11 @@ const VideoList: React.FC<{ chipList?: any }> = (props) => {
             justifyContent={"center"}
             alignItems={"center"}
           >
-            <VideoCard nth={index} video={video} />
+            <VideoCard
+              nth={index}
+              video={video}
+              setOpenLoginAlert={props.setOpenLoginAlert}
+            />
           </Grid>
         ))
       ) : (

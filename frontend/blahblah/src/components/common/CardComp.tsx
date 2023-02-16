@@ -95,6 +95,7 @@ type CardCompPropsType = {
   title?: string;
   caption?: boolean;
   video?: ProfileVideoType | VideoType;
+  setOpenLoginAlert?: any;
 };
 
 export default function CardComp({
@@ -103,6 +104,7 @@ export default function CardComp({
   title,
   caption,
   video,
+  setOpenLoginAlert,
 }: CardCompPropsType): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -115,7 +117,7 @@ export default function CardComp({
         navigate(`/video/${video?.id}`);
       });
     } else {
-      alert("로그인이 필요합니다.");
+      setOpenLoginAlert(true);
     }
   }
 

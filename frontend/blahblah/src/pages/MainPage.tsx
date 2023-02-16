@@ -1,7 +1,7 @@
 import VideoList from "../components/video/VideoList";
 import { Box } from "@mui/system";
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import AccountModal from "../components/auth/AccountModal";
 import BroadcastList from "../components/broadcast/BroadcastList";
 import { RootState } from "../redux/configStore";
@@ -12,6 +12,13 @@ import BroadcastCarousel from "../components/broadcast/broadcastCarousel";
 import { fetchAllVideoData } from "../redux/modules/video";
 import ChipsArray from "../components/broadcast/ChipsArray";
 import { fetchHashVideoData } from "../redux/modules/video";
+import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Typography from "@mui/material/Typography";
+import SignupModal from "../components/auth/SignupModal";
 
 interface ChipData {
   key: number;
@@ -104,6 +111,43 @@ function MainPage(): JSX.Element {
     dispatch(fetchAllVideoData());
   };
 
+  // 로그인이 필요한 서비스입니다.
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const [openSignupModal, setOpenSignupModal] = useState<boolean>(false);
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+  const onClickSignup = () => {
+    setOpenLoginAlert(false);
+    handleCloseUserMenu();
+    setOpenSignupModal((prev) => !prev);
+  };
+
+  const [openLoginAlert, setOpenLoginAlert] = useState<boolean>(false);
+
+  const handleLoginAlert = () => {
+    setOpenLoginAlert(!openLoginAlert);
+  };
+
+  const handleLoginAlertClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenLoginAlert(false);
+  };
+
+  const actionLogin = (
+    <Button color="inherit" size="small" onClick={handleLoginAlert}>
+      <CloseIcon />
+    </Button>
+  );
+
   // 로딩 페이지 적용
   useEffect(() => {
     setIsLoading(true);
@@ -124,7 +168,10 @@ function MainPage(): JSX.Element {
       }}
     >
       <div>
-        <BroadcastCarousel sessions={broadcast.sessions} />
+        <BroadcastCarousel
+          sessions={broadcast.sessions}
+          setOpenLoginAlert={setOpenLoginAlert}
+        />
         {/* <h1>예시</h1> */}
         {/* <BroadcastCarousel sessions={SAMPLE_SESSIONS} /> */}
         {/* <h1>추천 동영상</h1> */}
@@ -134,8 +181,33 @@ function MainPage(): JSX.Element {
           allChip={allChip}
           handleClickAll={handleClickAll}
         />
-        <VideoList chipList={chipList} />
+        <VideoList chipList={chipList} setOpenLoginAlert={setOpenLoginAlert} />
       </div>
+
+      {/* 회원가입 모달 */}
+      {openSignupModal && (
+        <SignupModal open={openSignupModal} setOpen={setOpenSignupModal} />
+      )}
+      {/* 로그인이 필요한 서비스입니다. */}
+      <Snackbar
+        open={openLoginAlert}
+        autoHideDuration={3000}
+        onClose={handleLoginAlertClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          variant="filled"
+          severity="error"
+          action={actionLogin}
+          onClose={handleLoginAlertClose}
+        >
+          <AlertTitle>로그인이 필요한 서비스입니다.</AlertTitle>
+          아직 회원이 아니신가요? —
+          <Typography variant="button" onClick={onClickSignup}>
+            회원가입 바로가기
+          </Typography>
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
