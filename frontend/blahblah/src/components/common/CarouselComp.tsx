@@ -40,7 +40,6 @@ const CardWrapper = styled(Card)<{ nth: number }>`
       display: block;
       width: calc(100% - 8px);
       height: calc(100% - 8px);
-      border-radius: 13px;
       border: 1.5px solid black;
       position: absolute;
       z-index: -1;

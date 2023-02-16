@@ -23,7 +23,7 @@ export const getFeedsAction = createAsyncThunk(
     try {
       console.log("작성 후 getfeeds", reqData.page);
       const axios = axiosInitializer();
-      console.log("피드목롥 가지러감?");
+
       const { data } = await axios.get<FeedWrapType>(
         `/api/articles/${reqData.size}/${reqData.page}`,
         {
@@ -33,7 +33,7 @@ export const getFeedsAction = createAsyncThunk(
           },
         }
       );
-      console.log(data);
+      console.log("피드 데이터", data);
 
       return data;
     } catch (e) {
@@ -77,10 +77,9 @@ export const fetchFeedData = createAsyncThunk(
 
 export const postFeedData2 = createAsyncThunk(
   "feed/postFeedData",
-  async (postData : FeedPostType, thunkAPI) => {
+  async (postData: FeedPostType, thunkAPI) => {
     try {
       const axios = axiosInitializer();
-
 
       await axios
         .post<FeedPostType>(`/api/articles`, postData, {
@@ -109,12 +108,12 @@ export const postFeedData2 = createAsyncThunk(
 
 export const postFeedData = createAsyncThunk(
   "feed/postFeedData",
-  async (formData : FormData, thunkAPI) => {
+  async (formData: FormData, thunkAPI) => {
     try {
       const axios = axiosInitializer();
-      
+
       await axios
-        .post<FeedPostType>(`/api/articles`, formData ,{
+        .post<FeedPostType>(`/api/articles`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Baerer " + getAccessToken(),
@@ -137,7 +136,6 @@ export const postFeedData = createAsyncThunk(
     }
   }
 );
-
 
 // 피드 삭제하기
 

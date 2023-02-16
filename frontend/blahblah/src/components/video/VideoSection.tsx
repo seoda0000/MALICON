@@ -77,7 +77,7 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
   // 구독
   const isSubscribing = useAppSelector((state) => state.profile.isSubscribing);
   const userPK = useAppSelector((state) => state.user.userData.id);
-  const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn)
+  const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn);
 
   let isMine;
   if (props.video.userPK === userPK) {
@@ -104,6 +104,21 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
   const handleCloseDialog = () => {
     setopenRemoveDialog(false);
   };
+
+  // 날짜 조작
+  let dateList = props.video.createDate.slice(0, 6);
+  dateList[1]--;
+  // console.log(dateList);
+  const utcDate = new Date(
+    ...(dateList as [number, number, number, number, number, number])
+  );
+
+  const utc = utcDate.getTime() + utcDate.getTimezoneOffset() * 60 * 1000;
+  const KR_TIME_DIFF = 9 * 60 * 60 * 1000 * 2;
+  const kr_curr = new Date(utc + KR_TIME_DIFF);
+  const koreaDate = kr_curr.toLocaleString("en-US", {
+    timeZone: "Asia/Seoul",
+  });
 
   return (
     <Card sx={{ width: "100%" }}>
@@ -143,7 +158,7 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
             variant="caption"
             sx={{ fontSize: "sm", fontWeight: "sm", ml: 1 }}
           >
-            {props.video?.createDate}
+            {koreaDate}
           </Typography>
 
           {/* 좋아요 표시 */}
@@ -197,26 +212,30 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
 
             {isMine ? (
               <></>
-            ) : isLoggedIn ? isSubscribing ? (
-              <ButtonComp
-                onClick={onClickSubscribe}
-                text="FOLLOW"
-                width={115}
-                height={39}
-                active={true}
-              >
-                <HowToRegRounded />
-              </ButtonComp>
+            ) : isLoggedIn ? (
+              isSubscribing ? (
+                <ButtonComp
+                  onClick={onClickSubscribe}
+                  text="FOLLOW"
+                  width={115}
+                  height={39}
+                  active={true}
+                >
+                  <HowToRegRounded />
+                </ButtonComp>
+              ) : (
+                <ButtonComp
+                  onClick={onClickSubscribe}
+                  text="FOLLOW"
+                  width={115}
+                  height={39}
+                >
+                  <PersonAddRounded />
+                </ButtonComp>
+              )
             ) : (
-              <ButtonComp
-                onClick={onClickSubscribe}
-                text="FOLLOW"
-                width={115}
-                height={39}
-              >
-                <PersonAddRounded />
-              </ButtonComp>
-            ) : <></>}
+              <></>
+            )}
             {/* ============ */}
             <IconButton aria-label="share" sx={{ ml: "auto" }}>
               <ShareIcon />

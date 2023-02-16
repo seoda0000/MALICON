@@ -51,18 +51,18 @@ export default function FeedPage() {
     if (isLoggedIn) setOpenEditorModal((prev) => !prev);
   };
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      alert("로그인 되지 않은 사용자입니다. 메인페이지로 돌아갑니다.");
-      navigate("/main");
-    }
-    // dispatch(getFeedsAction({ size: 5, page: 0 })).then(() => {
-    //   console.log("feeds!!!!!!!!!!!!!!", feeds);
-    // });
-    if (isInitial) {
-      isInitial = false;
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     alert("로그인 되지 않은 사용자입니다. 메인페이지로 돌아갑니다.");
+  //     navigate("/main");
+  //   }
+  //   // dispatch(getFeedsAction({ size: 5, page: 0 })).then(() => {
+  //   //   console.log("feeds!!!!!!!!!!!!!!", feeds);
+  //   // });
+  //   if (isInitial) {
+  //     isInitial = false;
+  //   }
+  // }, []);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -102,4 +102,3 @@ export default function FeedPage() {
     </Box>
   );
 }
-
