@@ -240,6 +240,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
           .badge-nickname {
             position: absolute;
             height: 65px;
+            margin-top: -8px;
             padding: 16px 15px 0px 15px;
             background-image: url(${BubbleNickName});
             background-size: 100% 100%;
@@ -276,7 +277,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const menuWithLogin = ["Profile", "Logout"];
+const menuWithLogin = ["회원정보 수정", "로그아웃"];
 const menuWithLogout = ["Signup", "Login"];
 
 const drawerWidth = 240;
@@ -582,11 +583,9 @@ export default function Layout(props: LayoutProps) {
               >
                 <div className="badge-wrapper">
                   {loggedUser.isLoggedIn ? (
-                    <Tooltip title="Open settings">
-                      <IconButton onClick={handleOpenUserMenu} sx={{ mr: 1 }}>
-                        <ProfileImage big={true} border={true} />
-                      </IconButton>
-                    </Tooltip>
+                    <IconButton sx={{ mr: 1 }}>
+                      <ProfileImage big={true} border={true} />
+                    </IconButton>
                   ) : (
                     <IconButton sx={{ mr: 1 }}>
                       <AccountCircleRoundedIcon
@@ -609,32 +608,41 @@ export default function Layout(props: LayoutProps) {
                         size="large"
                         aria-label="show 17 new notifications"
                         color="inherit"
-                        onClick={() => setOpenAccountModal((prev) => !prev)}
+                        onClick={handleOpenUserMenu}
                       >
                         <SettingsIcon />
                       </IconButton>
-                      <div className="badge-subscribers">
-                        {/* <img src={BubbleSubscribers} alt="" /> */}
-                        <IconButton
-                          size="large"
-                          aria-label="show 17 new notifications"
-                          color="inherit"
-                          onClick={() => setOpenAccountModal((prev) => !prev)}
-                        >
-                          <PersonRounded />
-                          <span>3</span>
-                        </IconButton>
-                      </div>
-                      <ListItemText
+                      <Tooltip title="팔로워">
+                        <div className="badge-subscribers">
+                          {/* <img src={BubbleSubscribers} alt="" /> */}
+                          <IconButton
+                            size="large"
+                            aria-label="show 17 new notifications"
+                            color="inherit"
+                            onClick={() => setOpenAccountModal((prev) => !prev)}
+                          >
+                            <PersonRounded />
+                            <span>3</span>
+                          </IconButton>
+                        </div>
+                      </Tooltip>
+
+                      <div
                         className="badge-userid"
-                        primary={"@" + loggedUser.userId}
-                        sx={{ opacity: open ? 1 : 0 }}
-                      />
-                      <ListItemText
-                        className="badge-nickname"
-                        primary={loggedUser.nickName}
-                        sx={{ opacity: open ? 1 : 0, ml: 2 }}
-                      />
+                        style={{ marginLeft: "5px" }}
+                      >
+                        {"@" + loggedUser.userId}
+                      </div>
+
+                      <Tooltip title="내 프로필">
+                        <div
+                          className="badge-nickname"
+                          style={{ marginLeft: "5px" }}
+                          onClick={onClickMyProfile}
+                        >
+                          {loggedUser.nickName}
+                        </div>
+                      </Tooltip>
                     </MenuItem>
                   )}
 
@@ -678,13 +686,9 @@ export default function Layout(props: LayoutProps) {
                       <MenuItem
                         key={item}
                         onClick={
-                          item === "Profile"
-                            ? onClickMyProfile
-                            : // : item === "Account"
-                              // ? onClickAccount
-                              // : item === "Dashboard"
-                              // ? onClickDashboard
-                              onClickLogout
+                          item === "로그아웃"
+                            ? onClickLogout
+                            : () => setOpenAccountModal((prev) => !prev)
                         }
                       >
                         <Typography textAlign="center">{item}</Typography>
