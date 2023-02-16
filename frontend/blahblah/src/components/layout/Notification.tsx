@@ -125,7 +125,7 @@ function Notification(userData: iUserData) {
             {notifications?.map((notification) => {
               return (
                 <ListItem>
-                  <Avatar sx={{ width: 24, height: 24, mr: 2 }}></Avatar>
+                  {/* <Avatar sx={{ width: 24, height: 24, mr: 2 }}></Avatar> */}
 
                   <div
                     style={{
