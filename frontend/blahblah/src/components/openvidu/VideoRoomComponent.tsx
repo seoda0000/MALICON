@@ -226,6 +226,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
               "/api/notifications/send",
               {
                 msg: `${this.state.myUserName} 님이 콘서트를 연대요! 빨리 가서 확인해볼까요?`,
+                avatar: this.state.myUserAvatar
               },
               {
                 headers: {

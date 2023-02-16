@@ -13,6 +13,8 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { UserType } from "../../model/user/userType";
 import { axiosInitializer } from "../../redux/utils/axiosInitializer";
 import { getAccessToken } from "../../redux/modules/user/token";
+import { createAvatar } from "@dicebear/core";
+import { personas } from "@dicebear/collection";
 
 interface iUserData {
   userData: UserType;
@@ -23,6 +25,7 @@ interface iNotification {
   timestamp: number;
   msg: string;
   read: boolean;
+  avatar: string;
 }
 
 function Notification(userData: iUserData) {
@@ -44,6 +47,26 @@ function Notification(userData: iUserData) {
     const eventTarget = e.target as HTMLElement;
     console.log(eventTarget.parentElement);
   };
+
+  const tempAvatar = JSON.stringify({
+    body: ["rounded"],
+    clothingColor: ["54d7c7"],
+    eyes: ["happy"],
+    facialHair: [""],
+    facialHairProbability: 100,
+    hair: ["curlyHighTop"],
+    hairColor: ["6c4545"],
+    mouth: ["bigSmile"],
+    nose: ["smallRound"],
+    skinColor: ["d78774"],
+  });
+
+  function avatarStringToUri(avatarStr : string | null) {
+    return createAvatar(personas, {
+    ...JSON.parse(avatarStr ? avatarStr : tempAvatar),
+    backgroundColor: ["ffffff"],
+  }).toDataUriSync()
+}
 
   const [notifications, setNotifications] = useState<iNotification[]>();
 
@@ -123,9 +146,12 @@ function Notification(userData: iUserData) {
 
           <List dense={true}>
             {notifications?.map((notification) => {
+              console.log(notification.avatar);
+              console.log(avatarStringToUri(notification.avatar))
               return (
                 <ListItem>
-                  {/* <Avatar sx={{ width: 24, height: 24, mr: 2 }}></Avatar> */}
+                  {<Avatar alt="Sample" src={avatarStringToUri(notification.avatar)}/>}
+                         {/* sx={{ width: props.small ? 30 : 40, height: props.small ? 30 : 40 }} */}
 
                   <div
                     style={{
