@@ -1,10 +1,13 @@
 package io.openvidu.basic.java.controller;
 
 import io.openvidu.basic.java.controller.exception.CustomException;
+import io.openvidu.basic.java.dto.UserDto;
 import io.openvidu.basic.java.dto.request.RoomUpdateDto;
 import io.openvidu.basic.java.redis.entity.LiveRoomEntity;
 import io.openvidu.basic.java.service.LiveRoomService;
 import io.openvidu.basic.java.service.RecordingService;
+import io.openvidu.basic.java.service.UserService;
+import io.openvidu.basic.java.util.JwtUtil;
 import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,9 +29,17 @@ public class RecordingController {
 
     private final RecordingService recordingService;
 
+    private final UserService userService;
+    private final JwtUtil jwtUtil;
+
     @GetMapping(value = "/api/recording/{sessionId}")
-    public ResponseEntity<?> startRecording(@PathVariable String sessionId) {
+    public ResponseEntity<?> startRecording(@PathVariable String sessionId, HttpServletRequest request) {
         log.info("\n----------- RECORDING START -----------");
+
+        UserDto user = jwtUtil.getUserFromToken(request);
+
+        if(!sessionId.startsWith(user.getUserId()))
+            throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없는 사용자입니다.");
 
         log.info("받아온 sessionId : "+sessionId);
         //비디오를 저장할 때 옵션 관리
