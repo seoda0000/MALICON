@@ -63,6 +63,7 @@ public class UserController {
                         .lightStick(userInfo.getLightStick())
                         .phoneNumber(userInfo.getPhoneNumber())
                         .nickName(userInfo.getNickName())
+                        .subscribers(userInfo.getSubscribers())
                         .build()
         );
     }

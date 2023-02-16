@@ -114,7 +114,7 @@ public class ArticleController {
         return ResponseEntity.ok(articleList);
     }
 
-    @GetMapping("/loadfile.do")
+    @RequestMapping("/loadfile.do")
     public ResponseEntity loadFile(@RequestParam("filePath") String filePath, HttpServletResponse response) throws IOException {
         response.setContentType("image/png");
         ServletOutputStream out = response.getOutputStream();
