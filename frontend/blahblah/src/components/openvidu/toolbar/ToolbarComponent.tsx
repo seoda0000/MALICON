@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./ToolbarComponent.css";
 
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -19,7 +18,10 @@ import PowerSettingsNew from "@mui/icons-material/PowerSettingsNew";
 import QuestionAnswer from "@mui/icons-material/QuestionAnswer";
 
 import IconButton from "@mui/material/IconButton";
-import {SessionType} from "../../../model/broadcast/sessionType";
+import { SessionType } from "../../../model/broadcast/sessionType";
+import { ToolbarComponentContainer } from "./ToolbarComponentStyle";
+import ProfileImage from "../../common/ProfileImage";
+import { VolumeOff, VolumeUp } from "@mui/icons-material";
 
 const logo = require("../../../assets/img/ticket_icon.png");
 
@@ -39,6 +41,8 @@ interface ToolbarProps {
   isPublisher: any;
   showNotification: any;
   streamInfo: SessionType;
+  mutedSound: boolean;
+  toggleSound: any;
 }
 
 interface StateType {
@@ -103,122 +107,106 @@ export default class ToolbarComponent extends Component<ToolbarProps, {}> {
     const streamInfo = this.props.streamInfo;
     const localUser = this.props.user;
     return (
-      <AppBar className="toolbar" id="header">
+      <ToolbarComponentContainer className="toolbar" id="header">
         <Toolbar className="toolbar">
-          <div id="navSessionInfo">
-            <img id="header_img" alt="OpenVidu Logo" src={logo} />
-
+          <div className="header-wrapper">
+            {/* 헤더 왼쪽 */}
             {this.props.streamInfo && (
-              <div id="titleContent">
-                <span id="session-title">{streamInfo.title}</span>
+              <div className="broadcast-info">
+                <span className="title">{streamInfo.title}</span>
+                <div className="streamer">
+                  <ProfileImage userAvatar={streamInfo.streamer.avatar} />
+                  <span>{streamInfo.streamer.nickName}</span>
+                </div>
               </div>
             )}
-          </div>
-
-          <div className="buttonsContent">
-            {/* 마이크 버튼 */}
-            {this.props.isPublisher && (
-              <IconButton
-                color="inherit"
-                className="navButton"
-                id="navMicButton"
-                onClick={this.micStatusChanged}
-              >
-                {localUser !== undefined && localUser.isAudioActive() ? (
-                  <Mic />
-                ) : (
-                  <MicOff color="secondary" />
+            {/* 헤더 오른쪽 */}
+            <div className="button-wrapper">
+              <div className="buttons">
+                {/* 마이크 버튼 */}
+                {this.props.isPublisher && (
+                  <IconButton
+                    color="inherit"
+                    className="navButton"
+                    id="navMicButton"
+                    onClick={this.micStatusChanged}
+                  >
+                    {localUser !== undefined && localUser.isAudioActive() ? (
+                      <Mic />
+                    ) : (
+                      <MicOff style={{ color: "#54d7c7" }} />
+                    )}
+                  </IconButton>
                 )}
-              </IconButton>
-            )}
 
-            {/* 캠 버튼 */}
-            {
-              //this.props.isPublisher &&
-              <IconButton
-                color="inherit"
-                className={
-                  "navButton:" + (this.props.isPublisher ? "" : " mycam")
+                {/* 캠 버튼 */}
+                {
+                  //this.props.isPublisher &&
+                  <IconButton
+                    color="inherit"
+                    className={
+                      "navButton:" + (this.props.isPublisher ? "" : " mycam")
+                    }
+                    id="navCamButton"
+                    onClick={this.camStatusChanged}
+                  >
+                    {localUser !== undefined && localUser.isVideoActive() ? (
+                      <Videocam />
+                    ) : (
+                      <VideocamOff style={{ color: "#54d7c7" }} />
+                    )}
+                  </IconButton>
                 }
-                id="navCamButton"
-                onClick={this.camStatusChanged}
-              >
-                {localUser !== undefined && localUser.isVideoActive() ? (
-                  <Videocam />
-                ) : (
-                  <VideocamOff color="secondary" />
-                )}
-              </IconButton>
-            }
 
-            {/* 화면 공유 버튼 */}
-            {/* {this.props.isPublisher && (
-              <IconButton
-                color="inherit"
-                className="navButton"
-                onClick={this.screenShare}
-              >
-                {localUser !== undefined && localUser.isScreenShareActive() ? (
-                  <PictureInPicture />
-                ) : (
-                  <ScreenShare />
-                )}
-              </IconButton>
-            )}
-
-            {this.props.isPublisher &&
-              localUser !== undefined &&
-              localUser.isScreenShareActive() && (
-                <IconButton onClick={this.stopScreenShare} id="navScreenButton">
-                  <StopScreenShare color="secondary" />
+                <IconButton
+                  color="inherit"
+                  onClick={this.toggleChat}
+                  id="navChatButton"
+                >
+                  {this.props.showNotification && (
+                    <div id="point" className="" />
+                  )}
+                  <Tooltip title="Chat">
+                    <QuestionAnswer />
+                  </Tooltip>
                 </IconButton>
-              )} */}
+                {/* 스트리머 조용히해 버튼 */}
+                <IconButton id="volumeButton" onClick={this.props.toggleSound}>
+                  {this.props.mutedSound ? (
+                    <VolumeOff style={{ color: "#54d7c7" }} />
+                  ) : (
+                    <VolumeUp style={{ color: "#ffffff" }} />
+                  )}
+                </IconButton>
+                {/* 풀스크린 버튼 */}
+                <IconButton
+                  color="inherit"
+                  className="navButton"
+                  onClick={this.toggleFullscreen}
+                >
+                  {localUser !== undefined && this.state.fullscreen ? (
+                    <FullscreenExit />
+                  ) : (
+                    <Fullscreen />
+                  )}
+                </IconButton>
 
-            {/* 카메라 변경 버튼 */}
-
-            {/* <IconButton
-              color="inherit"
-              className="navButton"
-              onClick={this.switchCamera}
-            >
-              <SwitchVideoIcon />
-            </IconButton> */}
-
-            {/* 풀스크린 버튼 */}
-            <IconButton
-              color="inherit"
-              className="navButton"
-              onClick={this.toggleFullscreen}
-            >
-              {localUser !== undefined && this.state.fullscreen ? (
-                <FullscreenExit />
-              ) : (
-                <Fullscreen />
-              )}
-            </IconButton>
-
-            {/* 퇴장 버튼 */}
-            <IconButton
-              color="secondary"
-              className="navButton"
-              onClick={this.exitButton}
-              id="navLeaveButton"
-            >
-              <PowerSettingsNew />
-            </IconButton>
+                {/* 퇴장 버튼 */}
+                <IconButton
+                  style={{ color: "#54d7c7" }}
+                  className="navButton"
+                  onClick={this.exitButton}
+                  id="navLeaveButton"
+                >
+                  <PowerSettingsNew />
+                </IconButton>
+              </div>
+              <img className="logo" alt="OpenVidu Logo" src={logo} />
+            </div>
           </div>
-          <IconButton
-            color="inherit"
-            onClick={this.toggleChat}
-            id="navChatButton"
-          >
-            {this.props.showNotification && <div id="point" className="" />}
-            <Tooltip title="Chat">
-              <QuestionAnswer />
-            </Tooltip>
-          </IconButton>
         </Toolbar>
-      </AppBar>
+      </ToolbarComponentContainer>
     );
   }
 }
+

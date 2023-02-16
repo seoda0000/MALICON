@@ -1,59 +1,15 @@
-#header {
-  color: #ffffff;
-  background-color: #333333;
-  padding: 0 14px 0 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 999999;
-  min-width: 400px !important;
-}
-
-.toolbar {
-  min-height: 40px !important;
-}
-
-#titleContent {
-  max-width: 100px;
-  background-color: #494949;
-  margin: 5px -18px;
-  padding: 0px 15px;
-  font-size: 16px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.buttonsContent {
-  height: 40px !important;
-  text-align: center;
-  margin: auto;
-  width: 90%;
-}
-.navButton {
-  height: 40px !important;
-  width: 40px !important;
-}
-
-#navChatButton {
-  position: absolute;
-  right: 0;
-}
-.stream-container {
-  padding: 0;
-}
-
 .bounds {
   background-image: url("https://i.ytimg.com/vi/EMhKeVHboiA/maxresdefault.jpg");
-  background-size: cover;
+  background-size: contain;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 40px;
-  bottom: 0;
-  height: inherit;
   min-width: 400px !important;
-  width: inherit;
+}
+.bounds > #localUser,
+.bounds > #remoteUsers {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /*!
@@ -895,14 +851,17 @@
 
 .chatviewer {
   position: fixed;
-  top: 200px;
-  right: 5px;
+  top: 230px;
+  right: 28px;
   z-index: 500;
-  width: 350px;
+  width: 320px;
   height: 65%;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
 }
 
 .streamer-chatviewer {
   top: 5%;
   height: 90%;
 }
+

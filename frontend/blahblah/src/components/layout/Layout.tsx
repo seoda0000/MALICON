@@ -531,6 +531,7 @@ export default function Layout(props: LayoutProps) {
                     md: "flex",
                     justifyContent: "center",
                     mr: auto,
+                    marginTop: "30px",
                     marginBottom: "30px",
                   },
                 }}
