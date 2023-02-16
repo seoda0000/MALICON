@@ -48,7 +48,7 @@ public class VideoEntity extends BaseEntity{
     @Column(name="thumbnail", columnDefinition = "MEDIUMTEXT")
     private String thumbnail;
 
-    @Column(name="hashtags")
+    @Column(name="hashtags", columnDefinition = "MEDIUMTEXT")
     private String hashtags;
 
     @Column(name = "user_id", insertable = false, updatable = false)
