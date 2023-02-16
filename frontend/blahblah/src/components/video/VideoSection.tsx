@@ -129,37 +129,43 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
 
       <CardContent>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography noWrap variant="h6" sx={{ mr: 1 }}>
-            {props.video?.title}
-          </Typography>
           <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
-            {/* 해시태그 표시 */}
-            {props.video?.hashtags &&
-              JSON.parse(props.video.hashtags).map((data: any, index: any) => {
-                return (
-                  <Box
-                    sx={{
-                      backgroundColor: "#dddddd",
-                      // color: "white",
-                      fontSize: 9,
-                      borderRadius: 13,
-                      px: 0.5,
-                      mr: 1,
-                      height: 15,
-                    }}
-                    key={index}
-                  >
-                    {data.label}
-                  </Box>
-                );
-              })}
+            <Typography variant="h6" sx={{ mr: 1 }}>
+              {props.video?.title}
+            </Typography>
+            <Box
+              sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}
+            >
+              {/* 해시태그 표시 */}
+              {props.video?.hashtags &&
+                JSON.parse(props.video.hashtags).map(
+                  (data: any, index: any) => {
+                    return (
+                      <Box
+                        sx={{
+                          backgroundColor: "#dddddd",
+                          // color: "white",
+                          fontSize: 9,
+                          borderRadius: 13,
+                          px: 0.5,
+                          mr: 1,
+                          height: 15,
+                        }}
+                        key={index}
+                      >
+                        {data.label}
+                      </Box>
+                    );
+                  }
+                )}
+            </Box>
+            <Typography
+              variant="caption"
+              sx={{ fontSize: "sm", fontWeight: "sm", ml: 1 }}
+            >
+              {koreaDate}
+            </Typography>
           </Box>
-          <Typography
-            variant="caption"
-            sx={{ fontSize: "sm", fontWeight: "sm", ml: 1 }}
-          >
-            {koreaDate}
-          </Typography>
 
           {/* 좋아요 표시 */}
           <IconButton aria-label="add to favorites">
