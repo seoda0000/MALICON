@@ -172,6 +172,7 @@ function MainPage(): JSX.Element {
           sessions={broadcast.sessions}
           setOpenLoginAlert={setOpenLoginAlert}
         />
+
         {/* <h1>예시</h1> */}
         {/* <BroadcastCarousel sessions={SAMPLE_SESSIONS} /> */}
         {/* <h1>추천 동영상</h1> */}
@@ -182,6 +183,7 @@ function MainPage(): JSX.Element {
           handleClickAll={handleClickAll}
           isMain={true}
         />
+
         <VideoList chipList={chipList} setOpenLoginAlert={setOpenLoginAlert} />
       </div>
 
