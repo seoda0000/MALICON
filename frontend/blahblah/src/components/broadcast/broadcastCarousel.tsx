@@ -72,29 +72,28 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
             // onSwiper={(swiper) => console.log(swiper)}
             className="mySwiper"
           >
-            {props.sessions.length !== 0
-              ? props.sessions.map((session, index) => (
-                  <SwiperSlide key={session.sessionId} onClick={onClickHandler}>
-                    <CarouselComp
-                      nth={index}
-                      title={session.title}
-                      nickname={session.streamer.nickName}
-                      caption={true}
-                      userAvatar={session.streamer.avatar}
-                      hashTag={session.hashTag}
-                      startAt={session.startAt}
-                    >
-                      <BroadcastCarouselItem session={session} />
-                    </CarouselComp>
-                  </SwiperSlide>
-                ))
-              : basicList.map((item, index) => (
-                  <SwiperSlide>
-                    <CarouselCompBasic nth={index}>
-                      <img src={item} alt="" />
-                    </CarouselCompBasic>
-                  </SwiperSlide>
-                ))}
+            {props.sessions.map((session, index) => (
+              <SwiperSlide key={session.sessionId} onClick={onClickHandler}>
+                <CarouselComp
+                  nth={index}
+                  title={session.title}
+                  nickname={session.streamer.nickName}
+                  caption={true}
+                  userAvatar={session.streamer.avatar}
+                  hashTag={session.hashTag}
+                  startAt={session.startAt}
+                >
+                  <BroadcastCarouselItem session={session} />
+                </CarouselComp>
+              </SwiperSlide>
+            ))}
+            {basicList.map((item, index) => (
+              <SwiperSlide>
+                <CarouselCompBasic nth={index}>
+                  <img src={item} alt="" />
+                </CarouselCompBasic>
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </Grid>
