@@ -59,7 +59,7 @@ public class VideoDTO {
                 .createDate(v.getCreateDate())
                 .userId(v.getUserEntity().getUserId())
                 .hashtags(v.getHashtags())
-                .comments(new CommentDTO().toVDtoList(new PageImpl<>(v.getComments().subList(start, Math.min(end, v.getComments().size())), pageRequest, v.getComments().size())))
+                //.comments(new CommentDTO().toVDtoList(new PageImpl<>(v.getComments().subList(start, Math.min(end, v.getComments().size())), pageRequest, v.getComments().size())))
                 .build());
         return videos;
     }

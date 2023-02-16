@@ -1,6 +1,7 @@
 package com.blahblah.web.controller;
 
 import com.blahblah.web.controller.exception.CustomException;
+import com.blahblah.web.dto.response.HashTagResponse;
 import com.blahblah.web.dto.response.Message;
 import com.blahblah.web.dto.response.VideoDTO;
 import com.blahblah.web.entity.VideoEntity;
@@ -71,4 +72,9 @@ public class VideoController {
 
     }
 
+    @PostMapping("/{size}/{page}")
+    public ResponseEntity readVideoAllByHashTags(@PathVariable long size, @PathVariable long page, @RequestBody HashTagResponse hashTag){
+        Page<VideoDTO> videos = videoService.readVideosByHashTag(size, page, hashTag.getHashTag());
+        return ResponseEntity.ok(videos);
+    }
 }
