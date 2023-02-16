@@ -93,6 +93,7 @@ const VideoAvatarSection: React.FC<{ played: number; emotionLog: any }> = (
         width: "100%",
         display: "flex",
         justifyContent: "center",
+        maxHeight: "80px",
       }}
     >
       {emotionLog.map((elem) => (
