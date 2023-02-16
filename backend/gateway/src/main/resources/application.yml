@@ -20,35 +20,88 @@ spring:
             allow-credentials: false
             allowedHeaders: '*'
             allowedMethods: '*'
+#      no auth
       routes:
-      - id: user_me
-        uri: http://172.17.0.1:8081
-        predicates:
-          - Path=/web-service/api/users/me
-        filters:
-          - RewritePath=/web-service/(?<segment>.*), /$\{segment}
-          - JwtAuthenticationFilter
-
-      - id: user_modify
-        uri: http://172.17.0.1:8081
-        predicates:
-          - Path=/web-service/api/users/**
-          - Method=PUT
-        filters:
-          - RewritePath=/web-service/(?<segment>.*), /$\{segment}
-          - JwtAuthenticationFilter
-
-      - id: web-service
+      - id: web-service-no-auth
         uri: http://172.17.0.1:8081
         predicates:
           - Path=/web-service/**
         filters:
           - RewritePath=/web-service/(?<segment>.*), /$\{segment}
+#     auth
+      - id: aubout_me
+        uri: http://172.17.0.1:8081
+        predicates:
+          - Path=/web-service/api/aboutme
+          - Method=POST, PUT
+        filters:
+          - RewritePath=/web-service/(?<segment>.*), /$\{segment}
+          - JwtAuthenticationFilter
+
+      - id: article
+        uri: http://172.17.0.1:8081
+        predicates:
+          - Path=/web-service/api/articles/**
+        filters:
+          - RewritePath=/web-service/(?<segment>.*), /$\{segment}
+          - JwtAuthenticationFilter
+
+      - id: comment
+        uri: http://172.17.0.1:8081
+        predicates:
+          - Path=/web-service/api/comments/**
+        filters:
+          - RewritePath=/web-service/(?<segment>.*), /$\{segment}
+          - JwtAuthenticationFilter
+
+      - id: like
+        uri: http://172.17.0.1:8081
+        predicates:
+          - Path=/web-service/api/likes/**
+        filters:
+          - RewritePath=/web-service/(?<segment>.*), /$\{segment}
+          - JwtAuthenticationFilter
+
+      - id: notification
+        uri: http://172.17.0.1:8081
+        predicates:
+          - Path=/web-service/api/notifications/**
+        filters:
+          - RewritePath=/web-service/(?<segment>.*), /$\{segment}
+          - JwtAuthenticationFilter
+
+      - id: subscribe
+        uri: http://172.17.0.1:8081
+        predicates:
+          - Path=/web-service/api/subscribes/**
+          - Method=POST, DELETE
+        filters:
+          - RewritePath=/web-service/(?<segment>.*), /$\{segment}
+          - JwtAuthenticationFilter
+
+      - id: user
+        uri: http://172.17.0.1:8081
+        predicates:
+          - Path=/web-service/api/users/me, /web-service/api/users
+          - Method=GET, PUT, DELETE
+        filters:
+          - RewritePath=/web-service/(?<segment>.*), /$\{segment}
+          - JwtAuthenticationFilter
+
+      - id: video
+        uri: http://172.17.0.1:8081
+        predicates:
+          - Path=/web-service/videos/[^/]*(?<!/main)(?<!/hashtag)/**
+        filters:
+          - RewritePath=/web-service/(?<segment>.*), /$\{segment}
+          - JwtAuthenticationFilter
+
+
 
       - id: stream-service
         uri: http://172.17.0.1:33332
         predicates:
-          - Path=/stream-service/**
+          - Path=/stream-service/[^/]*(?<!/rooms)/**
         filters:
           - RewritePath=/stream-service/(?<segment>.*), /$\{segment}
           - JwtAuthenticationFilter

@@ -2,12 +2,7 @@ package io.openvidu.basic.java.controller;
 
 import io.openvidu.basic.java.controller.exception.CustomException;
 import io.openvidu.basic.java.dto.request.RoomUpdateDto;
-import io.openvidu.basic.java.dto.request.StartRecordDto;
-import io.openvidu.basic.java.dto.request.StopRecordDto;
 import io.openvidu.basic.java.redis.entity.LiveRoomEntity;
-import io.openvidu.basic.java.redis.entity.PreviousVideoEntity;
-import io.openvidu.basic.java.redis.repository.LiveRoomRepository;
-import io.openvidu.basic.java.redis.repository.PreviousVideoRepository;
 import io.openvidu.basic.java.service.LiveRoomService;
 import io.openvidu.basic.java.service.RecordingService;
 import io.openvidu.java.client.*;
@@ -17,10 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import retrofit2.http.Path;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequiredArgsConstructor
