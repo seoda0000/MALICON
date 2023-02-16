@@ -40,7 +40,7 @@ public class VideoDTO {
     private Page<CommentDTO> comments;
 
     public Page<VideoDTO> toDtoList(Page<VideoEntity> videoList){
-        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createDate"));
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createDate"));
         int start = (int) pageRequest.getOffset();
         int end = start+pageRequest.getPageSize();
         Page<VideoDTO> videos = videoList.map(v -> VideoDTO.builder()

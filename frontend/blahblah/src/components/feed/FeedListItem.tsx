@@ -113,6 +113,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
 
         <CardContent>
           <Typography variant="h5">{props.feed.title}</Typography>
+          {props.feed.filePath && <img src={props.feed.filePath}/>}
           <div>{parse(props.feed.content)}</div>
         </CardContent>
         <CardActions disableSpacing>

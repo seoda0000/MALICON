@@ -40,10 +40,10 @@ public class ArticleController {
 
         ArticleEntity result = null;
         if(file!=null) {
-            String realPath = request.getServletContext().getRealPath(filePath);
+//            String realPath = request.getServletContext().getRealPath(filePath);
             String today = new SimpleDateFormat("yyMMdd").format(new Date());
 
-            String saveFolder = realPath + File.separator + today;
+            String saveFolder = filePath + File.separator + today;
             File folder = new File(saveFolder);
             String saveFileName = "";
             if(!folder.exists())
