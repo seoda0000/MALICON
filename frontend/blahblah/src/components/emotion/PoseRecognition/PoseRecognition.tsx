@@ -137,8 +137,8 @@ export default function PoseRecognition(props: iPositionRecognitionProps) {
 
   function isLeftWristHigherThanLeftElbow(pose: iPartPosition) {
     return isScoreHigherThanPredictionThreshold(pose.leftWrist)
-      && isScoreHigherThanPredictionThreshold(pose.leftShoulder)
-      && pose.leftWrist.position.y < pose.leftShoulder.position.y;
+      && isScoreHigherThanPredictionThreshold(pose.leftElbow)
+      && pose.leftWrist.position.y < pose.leftElbow.position.y;
   }
 
   function isRightWristHigherThanRightElbow(pose: iPartPosition) {
