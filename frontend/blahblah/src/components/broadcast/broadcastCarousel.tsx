@@ -20,11 +20,11 @@ import { broadcastActions } from "../../redux/modules/broadcast/broadcast-slice"
 import CardComp from "../common/CardComp";
 import CarouselCompBasic from "../common/CarouselCompBasic";
 
-const basicCarousel_1 = require("../../assets/img/basic_1.jpg");
+const basicCarousel_1 = require("../../assets/img/basic_1.png");
 const basicCarousel_2 = require("../../assets/img/basic_2.jpg");
-const basicCarousel_3 = require("../../assets/img/basic_3.jpg");
+// const basicCarousel_3 = require("../../assets/img/basic_3.jpg");
 
-const basicList = [basicCarousel_1, basicCarousel_2, basicCarousel_3];
+const basicList = [basicCarousel_1, basicCarousel_2];
 
 const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -34,7 +34,7 @@ const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
   const joinSessionStart = async () => {
     dispatch(
       broadcastActions.loadCurrentSession({
-        currentSession : props.sessions[index]
+        currentSession: props.sessions[index],
       })
     );
   };

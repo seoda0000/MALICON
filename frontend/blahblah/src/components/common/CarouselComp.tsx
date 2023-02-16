@@ -23,7 +23,7 @@ const CardWrapper = styled(Card)<{ nth: number }>`
       position: absolute;
       left: 3px;
       top: 3px;
-      border-radius: 13px;
+
       border: 1.5px solid black;
       width: calc(100% - 8px) !important;
       height: calc(100% - 8px) !important;
@@ -194,4 +194,3 @@ export default function CarouselComp({
     </CardWrapper>
   );
 }
-
