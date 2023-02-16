@@ -123,8 +123,8 @@ CardCompPropsType): JSX.Element {
             height: "calc(100% - 8px)",
             left: "3px",
             top: "3px",
-            background:
-              "linear-gradient(180deg, transparent 62%, rgba(0,0,0,0.00345888) 63.94%, rgba(0,0,0,0.014204) 65.89%, rgba(0,0,0,0.0326639) 67.83%, rgba(0,0,0,0.0589645) 69.78%, rgba(0,0,0,0.0927099) 71.72%, rgba(0,0,0,0.132754) 73.67%, rgba(0,0,0,0.177076) 75.61%, rgba(0,0,0,0.222924) 77.56%, rgba(0,0,0,0.267246) 79.5%, rgba(0,0,0,0.30729) 81.44%, rgba(0,0,0,0.341035) 83.39%, rgba(0,0,0,0.367336) 85.33%, rgba(0,0,0,0.385796) 87.28%, rgba(0,0,0,0.396541) 89.22%, rgba(0,0,0,0.4) 91.17%)",
+            // background:
+            // "linear-gradient(180deg, transparent 62%, rgba(0,0,0,0.00345888) 63.94%, rgba(0,0,0,0.014204) 65.89%, rgba(0,0,0,0.0326639) 67.83%, rgba(0,0,0,0.0589645) 69.78%, rgba(0,0,0,0.0927099) 71.72%, rgba(0,0,0,0.132754) 73.67%, rgba(0,0,0,0.177076) 75.61%, rgba(0,0,0,0.222924) 77.56%, rgba(0,0,0,0.267246) 79.5%, rgba(0,0,0,0.30729) 81.44%, rgba(0,0,0,0.341035) 83.39%, rgba(0,0,0,0.367336) 85.33%, rgba(0,0,0,0.385796) 87.28%, rgba(0,0,0,0.396541) 89.22%, rgba(0,0,0,0.4) 91.17%)",
           }}
         >
           {/* The first box acts as a container that inherits style from the CardCover */}
@@ -152,14 +152,14 @@ CardCompPropsType): JSX.Element {
                   noWrap
                   sx={{ fontSize: "sm", color: "#fff", marginLeft: "5px" }}
                 >
-                  "닉네임"
+                  {/* "닉네임" */}
                 </Typography>
                 <Typography
                   level="h3"
                   noWrap
                   sx={{ fontSize: "sm", color: "#fff", marginLeft: "5px" }}
                 >
-                  "날짜"
+                  {/* "날짜" */}
                 </Typography>
               </Box>
               <Box
@@ -180,7 +180,7 @@ CardCompPropsType): JSX.Element {
                       display: "block",
                     }}
                   >
-                    "제목"
+                    {/* MY LITTLE CONCERT */}
                   </Link>
                 </Typography>
 

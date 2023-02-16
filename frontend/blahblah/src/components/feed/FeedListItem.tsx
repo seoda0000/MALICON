@@ -89,6 +89,21 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
     console.log(heartColor);
   };
 
+  // 날짜 조작
+  let dateList = props.feed.createDate.slice(0, 6);
+  dateList[1]--;
+  // console.log(dateList);
+  const utcDate = new Date(
+    ...(dateList as [number, number, number, number, number, number])
+  );
+
+  const utc = utcDate.getTime() + utcDate.getTimezoneOffset() * 60 * 1000;
+  const KR_TIME_DIFF = 9 * 60 * 60 * 1000 * 2;
+  const kr_curr = new Date(utc + KR_TIME_DIFF);
+  const koreaDate = kr_curr.toLocaleString("en-US", {
+    timeZone: "Asia/Seoul",
+  });
+
   return (
     <div>
       <Card>
@@ -108,7 +123,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
             )
           }
           title={props.feed.nickName}
-          subheader={props.feed.createDate}
+          subheader={String(koreaDate)}
         />
 
         <CardContent>

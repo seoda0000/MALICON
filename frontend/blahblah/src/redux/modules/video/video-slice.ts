@@ -15,7 +15,7 @@ const initialState: VideoStateType = {
     title: "",
     views: 0,
     pathUrl: "",
-    createDate: "",
+    createDate: [],
     hashtags: "",
     like: false,
     likeCnt: 0,

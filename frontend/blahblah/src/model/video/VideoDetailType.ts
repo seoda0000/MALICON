@@ -9,7 +9,7 @@ export type VideoDetailType = {
   title: string;
   views: number;
   pathUrl: string;
-  createDate: string;
+  createDate: number[];
   hashtags: string;
   thumbnail: string | null;
 
