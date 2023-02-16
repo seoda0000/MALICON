@@ -79,6 +79,7 @@ export default function FeedPage() {
             onClick={onClickEditor}
             variant="outlined"
             startIcon={<CreateIcon />}
+            sx={{ marginLeft: "40px" }}
           >
             새 피드
           </Button>

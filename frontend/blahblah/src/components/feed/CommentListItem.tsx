@@ -29,32 +29,57 @@ const CommentListItem: React.FC<{
     setopenRemoveDialog(false);
   };
 
+  // 날짜 조작
+  let dateList = props.comment.createDate.slice(0, 6);
+  dateList[1]--;
+  // console.log(dateList);
+  const utcDate = new Date(
+    ...(dateList as [number, number, number, number, number, number])
+  );
+
+  const utc = utcDate.getTime() + utcDate.getTimezoneOffset() * 60 * 1000;
+  const KR_TIME_DIFF = 9 * 60 * 60 * 1000 * 2;
+  const kr_curr = new Date(utc + KR_TIME_DIFF);
+  const koreaDate = kr_curr.toLocaleString("en-US", {
+    timeZone: "Asia/Seoul",
+  });
+
   return (
     <ListItem alignItems="flex-start">
-      <ListItemAvatar>
-        <FeedProfileImage
-          avatar={props.comment.avatar}
-          userPK={props.comment.userPK}
-        />
-      </ListItemAvatar>
-      <ListItemText
-        primary={
-          <React.Fragment>
-            <Typography
-              sx={{ display: "inline", mr: 3 }}
-              component="span"
-              variant="body2"
-              color="text.primary"
-            >
-              {props.comment.nickName}
-            </Typography>
-            {props.comment.content}
-          </React.Fragment>
-        }
-        secondary={props.comment.createDate}
+      <FeedProfileImage
+        avatar={props.comment.avatar}
+        userPK={props.comment.userPK}
       />
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          justifyItems: "center",
+          // alignItems: "center",
+        }}
+      >
+        <div>
+          <Typography
+            sx={{ display: "inline", mr: 3 }}
+            component="span"
+            variant="body1"
+            color="text.primary"
+          >
+            {props.comment.nickName}
+          </Typography>
+          {props.comment.content}
+        </div>
+        <Typography variant="caption">{koreaDate}</Typography>
+      </div>
+
       {props.comment.userId === loggedUserId && (
-        <IconButton type="submit" onClick={handleClickOpen}>
+        <IconButton
+          type="submit"
+          onClick={handleClickOpen}
+          style={{ marginLeft: "auto" }}
+        >
           <DeleteIcon />
         </IconButton>
       )}

@@ -15,7 +15,7 @@ const InfiniteScrollContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 90%;
-    gap: 50px;
+    gap: 20px;
     & > li {
       list-style: none;
       width: 100%;
@@ -206,4 +206,3 @@ export default function InfiniteScroll({
     </InfiniteScrollContainer>
   );
 }
-
