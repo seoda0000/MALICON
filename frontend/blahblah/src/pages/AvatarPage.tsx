@@ -514,7 +514,7 @@ function AvatarPage() {
               variant="contained"
               onClick={saveAvatarHandler}
             >
-              확정
+              저장
             </Button>
           </Box>
         </Box>
