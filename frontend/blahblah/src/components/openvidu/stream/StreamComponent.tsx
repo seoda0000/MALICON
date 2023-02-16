@@ -20,6 +20,8 @@ interface StreamProps {
   isStreamer?: boolean;
   //handleNickname?: any;
   streamId?: any;
+  mutedSound: boolean;
+  toggleSound: any;
 }
 // StreamComponent
 
