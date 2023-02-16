@@ -91,17 +91,24 @@ spring:
       - id: video
         uri: http://172.17.0.1:8081
         predicates:
-          - Path=/web-service/videos/[^/]*(?<!/main)(?<!/hashtag)/**
+          - Path=/web-service/api/videos[^/]*(?<!/main)(?<!/hashtag)/**
         filters:
           - RewritePath=/web-service/(?<segment>.*), /$\{segment}
           - JwtAuthenticationFilter
 
-
-
+#      no auth
       - id: stream-service
         uri: http://172.17.0.1:33332
         predicates:
-          - Path=/stream-service/[^/]*(?<!/rooms)/**
+          - Path=/stream-service/**
+        filters:
+          - RewritePath=/stream-service/(?<segment>.*), /$\{segment}
+
+#     auth
+      - id: stream-service
+        uri: http://172.17.0.1:33332
+        predicates:
+          - Path=/stream-service[^/]*(?<!/rooms)(?<!/onAir)/**
         filters:
           - RewritePath=/stream-service/(?<segment>.*), /$\{segment}
           - JwtAuthenticationFilter
