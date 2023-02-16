@@ -219,7 +219,7 @@ export default function CardComp({
                 "&:hover": { color: "danger.plainColor" },
               }}
             >
-              117
+              {video?.likeCnt}
             </Link>
 
             {/* 조회수 표시 */}
