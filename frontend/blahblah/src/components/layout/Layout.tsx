@@ -280,7 +280,6 @@ export default function Layout(props: LayoutProps) {
   });
 
   const handleAlert = () => {
-    console.log("꺼져야함");
     navigate("/avatar");
     setOpenAlert({ state: !openAlert.state, username: "" });
   };
@@ -325,6 +324,17 @@ export default function Layout(props: LayoutProps) {
 
   const handleLoginAlert = () => {
     setOpenLoginAlert(!openLoginAlert);
+  };
+
+  const handleLoginAlertClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenLoginAlert(false);
   };
 
   const actionLogin = (
@@ -758,11 +768,16 @@ export default function Layout(props: LayoutProps) {
       {/* 로그인이 필요한 서비스입니다. */}
       <Snackbar
         open={openLoginAlert}
-        autoHideDuration={1000}
-        onClose={handleAlertClose}
+        autoHideDuration={3000}
+        onClose={handleLoginAlertClose}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert variant="filled" severity="error" action={actionLogin}>
+        <Alert
+          variant="filled"
+          severity="error"
+          action={actionLogin}
+          onClose={handleLoginAlertClose}
+        >
           <AlertTitle>로그인이 필요한 서비스입니다.</AlertTitle>
           아직 회원이 아니신가요? —
           <Typography variant="button" onClick={onClickSignup}>
