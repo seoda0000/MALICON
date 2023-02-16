@@ -1,4 +1,4 @@
-package io.openvidu.basic.java.redis.entity;
+package com.blahblah.web.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,6 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class VideoHashtagEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +24,9 @@ public class VideoHashtagEntity {
     @Column(name = "video_id", insertable = false, updatable = false)
     private Long videoId;
     @ManyToOne(
-        targetEntity = PreviousVideoEntity.class,
+            targetEntity = VideoEntity.class,
             fetch = FetchType.LAZY
     )
     @JoinColumn(name = "video_id")
-    private PreviousVideoEntity previousVideo;
+    private VideoEntity videoEntity;
 }

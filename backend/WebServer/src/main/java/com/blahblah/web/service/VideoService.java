@@ -18,4 +18,5 @@ public interface VideoService {
 
     void deleteVideo(long id);
 
+    Page<VideoDTO> readVideosByHashTag(long size, long page, String hashTag);
 }

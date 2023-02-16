@@ -1,6 +1,7 @@
 package com.blahblah.web.service;
 
 import com.blahblah.web.controller.exception.CustomException;
+import com.blahblah.web.dto.HashTag;
 import com.blahblah.web.dto.request.CommentDTO;
 import com.blahblah.web.dto.response.VideoDTO;
 import com.blahblah.web.entity.CommentVideoEntity;
@@ -9,6 +10,11 @@ import com.blahblah.web.entity.VideoEntity;
 import com.blahblah.web.repository.LikeVideoRepository;
 import com.blahblah.web.repository.UserRepository;
 import com.blahblah.web.repository.VideoRepository;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,8 +25,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.temporal.TemporalField;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -113,5 +121,19 @@ public class VideoServiceImpl implements VideoService{
     @Override
     public void deleteVideo(long id) {
         videoRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<VideoDTO> readVideosByHashTag(long size, long page, String hashTag) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<HashTag>>(){}.getType();
+
+        List<HashTag> hashTags = gson.fromJson(hashTag, type);
+        List<Integer> hashTagKeys = new ArrayList<>();
+
+        hashTags.forEach((ht)-> hashTagKeys.add(ht.getKey()));
+
+        PageRequest pageRequest = PageRequest.of((int)page, (int)size, Sort.by(Sort.Direction.DESC, "views"));
+        return new VideoDTO().toDtoList(videoRepository.findByHashtagKeys(hashTagKeys, pageRequest));
     }
 }

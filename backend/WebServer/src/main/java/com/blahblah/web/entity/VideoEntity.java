@@ -61,4 +61,6 @@ public class VideoEntity extends BaseEntity{
     @OneToMany(mappedBy = "videoEntity", cascade = CascadeType.REMOVE)
     private List<CommentVideoEntity> comments;
 
+    @OneToMany(mappedBy = "videoEntity",cascade = CascadeType.REMOVE)
+    private List<VideoHashtagEntity> hashtagEntityList;
 }

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Transactional
 public interface VideoRepository extends JpaRepository<VideoEntity, Long> {
@@ -23,4 +24,7 @@ public interface VideoRepository extends JpaRepository<VideoEntity, Long> {
     @Modifying
     @Query(value="update videos v set v.views=:view where v.id=:id", nativeQuery = true)
     int updateViewsById(@Param("view") long view, @Param("id") long id);
+
+    @Query("SELECT DISTINCT  v FROM VideoEntity v JOIN v.hashtagEntityList h WHERE h.key IN :hashtagKeys ORDER BY v.views")
+    Page<VideoEntity> findByHashtagKeys(@Param("hashtagKeys") List<Integer> hashtagKeys, Pageable pageable);
 }
