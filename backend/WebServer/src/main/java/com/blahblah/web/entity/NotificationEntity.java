@@ -33,6 +33,9 @@ public class NotificationEntity extends BaseEntity {
     @Column(name = "timestamp", nullable = false)
     private long timestamp;
 
+    @Column(name = "avatar")
+    private String avatar;
+
     @ManyToOne(targetEntity = UserEntity.class,
             fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
