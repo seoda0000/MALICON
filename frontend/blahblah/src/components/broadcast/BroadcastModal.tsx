@@ -126,6 +126,7 @@ export default function BroadcastModal({ open, setOpen }: any): JSX.Element {
           <InputLabel>방송 제목</InputLabel>
           <Input id="title" value={title} onChange={onChangeTitle} required />
         </FormControl>
+
         <ChipsArray chipData={chipData} handleClick={handleClick} />
         <Box sx={buttonBoxStyle}>
           <Button variant="contained" type="submit">

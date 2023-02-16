@@ -19,6 +19,7 @@ const ChipsArray: React.FC<{
   handleClick: any;
   allChip?: boolean;
   handleClickAll?: any;
+  isMain?: boolean;
 }> = (props) => {
   useEffect(() => {}, [props.chipData]);
 
@@ -35,24 +36,27 @@ const ChipsArray: React.FC<{
       }}
       component="ul"
     >
-      <ListItem>
-        <div
-          onClick={props.handleClickAll}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: `${props.allChip ? "black" : "white"}`,
-            color: `${props.allChip ? "white" : "black"}`,
-            borderRadius: 100,
-            height: "32px",
-            fontSize: "13px",
-            width: "50px",
-          }}
-        >
-          전체
-        </div>
-      </ListItem>
+      {props.isMain && (
+        <ListItem>
+          <div
+            onClick={props.handleClickAll}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: `${props.allChip ? "black" : "white"}`,
+              color: `${props.allChip ? "white" : "black"}`,
+              borderRadius: 100,
+              height: "32px",
+              fontSize: "13px",
+              width: "50px",
+            }}
+          >
+            전체
+          </div>
+        </ListItem>
+      )}
+
       {props.chipData.map((data, index) => {
         let icon;
 
