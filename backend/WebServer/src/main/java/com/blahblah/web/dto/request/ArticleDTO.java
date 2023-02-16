@@ -1,9 +1,6 @@
 package com.blahblah.web.dto.request;
 
-import com.blahblah.web.dto.FileInfoDTO;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Builder

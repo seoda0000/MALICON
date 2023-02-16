@@ -2,12 +2,10 @@ package com.blahblah.web.controller;
 
 
 import com.blahblah.web.controller.exception.CustomException;
-import com.blahblah.web.dto.FileInfoDTO;
 import com.blahblah.web.dto.request.ArticleDTO;
 import com.blahblah.web.dto.response.Message;
 import com.blahblah.web.dto.response.SubscribeArticleDTO;
 import com.blahblah.web.entity.ArticleEntity;
-import com.blahblah.web.repository.ArticleRepository;
 import com.blahblah.web.service.ArticleService;
 import com.blahblah.web.util.JWTutil;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @RequestMapping("/articles")
 @RestController
@@ -48,14 +42,14 @@ public class ArticleController {
         if(file!=null) {
             String realPath = request.getServletContext().getRealPath(filePath);
             String today = new SimpleDateFormat("yyMMdd").format(new Date());
-            log.info(""+file);
-            log.info("realpat"+realPath);
+
             String saveFolder = realPath + File.separator + today;
             File folder = new File(saveFolder);
             String saveFileName = "";
             if(!folder.exists())
                 folder.mkdirs();
             String originalFileName = file.getOriginalFilename();
+
             if(!originalFileName.isEmpty()){
                 saveFileName = System.nanoTime()+originalFileName.substring(originalFileName.lastIndexOf('.'));
                 file.transferTo(new File(folder, saveFileName));

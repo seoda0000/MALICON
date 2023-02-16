@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
 
-    private static final String FROM_ADDRESS = "admin@blahblah.movebxeax.me";
+    private static final String FROM_ADDRESS = "blahblah207@naver.com";
 
     private final String DEFAULT_AVATAR =
             "{\"body\":[\"rounded\"],\"clothingColor\":[\"6dbb58\"],\"eyes\":[\"sleep\"],\"facialHair\":[\"\"],\"facialHairProbability\":100,\"hair\":[\"shortCombover\"],\"hairColor\":[\"6c4545\"],\"mouth\":[\"frown\"],\"nose\":[\"wrinkles\"],\"skinColor\":[\"d78774\"]}";
@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void mailSend(MailDto mailDto) {
+        log.info("mailsender"+mailDto.getAddress());
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mailDto.getAddress());
         message.setSubject(mailDto.getTitle());
