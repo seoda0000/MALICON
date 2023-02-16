@@ -8,6 +8,7 @@ export type FeedType = {
   lastModifiedDate: string;
   like: boolean;
   likeCnt: number;
+  filePath: string | null;
 
   userPK: number;
   userId: string;

@@ -62,6 +62,7 @@ export default function EditorModal({
       title,
       content,
       id: feed.id,
+      filePath: feed.filePath,
       userPK,
     };
 

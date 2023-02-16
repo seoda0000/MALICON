@@ -250,7 +250,9 @@ export default function Layout(props: LayoutProps) {
   };
 
   useEffect(() => {
-    dispatch(getSubscribersAction());
+    if(isLoggedIn){
+      dispatch(getSubscribersAction());
+    }
   }, []);
 
   useEffect(() => {
