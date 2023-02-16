@@ -4,7 +4,6 @@ import com.blahblah.web.controller.exception.CustomException;
 import com.blahblah.web.dto.response.HashTagResponse;
 import com.blahblah.web.dto.response.Message;
 import com.blahblah.web.dto.response.VideoDTO;
-import com.blahblah.web.entity.VideoEntity;
 import com.blahblah.web.service.VideoService;
 import com.blahblah.web.util.JWTutil;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +48,6 @@ public class VideoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message("지난 동영상이 없습니다."));
         }
         return ResponseEntity.ok(videoList);
-
     }
 
     @GetMapping("/details/{videoId}")
@@ -72,7 +70,7 @@ public class VideoController {
 
     }
 
-    @PostMapping("/{size}/{page}")
+    @PostMapping("/hashtag/{size}/{page}")
     public ResponseEntity readVideoAllByHashTags(@PathVariable long size, @PathVariable long page, @RequestBody HashTagResponse hashTag){
         Page<VideoDTO> videos = videoService.readVideosByHashTag(size, page, hashTag.getHashTag());
         return ResponseEntity.ok(videos);
