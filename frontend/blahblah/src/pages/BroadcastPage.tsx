@@ -14,16 +14,16 @@ function BroadcastPage() {
   const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if(!isLoggedIn) {
-  //     alert("로그인 되지 않은 사용자입니다. 메인페이지로 돌아갑니다.");
-  //     navigate("/main");
-  //   }
-  //   setIsLoading(true);
-  //   setTimeout(() => {
-  //     setIsLoading(false);
-  //   }, 2700);
-  // }, []);
+  useEffect(() => {
+    // if(!isLoggedIn) {
+    //   alert("로그인 되지 않은 사용자입니다. 메인페이지로 돌아갑니다.");
+    //   navigate("/main");
+    // }
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2700);
+  }, []);
   if (isLoading) return <LoadingPage />;
   return (
     <div>

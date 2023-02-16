@@ -69,6 +69,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
 
   // 피드 좋아요
   const [heartColor, setHeartColor] = useState<any>(false);
+  const [likeCnt, setLikeCnt] = useState<number>(props.feed.likeCnt);
   useEffect(() => {
     if (props.feed.like) {
       setHeartColor(true);
@@ -77,12 +78,22 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const likeFeedHandler = () => {
+    if (!heartColor) {
+      setLikeCnt(likeCnt + 1);
+    } else {
+      setLikeCnt(likeCnt - 1);
+    }
     const articleId = props.feed.id;
     dispatch(likeFeedAction(articleId));
     setHeartColor(!heartColor);
     console.log(heartColor);
   };
   const likeCancelHandler = () => {
+    if (!heartColor) {
+      setLikeCnt(likeCnt + 1);
+    } else {
+      setLikeCnt(likeCnt - 1);
+    }
     const articleId = props.feed.id;
     dispatch(likeCancelAction(articleId));
     setHeartColor(!heartColor);
@@ -149,7 +160,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
             )}
           </IconButton>
           <Typography variant="subtitle2" color={"grey"}>
-            {props.feed.likeCnt}
+            {likeCnt}
           </Typography>
           <IconButton aria-label="share">
             <ShareIcon />

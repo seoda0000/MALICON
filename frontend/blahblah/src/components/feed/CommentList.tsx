@@ -26,7 +26,7 @@ const CommentList: React.FC<{
           />
         ))
       ) : (
-        <div>덧글이 없습니다.</div>
+        <div>덧글이 없습니다. 첫번째 덧글을 작성해보세요!</div>
       )}
     </List>
   );

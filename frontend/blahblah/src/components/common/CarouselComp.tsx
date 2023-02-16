@@ -159,7 +159,7 @@ export default function CarouselComp({
                   noWrap
                   sx={{ fontSize: "sm", color: "#fff", marginLeft: "5px" }}
                 >
-                  {startAt}
+                  {/* {startAt} */}
                 </Typography>
               </Box>
               <Box

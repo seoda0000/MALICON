@@ -8,7 +8,7 @@ const VideoBox: React.FC<{ emotionLog: any; pathUrl: any }> = (props) => {
 
   return (
     <Box sx={{ width: "100%", backgroundColor: "black" }}>
-      <h1 style={{ color: "white" }}>현재 재생 시점 : {played} sec</h1>
+      {/* <h1 style={{ color: "white" }}>현재 재생 시점 : {played} sec</h1> */}
       <VideoPlayer
         played={played}
         setPlayed={setPlayed}

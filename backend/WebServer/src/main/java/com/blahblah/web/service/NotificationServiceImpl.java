@@ -31,13 +31,14 @@ public class NotificationServiceImpl implements NotificationService{
     private final UserRepository userRepository;
     @Override
     public List<NotificationDTO> getNotifications(long userId) {
-        List<NotificationEntity> findResult = notificationRepository.findAllByUserId(userId);
+        List<NotificationEntity> findResult = notificationRepository.findAllByUserIdOrderByTimestampDesc(userId);
         List<NotificationDTO> result = new ArrayList<>();
         for(NotificationEntity ne : findResult)
             result.add(NotificationDTO.builder()
                             .msgId(ne.getId())
                             .timestamp(ne.getTimestamp())
                             .msg(ne.getMsg())
+                            .avatar(ne.getAvatar())
                             .isRead(ne.isRead())
                     .build());
 
@@ -59,6 +60,7 @@ public class NotificationServiceImpl implements NotificationService{
                             .userEntity(ue.getUserEntity())
                             .userId(ue.getUserId())
                             .msg(notificationRequestDTO.msg)
+                            .avatar(notificationRequestDTO.avatar)
                             .isRead(false)
                             .build()
             );
@@ -77,6 +79,7 @@ public class NotificationServiceImpl implements NotificationService{
                         .userEntity(userEntity)
                         .userId(userId)
                         .msg(notificationRequestDTO.msg)
+                        .avatar(notificationRequestDTO.avatar)
                         .isRead(false)
                 .build());
     }
@@ -92,6 +95,7 @@ public class NotificationServiceImpl implements NotificationService{
                     .userEntity(notificationEntity.getUserEntity())
                     .userId(notificationEntity.getUserId())
                     .msg(notificationEntity.getMsg())
+                    .avatar(notificationEntity.getAvatar())
                     .isRead(true)
                     .build());
         else
