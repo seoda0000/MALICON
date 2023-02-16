@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import Divider from '@mui/material/Divider';
-import Box from '@mui/material/Box/Box';
-import Popover from '@mui/material/Popover/Popover'
-import List from '@mui/material/List/List';
-import ListItem from '@mui/material/ListItem/ListItem';
-import Avatar from '@mui/material/Avatar/Avatar';
-import Badge from '@mui/material/Badge/Badge';
+import React, { useEffect, useState } from "react";
+import Divider from "@mui/material/Divider";
+import Box from "@mui/material/Box/Box";
+import Popover from "@mui/material/Popover/Popover";
+import List from "@mui/material/List/List";
+import ListItem from "@mui/material/ListItem/ListItem";
+import Avatar from "@mui/material/Avatar/Avatar";
+import Badge from "@mui/material/Badge/Badge";
 import CloseIcon from "@mui/icons-material/Close";
-import IconButton from '@mui/material/IconButton/IconButton';
+import IconButton from "@mui/material/IconButton/IconButton";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
 import { UserType } from "../../model/user/userType";
-import { axiosInitializer } from '../../redux/utils/axiosInitializer';
-import { getAccessToken } from '../../redux/modules/user/token';
+import { axiosInitializer } from "../../redux/utils/axiosInitializer";
+import { getAccessToken } from "../../redux/modules/user/token";
 
 interface iUserData {
-  userData: UserType
+  userData: UserType;
 }
 
 interface iNotification {
-  msgId: number,
-  timestamp: number,
-  msg: string,
-  read: boolean
+  msgId: number;
+  timestamp: number;
+  msg: string;
+  read: boolean;
 }
 
 function Notification(userData: iUserData) {
@@ -43,7 +43,7 @@ function Notification(userData: iUserData) {
     e.preventDefault();
     const eventTarget = e.target as HTMLElement;
     console.log(eventTarget.parentElement);
-  }
+  };
 
   const [notifications, setNotifications] = useState<iNotification[]>();
 
@@ -53,27 +53,29 @@ function Notification(userData: iUserData) {
   async function fetchNotifications() {
     const axios = axiosInitializer();
 
-    await axios.get("/api/notifications",
-      {
+    await axios
+      .get("/api/notifications", {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Baerer " + getAccessToken(),
         },
       })
-      .then((data) => setNotifications(data.data))
+      .then((data) => setNotifications(data.data));
   }
 
   async function removeNotification(msgId: number) {
     const axios = axiosInitializer();
 
-    await axios.delete(`/api/notifications/${msgId}`,
-      {
+    await axios
+      .delete(`/api/notifications/${msgId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Baerer " + getAccessToken(),
         },
       })
-      .then(() => setNotifications(notifications?.filter(item => item.msgId !== msgId)))
+      .then(() =>
+        setNotifications(notifications?.filter((item) => item.msgId !== msgId))
+      )
       .catch();
   }
 
@@ -81,12 +83,11 @@ function Notification(userData: iUserData) {
     fetchNotifications();
   }, []);
 
-
   return (
     <div>
       {/* 알림 아이콘 */}
       <IconButton
-        className="badge-alart"
+        className="badge-alert"
         size="large"
         aria-label="show 17 new notifications"
         color="inherit"
@@ -121,64 +122,59 @@ function Notification(userData: iUserData) {
           <Divider />
 
           <List dense={true}>
-            {
-              notifications?.map((notification) => {
-                return (
-                  <ListItem>
-                    <Avatar
-                      sx={{ width: 24, height: 24, mr: 2 }}
-                    ></Avatar>
+            {notifications?.map((notification) => {
+              return (
+                <ListItem>
+                  <Avatar sx={{ width: 24, height: 24, mr: 2 }}></Avatar>
 
-                    <div
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <p
                       style={{
-                        display: "flex",
-                        flexDirection: "column",
+                        fontFamily: "NanumSquareRound",
+                        fontSize: 14,
+                        margin: 0,
                       }}
                     >
-                      <p
-                        style={{
-                          fontFamily: "NanumSquareRound",
-                          fontSize: 14,
-                          margin: 0,
-                        }}
-                      >
-                        {notification.msg}
-                      </p>
-                      <p
-                        style={{
-                          fontFamily: "NanumSquareRound",
-                          margin: 0,
-                          fontSize: 5,
-                          color: "grey",
-                        }}
-                      >
-                        {new Date(notification.timestamp).toDateString()}
-                      </p>
-                    </div>
-                    <CloseIcon
-                      fontSize="small"
-                      sx={{
-                        width: 12,
-                        height: 12,
-                        alignSelf: "flex-start",
-                        justifySelf: "flex-start",
-                        mt: 0.4,
-                        ml: 2,
-                      }
-                      }
-
-                      onClick={() => { removeNotification(notification.msgId) }}
-                    />
-                  </ListItem>
-                )
-              })
-
-            }
+                      {notification.msg}
+                    </p>
+                    <p
+                      style={{
+                        fontFamily: "NanumSquareRound",
+                        margin: 0,
+                        fontSize: 5,
+                        color: "grey",
+                      }}
+                    >
+                      {new Date(notification.timestamp).toDateString()}
+                    </p>
+                  </div>
+                  <CloseIcon
+                    fontSize="small"
+                    sx={{
+                      width: 12,
+                      height: 12,
+                      alignSelf: "flex-start",
+                      justifySelf: "flex-start",
+                      mt: 0.4,
+                      ml: 2,
+                    }}
+                    onClick={() => {
+                      removeNotification(notification.msgId);
+                    }}
+                  />
+                </ListItem>
+              );
+            })}
           </List>
         </Box>
       </Popover>
     </div>
-  )
+  );
 }
 
-export default Notification
+export default Notification;
