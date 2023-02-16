@@ -19,29 +19,39 @@ import { useNavigate } from "react-router-dom";
 import { broadcastActions } from "../../redux/modules/broadcast/broadcast-slice";
 import CardComp from "../common/CardComp";
 import CarouselCompBasic from "../common/CarouselCompBasic";
+import { useAppSelector } from "../../redux/configStore.hooks";
 
 const basicCarousel_1 = require("../../assets/img/basic_3.png");
 const basicCarousel_2 = require("../../assets/img/basic_1.png");
 const basicCarousel_3 = require("../../assets/img/basic_2.png");
-
 const basicList = [basicCarousel_1, basicCarousel_2, basicCarousel_3];
 
-const BroadcastCarousel: React.FC<{ sessions: SessionType[] }> = (props) => {
+const BroadcastCarousel: React.FC<{
+  sessions: SessionType[];
+  setOpenLoginAlert: any;
+}> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const isLoggedIn = useAppSelector((state) => state.user.userData.isLoggedIn);
   const [index, setIndex] = useState(0);
 
   const joinSessionStart = async () => {
-    dispatch(
-      broadcastActions.loadCurrentSession({
-        currentSession: props.sessions[index],
-      })
-    );
+    if (isLoggedIn) {
+      dispatch(
+        broadcastActions.loadCurrentSession({
+          currentSession: props.sessions[index],
+        })
+      );
+    }
   };
   const onClickHandler = () => {
-    joinSessionStart().then(() => {
-      navigate("/broadcast");
-    });
+    if (isLoggedIn) {
+      joinSessionStart().then(() => {
+        navigate("/broadcast");
+      });
+    } else {
+      props.setOpenLoginAlert(true);
+    }
   };
 
   return (

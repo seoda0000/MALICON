@@ -18,11 +18,13 @@ import { VideoType } from "../../model/video/VideoType";
 type VideoCardPropsType = {
   nth: number;
   video: ProfileVideoType | VideoType;
+  setOpenLoginAlert?: any;
 };
 
 export default function VideoCard({
   nth,
   video,
+  setOpenLoginAlert,
 }: VideoCardPropsType): JSX.Element {
   let decodedImage;
   if (video.thumbnail) {
@@ -32,7 +34,13 @@ export default function VideoCard({
   }
 
   return (
-    <CardComp nth={nth} title={video.title} caption={true} video={video}>
+    <CardComp
+      nth={nth}
+      title={video.title}
+      setOpenLoginAlert={setOpenLoginAlert}
+      caption={true}
+      video={video}
+    >
       <img
         src={
           video.thumbnail
@@ -46,4 +54,3 @@ export default function VideoCard({
     </CardComp>
   );
 }
-
