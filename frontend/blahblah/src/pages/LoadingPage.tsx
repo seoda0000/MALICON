@@ -6,7 +6,7 @@ import React from "react";
 import { useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import Heart from "../assets/emoji/happy.png";
+import Heart from "../assets/emoji/heart.png";
 
 const PtagKeyFrame = keyframes`
     from {

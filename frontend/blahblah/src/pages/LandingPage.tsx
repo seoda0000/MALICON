@@ -9,14 +9,24 @@ import NavBarLanding from "../components/layout/NavBarLanding";
 import Pop from "../assets/emoji/pop.png";
 import ButtonComp from "../components/common/ButtonComp";
 import BackgroundImg from "../assets/img/grid.jpg";
-import Logo from "../assets/img/logo_big.png";
+import Logo from "../assets/img/logo_mic.png";
 
-const TypingAni = keyframes`
+const TypingAniTop = keyframes`
   0% {
     width: 0%;
   }
   100% {
     width: 347px;
+  };
+`;
+
+const TypingAniBottom = keyframes`
+  0% {
+    /* display: block; */
+    width: 0%;
+  }
+  100% {
+    width: 260px;
   };
 `;
 
@@ -332,16 +342,8 @@ const LandingPageLayout = styled.div`
   overflow: hidden;
   background-image: url(${BackgroundImg});
   background-size: cover;
-  /* &:after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-  } */
   & > div.title-wrapper {
-    max-width: 800px;
+    max-width: 750px;
     margin: 0 auto;
     transform: translateY(calc(var(--title-vh))) rotate(180deg);
     animation: ${TitleStartKeyFrame} ease 0.8s;
@@ -352,7 +354,7 @@ const LandingPageLayout = styled.div`
     &.duration {
       animation: ${TitleDurationKeyFrame} ease 0.5s infinite alternate;
     }
-    & > div.logo_img {
+    & > div.logo-img {
       margin: 0;
       width: 100%;
       & > img {
@@ -362,53 +364,42 @@ const LandingPageLayout = styled.div`
       }
     }
     & > p {
-      margin: 0;
-      font-size: 25px;
-      display: inline-block;
-    }
-    & > p.top-p {
-      margin-bottom: 5px;
-      margin-left: 25px;
-      padding-bottom: 5px;
       position: relative;
+      margin: 20px 0px 0px 25px;
+      font-size: 25px;
+      display: block;
       width: 0px;
       height: 27px;
       overflow: hidden;
-      animation: ${TypingAni} 2s steps(15, end) infinite alternate;
-      animation-delay: 3200ms;
       &:after {
         content: "";
         display: block;
-        width: 22px;
+        width: 0px;
         height: 28px;
         position: absolute;
         top: 1px;
         right: 0;
         border-right: 2px solid #808080;
-        animation: ${TypingCursor} 0.5s step-end infinite alternate;
+        opacity: 0;
+      }
+    }
+    & > p.top-p {
+      animation: ${TypingAniTop} 2s steps(15, end) forwards;
+      animation-delay: 3200ms;
+      &:after {
+        animation: ${TypingCursor} 0.5s step-end infinite;
+        animation-iteration-count: 4;
+        animation-fill-mode: backwards;
         animation-delay: 3200ms;
       }
     }
     & > p.bottom-p {
-      position: absolute;
-      right: 0;
-      padding-top: 5px;
-      width: 0px;
-      height: 27px;
-      overflow: hidden;
-      animation: ${TypingAni} 2s steps(15, end) infinite alternate;
-      animation-delay: 3200ms;
+      /* display: none; */
+      animation: ${TypingAniBottom} 2s steps(11, end) forwards;
+      animation-delay: 5200ms;
       &:after {
-        content: "";
-        display: block;
-        width: 22px;
-        height: 28px;
-        position: absolute;
-        top: 1px;
-        right: 0;
-        border-right: 2px solid #808080;
-        /* animation: ${TypingCursor} 0.5s step-end infinite alternate; */
-        animation-delay: 3200ms;
+        animation: ${TypingCursor} 0.5s step-end infinite;
+        animation-delay: 5200ms;
       }
     }
   }
@@ -489,11 +480,12 @@ function LandingPage(): JSX.Element {
   return (
     <LandingPageLayout>
       <div className="title-wrapper" ref={titleEl} onClick={onClickTitle}>
+        {/* <p className="top-p">아바타로 소통하는 아티스트와 나</p> */}
         <p className="top-p">아바타로 소통하는 아티스트와 나</p>
+        <p className="bottom-p">아바타로 표현하는 내 감정</p>
         <div className="logo-img">
           <img src={Logo} alt="logo" />
         </div>
-        {/* <p className="bottom-p">아바타로 표현하는 내 감정</p> */}
       </div>
       <div className="button-wrapper">
         <ButtonComp
