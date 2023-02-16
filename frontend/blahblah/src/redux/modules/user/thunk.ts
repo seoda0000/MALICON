@@ -132,6 +132,7 @@ export const getMeWithTokenAction = createAsyncThunk(
         },
       });
       console.log(`로그인 - User: ${data.userId}`);
+      console.log(`데이터 - User: ${data.subscribers}`);
 
       return data;
     } catch (e) {

@@ -25,6 +25,7 @@ const initialState: UserStateType = {
     lightStick: null,
     aboutMe: "",
     isLoggedIn: false,
+    subscribers: 0,
   },
   subscribers: [],
   signup: { loading: false, data: null, error: null },
@@ -124,6 +125,7 @@ const userSlice = createSlice({
         state.userData.avatar = payload.avatar;
         state.userData.lightStick = payload.lightStick;
         state.userData.isLoggedIn = true;
+        state.userData.subscribers = payload.subscribers;
       })
       .addCase(getMeWithTokenAction.rejected, (state, { payload }) => {
         state.getMe.loading = false;
@@ -223,10 +225,8 @@ const userSlice = createSlice({
         state.checkEmail.loading = false;
         state.checkEmail.data = null;
         state.checkEmail.error = payload;
-      })
-      ;
+      });
   },
 });
 
 export default userSlice.reducer;
-

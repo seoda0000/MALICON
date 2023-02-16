@@ -623,7 +623,7 @@ export default function Layout(props: LayoutProps) {
                             color="inherit"
                           >
                             <PersonRounded />
-                            <span>3</span>
+                            <span>{loggedUser.subscribers}</span>
                           </IconButton>
                         </div>
                       </Tooltip>

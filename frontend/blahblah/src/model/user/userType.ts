@@ -10,5 +10,5 @@ export type UserType = {
   // accessToken: string;
   // refreshToken: string;
   isLoggedIn: boolean;
+  subscribers: number | null;
 };
-
