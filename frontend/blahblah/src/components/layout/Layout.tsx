@@ -219,7 +219,41 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
               color: #3f3f3f;
             }
           }
+          .badge-login {
+            position: absolute;
+            /* width: 75px; */
+            height: 90px;
+            margin-top: 20px;
+            padding: 28px 15px 0px 15px;
+            background-image: url(${BubbleId});
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: ${IdKeyFrame} 0.7s ease-out forwards;
+            animation-delay: 3s;
+            opacity: 0;
+            & > span {
+              display: inline-block;
+              font-size: 14px;
+              color: #3f3f3f;
+            }
+          }
           .badge-nickname {
+            position: absolute;
+            height: 65px;
+            margin-top: -8px;
+            padding: 16px 15px 0px 15px;
+            background-image: url(${BubbleNickName});
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: ${NickNameKeyFrame} 0.7s ease-out forwards;
+            animation-delay: 3s;
+            opacity: 0;
+            & > span {
+              display: inline-block;
+              font-size: 16px;
+            }
+          }
+          .badge-signup {
             position: absolute;
             height: 65px;
             padding: 16px 15px 0px 15px;
@@ -243,7 +277,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const menuWithLogin = ["Profile", "Logout"];
+const menuWithLogin = ["회원정보 수정", "로그아웃"];
 const menuWithLogout = ["Signup", "Login"];
 
 const drawerWidth = 240;
@@ -375,7 +409,7 @@ export default function Layout(props: LayoutProps) {
   };
 
   useEffect(() => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       dispatch(getSubscribersAction());
     }
   }, [isLoggedIn]);
@@ -548,20 +582,20 @@ export default function Layout(props: LayoutProps) {
                 }}
               >
                 <div className="badge-wrapper">
-                  <Tooltip title="Open settings">
-                    <IconButton onClick={handleOpenUserMenu} sx={{ mr: 1 }}>
-                      {loggedUser.isLoggedIn ? (
-                        <ProfileImage big={true} border={true} />
-                      ) : (
-                        <AccountCircleRoundedIcon
-                          sx={{
-                            height: 120,
-                            width: 120,
-                          }}
-                        />
-                      )}
+                  {loggedUser.isLoggedIn ? (
+                    <IconButton sx={{ mr: 1 }}>
+                      <ProfileImage big={true} border={true} />
                     </IconButton>
-                  </Tooltip>
+                  ) : (
+                    <IconButton sx={{ mr: 1 }}>
+                      <AccountCircleRoundedIcon
+                        sx={{
+                          height: 120,
+                          width: 120,
+                        }}
+                      />
+                    </IconButton>
+                  )}
 
                   {/* Drawer 열렸을 때 작은 아이콘들 */}
                   {open && loggedUser.isLoggedIn && (
@@ -574,32 +608,60 @@ export default function Layout(props: LayoutProps) {
                         size="large"
                         aria-label="show 17 new notifications"
                         color="inherit"
-                        onClick={() => setOpenAccountModal((prev) => !prev)}
+                        onClick={handleOpenUserMenu}
                       >
                         <SettingsIcon />
                       </IconButton>
-                      <div className="badge-subscribers">
-                        {/* <img src={BubbleSubscribers} alt="" /> */}
-                        <IconButton
-                          size="large"
-                          aria-label="show 17 new notifications"
-                          color="inherit"
-                          onClick={() => setOpenAccountModal((prev) => !prev)}
-                        >
-                          <PersonRounded />
-                          <span>3</span>
-                        </IconButton>
-                      </div>
-                      <ListItemText
+                      <Tooltip title="팔로워">
+                        <div className="badge-subscribers">
+                          {/* <img src={BubbleSubscribers} alt="" /> */}
+                          <IconButton
+                            size="large"
+                            aria-label="show 17 new notifications"
+                            color="inherit"
+                            onClick={() => setOpenAccountModal((prev) => !prev)}
+                          >
+                            <PersonRounded />
+                            <span>3</span>
+                          </IconButton>
+                        </div>
+                      </Tooltip>
+
+                      <div
                         className="badge-userid"
-                        primary={"@" + loggedUser.userId}
-                        sx={{ opacity: open ? 1 : 0 }}
+                        style={{ marginLeft: "5px" }}
+                      >
+                        {"@" + loggedUser.userId}
+                      </div>
+
+                      <Tooltip title="내 프로필">
+                        <div
+                          className="badge-nickname"
+                          style={{ marginLeft: "5px" }}
+                          onClick={onClickMyProfile}
+                        >
+                          {loggedUser.nickName}
+                        </div>
+                      </Tooltip>
+                    </MenuItem>
+                  )}
+
+                  {/* 로그아웃시 보이는 작은 아이콘들 */}
+                  {open && !loggedUser.isLoggedIn && (
+                    <MenuItem className="badge-inner">
+                      <ListItemText
+                        className="badge-login"
+                        primary={"로그인"}
+                        sx={{ opacity: open ? 1 : 0, ml: 4 }}
+                        onClick={onClickSignin}
                       />
                       <ListItemText
-                        className="badge-nickname"
-                        primary={loggedUser.nickName}
-                        sx={{ opacity: open ? 1 : 0, ml: 2 }}
+                        className="badge-signup"
+                        primary={"회원가입"}
+                        sx={{ opacity: open ? 1 : 0, ml: 1 }}
+                        onClick={onClickSignup}
                       />
+                      {/* <div className="badge-userid">로그인</div> */}
                     </MenuItem>
                   )}
                 </div>
@@ -624,24 +686,9 @@ export default function Layout(props: LayoutProps) {
                       <MenuItem
                         key={item}
                         onClick={
-                          item === "Profile"
-                            ? onClickMyProfile
-                            : // : item === "Account"
-                              // ? onClickAccount
-                              // : item === "Dashboard"
-                              // ? onClickDashboard
-                              onClickLogout
-                        }
-                      >
-                        <Typography textAlign="center">{item}</Typography>
-                      </MenuItem>
-                    ))}
-                  {!loggedUser.isLoggedIn &&
-                    menuWithLogout.map((item) => (
-                      <MenuItem
-                        key={item}
-                        onClick={
-                          item === "Login" ? onClickSignin : onClickSignup
+                          item === "로그아웃"
+                            ? onClickLogout
+                            : () => setOpenAccountModal((prev) => !prev)
                         }
                       >
                         <Typography textAlign="center">{item}</Typography>
@@ -917,4 +964,3 @@ export default function Layout(props: LayoutProps) {
     </LayoutContainer>
   );
 }
-
