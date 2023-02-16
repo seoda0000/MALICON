@@ -125,10 +125,11 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
           title={props.feed.nickName}
           subheader={String(koreaDate)}
         />
-
+  
         <CardContent>
           <Typography variant="h5">{props.feed.title}</Typography>
-          {props.feed.filePath && <img src={props.feed.filePath}/>}
+          {/* {props.feed.filePath && <img src={`${process.env.REACT_APP_BASE_URL}+${props.feed.filePath}`} alt=""/>} */}
+          {props.feed.filePath && <img src={`/loadfile.do?filePath=${props.feed.filePath}`} alt=""/>}
           <div>{parse(props.feed.content)}</div>
         </CardContent>
         <CardActions disableSpacing>

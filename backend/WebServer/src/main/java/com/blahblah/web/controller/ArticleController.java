@@ -17,10 +17,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 @RequestMapping("/articles")
 @RestController
@@ -40,10 +42,6 @@ public class ArticleController {
 
         ArticleEntity result = null;
         if(file!=null) {
-//            String realPath = request.getServletContext().getRealPath(filePath);
-//            String today = new SimpleDateFormat("yyMMdd").format(new Date());
-
-//            String saveFolder = filePath + File.separator + today;
             String saveFolder = filePath;
             File folder = new File(saveFolder);
             String saveFileName = "";
@@ -71,9 +69,6 @@ public class ArticleController {
                     .build();
             result = articleService.createArticle(a);
         }
-
-
-
 
         if (result == null) {
             throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "글 작성 실패");
@@ -118,4 +113,18 @@ public class ArticleController {
         }
         return ResponseEntity.ok(articleList);
     }
+
+    @GetMapping("/loadfile.do")
+    public ResponseEntity loadFile(@RequestParam("filePath") String filePath, HttpServletResponse response) throws IOException {
+        response.setContentType("image/png");
+        ServletOutputStream out = response.getOutputStream();
+        FileInputStream f = new FileInputStream(filePath);
+        int length;
+        byte[] buffer = new byte[10];
+        while((length=f.read(buffer))!=-1){
+            out.write(buffer, 0, length);
+        }
+        return ResponseEntity.ok(new Message("파일로드"));
+    }
+
 }
