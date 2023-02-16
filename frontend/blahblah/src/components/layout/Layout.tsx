@@ -378,7 +378,7 @@ export default function Layout(props: LayoutProps) {
     if(isLoggedIn){
       dispatch(getSubscribersAction());
     }
-  }, []);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (getAccessToken()) {
