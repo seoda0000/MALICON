@@ -28,11 +28,11 @@ import { ViewerModelType } from "../../model/openvidu/viewer-model";
 const lightStickShakeKeyFrame = keyframes`
   from {
     transform: rotate(70deg);
-    left: 34px;
+    left: -1px;
   }
   to {
-    transform : perspective(50px) rotate(60deg) rotateX(311deg) translate(18px, 4px);
-    left: 14px;
+    transform: perspective(50px) rotate(60deg) rotateX(311deg) translate(18px, 4px);
+    left: -19px;
   } 
 `;
 
@@ -122,7 +122,7 @@ const AvatarCompContainer = styled.div`
       width: 60px;
       height: 60px;
       top: -28px;
-      left: -7px;
+      left: -40px;
       z-index: 10;
       transform-origin: 90% 100%;
       animation: ${lightStickBalladKeyFrame} 1s ease-in-out alternate infinite;
@@ -136,8 +136,8 @@ const AvatarCompContainer = styled.div`
       position: absolute;
       width: 60px;
       height: 60px;
-      top: -28px;
-      left: 14px;
+      top: -33px;
+      /* left: 14px; */
       z-index: 10;
       animation: ${lightStickShakeKeyFrame} 0.3s ease-in-out alternate infinite;
       & > img {
@@ -235,7 +235,11 @@ export default function AvatarComp({
   return (
     <AvatarCompContainer>
       <img className="avatar-comp-avatar" alt="Sample" src={dataUri} />
-      <div className="avatar-comp-emotion" ref={parentEl}></div>
+      <div className="avatar-comp-emotion" ref={parentEl}>
+        {/* <span className="shake">
+          <img src={Pink} alt="" />
+        </span> */}
+      </div>
     </AvatarCompContainer>
   );
 }
