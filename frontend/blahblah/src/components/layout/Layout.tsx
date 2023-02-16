@@ -476,7 +476,8 @@ export default function Layout(props: LayoutProps) {
     if (isLoggedIn) {
       navigate(path);
     } else {
-      setOpenLoginAlert(true);
+      navigate(path);
+      // setOpenLoginAlert(true);
     }
   };
 
@@ -619,7 +620,6 @@ export default function Layout(props: LayoutProps) {
                             size="large"
                             aria-label="show 17 new notifications"
                             color="inherit"
-                            onClick={() => setOpenAccountModal((prev) => !prev)}
                           >
                             <PersonRounded />
                             <span>3</span>
