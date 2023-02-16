@@ -377,16 +377,17 @@ const LandingPageLayout = styled.div`
     & > p {
       position: relative;
       margin: 20px 0px 0px 25px;
-      font-size: 25px;
+      font-size: 1.5em;
       display: block;
       width: 0px;
-      height: 27px;
+      height: 1.5em;
       overflow: hidden;
+      line-height: 130%;
       &:after {
         content: "";
         display: block;
         width: 0px;
-        height: 28px;
+        height: 1.5em;
         position: absolute;
         top: 1px;
         right: 0;
@@ -409,7 +410,7 @@ const LandingPageLayout = styled.div`
       position: absolute;
       top: -20px;
       animation: ${TypingAniBottom} 8s steps(11, end) infinite;
-      animation-delay: 6600ms;
+      animation-delay: 7300ms;
       &:after {
         animation: ${TypingCursor} 0.5s step-end infinite;
         animation-delay: 6600ms;
