@@ -60,7 +60,7 @@ public class ArticleController {
                     .title(articleDTO.getTitle())
                     .content(articleDTO.getContent())
                     .userPK(userId)
-                    .filePath("/img/"+saveFileName)
+                    .filePath(folder+"/"+saveFileName)
                     .build();
             result = articleService.createArticle(a);
         } else{
