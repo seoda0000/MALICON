@@ -198,12 +198,10 @@ public class Controller {
 			if (session.getSessionId().startsWith(userId + "-")) {
 				if (liveRoomService.existBySessionId(session.getSessionId()))
 				{
-					onAir = true;
-					break;
+					return ResponseEntity.ok(liveRoomService.findBySessionId(session.getSessionId()));
 				}
 			}
 		}
-
-		return new ResponseEntity<>(onAir, HttpStatus.OK);
+		return ResponseEntity.notFound().build();
 	}
 }
