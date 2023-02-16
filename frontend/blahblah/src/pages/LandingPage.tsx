@@ -15,19 +15,30 @@ const TypingAniTop = keyframes`
   0% {
     width: 0%;
   }
-  100% {
+  25% {
     width: 347px;
-  };
+  }
+  50% {
+    width: 0%;
+  }
+  100% {
+    width: 0%;
+  }
 `;
 
 const TypingAniBottom = keyframes`
   0% {
-    /* display: block; */
+    width: 0%;
+  }
+  25% {
+    width: 280px;
+  }
+  50% {
     width: 0%;
   }
   100% {
-    width: 260px;
-  };
+    width: 0%;
+  }
 `;
 
 const TypingCursor = keyframes`
@@ -335,7 +346,7 @@ const PopWrapper2 = styled.div`
 `;
 
 const LandingPageLayout = styled.div`
-  --title-vh: 50vh - 100px;
+  --title-vh: 50vh - 140px;
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -384,28 +395,30 @@ const LandingPageLayout = styled.div`
       }
     }
     & > p.top-p {
-      animation: ${TypingAniTop} 2s steps(15, end) forwards;
+      animation: ${TypingAniTop} 8s steps(14, end) infinite;
       animation-delay: 3200ms;
       &:after {
         animation: ${TypingCursor} 0.5s step-end infinite;
-        animation-iteration-count: 4;
-        animation-fill-mode: backwards;
+        /* animation-iteration-count: 4; */
+        /* animation-fill-mode: backwards;s */
         animation-delay: 3200ms;
       }
     }
     & > p.bottom-p {
       /* display: none; */
-      animation: ${TypingAniBottom} 2s steps(11, end) forwards;
-      animation-delay: 5200ms;
+      position: absolute;
+      top: -20px;
+      animation: ${TypingAniBottom} 8s steps(11, end) infinite;
+      animation-delay: 6600ms;
       &:after {
         animation: ${TypingCursor} 0.5s step-end infinite;
-        animation-delay: 5200ms;
+        animation-delay: 6600ms;
       }
     }
   }
   & > div.button-wrapper {
     position: absolute;
-    bottom: 50%;
+    bottom: 40%;
     left: 50%;
     transform: translate(-65px, 163px);
     width: 130px;
