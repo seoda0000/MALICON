@@ -16,7 +16,7 @@ const TypingAniTop = keyframes`
     width: 0%;
   }
   25% {
-    width: 347px;
+    width: 380px;
   }
   50% {
     width: 0%;
@@ -31,7 +31,7 @@ const TypingAniBottom = keyframes`
     width: 0%;
   }
   25% {
-    width: 280px;
+    width: 310px;
   }
   50% {
     width: 0%;
@@ -380,14 +380,14 @@ const LandingPageLayout = styled.div`
       font-size: 1.5em;
       display: block;
       width: 0px;
-      height: 1.5em;
+      height: 1.45em;
       overflow: hidden;
       line-height: 130%;
       &:after {
         content: "";
         display: block;
         width: 0px;
-        height: 1.5em;
+        height: 1.45em;
         position: absolute;
         top: 1px;
         right: 0;
@@ -397,12 +397,12 @@ const LandingPageLayout = styled.div`
     }
     & > p.top-p {
       animation: ${TypingAniTop} 8s steps(14, end) infinite;
-      animation-delay: 3200ms;
+      animation-delay: 3400ms;
       &:after {
         animation: ${TypingCursor} 0.5s step-end infinite;
         /* animation-iteration-count: 4; */
         /* animation-fill-mode: backwards;s */
-        animation-delay: 3200ms;
+        animation-delay: 3400ms;
       }
     }
     & > p.bottom-p {
@@ -410,10 +410,10 @@ const LandingPageLayout = styled.div`
       position: absolute;
       top: -20px;
       animation: ${TypingAniBottom} 8s steps(11, end) infinite;
-      animation-delay: 7300ms;
+      animation-delay: 7600ms;
       &:after {
         animation: ${TypingCursor} 0.5s step-end infinite;
-        animation-delay: 6600ms;
+        animation-delay: 7600ms;
       }
     }
   }
