@@ -34,7 +34,6 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity checkDuplicatedId(@PathVariable String userId){
-        log.info(userId);
         if(userService.isExistUserId(userId))
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new Message("이미 존재하는 사용자 ID입니다"));
         else return ResponseEntity.ok(new Message("사용가능한 사용자 ID입니다"));
@@ -42,7 +41,6 @@ public class UserController {
 
     @GetMapping("/nickName/{nickName}")
     public ResponseEntity checkDuplicatedNickName(@PathVariable String nickName){
-        log.info(nickName);
         if(userService.isExistUserNickName(nickName))
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new Message("이미 존재하는 사용자 닉네임입니다"));
         else return ResponseEntity.ok(new Message("사용가능한 사용자 닉네임입니다"));
@@ -51,7 +49,6 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity getMyInfo(HttpServletRequest request){
         String accessToken =request.getHeader("Authorization").substring(7);
-        log.info(accessToken);
         String userId = JWTutil.getIdByAccessToken(accessToken);
         UserDTO userInfo = userService.readUserByUserId(userId);
 
@@ -63,6 +60,7 @@ public class UserController {
                         .lightStick(userInfo.getLightStick())
                         .phoneNumber(userInfo.getPhoneNumber())
                         .nickName(userInfo.getNickName())
+                        .avatar(userInfo.getAvatar())
                         .subscribers(userInfo.getSubscribers())
                         .build()
         );
@@ -72,9 +70,7 @@ public class UserController {
     public ResponseEntity updateUser(@RequestBody UserDTO userDTO, HttpServletRequest request){
         String accessToken =request.getHeader("Authorization").substring(7);
         String userId = JWTutil.getIdByAccessToken(accessToken);
-        log.info(userId + " " + userDTO.getUserId());
         if(!userId.equals(userDTO.getUserId())) throw new CustomException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
-        log.info(userDTO.toString());
         if(userService.updateUser(userDTO))
             return ResponseEntity.ok(new Message("회원정보 수정 성공"));
         else return ResponseEntity.internalServerError().build();
