@@ -209,7 +209,7 @@ export default function CardComp({
             </Typography>
 
             {/* 좋아요 표시 */}
-            <Link
+            {/* <Link
               level="body3"
               underline="none"
               startDecorator={<Favorite sx={{ width: 20 }} />}
@@ -222,7 +222,7 @@ export default function CardComp({
               }}
             >
               {video?.likeCnt}
-            </Link>
+            </Link> */}
 
             {/* 조회수 표시 */}
             <Link
@@ -233,7 +233,7 @@ export default function CardComp({
               sx={{
                 fontSize: "sm",
                 fontWeight: "md",
-                ml: 2,
+                // ml: 2,
                 "&:hover": { color: "primary.plainColor" },
               }}
             >
