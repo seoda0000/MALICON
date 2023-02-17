@@ -16,8 +16,8 @@ const RightVideoSectionContainer = styled.div`
   & > div {
     position: fixed;
     top: 20px;
-    right: 50px;
-    width: 280px;
+    right: 150px;
+    width: 300px;
   }
 `;
 
@@ -58,8 +58,8 @@ const RightVideoSection: React.FC<{ drawerWidth: number }> = (props) => {
           }}
         >
           {/* 컨텐츠 내용 */}
-          <Grid container rowSpacing={3}>
-            {/* <h3>Following Video</h3> */}
+          <Grid container rowSpacing={1}>
+            <h4>Following Video</h4>
             {video.followingVideoList.length > 0 ? (
               video.followingVideoList.slice(0, 3).map((video, index) => (
                 <Grid item width={"100%"} key={index}>
