@@ -27,13 +27,13 @@
 
 ### 메인 페이지
 
-![Untitled](./ReadMe/Untitled.png)
+![Untitled](./README/Untitled.png)
 
 ### 피드 페이지
 
 ---
 
-![Untitled](./ReadMe/Untitled%201.png)
+![Untitled](./ReadMe%203a13f5e618724d939bfe8979f88570d9/Untitled%201.png)
 
 ### 아바타 페이지
 
