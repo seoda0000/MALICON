@@ -47,20 +47,17 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(readOnly = true)
     public boolean isExistUserId(String userId) {
-        log.info(userId);
         return userRepository.existsByUserId(userId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean isExistUserNickName(String nickName) {
-        log.info(nickName);
         return userRepository.existsByNickName(nickName);
     }
 
     @Override
     public void mailSend(MailDto mailDto) {
-        log.info("mailsender"+mailDto.getAddress());
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mailDto.getAddress());
         message.setSubject(mailDto.getTitle());
@@ -136,6 +133,7 @@ public class UserServiceImpl implements UserService{
                 .nickName(user.getNickName())
                 .userId(user.getUserId())
                 .email(user.getEmail())
+                .avatar(user.getAvatar())
                 .lightStick(user.getLightStick())
                 .phoneNumber(user.getPhoneNumber())
                 .subscribers(subscribers.size())
