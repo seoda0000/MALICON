@@ -131,8 +131,9 @@ export const getMeWithTokenAction = createAsyncThunk(
           Authorization: "Baerer " + getAccessToken(),
         },
       });
-      // console.log(`로그인 - User: ${data.userId}`);
-      // console.log(`데이터 - User: ${data.subscribers}`);
+      console.log(`데이터 - User: ${data.userId}`);
+      console.log(`로그인 - User: ${data.avatar}`);
+      console.log(data);
 
       return data;
     } catch (e) {
