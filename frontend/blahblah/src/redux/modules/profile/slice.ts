@@ -21,7 +21,7 @@ const initialState: ProfileStateType = {
     avatar: "",
     aboutMe: "",
     subscribers: 0,
-    isOnAir: false,
+    isOnAir: null,
   },
   isSubscribing: false,
   subscribers: [],
@@ -83,6 +83,8 @@ const profileSlice = createSlice({
         state.getIsOnAir.loading = false;
         state.getIsOnAir.data = null;
         state.getIsOnAir.error = payload;
+
+        state.userData.isOnAir = null;
       })
       // .addCase(getSubscribersAction.pending, (state) => {
       //   state.getSub.loading = true;

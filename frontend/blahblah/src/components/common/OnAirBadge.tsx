@@ -2,6 +2,10 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { PlayArrowRounded } from "@mui/icons-material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { SessionType } from "../../model/broadcast/sessionType";
+import { useAppDispatch } from "../../redux/configStore.hooks";
+import { broadcastActions } from "../../redux/modules/broadcast/broadcast-slice";
 
 const OnAirBadgeBox = styled.span<{
   inactiveVisible: boolean;
@@ -43,19 +47,39 @@ const OnAirBadgeBox = styled.span<{
 type OnAirBadgePropsType = {
   inactiveVisible?: boolean;
   isOnAir?: boolean;
+  sessionInfo?: SessionType;
   onClick?: () => void;
 };
 
 export default function OnAirBadge({
   inactiveVisible = false,
   isOnAir,
+  sessionInfo,
   onClick,
 }: OnAirBadgePropsType) {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const joinSessionStart = async () => {
+    if (sessionInfo) {
+      dispatch(
+        broadcastActions.joinSession({
+          sessionId: sessionInfo.sessionId,
+        })
+      );
+    }
+  };
+  const onClickOnAir = () => {
+    joinSessionStart().then(() => {
+      navigate("/broadcast");
+    });
+  };
+
   return (
     <OnAirBadgeBox
       inactiveVisible={inactiveVisible}
       isOnAir={isOnAir}
-      onClick={onClick}
+      onClick={onClickOnAir}
     >
       <PlayArrowRounded />
       <span>ON AIR</span>
