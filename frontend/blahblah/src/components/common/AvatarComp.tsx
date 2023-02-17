@@ -220,7 +220,7 @@ export default function AvatarComp({
   );
 
   useEffect(() => {
-    console.log(signal?.nickname, viewer?.nickname);
+    // console.log(signal?.nickname, viewer?.nickname);
     if (signal?.nickname === viewer?.nickname) {
       if (currentState && currentState !== "neutral") {
         throttled(currentState);
@@ -243,4 +243,3 @@ export default function AvatarComp({
     </AvatarCompContainer>
   );
 }
-

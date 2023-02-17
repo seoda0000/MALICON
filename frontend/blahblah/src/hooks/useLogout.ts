@@ -4,7 +4,7 @@ import { removeToken } from "../redux/modules/user/token";
 function useLogout() {
   const loggedUser = useAppSelector((state) => state.user.userData);
 
-  console.log("로그아웃??");
+  // console.log("로그아웃??");
 
   removeToken();
 
@@ -16,10 +16,9 @@ function useLogout() {
   loggedUser.lightStick = null;
   loggedUser.isLoggedIn = false;
 
-  console.log("로그아웃됨");
+  // console.log("로그아웃됨");
 
   return;
 }
 
 export default useLogout;
-

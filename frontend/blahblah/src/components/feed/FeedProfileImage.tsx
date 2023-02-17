@@ -32,7 +32,7 @@ const FeedProfileImage: React.FC<{
   }).toDataUriSync();
 
   const onClickHandler = () => {
-    console.log("userPK", props.userPK);
+    // console.log("userPK", props.userPK);
     dispatch(getAboutMeAction(String(props.userPK))).then(() => {
       navigate(`/profile/${props.userPK}`);
     });

@@ -62,7 +62,7 @@ export default class ChatComponent extends Component<ChatProps, {}> {
       .stream.session.on("signal:chat", (event: any) => {
         const data = JSON.parse(event.data);
         let messageList = this.state.messageList;
-        console.log("data.publish", data.isPublisher);
+        // console.log("data.publish", data.isPublisher);
         messageList.push({
           message: data.message,
           viewer: data.viewer,
@@ -87,7 +87,7 @@ export default class ChatComponent extends Component<ChatProps, {}> {
   }
 
   sendMessage() {
-    console.log(this.state.message);
+    // console.log(this.state.message);
     if (this.props.user && this.state.message) {
       let message = this.state.message.replace(/ +(?= )/g, "");
       if (message !== "" && message !== " ") {
@@ -96,7 +96,7 @@ export default class ChatComponent extends Component<ChatProps, {}> {
           viewer: this.props.viewer,
           isPublisher: this.props.isPublisher,
         };
-        console.log("메세지 보낼 때", data);
+        // console.log("메세지 보낼 때", data);
         this.props.user.getStreamManager().stream.session.signal({
           data: JSON.stringify(data),
           type: "chat",
@@ -122,8 +122,8 @@ export default class ChatComponent extends Component<ChatProps, {}> {
   render() {
     const styleChat = { display: this.props.chatDisplay };
 
-    console.log("chatComponent : ", this.props.localUser);
-    console.log("handleNickname : ", this.props.handleNickname);
+    // console.log("chatComponent : ", this.props.localUser);
+    // console.log("handleNickname : ", this.props.handleNickname);
 
     return (
       <div id="chatContainer">
@@ -176,4 +176,3 @@ export default class ChatComponent extends Component<ChatProps, {}> {
     );
   }
 }
-

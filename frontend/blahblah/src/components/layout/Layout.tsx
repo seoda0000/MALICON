@@ -395,13 +395,13 @@ export default function Layout(props: LayoutProps) {
   // 로그아웃
   const onClickLogout = () => {
     removeToken();
-    console.log("로그아웃");
+    // console.log("로그아웃");
     window.location.replace("/main");
   };
 
   const onClickMyProfile = () => {
     handleCloseUserMenu();
-    console.log("프로필 누름");
+    // console.log("프로필 누름");
 
     dispatch(getAboutMeAction(String(loggedUser.id))).then(() => {
       navigate(`/profile/${loggedUser.id}`);
@@ -616,14 +616,13 @@ export default function Layout(props: LayoutProps) {
                       </IconButton>
                       <Tooltip title="팔로워">
                         <div className="badge-subscribers">
-                          {/* <img src={BubbleSubscribers} alt="" /> */}
                           <IconButton
                             size="large"
                             aria-label="show 17 new notifications"
                             color="inherit"
                           >
                             <PersonRounded />
-                            <span>3</span>
+                            <span>{loggedUser.subscribers}</span>
                           </IconButton>
                         </div>
                       </Tooltip>

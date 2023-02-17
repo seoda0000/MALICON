@@ -21,7 +21,7 @@ export const getFeedsAction = createAsyncThunk(
   "GET_FEEDS",
   async (reqData: { size: number; page: number }, thunkAPI) => {
     try {
-      console.log("작성 후 getfeeds", reqData.page);
+      // console.log("작성 후 getfeeds", reqData.page);
       const axios = axiosInitializer();
 
       const { data } = await axios.get<FeedWrapType>(
@@ -33,7 +33,7 @@ export const getFeedsAction = createAsyncThunk(
           },
         }
       );
-      console.log("피드 데이터", data);
+      // console.log("피드 데이터", data);
 
       return data;
     } catch (e) {
@@ -67,7 +67,7 @@ export const fetchFeedData = createAsyncThunk(
 
       return response.data;
     } catch (e: any) {
-      console.error(e.response.data);
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -89,7 +89,7 @@ export const postFeedData2 = createAsyncThunk(
           },
         })
         .then(({ data }: any) => {
-          console.log("피드 작성: ", data);
+          // console.log("피드 작성: ", data);
 
           // thunkAPI.dispatch(fetchFeedData());
 
@@ -98,9 +98,9 @@ export const postFeedData2 = createAsyncThunk(
 
       // return data;
     } catch (e: any) {
-      console.log("작성 실패");
-      console.log(e.request);
-      console.error(e.response.data);
+      // console.log("작성 실패");
+      // console.log(e.request);
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -120,7 +120,7 @@ export const postFeedData = createAsyncThunk(
           },
         })
         .then(({ data }: any) => {
-          console.log("피드 작성: ", data);
+          // console.log("피드 작성: ", data);
 
           // thunkAPI.dispatch(fetchFeedData());
 
@@ -129,9 +129,9 @@ export const postFeedData = createAsyncThunk(
 
       // return data;
     } catch (e: any) {
-      console.log("작성 실패");
-      console.log(e.request);
-      console.error(e.response.data);
+      // console.log("작성 실패");
+      // console.log(e.request);
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -154,15 +154,15 @@ export const removeFeedData = createAsyncThunk(
           },
         }
       );
-      console.log("피드 삭제: ", data);
+      // console.log("피드 삭제: ", data);
       // thunkAPI.dispatch(fetchFeedData());
       thunkAPI.dispatch(feedActions.resetNewest({ newest: 0 }));
       thunkAPI.dispatch(getFeedsAction({ size: 5, page: 0 })).then(() => {});
 
       return data;
     } catch (e) {
-      console.log("피드 삭제 실패", removeData);
-      console.error(e);
+      // console.log("피드 삭제 실패", removeData);
+      // console.error(e);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -184,17 +184,16 @@ export const editFeedData = createAsyncThunk(
           },
         })
         .then(({ data }: any) => {
-          console.log("피드 수정: ", data);
-
+          // console.log("피드 수정: ", data);
           // thunkAPI.dispatch(getFeedsAction({ size: 5, page: 0 }));
           // thunkAPI.dispatch(feedActions.resetNewest({ newest: 0 }));
         });
 
       // return data;
     } catch (e: any) {
-      console.log("수정 실패");
-      console.log(e.request);
-      console.error(e.response.data);
+      // console.log("수정 실패");
+      // console.log(e.request);
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -221,7 +220,7 @@ export const postCommentData = createAsyncThunk(
           },
         })
         .then(({ data }: any) => {
-          console.log("덧글 작성: ", data);
+          // console.log("덧글 작성: ", data);
 
           if (postData.articleId) {
             // thunkAPI.dispatch(fetchFeedData());
@@ -232,8 +231,8 @@ export const postCommentData = createAsyncThunk(
           }
         });
     } catch (e: any) {
-      console.log("덧글 작성 실패");
-      console.error(e.response.data);
+      // console.log("덧글 작성 실패");
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -264,7 +263,7 @@ export const removeCommentData = createAsyncThunk(
           }
         )
         .then((data) => {
-          console.log("덧글 삭제: ", data);
+          // console.log("덧글 삭제: ", data);
           if (removeData.isVideo) {
             thunkAPI.dispatch(getVideoById(removeData.videoId));
           } else {
@@ -273,7 +272,7 @@ export const removeCommentData = createAsyncThunk(
           }
         });
     } catch (e) {
-      console.error(e);
+      // console.error(e);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -299,15 +298,15 @@ export const likeFeedAction = createAsyncThunk(
           }
         )
         .then(({ data }: any) => {
-          console.log("피드 좋아요: ", data);
+          // console.log("피드 좋아요: ", data);
 
           thunkAPI.dispatch(fetchFeedData());
 
-          console.log("피드 리스트 갱신 완료");
+          // console.log("피드 리스트 갱신 완료");
         });
     } catch (e: any) {
-      console.log("피드 좋아요 실패");
-      console.error(e.response.data);
+      // console.log("피드 좋아요 실패");
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -329,7 +328,7 @@ export const likeCancelAction = createAsyncThunk(
           },
         })
         .then(({ data }: any) => {
-          console.log("피드 좋아요 취소: ", data);
+          // console.log("피드 좋아요 취소: ", data);
 
           thunkAPI.dispatch(fetchFeedData());
 
@@ -337,7 +336,7 @@ export const likeCancelAction = createAsyncThunk(
         });
     } catch (e: any) {
       console.log("피드 좋아요 치소 실패");
-      console.error(e.response.data);
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }

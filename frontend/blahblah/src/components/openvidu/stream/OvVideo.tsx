@@ -28,7 +28,7 @@ export default class OvVideoComponent extends Component<OvVideoProps, {}> {
 
   componentDidMount() {
     if (this.props && this.props.user.streamManager && !!this.videoRef) {
-      console.log("PROPS: ", this.props);
+      // console.log("PROPS: ", this.props);
       this.props.user.getStreamManager().addVideoElement(this.videoRef.current);
     }
 
@@ -66,12 +66,17 @@ export default class OvVideoComponent extends Component<OvVideoProps, {}> {
           id={"video-" + this.props.user.getStreamManager().stream.streamId}
           ref={this.videoRef}
           muted={this.props.mutedSound}
-
           width={320}
           height={240}
         />
 
-        {(!this.props.isPublisher && this.videoRef.current) && <EmotionExpression user={this.props.user} videoRef={this.videoRef} isTutorial={false} />}
+        {!this.props.isPublisher && this.videoRef.current && (
+          <EmotionExpression
+            user={this.props.user}
+            videoRef={this.videoRef}
+            isTutorial={false}
+          />
+        )}
       </div>
     );
   }
