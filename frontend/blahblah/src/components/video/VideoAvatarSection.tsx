@@ -38,7 +38,7 @@ const VideoAvatarSection: React.FC<{ played: number; emotionLog: any }> = (
       }
     }
   });
-  console.log("timeline", timeline);
+  // console.log("timeline", timeline);
   emotionLogFirst = avatarList.map((elem) => {
     return {
       userId: elem.userId,
@@ -67,17 +67,17 @@ const VideoAvatarSection: React.FC<{ played: number; emotionLog: any }> = (
   };
 
   useEffect(() => {
-    console.log("업데이트 전", emotionLog);
+    // console.log("업데이트 전", emotionLog);
     timeline.map((item: any) => {
       if (item.time === Math.round(props.played)) {
-        console.log("해당시각 유저목록", item.user);
+        // console.log("해당시각 유저목록", item.user);
         emotionLogChange = emotionLogChange.map((elem) =>
           findUserId(elem.userId, item.user)
             ? { ...elem, type: findUserId(elem.userId, item.user) as string }
             : { ...elem, type: "" }
         );
         setEmotionLog(emotionLogChange);
-        console.log("업데이트 후", emotionLog);
+        // console.log("업데이트 후", emotionLog);
         return;
       }
     });

@@ -76,14 +76,14 @@ export default function SubscriberItem({
     dispatch(getAboutMeAction(String(item.userPK)))
       .then(() => {
         // 지난 동영상 목록 가져오기
-        console.log("동영상 목록 가져와요");
+        // console.log("동영상 목록 가져와요");
         dispatch(
           getVideoAction({ userPK: String(item.userPK), size: 5, page: 0 })
         );
       })
       .then(() => {
         // 피드 목록 가져오기
-        console.log("피드 목록 가져와요");
+        // console.log("피드 목록 가져와요");
         dispatch(
           getFeedAction({ userPK: String(item.userPK), size: 5, page: 0 })
         );
@@ -98,7 +98,7 @@ export default function SubscriberItem({
     // 방송중인 사용자면
 
     dispatch(getIsOnAirAction(item.userId)).then(({ payload }: any): void => {
-      console.log("으아아아ㅏ아아ㅏ ", payload);
+      // console.log("으아아아ㅏ아아ㅏ ", payload);
       setIsOnAir(payload);
     });
   }, []);

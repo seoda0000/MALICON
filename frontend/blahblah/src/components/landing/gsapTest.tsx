@@ -50,7 +50,7 @@ function TestAnimation() {
   };
 
   const createIcon = () => {
-    console.log("아이콘 생성");
+    // console.log("아이콘 생성");
   };
   function animateIcon(icon: any) {
     gsap.to(icon, { y: -200 });
@@ -59,7 +59,7 @@ function TestAnimation() {
     }, 2000);
   }
   const popIcon = () => {
-    console.log("pop");
+    // console.log("pop");
     createIcon();
     const icon = document.createElement("span");
     icon.innerText = "❤";

@@ -89,10 +89,10 @@ const VideoSection: React.FC<{ video: VideoDetailType }> = (props) => {
   const onClickSubscribe = () => {
     if (!isSubscribing) {
       dispatch(subscribeAction(String(props.video.userPK))); // 확인필요
-      console.log("구독!!");
+      // console.log("구독!!");
     } else {
       dispatch(unSubscribeAction(String(props.video.userPK)));
-      console.log("구독 취소!");
+      // console.log("구독 취소!");
     }
   };
 

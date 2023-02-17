@@ -67,7 +67,7 @@ export default function NavBarLanding() {
 
   const logout = () => {
     removeToken();
-    console.log("로그아웃");
+    // console.log("로그아웃");
     window.location.replace("/");
   };
 
@@ -250,4 +250,3 @@ export default function NavBarLanding() {
     </Box>
   );
 }
-

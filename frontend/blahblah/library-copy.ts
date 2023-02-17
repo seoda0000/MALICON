@@ -8,7 +8,7 @@ async function copyFiles() {
     await fs.copy("./src/layout/", libraryPath + "layout");
     await fs.copy("./src/models/", libraryPath + "models");
   } catch (err) {
-    console.error("Error executing copy function in library-copy.js", err);
+    // console.error("Error executing copy function in library-copy.js", err);
   }
 }
 

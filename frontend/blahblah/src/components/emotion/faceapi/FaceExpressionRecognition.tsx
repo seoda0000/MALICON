@@ -25,7 +25,7 @@ export default function FaceExpressionRecognition(
       height: videoRef.current.videoHeight,
     };
 
-    console.log("!!!!!", displaySize);
+    // console.log("!!!!!", displaySize);
 
     // FaceRecognitionStart
     const faceDetecting = async () => {
@@ -62,7 +62,7 @@ export default function FaceExpressionRecognition(
         faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
         faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
       ]).then(() => {
-        console.log(videoRef);
+        // console.log(videoRef);
         startPredict();
       });
     };

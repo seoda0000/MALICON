@@ -235,7 +235,7 @@ export default function ProfilePage(): JSX.Element {
   }, [loggedUser, userpk]);
 
   useEffect(() => {
-    console.log("프로필입니당 누구냐면 userpk : " + userpk);
+    // console.log("프로필입니당 누구냐면 userpk : " + userpk);
     // 프로필 가져오기
     dispatch(getAboutMeAction(userpk)).then(() => {
       // 생방송 중 여부 가져오기
@@ -417,4 +417,3 @@ export default function ProfilePage(): JSX.Element {
     </ProfilePageLayout>
   );
 }
-

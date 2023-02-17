@@ -86,7 +86,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
     const articleId = props.feed.id;
     dispatch(likeFeedAction(articleId));
     setHeartColor(!heartColor);
-    console.log(heartColor);
+    // console.log(heartColor);
   };
   const likeCancelHandler = () => {
     if (!heartColor) {
@@ -97,7 +97,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
     const articleId = props.feed.id;
     dispatch(likeCancelAction(articleId));
     setHeartColor(!heartColor);
-    console.log(heartColor);
+    // console.log(heartColor);
   };
 
   // 날짜 조작
@@ -136,11 +136,13 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
           title={props.feed.nickName}
           subheader={String(koreaDate)}
         />
-  
+
         <CardContent>
           <Typography variant="h5">{props.feed.title}</Typography>
           {/* {props.feed.filePath && <img src={`${process.env.REACT_APP_BASE_URL}+${props.feed.filePath}`} alt=""/>} */}
-          {props.feed.filePath && <img src={`/loadfile.do?filePath=${props.feed.filePath}`} alt=""/>}
+          {props.feed.filePath && (
+            <img src={`/loadfile.do?filePath=${props.feed.filePath}`} alt="" />
+          )}
           <div>{parse(props.feed.content)}</div>
         </CardContent>
         <CardActions disableSpacing>

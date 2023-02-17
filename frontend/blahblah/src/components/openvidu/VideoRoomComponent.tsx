@@ -92,7 +92,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     let userAvatar = this.props.user.avatar;
     let currentSession = this.props.currentSession;
 
-    console.log("session 이름그 : ", currentSession.sessionId);
+    // console.log("session 이름그 : ", currentSession.sessionId);
     this.remotes = [];
     this.localUserAccessAllowed = false;
     this.isPublisher = false;
@@ -201,15 +201,15 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   async connectToSession() {
     try {
       var token = await this.getToken();
-      console.log(token);
+      // console.log(token);
       this.connect(token);
     } catch (error: any) {
       alert("방송 중이 아닙니다.");
-      console.error(
-        "There was an error getting the token:",
-        error.code,
-        error.message
-      );
+      // console.error(
+      //   "There was an error getting the token:",
+      //   error.code,
+      //   error.message
+      // );
       window.location.replace(APPLICATION_CONTEXT_PATH + "/main");
     }
   }
@@ -236,7 +236,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
             );
 
             setTimeout(() => {
-              console.log("썸네일 보내냐?");
+              // console.log("썸네일 보내냐?");
               this.sendThumbnail();
               this.startRecording(this.state.mySessionId)
                 .then((data) => console.log(data))
@@ -248,11 +248,11 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       })
       .catch((error: any) => {
         alert("방송 중이 아닙니다.");
-        console.log(
-          "There was an error connecting to the session:",
-          error.code,
-          error.message
-        );
+        // console.log(
+        //   "There was an error connecting to the session:",
+        //   error.code,
+        //   error.message
+        // );
         window.location.replace(APPLICATION_CONTEXT_PATH + "/main");
       });
   }
@@ -296,7 +296,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
 
     this.subscribeToUserChanged();
     this.subscribeToStreamDestroyed();
-    console.log("센도 시그널 유저 첸지");
+    // console.log("센도 시그널 유저 첸지");
     this.sendSignalUserChanged({
       isScreenShareActive: localUser.isScreenShareActive(),
       avatar: localUser.getAvatar(),
@@ -346,19 +346,19 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   leaveSession() {
-    console.log("Leave!!!!!!!!!!!!!!!!!!!!!!");
+    // console.log("Leave!!!!!!!!!!!!!!!!!!!!!!");
     const mySession = this.state.session;
 
     if (mySession) {
       if (this.isPublisher) {
-        console.log("세션 지우기");
+        // console.log("세션 지우기");
         this.deleteSession(this.state.mySessionId)
           .then(() => {
             mySession.disconnect();
             window.location.replace(APPLICATION_CONTEXT_PATH + "/main");
           })
           .catch((e) => {
-            console.error(e);
+            // console.error(e);
           });
       } else {
         this.sendSignalSubcriberDeleted(localViewer);
@@ -418,7 +418,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   subscribeToStreamCreated() {
     this.state.session.on("streamCreated", (event: any) => {
       const subscriber = this.state.session.subscribe(event.stream, undefined);
-      console.log("subscribeToStreamCreated 376 + 누군가가 생성됐다!");
+      // console.log("subscribeToStreamCreated 376 + 누군가가 생성됐다!");
       subscriber.on("streamPlaying", (e: any) => {
         subscriber.videos[0].video.parentElement.classList.remove(
           "custom-class"
@@ -430,7 +430,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       newUser.setType("remote");
       const nickname = event.stream.connection.data.split("%")[0];
       newUser.setNickname(JSON.parse(nickname).clientData);
-      console.log("그 누군가는", newUser);
+      // console.log("그 누군가는", newUser);
       this.remotes.push(newUser);
       if (this.localUserAccessAllowed) {
         this.updateSubscribers();
@@ -440,7 +440,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
 
   subscriberCreated() {
     this.state.session.on("signal:subscribe", (event: any) => {
-      console.log("구독자가 들어왔삼용! ㅋ");
+      // console.log("구독자가 들어왔삼용! ㅋ");
       const viewer = JSON.parse(event.data);
       let viewers = [...this.state.viewers, viewer];
       this.setState({
@@ -453,7 +453,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   subscriberDeleted() {
     this.state.session.on("signal:unSubscribe", (event: any) => {
       const viewer = JSON.parse(event.data);
-      console.log("구독자가 나갔슴용! ㅜ");
+      // console.log("구독자가 나갔슴용! ㅜ");
       this.deleteViewer(viewer).then(() => {
         this.sendSignalViewersBroadCast(this.state.viewers);
       });
@@ -463,7 +463,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   async viewerBroadCastListener() {
     this.state.session.on("signal:viewerBroadCast", (event: any) => {
       const viewers = JSON.parse(event.data);
-      console.log("브로드캐스트 당해버려!!", viewers);
+      // console.log("브로드캐스트 당해버려!!", viewers);
       this.setState({
         viewers: viewers,
       });
@@ -471,14 +471,14 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   async deleteViewer(deletedViewer: ViewerModel) {
-    console.log("뷰어를 지워버려");
+    // console.log("뷰어를 지워버려");
     const viewers = this.state.viewers;
-    console.log("뷰어 지우기 직전 찍기", viewers);
+    // console.log("뷰어 지우기 직전 찍기", viewers);
     const viewer = viewers.filter(
       (v: ViewerModel) => v.nickname === deletedViewer.nickname
     )[0];
     let index = viewers.indexOf(viewer, 0);
-    console.log("뷰어지우는 인덱스", index);
+    // console.log("뷰어지우는 인덱스", index);
     if (index > -1) {
       viewers.splice(index, 1);
       this.setState({
@@ -488,7 +488,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   sendSignalSubcriberCreated(data: any) {
-    console.log("구독자 생성됐음을 알려버려");
+    // console.log("구독자 생성됐음을 알려버려");
     const signalOptions = {
       data: JSON.stringify(data),
       type: "subscribe",
@@ -497,7 +497,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   sendSignalSubcriberDeleted(data: any) {
-    console.log("구독자 삭제됐음을 알려버려");
+    // console.log("구독자 삭제됐음을 알려버려");
     const signalOptions = {
       data: JSON.stringify(data),
       type: "unSubscribe",
@@ -506,7 +506,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 
   sendSignalViewersBroadCast(viewers: ViewerModel[]) {
-    console.log("브로드 캐스트 한다고 알려버려");
+    // console.log("브로드 캐스트 한다고 알려버려");
     const signalOptions = {
       data: JSON.stringify(viewers),
       type: "viewerBroadCast",
@@ -519,8 +519,8 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   // leaveSession 함수 앞에 원하는 작업 추가 가능
   subscribeToStreamDestroyed() {
     this.state.session.on("streamDestroyed", (event: any) => {
-      console.log("subscribeToStreamCreated 401 + 누군가가 떠났다!");
-      console.log("stream : ", event.stream);
+      // console.log("subscribeToStreamCreated 401 + 누군가가 떠났다!");
+      // console.log("stream : ", event.stream);
       alert("방송이 종료되었습니다.");
       this.leaveSession();
     });
@@ -533,7 +533,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       remoteUsers.forEach((user: any) => {
         if (user.getConnectionId() === event.from.connectionId) {
           const data = JSON.parse(event.data);
-          console.log("EVENTO REMOTE: ", event.data);
+          // console.log("EVENTO REMOTE: ", event.data);
           if (data.isAudioActive !== undefined) {
             user.setAudioActive(data.isAudioActive);
           }
@@ -649,7 +649,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
     if (display === "block") {
       this.setState({ chatDisplay: display, messageReceived: false });
     } else {
-      console.log("chat", display);
+      // console.log("chat", display);
       this.setState({ chatDisplay: display });
     }
     this.updateLayout();
@@ -680,7 +680,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
 
   async captureThumbnail() {
     let id = "video-" + localUser.getStreamManager().stream.streamId;
-    console.log("아이디는 이거에옹 ", id);
+    // console.log("아이디는 이거에옹 ", id);
     return await html2canvas(document.getElementById(id) as HTMLElement)
       .then((canvas) => {
         return encodeURIComponent(
@@ -694,7 +694,7 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
 
   async sendThumbnail() {
     let encodedImage = await this.captureThumbnail();
-    console.log("썸네일", encodedImage);
+    // console.log("썸네일", encodedImage);
     this.createThumbnail(this.state.mySessionId, encodedImage)
       .then((data) => console.log(data))
       .catch((e) => console.error(e));
@@ -819,12 +819,12 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
       }
     );
     this.isPublisher = data.role === "PUBLISHER";
-    console.log("커넥션 : ", data, " isPulisher : ", this.isPublisher);
+    // console.log("커넥션 : ", data, " isPulisher : ", this.isPublisher);
     return data.token; // The token
   }
 
   async deleteSession(sessionId: any) {
-    console.log("delete 요청 보내");
+    // console.log("delete 요청 보내");
     const { data } = await axios.delete(
       APPLICATION_SERVER_URL + "/api/sessions/" + sessionId,
       {
@@ -867,4 +867,3 @@ class VideoRoomComponent extends Component<VideoRoomProps, {}> {
   }
 }
 export default VideoRoomComponent;
-

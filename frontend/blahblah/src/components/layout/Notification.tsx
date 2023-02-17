@@ -42,7 +42,7 @@ function Notification(userData: iUserData) {
   const onClickHandler = (e: React.MouseEvent) => {
     e.preventDefault();
     const eventTarget = e.target as HTMLElement;
-    console.log(eventTarget.parentElement);
+    // console.log(eventTarget.parentElement);
   };
 
   const [notifications, setNotifications] = useState<iNotification[]>();
