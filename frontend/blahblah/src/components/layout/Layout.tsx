@@ -923,7 +923,7 @@ export default function Layout(props: LayoutProps) {
       {/* alert */}
       <Snackbar
         open={openAlert.state}
-        autoHideDuration={5000}
+        autoHideDuration={20000}
         onClose={handleAlertClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       >
