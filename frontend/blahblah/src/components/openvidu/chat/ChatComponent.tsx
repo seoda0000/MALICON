@@ -138,7 +138,7 @@ export default class ChatComponent extends Component<ChatProps, {}> {
             {this.state.messageList.map((data, i) => (
               <div
                 key={i}
-                id="remoteUsers"
+                id="remoteUsers_chat"
                 className={"message" + (!data.isPublisher ? " left" : " right")}
               >
                 <div className="msg-avatar">
