@@ -25,6 +25,6 @@ public interface VideoRepository extends JpaRepository<VideoEntity, Long> {
     @Query(value="update videos v set v.views=:view where v.id=:id", nativeQuery = true)
     int updateViewsById(@Param("view") long view, @Param("id") long id);
 
-    @Query("SELECT DISTINCT  v FROM VideoEntity v JOIN v.hashtagEntityList h WHERE h.key IN :hashtagKeys ORDER BY v.views")
+    @Query("SELECT DISTINCT  v FROM VideoEntity v JOIN v.hashtagEntityList h WHERE h.key IN :hashtagKeys ORDER BY v.views DESC")
     Page<VideoEntity> findByHashtagKeys(@Param("hashtagKeys") List<Integer> hashtagKeys, Pageable pageable);
 }
