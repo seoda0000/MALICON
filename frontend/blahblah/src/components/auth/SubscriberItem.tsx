@@ -12,6 +12,7 @@ import { getIsOnAirAction } from "../../redux/modules/user";
 import { getAboutMeAction } from "../../redux/modules/profile";
 import { getVideoAction } from "../../redux/modules/profile";
 import { getFeedAction } from "../../redux/modules/profile";
+import { SessionType } from "../../model/broadcast/sessionType";
 
 const ItemContainer = styled.li<{ open: boolean }>`
   margin-bottom: 18px;
@@ -63,9 +64,11 @@ export default function SubscriberItem({
   item: SubscriberType;
   open: boolean;
 }): JSX.Element {
+  const getIsOnAir = useAppSelector((state) => state.user.getIsOnAir);
   const dispatch = useAppDispatch();
   const navigator = useNavigate();
-  const [isOnAir, setIsOnAir] = useState(false);
+  const [isOnAir, setIsOnAir] = useState<boolean>(false);
+  const [sessionInfo, setSessionInfo] = useState<SessionType>();
 
   const dataUri = createAvatar(personas, {
     ...JSON.parse(item.avatar),
@@ -73,51 +76,33 @@ export default function SubscriberItem({
   }).toDataUriSync();
 
   const onClickItem = () => {
-    dispatch(getAboutMeAction(String(item.userPK)))
-      .then(() => {
-        // 지난 동영상 목록 가져오기
-        // console.log("동영상 목록 가져와요");
-        dispatch(
-          getVideoAction({ userPK: String(item.userPK), size: 5, page: 0 })
-        );
-      })
-      .then(() => {
-        // 피드 목록 가져오기
-        // console.log("피드 목록 가져와요");
-        dispatch(
-          getFeedAction({ userPK: String(item.userPK), size: 5, page: 0 })
-        );
-      })
-
-      .then(() => {
-        navigator(`/profile/${item.userPK}`);
-      });
+    dispatch(getAboutMeAction(String(item.userPK))).then(() => {
+      navigator(`/profile/${item.userPK}`);
+    });
   };
 
-  useEffect(() => {
-    // 방송중인 사용자면
+  console.log("item.isOnAir", item.isOnAir);
 
-    dispatch(getIsOnAirAction(item.userId)).then(({ payload }: any): void => {
-      // console.log("으아아아ㅏ아아ㅏ ", payload);
-      setIsOnAir(payload);
-    });
+  useEffect(() => {
+    dispatch(getIsOnAirAction(item.userId));
   }, []);
   return (
-    <ItemContainer open={open} onClick={onClickItem}>
-      <div>
+    <ItemContainer open={open}>
+      <div onClick={onClickItem}>
         <Avatar
           src={dataUri}
           alt="profile_img"
           sx={{
             width: `${open ? "45px" : "20px"}`,
             height: `${open ? "45px" : "20px"}`,
-            border: `1.5px solid ${isOnAir ? "#e24553" : "black"}`,
+            border: `1.5px solid ${item.isOnAir ? "#e24553" : "black"}`,
           }}
         />
         {open && <Typography>{item.nickName} </Typography>}
         {/* <span>{item.nickName}</span> */}
       </div>
-      {open && isOnAir && <OnAirBadge />}
+      {open && item.isOnAir && <OnAirBadge sessionInfo={item.isOnAir} />}
     </ItemContainer>
   );
 }
+

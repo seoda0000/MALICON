@@ -633,6 +633,19 @@ export default function Layout(props: LayoutProps) {
                       >
                         {"@" + loggedUser.userId}
                       </div>
+                      <div className="badge-subscribers">
+                        {/* <img src={BubbleSubscribers} alt="" /> */}
+                        <IconButton
+                          size="large"
+                          aria-label="show 17 new notifications"
+                          color="inherit"
+                          onClick={() => setOpenAccountModal((prev) => !prev)}
+                        >
+                          <PersonRounded />
+                          {/* <span>{loggedUser.}</span> */}
+                          {/* 여기야 여기 */}
+                        </IconButton>
+                      </div>
 
                       <Tooltip title="내 프로필">
                         <div
@@ -964,3 +977,4 @@ export default function Layout(props: LayoutProps) {
     </LayoutContainer>
   );
 }
+

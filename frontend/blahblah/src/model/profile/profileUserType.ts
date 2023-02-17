@@ -1,3 +1,5 @@
+import { SessionType } from "../broadcast/sessionType";
+
 export type ProfileUserType = {
   userPK: number;
   userId: string;
@@ -5,6 +7,6 @@ export type ProfileUserType = {
   avatar: string;
   subscribers: number;
   aboutMe: string;
-  isOnAir: boolean;
+  isOnAir: SessionType | null;
 };
 

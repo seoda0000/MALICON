@@ -8,4 +8,6 @@ export type SessionType = {
   thumbnail: string;
   streamer: StreamerType;
   hashTag: string;
+  avatar?: string;
 };
+
