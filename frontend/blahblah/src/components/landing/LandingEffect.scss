@@ -1,0 +1,35 @@
+.flex {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.scene {
+  background-color: #a29bfe;
+  color: black;
+  font: 800 100%/1.2 "Nunito", sans-serif;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.header {
+  font-size: 6rem;
+  margin: 0 auto;
+  max-width: 80em;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+.confetti {
+  position: absolute;
+  user-select: none;
+  z-index: 0;
+
+  &__item {
+    display: inline-block;
+    font-size: 1.5rem;
+    position: absolute;
+  }
+}
