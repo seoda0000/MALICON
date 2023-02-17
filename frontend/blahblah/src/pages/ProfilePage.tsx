@@ -268,7 +268,8 @@ export default function ProfilePage(): JSX.Element {
             <ProfileImage
               big={true}
               border={true}
-              borderColor={isOnAir ? "#e24553" : "black"}
+              // borderColor={user.isOnAir ? "#e24553" : "black"}
+              borderColor={"black"}
               userAvatar={user.avatar}
             />
             {isMine && (
@@ -312,11 +313,11 @@ export default function ProfilePage(): JSX.Element {
                       </IconButton>
                     </div>
                   )}
-                  <OnAirBadge
+                  {/* <OnAirBadge
                     inactiveVisible={true}
-                    isOnAir={isOnAir}
+                    isOnAir={user.isOnAir ? true : false}
                     onClick={onClickOnAir}
-                  />
+                  /> */}
                 </div>
                 <span className="id">@{user.userId}</span>
                 <span className="subscriber">구독자 {user.subscribers}명</span>

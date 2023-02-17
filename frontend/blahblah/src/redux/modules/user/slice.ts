@@ -203,6 +203,12 @@ const userSlice = createSlice({
         state.getIsOnAir.loading = false;
         state.getIsOnAir.data = payload;
         state.getIsOnAir.error = null;
+
+        state.subscribers.map((subscriber, idx) => {
+          if (subscriber.userId === payload.streamer.userId) {
+            state.subscribers[idx].isOnAir = payload;
+          }
+        });
       })
       .addCase(getIsOnAirAction.rejected, (state, { payload }) => {
         state.getIsOnAir.loading = false;
@@ -223,8 +229,7 @@ const userSlice = createSlice({
         state.checkEmail.loading = false;
         state.checkEmail.data = null;
         state.checkEmail.error = payload;
-      })
-      ;
+      });
   },
 });
 

@@ -22,6 +22,7 @@ import { AboutMeType } from "../../../model/user/aboutMeType";
 import { UserUpdateType } from "../../../model/user/userUpdateType";
 import { SubscriberType } from "../../../model/subscribe/subscriberType";
 import { getAboutMeAction } from "../profile";
+import { SessionType } from "../../../model/broadcast/sessionType";
 
 // 회원가입
 export const signupAction = createAsyncThunk(
@@ -267,7 +268,7 @@ export const getIsOnAirAction = createAsyncThunk(
   async (userId: string, { rejectWithValue }) => {
     try {
       const axios = openviduInitializer();
-      const { data } = await axios.get<boolean>(
+      const { data } = await axios.get<SessionType>(
         `api/sessions/onAir/${userId}`,
         {
           headers: {
@@ -283,3 +284,4 @@ export const getIsOnAirAction = createAsyncThunk(
     }
   }
 );
+

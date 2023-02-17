@@ -167,7 +167,11 @@ export default class ToolbarComponent extends Component<ToolbarProps, {}> {
                     <div id="point" className="" />
                   )}
                   <Tooltip title="Chat">
-                    <QuestionAnswer />
+                    <QuestionAnswer
+                      style={{
+                        color: this.props.toggleChat ? "#54d7c7" : "#ffffff",
+                      }}
+                    />
                   </Tooltip>
                 </IconButton>
                 {/* 스트리머 조용히해 버튼 */}

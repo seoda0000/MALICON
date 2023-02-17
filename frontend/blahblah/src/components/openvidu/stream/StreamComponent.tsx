@@ -20,6 +20,8 @@ interface StreamProps {
   isStreamer?: boolean;
   //handleNickname?: any;
   streamId?: any;
+  mutedSound?: boolean;
+  toggleSound?: any;
 }
 // StreamComponent
 
@@ -30,13 +32,13 @@ export default class StreamComponent extends Component<StreamProps, {}> {
     this.state = {
       nickname: this.props.user.getNickname(),
       showForm: false,
-      mutedSound: false,
+      // mutedSound: false,
       isFormValid: true,
     };
     this.handleChange = this.handleChange.bind(this);
     //this.handlePressKey = this.handlePressKey.bind(this);
     //this.toggleNicknameForm = this.toggleNicknameForm.bind(this);
-    this.toggleSound = this.toggleSound.bind(this);
+    // this.toggleSound = this.toggleSound.bind(this);
   }
 
   handleChange(event: any) {
@@ -50,9 +52,9 @@ export default class StreamComponent extends Component<StreamProps, {}> {
   //   }
   // }
 
-  toggleSound() {
-    this.setState({ mutedSound: !this.state.mutedSound });
-  }
+  // toggleSound() {
+  //   this.setState({ mutedSound: !this.state.mutedSound });
+  // }
 
   // handlePressKey(event: any) {
   //   if (event.key === "Enter") {
@@ -116,11 +118,11 @@ export default class StreamComponent extends Component<StreamProps, {}> {
         </div> */}
 
         {this.props.user !== undefined &&
-          this.props.user.getStreamManager() !== undefined ? (
+        this.props.user.getStreamManager() !== undefined ? (
           <div className="streamComponent">
             <OvVideoComponent
               user={this.props.user}
-              mutedSound={this.state.mutedSound}
+              mutedSound={this.props.mutedSound}
               isPublisher={this.props.isPublisher}
             />
             <div id="statusIcons">
@@ -130,26 +132,27 @@ export default class StreamComponent extends Component<StreamProps, {}> {
                 </div>
               ) : null}
 
-              {!this.props.user.isAudioActive() ? (
+              {/* {!this.props.user.isAudioActive() ? (
                 <div id="micIcon">
                   <MicOff id="statusMic" />
                 </div>
-              ) : null}
+              ) : null} */}
             </div>
-            <div>
+            {/* <div>
               {!this.props.user.isLocal() && (
-                <IconButton id="volumeButton" onClick={this.toggleSound}>
-                  {this.state.mutedSound ? (
-                    <VolumeOff color="secondary" />
+                <IconButton id="volumeButton" onClick={this.props.toggleSound}>
+                  {this.props.mutedSound ? (
+                    <VolumeOff style={{ color: "#54d7c7" }} />
                   ) : (
                     <VolumeUp />
                   )}
                 </IconButton>
               )}
-            </div>
+            </div> */}
           </div>
         ) : null}
       </div>
     );
   }
 }
+
