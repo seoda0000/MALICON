@@ -172,7 +172,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
             background-size: 100% 100%;
             background-repeat: no-repeat;
             animation: ${AlertKeyFrame} 0.7s ease-out forwards;
-            animation-delay: 3s;
+            animation-delay: 0.5s;
             opacity: 0;
           }
           .badge-setting {
@@ -189,7 +189,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
             background-size: 100% 100%;
             background-repeat: no-repeat;
             animation: ${SubscribersKeyFrame} 0.7s ease-out forwards;
-            animation-delay: 3s;
+            animation-delay: 0.5s;
             opacity: 0;
             & button {
               padding: 0;
@@ -211,7 +211,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
             background-size: 100% 100%;
             background-repeat: no-repeat;
             animation: ${IdKeyFrame} 0.7s ease-out forwards;
-            animation-delay: 3s;
+            animation-delay: 0.5s;
             opacity: 0;
             & > span {
               display: inline-block;
@@ -229,7 +229,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
             background-size: 100% 100%;
             background-repeat: no-repeat;
             animation: ${IdKeyFrame} 0.7s ease-out forwards;
-            animation-delay: 3s;
+            animation-delay: 0.5s;
             opacity: 0;
             & > span {
               display: inline-block;
@@ -246,7 +246,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
             background-size: 100% 100%;
             background-repeat: no-repeat;
             animation: ${NickNameKeyFrame} 0.7s ease-out forwards;
-            animation-delay: 3s;
+            animation-delay: 0.5s;
             opacity: 0;
             & > span {
               display: inline-block;
@@ -261,7 +261,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
             background-size: 100% 100%;
             background-repeat: no-repeat;
             animation: ${NickNameKeyFrame} 0.7s ease-out forwards;
-            animation-delay: 3s;
+            animation-delay: 0.5s;
             opacity: 0;
             & > span {
               display: inline-block;
@@ -614,7 +614,7 @@ export default function Layout(props: LayoutProps) {
                       >
                         <SettingsIcon />
                       </IconButton>
-                      <Tooltip title="팔로워">
+                      {/* <Tooltip title="팔로워">
                         <div className="badge-subscribers">
                           <IconButton
                             size="large"
@@ -625,7 +625,7 @@ export default function Layout(props: LayoutProps) {
                             <span>{loggedUser.subscribers}</span>
                           </IconButton>
                         </div>
-                      </Tooltip>
+                      </Tooltip> */}
 
                       <div
                         className="badge-userid"
@@ -642,8 +642,7 @@ export default function Layout(props: LayoutProps) {
                           onClick={() => setOpenAccountModal((prev) => !prev)}
                         >
                           <PersonRounded />
-                          {/* <span>{loggedUser.}</span> */}
-                          {/* 여기야 여기 */}
+                          <span>3</span>
                         </IconButton>
                       </div>
 
