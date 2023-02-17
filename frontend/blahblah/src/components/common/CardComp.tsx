@@ -202,14 +202,23 @@ export default function CardComp({
             size="sm"
             sx={{ "--Avatar-size": "2rem" }}
           /> */}
-          <Box>
-            {/* 유저 닉네임 */}
-            <Typography sx={{ fontSize: "sm", fontWeight: "lg" }}>
-              {video?.nickName}
-            </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              // gap: 1,
+              mt: 1.5,
+              alignItems: "flex-start",
+              flexDirection: "column",
+            }}
+          >
+            <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+              {/* 유저 닉네임 */}
+              <Typography sx={{ fontSize: "sm", fontWeight: "lg" }}>
+                {video?.nickName}
+              </Typography>
 
-            {/* 좋아요 표시 */}
-            {/* <Link
+              {/* 좋아요 표시 */}
+              {/* <Link
               level="body3"
               underline="none"
               startDecorator={<Favorite sx={{ width: 20 }} />}
@@ -220,25 +229,26 @@ export default function CardComp({
                 ml: "auto",
                 "&:hover": { color: "danger.plainColor" },
               }}
-            >
+              >
               {video?.likeCnt}
             </Link> */}
 
-            {/* 조회수 표시 */}
-            <Link
-              level="body3"
-              underline="none"
-              startDecorator={<Visibility sx={{ width: 20 }} />}
-              color="neutral"
-              sx={{
-                fontSize: "sm",
-                fontWeight: "md",
-                // ml: 2,
-                "&:hover": { color: "primary.plainColor" },
-              }}
-            >
-              {video?.views}
-            </Link>
+              {/* 조회수 표시 */}
+              <Link
+                level="body3"
+                underline="none"
+                startDecorator={<Visibility sx={{ width: 20 }} />}
+                color="neutral"
+                sx={{
+                  fontSize: "sm",
+                  fontWeight: "md",
+                  ml: 2,
+                  "&:hover": { color: "primary.plainColor" },
+                }}
+              >
+                {video?.views}
+              </Link>
+            </Box>
             <Box sx={{ display: "flex", flexWrap: "wrap" }}>
               {/* 해시태그 표시 */}
               {video &&
