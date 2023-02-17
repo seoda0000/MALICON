@@ -33,12 +33,12 @@ export default function AvatarSection(props: iAvatarSectionProp) {
       .getStreamManager()
       .stream.session.on("signal:emotion", (event: any) => {
         const data: EmotionSignalType = JSON.parse(event.data);
-        console.log("signal:emotion", data);
+        // console.log("signal:emotion", data);
         setSignal(data);
       });
   };
 
-  console.log("!!!!!!!!!!!!!!!!", props.viewers);
+  // console.log("!!!!!!!!!!!!!!!!", props.viewers);
 
   useEffect(() => {
     onEmotionSignalRecieved();
@@ -61,4 +61,3 @@ export default function AvatarSection(props: iAvatarSectionProp) {
     </AvatarSectionContainer>
   );
 }
-

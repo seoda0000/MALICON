@@ -56,7 +56,7 @@ export default function InfiniteScroll({
   // (1)
   const updateItemsFunc = () => {
     if (feed && getFeeds.data) {
-      console.log("이거 두번호출돼?? 왜??");
+      // console.log("이거 두번호출돼?? 왜??");
       let temp: ProfileFeedType[] = [...(itemArr as ProfileFeedType[])];
 
       getFeeds.data.content.map((feed: ProfileFeedType) => {
@@ -75,7 +75,7 @@ export default function InfiniteScroll({
     } else if (feedPage && getFeedFeeds.data) {
       let temp: ProfileFeedType[] = [...(itemArr as ProfileFeedType[])];
 
-      console.log("새 글 감지 직전", newest);
+      // console.log("새 글 감지 직전", newest);
       if (getFeedFeeds.data.content[0].id === newest) {
         temp = [];
       } else if (newest === 0) {
@@ -175,7 +175,7 @@ export default function InfiniteScroll({
   }, [pageInfo.page]);
 
   useEffect(() => {
-    console.log("무한스크롤 안에서 userpk " + userpk);
+    // console.log("무한스크롤 안에서 userpk " + userpk);
     setItemArr([]);
     setPageInfo({ page: 0, totalPage: 0 });
     setText(video ? "지난 영상이 없습니다" : "작성된 피드가 없습니다");

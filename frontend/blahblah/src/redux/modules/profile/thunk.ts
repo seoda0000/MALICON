@@ -39,7 +39,7 @@ export const getIsOnAirAction = createAsyncThunk(
   async (userId: string, { rejectWithValue }) => {
     try {
       const axios = openviduInitializer();
-      console.log("!!!!", userId);
+      // console.log("!!!!", userId);
       const { data } = await axios.get<boolean>(
         `api/sessions/onAir/${userId}`,
         {
@@ -97,11 +97,11 @@ export const updateAboutMeAction = createAsyncThunk(
           dispatch(getAboutMeAction(String(aboutMeData.userPK)));
         });
 
-      console.log("자기소개 수정 완료");
+      // console.log("자기소개 수정 완료");
       // return data;
     } catch (e) {
-      console.log("자기소개 수정 실패");
-      console.error(e);
+      // console.log("자기소개 수정 실패");
+      // console.error(e);
       return rejectWithValue(e);
     }
   }

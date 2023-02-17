@@ -118,7 +118,7 @@ function TutorialPage() {
   };
 
   useEffect(() => {
-    console.log("축하!! 성공!!");
+    // console.log("축하!! 성공!!");
   }, [missionSuccess]);
 
   useEffect(() => {
@@ -171,4 +171,3 @@ function TutorialPage() {
   );
 }
 export default TutorialPage;
-

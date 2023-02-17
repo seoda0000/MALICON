@@ -42,7 +42,7 @@ export const fetchAllVideoData = createAsyncThunk(
           //   commentList: video.comments.content,
         };
       });
-      console.log("저장된 비디오 목록", videos);
+      // console.log("저장된 비디오 목록", videos);
       thunkAPI.dispatch(
         videoActions.replaceAllVideos({
           allVideoList: newVideos,
@@ -51,7 +51,7 @@ export const fetchAllVideoData = createAsyncThunk(
 
       return response.data;
     } catch (e: any) {
-      console.error(e.response.data);
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -73,7 +73,7 @@ export const fetchHashVideoData = createAsyncThunk(
       });
 
       const videos = response.data.content;
-      console.log("해시태그 비디오", videos);
+      // console.log("해시태그 비디오", videos);
 
       const newVideos = videos.map((video: any) => {
         return {
@@ -94,7 +94,7 @@ export const fetchHashVideoData = createAsyncThunk(
           //   commentList: video.comments.content,
         };
       });
-      console.log("저장된 해시태그 비디오 목록", videos);
+      // console.log("저장된 해시태그 비디오 목록", videos);
       thunkAPI.dispatch(
         videoActions.replaceAllVideos({
           allVideoList: newVideos,
@@ -103,7 +103,7 @@ export const fetchHashVideoData = createAsyncThunk(
 
       return response.data;
     } catch (e: any) {
-      console.error(e.response.data);
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -144,7 +144,7 @@ export const fetchFollowingVideoData = createAsyncThunk(
           //   commentList: video.comments.content,
         };
       });
-      console.log("구독 비디오 목록", videos);
+      // console.log("구독 비디오 목록", videos);
       thunkAPI.dispatch(
         videoActions.replaceFollowingVideos({
           followingVideoList: newVideos,
@@ -153,7 +153,7 @@ export const fetchFollowingVideoData = createAsyncThunk(
 
       return response.data;
     } catch (e: any) {
-      console.error(e.response.data);
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -196,7 +196,7 @@ export const getVideoById = createAsyncThunk(
     try {
       const video = await getVideo(videoId);
       const emotionLog = await getEmotion(video.sessionId);
-      console.log("덧글이 왜 안나올까?", video);
+      // console.log("덧글이 왜 안나올까?", video);
       const newVideo = {
         id: video.id,
         title: video.title,
@@ -227,7 +227,7 @@ export const getVideoById = createAsyncThunk(
 
       return video;
     } catch (e: any) {
-      console.error(e.response.data);
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -250,13 +250,13 @@ export const removeVideoData = createAsyncThunk(
           },
         }
       );
-      console.log("비디오 삭제: ", data);
+      // console.log("비디오 삭제: ", data);
       // thunkAPI.dispatch(fetchAllVideoData());
 
       return data;
     } catch (e) {
-      console.error(e);
-      console.log("비디오 삭제 실패");
+      // console.error(e);
+      // console.log("비디오 삭제 실패");
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -309,15 +309,15 @@ export const postVideoCommentData = createAsyncThunk(
           },
         })
         .then(({ data }: any) => {
-          console.log("비디오 덧글 작성: ", data);
+          // console.log("비디오 덧글 작성: ", data);
 
           thunkAPI.dispatch(getVideoById(postData.videoId!));
 
-          console.log("피드 리스트 갱신 완료");
+          // console.log("피드 리스트 갱신 완료");
         });
     } catch (e: any) {
-      console.log("비디오 덧글 작성 실패");
-      console.error(e.response.data);
+      // console.log("비디오 덧글 작성 실패");
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -339,11 +339,11 @@ export const removeVideoCommentData = createAsyncThunk(
           },
         })
         .then((data) => {
-          console.log("덧글 삭제: ", data);
+          // console.log("덧글 삭제: ", data);
           thunkAPI.dispatch(getVideoById(removeData.videoId));
         });
     } catch (e) {
-      console.error(e);
+      // console.error(e);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -369,15 +369,15 @@ export const likeVideoAction = createAsyncThunk(
           }
         )
         .then(({ data }: any) => {
-          console.log("비디오 좋아요: ", data);
+          // console.log("비디오 좋아요: ", data);
 
           thunkAPI.dispatch(getVideoById(videoId));
 
-          console.log("비디오 리스트 갱신 완료");
+          // console.log("비디오 리스트 갱신 완료");
         });
     } catch (e: any) {
-      console.log("비디오 좋아요 실패");
-      console.error(e.response.data);
+      // console.log("비디오 좋아요 실패");
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -399,15 +399,15 @@ export const likeVideoCancelAction = createAsyncThunk(
           },
         })
         .then(({ data }: any) => {
-          console.log("비디오 좋아요 취소: ", data);
+          // console.log("비디오 좋아요 취소: ", data);
 
           thunkAPI.dispatch(getVideoById(videoId));
 
-          console.log("비디오 리스트 갱신 완료");
+          // console.log("비디오 리스트 갱신 완료");
         });
     } catch (e: any) {
-      console.log("비디오 좋아요 치소 실패");
-      console.error(e.response.data);
+      // console.log("비디오 좋아요 치소 실패");
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }

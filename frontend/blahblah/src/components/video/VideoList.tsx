@@ -20,8 +20,8 @@ const VideoList: React.FC<{ chipList?: any; setOpenLoginAlert: any }> = (
   props
 ) => {
   const video = useSelector((state: RootState) => state.video);
-  console.log("해시태그 선택", props.chipList);
-  console.log(video.allVideoList);
+  // console.log("해시태그 선택", props.chipList);
+  // console.log(video.allVideoList);
   return (
     <Grid
       container

@@ -23,7 +23,7 @@ export const fetchSessionData = createAsyncThunk(
 
       const sessions = response.data;
 
-      console.log("세션목록: ", sessions);
+      // console.log("세션목록: ", sessions);
 
       thunkAPI.dispatch(
         broadcastActions.replaceSessions({
@@ -33,7 +33,7 @@ export const fetchSessionData = createAsyncThunk(
 
       return response.data;
     } catch (e: any) {
-      console.error(e.response.data);
+      // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -54,7 +54,7 @@ export const startSession = createAsyncThunk(
           },
         })
         .then(({ data }: any) => {
-          console.log("방송 시작: ", data);
+          // console.log("방송 시작: ", data);
           thunkAPI.dispatch(
             broadcastActions.loadCurrentSession({ currentSession: data })
           );
@@ -64,9 +64,9 @@ export const startSession = createAsyncThunk(
 
       // return data;
     } catch (e: any) {
-      console.log("dddddddddddddddddddd");
-      console.error(e);
-      console.log("dddddddddddddddddddd");
+      // console.log("dddddddddddddddddddd");
+      // console.error(e);
+      // console.log("dddddddddddddddddddd");
       return thunkAPI.rejectWithValue(e);
     }
   }
