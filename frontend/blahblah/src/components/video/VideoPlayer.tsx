@@ -43,6 +43,7 @@ const VideoPlayer: React.FC<{
         volume={volume} // 소리조절 기능
         // onProgress={progressHandler} // 재생 및 로드된 시점을 반환
         width="100%"
+        height="70vh"
         // height="100%"
       />
     </div>

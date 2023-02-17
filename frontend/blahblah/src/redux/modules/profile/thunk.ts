@@ -14,6 +14,8 @@ import {
 import { getAccessToken } from "../user/token";
 import { getMeWithTokenAction } from "../user";
 import { getSubscribersAction } from "../user";
+import { SessionType } from "../../../model/broadcast/sessionType";
+
 // 프로필 정보 가져오기
 export const getAboutMeAction = createAsyncThunk(
   "GET_ABOUTME",
@@ -39,8 +41,7 @@ export const getIsOnAirAction = createAsyncThunk(
   async (userId: string, { rejectWithValue }) => {
     try {
       const axios = openviduInitializer();
-      // console.log("!!!!", userId);
-      const { data } = await axios.get<boolean>(
+      const { data } = await axios.get<SessionType>(
         `api/sessions/onAir/${userId}`,
         {
           headers: {
@@ -231,3 +232,4 @@ export const getFeedAction = createAsyncThunk(
     }
   }
 );
+

@@ -172,7 +172,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
             background-size: 100% 100%;
             background-repeat: no-repeat;
             animation: ${AlertKeyFrame} 0.7s ease-out forwards;
-            animation-delay: 3s;
+            animation-delay: 0.5s;
             opacity: 0;
           }
           .badge-setting {
@@ -189,7 +189,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
             background-size: 100% 100%;
             background-repeat: no-repeat;
             animation: ${SubscribersKeyFrame} 0.7s ease-out forwards;
-            animation-delay: 3s;
+            animation-delay: 0.5s;
             opacity: 0;
             & button {
               padding: 0;
@@ -211,7 +211,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
             background-size: 100% 100%;
             background-repeat: no-repeat;
             animation: ${IdKeyFrame} 0.7s ease-out forwards;
-            animation-delay: 3s;
+            animation-delay: 0.5s;
             opacity: 0;
             & > span {
               display: inline-block;
@@ -229,7 +229,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
             background-size: 100% 100%;
             background-repeat: no-repeat;
             animation: ${IdKeyFrame} 0.7s ease-out forwards;
-            animation-delay: 3s;
+            animation-delay: 0.5s;
             opacity: 0;
             & > span {
               display: inline-block;
@@ -246,7 +246,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
             background-size: 100% 100%;
             background-repeat: no-repeat;
             animation: ${NickNameKeyFrame} 0.7s ease-out forwards;
-            animation-delay: 3s;
+            animation-delay: 0.5s;
             opacity: 0;
             & > span {
               display: inline-block;
@@ -261,7 +261,7 @@ const LayoutContainer = styled(Box)<{ open: boolean }>`
             background-size: 100% 100%;
             background-repeat: no-repeat;
             animation: ${NickNameKeyFrame} 0.7s ease-out forwards;
-            animation-delay: 3s;
+            animation-delay: 0.5s;
             opacity: 0;
             & > span {
               display: inline-block;
@@ -614,7 +614,7 @@ export default function Layout(props: LayoutProps) {
                       >
                         <SettingsIcon />
                       </IconButton>
-                      <Tooltip title="팔로워">
+                      {/* <Tooltip title="팔로워">
                         <div className="badge-subscribers">
                           <IconButton
                             size="large"
@@ -625,13 +625,25 @@ export default function Layout(props: LayoutProps) {
                             <span>{loggedUser.subscribers}</span>
                           </IconButton>
                         </div>
-                      </Tooltip>
+                      </Tooltip> */}
 
                       <div
                         className="badge-userid"
                         style={{ marginLeft: "5px" }}
                       >
                         {"@" + loggedUser.userId}
+                      </div>
+                      <div className="badge-subscribers">
+                        {/* <img src={BubbleSubscribers} alt="" /> */}
+                        <IconButton
+                          size="large"
+                          aria-label="show 17 new notifications"
+                          color="inherit"
+                          onClick={() => setOpenAccountModal((prev) => !prev)}
+                        >
+                          <PersonRounded />
+                          <span>3</span>
+                        </IconButton>
                       </div>
 
                       <Tooltip title="내 프로필">
@@ -923,7 +935,7 @@ export default function Layout(props: LayoutProps) {
       {/* alert */}
       <Snackbar
         open={openAlert.state}
-        autoHideDuration={5000}
+        autoHideDuration={20000}
         onClose={handleAlertClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       >
@@ -964,3 +976,4 @@ export default function Layout(props: LayoutProps) {
     </LayoutContainer>
   );
 }
+
