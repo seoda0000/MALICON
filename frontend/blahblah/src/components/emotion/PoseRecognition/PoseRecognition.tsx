@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import * as posenet from "@tensorflow-models/posenet";
+import { current } from "@reduxjs/toolkit";
 
-const PREDICTION_THRESHOLD = 0.3;
+const PREDICTION_THRESHOLD = 0.5;
 
 interface iPosition {
   y: number;
@@ -86,13 +87,15 @@ export default function PoseRecognition(props: iPositionRecognitionProps) {
     // // 2. 왼손들기
     else if (
       isLeftWristHigherThanLeftShoulder(pose) &&
-      isLeftWristHigherThanLeftElbow(pose)
+      isLeftWristHigherThanLeftElbow(pose) &&
+      isLeftElbowHighterThanLeftShoulder(pose)
     )
       setCurrentPose("left");
     // // 3. 오른손들기
     else if (
       isRightWristHigherThanRightShoulder(pose) &&
-      isRightWristHigherThanRightElbow(pose)
+      isRightWristHigherThanRightElbow(pose) &&
+      isRightElblowHigherThanRightShoulder(pose)
     )
       setCurrentPose("right");
     // // 4. 박수치기
