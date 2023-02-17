@@ -10,8 +10,11 @@ import com.blahblah.web.service.ArticleService;
 import com.blahblah.web.util.JWTutil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 @RequestMapping("/articles")
 @RestController
@@ -125,6 +129,17 @@ public class ArticleController {
             out.write(buffer, 0, length);
         }
         return ResponseEntity.ok(new Message("파일로드"));
+    }
+
+    @GetMapping("/file")
+    public ResponseEntity<Resource> serveFile(@RequestParam String filePath) {
+        Resource file = new FileSystemResource(filePath);
+        String mimeType = null;
+        try {
+            mimeType = Files.probeContentType(file.getFile().toPath());
+        } catch (IOException e) {
+        }
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(mimeType)).body(file);
     }
 
 }
