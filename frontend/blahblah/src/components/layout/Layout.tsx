@@ -888,20 +888,6 @@ export default function Layout(props: LayoutProps) {
           {props.children}
         </main>
         {/* <AvatarShortcutButton /> */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            height: "8px",
-            flexDirection: "column",
-            mt: 1,
-          }}
-        >
-          <Divider />
-          <Typography sx={{ mx: "auto" }} variant="caption">
-            Copyright 2023. blahblah Co. all rights reserved.
-          </Typography>
-        </Box>
       </Box>
 
       {/* 로그인 모달 */}
@@ -976,4 +962,3 @@ export default function Layout(props: LayoutProps) {
     </LayoutContainer>
   );
 }
-
