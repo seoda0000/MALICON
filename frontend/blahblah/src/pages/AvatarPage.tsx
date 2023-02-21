@@ -421,7 +421,7 @@ function AvatarPage() {
         }}
       >
         <ThemeProvider theme={BoldKoreanFont}>
-          <Typography variant="h4">Make your own Avatar</Typography>
+          <Typography variant="h4">My Little Audience</Typography>
           <Typography variant="h6">나만의 아바타 만들기</Typography>
         </ThemeProvider>
 
