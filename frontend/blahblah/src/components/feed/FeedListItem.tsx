@@ -58,11 +58,11 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
 
   useEffect(() => {
     if (props.feed.filePath) {
-      console.log("props.feed.filePath!!!!", props.feed.filePath);
+  // console.log("props.feed.filePath!!!!", props.feed.filePath);
       dispatch(getFeedFileAction(props.feed.filePath)).then(({ data }: any) => {
         // setImage(data);
-        console.log("data!!!!", data);
-        console.log("redux", getFeedFile.data);
+  // console.log("data!!!!", data);
+  // console.log("redux", getFeedFile.data);
         const file = new File([getFeedFile.data], props.feed.filePath);
         const reader = new FileReader();
         reader.onload = (event) => {
@@ -70,7 +70,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
           setImage(previewImage);
         };
         reader.readAsDataURL(file);
-        console.log(image);
+  // console.log(image);
       });
     }
   }, []);

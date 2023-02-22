@@ -89,7 +89,7 @@ export const getFeedFileAction = createAsyncThunk(
           filePath: filePath,
         },
       });
-      console.log("!!!피드파일가져옴!!!!", data);
+  // console.log("!!!피드파일가져옴!!!!", data);
       return data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
@@ -356,10 +356,10 @@ export const likeCancelAction = createAsyncThunk(
 
           thunkAPI.dispatch(fetchFeedData());
 
-          console.log("피드 리스트 갱신 완료");
+  // console.log("피드 리스트 갱신 완료");
         });
     } catch (e: any) {
-      console.log("피드 좋아요 치소 실패");
+  // console.log("피드 좋아요 치소 실패");
       // console.error(e.response.data);
       return thunkAPI.rejectWithValue(e);
     }
