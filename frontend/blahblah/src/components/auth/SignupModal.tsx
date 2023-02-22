@@ -104,7 +104,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
     if (!regex.test(e.target.value)) {
       setEmailAvail("RegexFail");
     } else {
-      setEmailAvail("PleaseCheckEmail");
+      setEmailAvail("Available");
     }
   };
   const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -174,14 +174,14 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
     }
   };
 
-  useEffect(() => {
-    if (checkEmailNumber.data == checkNumber) {
-      setValidEmail(true);
-      setEmailAvail("Available");
-    } else {
-      setValidEmail(false);
-    }
-  }, [checkEmailNumber.data, checkNumber]);
+  // useEffect(() => {
+  //   if (checkEmailNumber.data == checkNumber) {
+  //     setValidEmail(true);
+  //     setEmailAvail("Available");
+  //   } else {
+  //     setValidEmail(false);
+  //   }
+  // }, [checkEmailNumber.data, checkNumber]);
 
   useEffect(() => {
     if (pw === rePw) {
@@ -349,16 +349,18 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             {email &&
               (emailAvail === "Available" ? (
                 <span>사용 가능한 이메일 입니다</span>
-              ) : emailAvail === "PleaseCheckEmail" ? (
-                <span>이메일 인증을 해주세요</span>
-              ) : emailAvail === "RegexFail" ? (
+              ) 
+              // : emailAvail === "PleaseCheckEmail" ? (
+              //   <span>이메일 인증을 해주세요</span>
+              // ) 
+              : emailAvail === "RegexFail" ? (
                 <span>올바른 이메일 형식이 아닙니다</span>
               ) : (
                 <span>유효한 이메일이 아닙니다</span>
               ))}
           </FormHelperText>
         </FormControl>
-        <Button
+        {/* <Button
           onClick={onSendEmail}
           disabled={
             emailAvail === "RegexFail" || emailAvail === "Available"
@@ -389,7 +391,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
               <span>인증번호가 일치하지 않습니다</span>
             )}
           </FormHelperText>
-        </FormControl>
+        </FormControl> */}
         <FormControl variant="standard">
           <InputLabel htmlFor="phone">phone</InputLabel>
           <Input

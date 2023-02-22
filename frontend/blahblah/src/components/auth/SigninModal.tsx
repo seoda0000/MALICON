@@ -80,7 +80,7 @@ export default function SigninModal({
           <Button variant="contained" type="submit">
             Signin
           </Button>
-          <NewPasswordModal />
+          <Button onClick={onCloseModal}>Close</Button>
         </Box>
       </Box>
     </BasicModal>
