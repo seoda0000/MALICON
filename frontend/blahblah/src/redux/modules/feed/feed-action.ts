@@ -73,6 +73,30 @@ export const fetchFeedData = createAsyncThunk(
   }
 );
 
+//피드 파일 가져오기
+export const getFeedFileAction = createAsyncThunk(
+  "feed/getFeedFile",
+  async (filePath: string, thunkAPI) => {
+    try {
+      const axios = axiosInitializer();
+
+      const { data } = await axios.get<Blob>(`/api/articles/file`, {
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        responseType: "blob",
+        params: {
+          filePath: filePath,
+        },
+      });
+      console.log("!!!피드파일가져옴!!!!", data);
+      return data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
 // 새 피드 작성하기
 
 export const postFeedData2 = createAsyncThunk(
@@ -341,3 +365,4 @@ export const likeCancelAction = createAsyncThunk(
     }
   }
 );
+

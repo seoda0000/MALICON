@@ -642,7 +642,8 @@ export default function Layout(props: LayoutProps) {
                           onClick={() => setOpenAccountModal((prev) => !prev)}
                         >
                           <PersonRounded />
-                          <span>3</span>
+                          {/* <span>{loggedUser.}</span> */}
+                          {/* 여기야 여기 */}
                         </IconButton>
                       </div>
 
