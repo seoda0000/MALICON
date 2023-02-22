@@ -20,6 +20,7 @@ import {
   sendEmailAction,
   checkDupNickNameAction,
 } from "../../redux/modules/user";
+import ButtonComp from "../common/ButtonComp";
 import BasicModal from "../ui/BasicModal";
 
 const buttonBoxStyle = {
@@ -422,12 +423,8 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
         </Box>
         {/* </FormGroup> */}
         <Box sx={buttonBoxStyle}>
-          <Button variant="contained" type="submit">
-            Signin
-          </Button>
-          <Button variant="contained" type="submit" onClick={onCloseModal}>
-            Cancel
-          </Button>
+          <ButtonComp text="SIGNUP" type="submit" />
+          <ButtonComp text="CANCEL" onClick={onCloseModal} />
         </Box>
       </Box>
     </BasicModal>
