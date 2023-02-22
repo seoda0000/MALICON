@@ -140,7 +140,7 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
 
   return (
     <div>
-      <Card>
+      <Card sx={{ width: "100%" }}>
         <CardHeader
           avatar={
             <FeedProfileImage
@@ -233,4 +233,3 @@ const FeedListItem: React.FC<{ feed: any }> = (props) => {
 };
 
 export default FeedListItem;
-
