@@ -63,11 +63,11 @@ export default function SigninModal({
         onSubmit={onSubmit}
       >
         <FormControl variant="standard">
-          <InputLabel htmlFor="id">ID</InputLabel>
+          <InputLabel htmlFor="id">아이디</InputLabel>
           <Input id="id" value={id} onChange={onChangeId} required />
         </FormControl>
         <FormControl variant="standard">
-          <InputLabel htmlFor="pw">Password</InputLabel>
+          <InputLabel htmlFor="pw">비밀번호</InputLabel>
           <Input
             id="pw"
             value={pw}
@@ -78,7 +78,7 @@ export default function SigninModal({
         </FormControl>
         <Box sx={buttonBoxStyle}>
           <Button variant="contained" type="submit">
-            Signin
+            로그인
           </Button>
           <Button onClick={onCloseModal}>Close</Button>
         </Box>
