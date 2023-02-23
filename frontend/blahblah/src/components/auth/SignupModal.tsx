@@ -132,11 +132,11 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
   const onConfirmID = () => {
     dispatch(checkDuplicateAction(id));
   };
-  
+
   const onConfirmEmail = () => {
     dispatch(checkDupEmailAction(email));
   };
-  
+
 
   const onConfirmNickName = () => {
     dispatch(checkDupNickNameAction(nickName));
@@ -274,7 +274,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
           </Button>
         </div>
         <FormControl variant="standard">
-          <InputLabel htmlFor="pw">Password *</InputLabel>
+          <InputLabel htmlFor="pw">비밀번호 *</InputLabel>
           <Input
             id="pw"
             value={pw}
@@ -300,7 +300,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
           </FormHelperText>
         </FormControl>
         <FormControl variant="standard">
-          <InputLabel htmlFor="re-pw">Re-enter Password *</InputLabel>
+          <InputLabel htmlFor="re-pw">비밀번호 확인 *</InputLabel>
           <Input
             id="re-pw"
             value={rePw}
@@ -320,7 +320,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
           </FormHelperText>
         </FormControl>
         <FormControl variant="standard">
-          <InputLabel htmlFor="nickName">nickName *</InputLabel>
+          <InputLabel htmlFor="nickName">닉네임 *</InputLabel>
           <Input
             id="nickName"
             value={nickName}
@@ -353,7 +353,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
           닉네임 중복 확인
         </Button>
         <FormControl variant="standard">
-          <InputLabel htmlFor="email">email *</InputLabel>
+          <InputLabel htmlFor="email">Email *</InputLabel>
           <Input
             id="email"
             value={email}
@@ -367,10 +367,10 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
             {email &&
               (emailAvail === "Available" ? (
                 <span>사용 가능한 이메일 입니다</span>
-              ) 
+              )
               : emailAvail === "UnAvailable" ? (
                 <span>이미 사용중인 이메일 입니다</span>
-              ) 
+              )
               : emailAvail === "RegexFail" ? (
                 <span>올바른 이메일 형식이 아닙니다</span>
               ) : (
@@ -421,7 +421,7 @@ export default function SignupModal({ open, setOpen }: any): JSX.Element {
           </FormHelperText>
         </FormControl> */}
         <FormControl variant="standard">
-          <InputLabel htmlFor="phone">phone</InputLabel>
+          <InputLabel htmlFor="phone">연락처</InputLabel>
           <Input
             id="phone"
             value={phone}
