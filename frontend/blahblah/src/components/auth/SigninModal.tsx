@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useAppDispatch } from "../../redux/configStore.hooks";
 import { signinAction } from "../../redux/modules/user";
 import { removeToken } from "../../redux/modules/user/token";
+import ButtonComp from "../common/ButtonComp";
 import BasicModal from "../ui/BasicModal";
 import NewPasswordModal from "./NewPasswordModal";
 
@@ -77,6 +78,7 @@ export default function SigninModal({
           />
         </FormControl>
         <Box sx={buttonBoxStyle}>
+          {/* <ButtonComp text="LOGIN" onClick={goToTutorial} width={120} ></ButtonComp> */}
           <Button variant="contained" type="submit">
             로그인
           </Button>
