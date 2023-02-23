@@ -78,13 +78,14 @@ export default function SigninModal({
           />
         </FormControl>
         <Box sx={buttonBoxStyle}>
-          {/* <ButtonComp text="LOGIN" onClick={goToTutorial} width={120} ></ButtonComp> */}
-          <Button variant="contained" type="submit">
-            로그인
-          </Button>
+          <ButtonComp text="SIGNIN" type="submit" />
+          {/* <Button variant="contained" type="submit">
+            Signin
+          </Button> */}
           <NewPasswordModal />
         </Box>
       </Box>
     </BasicModal>
   );
 }
+
